@@ -1,0 +1,39 @@
+# Troque estes dados pelos seus, separados por TAB
+# Repito: separados por TAB, e não espaços em branco
+# A data é no formato ANO-MES-DIA
+
+2007-09-01	-100,00	Saldo inicial da conta :(
+2007-09-07	-25,00	luz|
+2007-09-07	-20,00	agua|
+2007-09-15	-74,23	mercado|
+2007-09-15	- 1,99	nerd| Prestação do mouse 10/12
+2007-09-23	-39,90	presente, livro| Livro "Horóscopo dos Duendes"
+
+2007-10-03	-142,59	presente| Um Shrubbery
+2007-10-07	-20,00	luz|
+2007-10-07	-17,80	agua|
+2007-10-11	  5,00	Ganhei a aposta com o Zé
+2007-10-12	-40,00	presente, nerd| Poster colorido 3D do Tux em Ascii Art
+2007-10-15	- 1,99	nerd| Prestação do mouse 11/12
+2007-10-29	-95,67	mercado|
+
+2007-11-07	-29,00	luz|
+2007-11-07	-32,37	agua|
+2007-11-12	-199,90	presente| Segway usado no Mercado Livre
+2007-11-15	- 1,99	nerd| Prestação do mouse 12/12 (acabou!)
+
+2007-12-07	-25,00	luz|
+2007-12-07	-30,00	agua|
+
+# A ordem não importa, é possível deixar juntas as transações periódicas
+2007-09-05	300,00	salario|
+2007-10-05	300,00	salario|
+2007-11-05	300,00	salario|
+2007-12-05	300,00	salario|
+
+
+# Pode usar linhas em branco e espaços indiscriminadamente
+2007-11-20	   -    10,00	    Carnê do Baú
+
+# Transações futuras! (comentado)
+# 2009-12-31	+99,99	Bônus

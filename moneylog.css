@@ -1,0 +1,177 @@
+/*
+	moneylog.css
+	http://aurelio.net/moneylog
+*/
+
+body {
+	color:#555;
+	background-color:#fff;
+	margin:0;
+	padding:0;
+	border:0;
+	overflow:scroll;
+	font-size:85%;
+	font-family:sans-serif;
+}
+a {
+	text-decoration:none;
+	font-weight:bold;
+}
+#toolbar {
+	color:#ddd;
+	background-color:#444;
+	text-align:center;
+	z-index:1;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:6em;
+	padding-top:.3em;
+}
+#toolbar a {
+	float:left;
+	color:#c6f;
+	font-variant:small-caps;
+	font-size:185%;
+	padding:0 4px;
+}
+#toolbar a:hover {
+	background-color:#c6f;
+	color:#444;
+}
+#toolbar a.helplink {
+	float:right;
+}
+#toolbar #filterbox {
+	float:right;
+	text-align:left;
+}
+#checkboxes {
+	width:20em;
+	margin:auto;
+	text-align:left;
+}
+#content {
+	z-index:0;
+	margin-top:5em;
+}
+#tagsArea {
+	float:left;
+	background-color:#eee;
+	padding:1.5em 0.5em 0.5em 0.5em;
+	border:1px solid #ccc;
+	border-width:0 1px 1px 0;
+	display:none;
+}
+#tagsArea p {
+	margin:0.5em 0;
+	padding:0;
+}
+#tagsArea input {
+	margin:0;
+	padding:0;
+}
+#tagsArea #tagMultiAll {
+	padding-left:0.3em;
+}
+#tagsArea #tagList {
+	padding-right:1em;
+}
+#report {
+	text-align:center;
+	padding:3em 0;
+}
+#help {
+	background-color:#edf;
+	color:#515;
+	padding:2em;
+	margin:0;
+	display:none;
+}
+#data {
+	display:none;
+}
+#dataFrame {
+	display:none;
+}
+
+table {
+	margin:0 auto;
+	border-spacing:0;
+	border-collapse:collapse;
+}
+td {
+	border:1px solid #ccc;
+	padding:.1em 10px;
+	font-size:85%;
+}
+td.row-count {
+	text-align:center;
+	font-size:70%;
+	color:#aaa;
+	border-width:0;
+	background-color:#fff;
+}
+td.date {
+	white-space:nowrap;
+}
+tr.future td.row-count {
+	font-style:normal;
+}
+th {
+	text-align:center;
+	font-size:85%;
+	cursor:pointer;
+}
+th:hover {
+	color:#000;
+	background-color:#eee;
+}
+tr:hover td {
+	background-color: #edf;
+}
+tr.future {
+	background-color:#eee;
+	font-style:italic;
+}
+tr.average {
+	background-color:#f8e8ff;
+	font-style:italic;
+}
+tr.monthtotal {
+	background-color:#f8e8ff;
+	line-height:200%;
+	text-align:right;
+}
+tr.monthtotal td {
+	border-width:0;
+	font-size:100%;
+}
+.trigger {
+	cursor:pointer;
+}
+.number {
+	text-align:right;
+	white-space:nowrap;
+}
+.neg {
+	color:#e33;
+}
+tr.monthtotal td td.mini {
+	font-size:75%;
+	color:#868;
+}
+table.monthsubtotal {
+	margin:0;
+}
+table.monthsubtotal td {
+	padding:0;
+	width:5.5em;
+}
+
+/* Emulating position:fixed in IE/Win 5+ */
+#toolbar {
+	_position:absolute;
+	_top:expression(eval(document.body.scrollTop));
+}
