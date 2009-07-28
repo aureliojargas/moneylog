@@ -47,6 +47,11 @@ a {
 	float:right;
 	text-align:left;
 }
+#toolbar #datafilesbox {
+	clear:right;
+	float:right;
+	padding:10px;
+}
 #checkboxes {
 	width:20em;
 	margin:auto;

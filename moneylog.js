@@ -28,7 +28,7 @@ var monthlyRowCount = true;       // The row numbers are reset each month?
 // Program structure and files
 // Note: dataFile must be UTF-8 (Safari, IE) or ISO-8859-1 (Firefox, Camino)
 var oneFile = false;              // Full app is at moneylog.html single file?
-var dataFile = 'moneylog.txt';    // The path for the data file (requires oneFile=false)
+var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneFile=false)
 
 // Data format
 var dataFieldSeparator = '\t';
@@ -178,6 +178,15 @@ function populateMonthsCombo() {
 	}
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
 }
+function populateDataFilesCombo() {
+	var el, i;
+	if (!oneFile) {
+		el = document.getElementById('datafiles');
+		for (i = 0; i < dataFiles.length; i++) {
+			el.options[i] = new Option(dataFiles[i]);
+		}
+	}
+}
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	var partial, theRow;
 	if (monthTotal) {
@@ -268,6 +277,12 @@ function lastMonthsChanged(elem) {
 	document.getElementById('optlastmonths').checked = true;
 	overviewData = [];
 	showReport();
+}
+function loadDataFile(filePath) {
+	document.getElementById("dataFrame").src = filePath;
+	overviewData = [];
+	setTimeout("showReport()", 100);
+	// The browser won't load the iframe contents unless we schedule it (strange...)
 }
 function readData() {
 	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription;
@@ -666,6 +681,12 @@ function init() {
 	setCurrentDate();
 	populateMonthsCombo();
 	
+	if (!oneFile && dataFiles.length > 1) {
+		populateDataFilesCombo();
+	} else {
+		document.getElementById('datafilesbox').style.display = 'none';
+	}
+	
 	// Lang-specific info
 	document.getElementById('optoverviewlabel'  ).innerHTML = labelOverview;
 	document.getElementById('optlastmonthslabel').innerHTML = labelLastMonths;
@@ -694,14 +715,10 @@ function init() {
 
 	// Load data file
 	if (!oneFile) {
-		document.getElementById("dataFrame").src = dataFile;
-		
-		// Safari won't load iframe contents on the next showReport
-		// so we schedule another in 0.1s
-		setTimeout("showReport()", 100);
+		loadDataFile(dataFiles[0]);
+	} else {
+		showReport();
 	}
-	
-	showReport();
 
 	// document.getElementById('filter').focus();
 }
