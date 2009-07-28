@@ -35,5 +35,5 @@
 # Pode usar linhas em branco e espaços indiscriminadamente
 2007-11-20	   -    10,00	    Carnê do Baú
 
-# Transações futuras! (comentado)
-# 2009-12-31	+99,99	Bônus
+# Transações futuras!
+2009-12-31	+99,99	Bônus
