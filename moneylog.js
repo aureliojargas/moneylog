@@ -273,7 +273,7 @@ function toggleLastMonths() {
 	overviewData = [];
 	showReport();
 }
-function lastMonthsChanged(elem) {
+function lastMonthsChanged() {
 	document.getElementById('optlastmonths').checked = true;
 	overviewData = [];
 	showReport();
