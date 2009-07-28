@@ -232,28 +232,12 @@ function getOverviewAverageRow(avgPos, avgNeg, avgTotal) {
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
-function toggleMonthly() {
-	if (document.getElementById('optmonthly').checked === true) {
-		sortColIndex = 0;
-		sortColRev = false;
-	}
-	showReport();
-}
-function toggleFuture() {
-	showReport();
-}
-function toggleHelp() {
-	var el = document.getElementById('help');
-	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
-}
 function toggleOverview() {
 	// When active, hide all the controls from the toolbar and also the tags
 	if (document.getElementById('optoverview').checked === true) {
 		document.getElementById('filterbox'      ).style.visibility = 'hidden';
 		document.getElementById('optmonthly'     ).style.visibility = 'hidden';
 		document.getElementById('optmonthlylabel').style.visibility = 'hidden';
-		document.getElementById('optfuture'      ).style.visibility = 'hidden';
-		document.getElementById('optfuturelabel' ).style.visibility = 'hidden';
 		document.getElementById('tagsArea'       ).style.display = 'none';
 		oldSortColIndex = sortColIndex; // save state
 		sortColIndex = 0; // Default by date
@@ -261,8 +245,6 @@ function toggleOverview() {
 		document.getElementById('filterbox'      ).style.visibility = '';
 		document.getElementById('optmonthly'     ).style.visibility = '';
 		document.getElementById('optmonthlylabel').style.visibility = '';
-		document.getElementById('optfuture'      ).style.visibility = '';
-		document.getElementById('optfuturelabel' ).style.visibility = '';
 		document.getElementById('tagsArea'       ).style.display = 'block';
 		sortColIndex = oldSortColIndex;
 		overviewData = [];
@@ -277,6 +259,21 @@ function lastMonthsChanged() {
 	document.getElementById('optlastmonths').checked = true;
 	overviewData = [];
 	showReport();
+}
+function toggleFuture() {
+	overviewData = [];
+	showReport();
+}
+function toggleMonthly() {
+	if (document.getElementById('optmonthly').checked === true) {
+		sortColIndex = 0;
+		sortColRev = false;
+	}
+	showReport();
+}
+function toggleHelp() {
+	var el = document.getElementById('help');
+	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
 }
 function loadDataFile(filePath) {
 	document.getElementById("dataFrame").src = filePath;
@@ -307,12 +304,14 @@ function readData() {
 		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
 	}
 	
+	// Show future works for both views
+	showFuture = document.getElementById('optfuture').checked;
+	
 	// Get filters data for the detailed report
 	if (!document.getElementById('optoverview').checked) {
 		filter = document.getElementById('filter').value;
 		isRegex = document.getElementById('optregex').checked;
 		isNegated = document.getElementById('optnegate').checked;
-		showFuture = document.getElementById('optfuture').checked;
 	}
 	
 	// Prepare filter contents as /regex/ or string, always ignore case
