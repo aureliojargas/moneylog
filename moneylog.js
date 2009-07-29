@@ -168,6 +168,10 @@ function addMonths(yyyymmdd, n) {
 	if (m > 12) {
 		y = y + Math.floor(m / 12);
 		m = m % 12;
+		if (m == 0) { // Exception for n=24, n=36, ...
+			m = 12;
+			y = y - 1;
+		}
 	}
 	m = (m < 10) ? '0' + m : m;
 	return y + '-' + m + '-' + d;
