@@ -37,3 +37,7 @@
 
 # Transações futuras!
 2009-12-31	+99,99	Bônus
+
+# Pagamentos e ganhos parcelados
+2009-05-05	-100/3	Netbook usado comprado parcelado
+2009-12-10	500/2	Presente de Natal, metade Dez, metade Jan

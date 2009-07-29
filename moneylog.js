@@ -158,6 +158,20 @@ function getPastMonth(months) {
 	m = (m < 10) ? '0' + m : m;
 	return y + '-' + m + '-' + '00';
 }
+function addMonths(yyyymmdd, n) {
+	var y, m, d, z;
+	yyyymmdd = yyyymmdd.replace(/-/g, '');
+	y = parseInt(yyyymmdd.slice(0,4));
+	m = parseInt(yyyymmdd.slice(4,6));
+	d = yyyymmdd.slice(6,8);
+	m = m + n;
+	if (m > 12) {
+		y = y + Math.floor(m / 12);
+		m = m % 12;
+	}
+	m = (m < 10) ? '0' + m : m;
+	return y + '-' + m + '-' + d;
+}
 function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
 	num = num.toFixed(2).replace('.', centsSeparator);
@@ -282,7 +296,7 @@ function loadDataFile(filePath) {
 	// The browser won't load the iframe contents unless we schedule it (strange...)
 }
 function readData() {
-	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription;
+	var i, j, temp, temp2, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, amountValue, amountTimes;
 
 	isRegex = false;
 	isNegated = false;
@@ -351,16 +365,43 @@ function readData() {
 		// Normalize Date
 		rowDate = rowDate.replace(/[^0-9\-]/, '') || '-';
 		
+		// Normalize Value (force '.' as cents separator)
+		rowAmount = rowAmount.replace(/[.,]([0-9][0-9])$/, '@$1'
+			).replace(/[^0-9@+\/\-]/g, ''
+			).replace('@', '.');
+
+		// A value of -100/10 means 100 paid in 10x
+		// This idea came from myMoneyLog. Thanks Nishimura!
+		//
+		// Compose each payment row, changing: date, value and description
+		// 2009-12-25  -90/3  Foo
+		// turns to 
+		// 2009-12-25  -30    Foo 1/3
+		// 2010-01-25  -30    Foo 2/3
+		// 2010-02-25  -30    Foo 3/3
+		//
+		// XXX It doesn't fix end-of-month day. Uses 2009-02-31 instead 2009-02-28. But it's OK.
+		//
+		if (rowAmount.match(/[+\-]?[0-9.]+\/[0-9]+$/)) {
+			temp2 = rowAmount.split('/');
+			amountValue = temp2[0];
+			amountTimes = temp2[1];
+			for (j = 1; j <= amountTimes; j++) {
+				rawData.push([
+					addMonths(rowDate, j - 1),
+					(amountValue / amountTimes).toFixed(2),
+					rowText + ' ' + j + '/' + amountTimes
+					].join('\t'));
+			}
+			continue
+		}
+		rowAmount = parseFloat(rowAmount); // str2float
+		
 		// Ignore dates older than "last N months" option (if checked)
 		if (rowDate < firstDate) { continue; }
 
 		// Ignore future dates
 		if (!showFuture && rowDate > currentDate) { continue; }
-
-		// Normalize Value (force '.' as scale separator)
-		rowAmount = parseFloat(rowAmount.replace(/[.,]([0-9][0-9])$/, '@$1'
-			).replace(/[^0-9@+\-]/g, ''
-			).replace('@', '.'));
 
 		// Normalize desc/tags
 		if (rowText.indexOf(dataTagTerminator) != -1) {
