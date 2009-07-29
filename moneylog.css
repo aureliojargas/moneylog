@@ -166,6 +166,7 @@ tr.monthtotal td {
 tr.monthtotal td td.mini {
 	font-size:75%;
 	color:#868;
+	font-weight:bold;
 }
 table.monthsubtotal {
 	margin:0;
