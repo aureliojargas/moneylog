@@ -161,8 +161,8 @@ function getPastMonth(months) {
 function addMonths(yyyymmdd, n) {
 	var y, m, d, z;
 	yyyymmdd = yyyymmdd.replace(/-/g, '');
-	y = parseInt(yyyymmdd.slice(0,4));
-	m = parseInt(yyyymmdd.slice(4,6));
+	y = parseInt(yyyymmdd.slice(0,4), 10);
+	m = parseInt(yyyymmdd.slice(4,6), 10);
 	d = yyyymmdd.slice(6,8);
 	m = m + n;
 	if (m > 12) {
@@ -296,7 +296,7 @@ function loadDataFile(filePath) {
 	// The browser won't load the iframe contents unless we schedule it (strange...)
 }
 function readData() {
-	var i, j, temp, temp2, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, amountValue, amountTimes;
+	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator;
 
 	isRegex = false;
 	isNegated = false;
@@ -367,33 +367,43 @@ function readData() {
 		
 		// Normalize Value (force '.' as cents separator)
 		rowAmount = rowAmount.replace(/[.,]([0-9][0-9])$/, '@$1'
-			).replace(/[^0-9@+\/\-]/g, ''
+			).replace(/[^0-9@+\/*\-]/g, ''
 			).replace('@', '.');
 
-		// A value of -100/10 means 100 paid in 10x
+		// A value of -100/10 means I've spent 100 and will pay it in 10x
+		// A value of -100*10 means I'll spent 100/month in the next 10 months
 		// This idea came from myMoneyLog. Thanks Nishimura!
 		//
 		// Compose each payment row, changing: date, value and description
-		// 2009-12-25  -90/3  Foo
-		// turns to 
-		// 2009-12-25  -30    Foo 1/3
-		// 2010-01-25  -30    Foo 2/3
-		// 2010-02-25  -30    Foo 3/3
+		// 2009-12-25  -90/3  Foo        |    2009-12-25  -90*3  Foo
+		// turns to                      |    turns to 
+		// 2009-12-25  -30    Foo 1/3    |    2009-12-25  -90    Foo 1/3
+		// 2010-01-25  -30    Foo 2/3    |    2010-01-25  -90    Foo 2/3
+		// 2010-02-25  -30    Foo 3/3    |    2010-02-25  -90    Foo 3/3
 		//
 		// XXX It doesn't fix end-of-month day. Uses 2009-02-31 instead 2009-02-28. But it's OK.
 		//
-		if (rowAmount.match(/[+\-]?[0-9.]+\/[0-9]+$/)) {
-			temp2 = rowAmount.split('/');
-			amountValue = temp2[0];
-			amountTimes = temp2[1];
-			for (j = 1; j <= amountTimes; j++) {
+		recurrentAmount = rowAmount.match(/^([+\-]?[0-9.]+)([\/*])([0-9]+)$/);
+		if (recurrentAmount) {
+			recValue = recurrentAmount[1];
+			recTimes = parseInt(recurrentAmount[3], 10);
+			recOperator = recurrentAmount[2];
+			
+			if (recOperator == '/') {
+				recValue = (recValue / recTimes).toFixed(2);
+			}
+
+			// Compose and append each new row
+			for (j = 1; j <= recTimes; j++) {
 				rawData.push([
 					addMonths(rowDate, j - 1),
-					(amountValue / amountTimes).toFixed(2),
-					rowText + ' ' + j + '/' + amountTimes
-					].join('\t'));
+					recValue,
+					rowText + ' ' + j + '/' + recTimes
+				].join('\t'));
 			}
-			continue
+			
+			// Ignore the original recurring row
+			continue;
 		}
 		rowAmount = parseFloat(rowAmount); // str2float
 		

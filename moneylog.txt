@@ -36,8 +36,12 @@
 2007-11-20	   -    10,00	    Carnê do Baú
 
 # Transações futuras!
-2009-12-31	+99,99	Bônus
+2009-12-31	+99,99	salario| Bônus
 
 # Pagamentos e ganhos parcelados
-2009-05-05	-100/3	Netbook usado comprado parcelado
-2009-12-10	500/2	Presente de Natal, metade Dez, metade Jan
+2009-05-05	-500/5	nerd| Netbook usado comprado parcelado
+2009-12-25	500/2	presente| Presente de Natal, metade Dez, metade Jan
+
+# Pagamentos e ganhos recorrentes
+2009-05-05	-300*6	aluguel| Aluguel da casa (seis meses)
+2009-09-10	100*4	presente| O Zé vai me dar 100 pilas por mês até o fim do ano
