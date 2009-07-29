@@ -366,7 +366,7 @@ function readData() {
 		rowDate = rowDate.replace(/[^0-9\-]/, '') || '-';
 		
 		// Normalize Value (force '.' as cents separator)
-		rowAmount = rowAmount.replace(/[.,]([0-9][0-9])$/, '@$1'
+		rowAmount = rowAmount.replace(/[.,]([0-9][0-9]) *([\/*]|$)/, '@$1$2'
 			).replace(/[^0-9@+\/*\-]/g, ''
 			).replace('@', '.');
 
