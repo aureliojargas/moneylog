@@ -240,9 +240,12 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	theRow += '<td colspan="2">' + partial + '<\/td><\/tr>';
 	return theRow;
 }
-function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal) {
+function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
 	var theRow = [];
 	theRow.push((theMonth <= currentDate.slice(0, 7)) ? '<tr>' : '<tr class="future">');
+	if (showRowCount) {
+		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
+	}
 	theRow.push('<td>' + theMonth + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
@@ -254,6 +257,9 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal) {
 function getOverviewTotalsRow(label, n1, n2, n3) {
 	var theRow = [];
 	theRow.push('<tr class="total">');
+	if (showRowCount) {
+		theRow.push('<td class="row-count"><\/td>');
+	}
 	theRow.push('<td class="rowlabel">' + label + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(n1)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(n2)  + '<\/td>');
@@ -589,6 +595,9 @@ function showOverview() {
 	thead += '<th onClick="sortCol(2, true)">' + labelsOverview[2] + '<\/th>';
 	thead += '<th onClick="sortCol(3, true)">' + labelsOverview[3] + '<\/th>';
 	thead += '<th onClick="sortCol(4, true)">' + labelsOverview[4] + '<\/th>';
+	if (showRowCount) {
+		thead = '<th class="row-count"><\/th>' + thead;
+	}
 
 	if (!overviewData.length) { // Data not cached
 		theData = readData();
@@ -664,7 +673,7 @@ function showOverview() {
 			sumNeg   += z[2];
 			sumTotal += z[3];
 			// Save this row to the report table
-			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4]));
+			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4], i + 1));
 		}
 		
 		// Compose the final average row
