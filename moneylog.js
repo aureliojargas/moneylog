@@ -38,31 +38,35 @@ var dataTagSeparator = ',';
 var commentChar = '#';   // Must be at line start (column 1)
 // Screen Labels
 if (lang == 'pt') {
-	var labelOverview = 'Relatório Geral';
+	var labelOverview = 'Relatório Geral:';
 	var labelLastMonths = 'Somente Recentes:';
-	var labelMonthly = 'Mostrar Parciais Mensais';
+	var labelMonthPartials = 'Mostrar Parciais Mensais';
 	var labelFuture = 'Mostrar Lançamentos Futuros';
 	var labelNoData = 'Nenhum lançamento.';
 	var labelsDetailed = ['Data', 'Valor', 'Tags', 'Descrição'];
-	var labelsOverview = ['Mês', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'];
+	var labelsOverview = ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'];
 	var labelAverage = 'Média';
 	var labelMonths = ['mês', 'meses'];
 	var labelRegex = ['regex'];
 	var labelNegate = ['excluir'];
+	var labelMonthly = ['mensal'];
+	var labelYearly = ['anual'];
 	var centsSeparator = ',';
 	var thousandSeparator = '.';
 } else {
-	var labelOverview = 'Overview';
+	var labelOverview = 'Overview:';
 	var labelLastMonths = 'Recent Only:';
-	var labelMonthly = 'Show Monthly Partials';
+	var labelMonthPartials = 'Show Monthly Partials';
 	var labelFuture = 'Show Future Data';
 	var labelNoData = 'No data.';
 	var labelsDetailed = ['Date', 'Amount', 'Tags', 'Description'];
-	var labelsOverview = ['Month', 'Incoming', 'Expense', 'Partial', 'Balance'];
+	var labelsOverview = ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'];
 	var labelAverage = 'Average';
 	var labelMonths = ['month', 'months'];
 	var labelRegex = ['regex'];
 	var labelNegate = ['negate'];
+	var labelMonthly = ['monthly'];
+	var labelYearly = ['yearly'];
 	// Screen separators (Inside data both , and . are handled automatically)
 	var centsSeparator = '.';
 	var thousandSeparator = ',';
@@ -186,6 +190,12 @@ function prettyFloat(num, noHtml) {
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
 	// Note: all html *end* tags have the / escaped to pass on validator
 }
+function populateOverviewRangeCombo() {
+	var el;
+	el = document.getElementById('overviewrange');
+	el.options[0] = new Option(labelMonthly, 'month');
+	el.options[1] = new Option(labelYearly, 'year');
+}
 function populateMonthsCombo() {
 	var el, label, i;
 	el = document.getElementById('lastmonths');
@@ -251,7 +261,7 @@ function getOverviewAverageRow(avgPos, avgNeg, avgTotal) {
 	return theRow.join('\n');
 }
 function toggleOverview() {
-	// When active, hide all the controls from the toolbar and also the tags
+	// When active, hide some controls from the toolbar and also the tags
 	if (document.getElementById('optoverview').checked === true) {
 		document.getElementById('filterbox'      ).style.visibility = 'hidden';
 		document.getElementById('optmonthly'     ).style.visibility = 'hidden';
@@ -268,6 +278,18 @@ function toggleOverview() {
 		overviewData = [];
 	}
 	showReport();
+}
+function overviewRangeChanged() {
+	// Automatic switch to overview mode when changing range
+	if (!document.getElementById('optoverview').checked) {
+		document.getElementById('optoverview').checked = true;
+		toggleOverview();
+
+	// Already in overview mode, just update the report
+	} else {
+		overviewData = [];
+		showReport();
+	}
 }
 function toggleLastMonths() {
 	overviewData = [];
@@ -553,10 +575,10 @@ function applyTags(theData) {
 	}
 }
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, thisMonth, results, theTotal, monthTotal, monthPos, monthNeg, sumPos, sumNeg, sumTotal, currSortIndex;
+	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeType, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex;
 
 	results = [];
-	theTotal = monthTotal = monthPos = monthNeg = sumPos = sumNeg = sumTotal = 0;
+	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
 	currSortIndex = sortColIndex;
 
 	// Table headings
@@ -576,49 +598,81 @@ function showOverview() {
 		results.push('<table>');
 		results.push('<tr>' + thead + '<\/tr>');
 
-		if (!overviewData.length) { // Scan and calculate
+		// The cache is empty. Scan and calculate everything.
+		if (!overviewData.length) {
+			
+			rangeType = document.getElementById('overviewrange').value; // month|year
+						
 			for (i = 0; i < theData.length; i++) {
 				rowDate        = theData[i][0];
 				rowAmount      = theData[i][1];
 				/* rowTags        = theData[i][2]; */
 				/* rowDescription = theData[i][3]; */
+
+				// rowDate.slice() size, to extract 2000 or 2000-01
+				dateSize = (rangeType == 'year') ? 4 : 7;
 				
-				if (i === 0) { thisMonth = rowDate.slice(0, 7); }
+				// First row, just save the month/year date
+				if (i === 0) {
+					rangeDate = rowDate.slice(0, dateSize);
+				}
+
+				// Other rows, detect if this is a new month/year
 				if (i > 0 &&
-					rowDate.slice(0, 7) !=
-					theData[i - 1][0].slice(0, 7)) { //new month
-					overviewData.push([thisMonth, monthPos, monthNeg, monthTotal, theTotal]);
-					monthTotal = 0;
-					monthPos = 0;
-					monthNeg = 0;
-					thisMonth = rowDate.slice(0, 7);
+					rowDate.slice(0, dateSize) !=
+					theData[i - 1][0].slice(0, dateSize)) {
+					
+					// Send old month/year totals to the report
+					overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);	
+					// Reset totals
+					rangeTotal = rangePos = rangeNeg = 0;
+					// Save new month/year date
+					rangeDate = rowDate.slice(0, dateSize);
 				}
-				theTotal += rowAmount;
-				monthTotal += rowAmount;
+				
+				// Common processing for all rows: update totals
+				grandTotal += rowAmount;
+				rangeTotal += rowAmount;
 				if (rowAmount < 0) {
-					monthNeg += rowAmount;
+					rangeNeg += rowAmount;
 				} else {
-					monthPos += rowAmount;
+					rangePos += rowAmount;
 				}
-			}
-			overviewData.push([thisMonth, monthPos, monthNeg, monthTotal, theTotal]);
+			}		
+			// No more rows. Send the last range totals to the report.
+			overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 		}
+		// End of cache filling
+		
+		//// Report data is OK inside overviewData array
+		//// Now we must compose the report table
+		
+		// Perform the user-selected sorting column and order
 		sortColIndex = currSortIndex;
 		overviewData.sort(sortArray);
-		if (sortColRev) { overviewData.reverse(); }
-		for (i = 0; i < overviewData.length; i++) { // Array2Html
+		if (sortColRev) {
+			overviewData.reverse();
+		}
+		
+		// Array2Html
+		for (i = 0; i < overviewData.length; i++) {
+			// Calculate overall totals
 			z = overviewData[i];
 			sumPos   += z[1];
 			sumNeg   += z[2];
 			sumTotal += z[3];
+			// Save this row to the report table
 			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4]));
 		}
+		
+		// Compose the final average row
 		len = overviewData.length;
 		results.push(getOverviewAverageRow(sumPos / len, sumNeg / len, sumTotal / len));
+		
+		// And we're done
 		results.push('<\/table>');
 		results = results.join('\n');
-	}
-	else {
+	} else {
 		results = labelNoData;
 	}
 	document.getElementById('report').innerHTML = results;
@@ -734,6 +788,7 @@ function init() {
 
 	setCurrentDate();
 	populateMonthsCombo();
+	populateOverviewRangeCombo();
 	
 	if (!oneFile && dataFiles.length > 1) {
 		populateDataFilesCombo();
@@ -744,7 +799,7 @@ function init() {
 	// Lang-specific info
 	document.getElementById('optoverviewlabel'  ).innerHTML = labelOverview;
 	document.getElementById('optlastmonthslabel').innerHTML = labelLastMonths;
-	document.getElementById('optmonthlylabel'   ).innerHTML = labelMonthly;
+	document.getElementById('optmonthlylabel'   ).innerHTML = labelMonthPartials;
 	document.getElementById('optfuturelabel'    ).innerHTML = labelFuture;
 	document.getElementById('optregexlabel'     ).innerHTML = labelRegex;
 	document.getElementById('optnegatelabel'    ).innerHTML = labelNegate;
