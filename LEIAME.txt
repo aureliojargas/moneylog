@@ -1,0 +1,89 @@
+MoneyLog Experience — Versão BETA
+======== ==========
+
+Esta versão BETA do MoneyLog é o código mais recente do programa, que conta
+com novidades que ainda não foram lançadas na versão oficial. O código está
+em constante evolução e novidades podem aparecer a qualquer momento.
+
+Use a versão BETA se você quer experimentar estas novidades assim que elas
+forem implementadas, tornando sua experiência com o MoneyLog ainda mais
+completa.
+
+Problemas podem ocorrer, mas serão corrigidos rapidamente, pois eu, o autor,
+uso esta versão diariamente e logo percebo se há algo de errado. Mesmo assim,
+contate-me se encontrar algo de errado: verde@aurelio.net ou @oreio.
+
+
+1) DOWNLOAD
+
+   Para baixar todos os arquivos do MoneyLog para a sua máquina, faça:
+
+      cd $HOME
+      svn checkout http://moneylog-dev.googlecode.com/svn/trunk/ moneylog-dev
+
+   Só é preciso fazer isto uma única vez. Com isso será criada a pasta
+   moneylog-dev dentro de sua pasta pessoal ($HOME). Você pode renomeá-la
+   se desejar.
+
+2) ATUALIZAÇÃO
+
+   O processo de desenvolvimento do programa vai continuar, e os arquivos
+   serão atualizados lá no servidor (Google Code). Para atualizar os seus
+   arquivos locais, garantindo que eles estarão sincronizados com a versão
+   mais recente do servidor, faça:
+
+      cd $HOME/moneylog-dev
+      svn update
+
+   Você pode executar este comando sempre que quiser. Se houver atualizações
+   elas serão baixadas, senão, nada é alterado.
+
+3) DICAS DE USO
+
+   A versão BETA do MoneyLog é composta por vários arquivos separados,
+   diferente da versão oficial que é composta por apenas um único arquivo.
+   Mas o código de ambos é o mesmo, assim como sua funcionalidade.
+
+   Se você editar o moneylog.js, suas alterações serão perdidas numa
+   atualização. Para evitar este transtorno, crie um arquivo chamado
+   config.js dentro da pasta do programa, e ali coloque suas preferências.
+   Use o mesmo formato da configuração do início do moneylog.js, exemplo:
+
+      var maxLastMonths = 12;
+      var initLastMonths = 3;
+      var defaultLastMonths = false;
+      var defaultMonthPartials = true;
+
+   O arquivo com os lançamentos (moneylog.txt) também poderá ser alterado
+   em uma atualização, então evite editá-lo. Em vez disso, configure um
+   nome diferente dentro do config.js. Exemplo:
+
+      dataFiles = ['dados.txt'];
+
+   IMPORTANTE: Se você estiver usando o Firefox ou o Camino, este arquivo
+   dos lançamentos deve ter a codificação ISO-8859-1, senão os acentos
+   aparecerão bagunçados. Os outros navegadores podem utilizar a codificação
+   padrão UTF-8 sem problemas.
+
+      # Converter os dados de UTF-8 para ISO-8859-1
+      iconv -f utf-8 -t iso-8859-1 moneylog.txt > dados-iso.txt
+
+   Se você quiser, pode usar mais de um arquivo de dados, para por exemplo
+   separar despesas profissionais das pessoais, ou criar um arquivo para
+   cada tipo de conta (carteira, cartão de crédito, cheque). Basta colocar
+   os nomes destes arquivos no config.js:
+
+      dataFiles = ['pessoal.txt', 'profissional.txt'];
+
+   Aconselho que estes arquivos estejam todos dentro da pasta do MoneyLog,
+   mas você também pode colocá-los em outras pastas, desde que coloque em
+   dataFiles o caminho completo para encontrá-los. O Firefox parece ter
+   algumas restrições para acessar outras pastas pelo JavaScript, então
+   reforço a dica de deixar tudo nesta mesma pasta.
+
+   Tudo certo? Então abra o moneylog.html em seu navegador preferido e
+   aproveite!
+
+
+Aurélio Marinho Jargas
+www.aurelio.net
