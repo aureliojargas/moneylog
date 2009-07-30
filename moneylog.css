@@ -121,6 +121,9 @@ td.row-count {
 td.date {
 	white-space:nowrap;
 }
+td.rowlabel {
+	font-weight:bold;
+}
 tr.future td.row-count {
 	font-style:normal;
 }
@@ -140,10 +143,6 @@ tr.future {
 	background-color:#eee;
 	font-style:italic;
 }
-tr.average {
-	background-color:#f8e8ff;
-	font-style:italic;
-}
 tr.monthtotal {
 	background-color:#f8e8ff;
 	line-height:200%;
@@ -152,6 +151,10 @@ tr.monthtotal {
 tr.monthtotal td {
 	border-width:0;
 	font-size:100%;
+}
+table.overview tr.total {
+	background-color:#f8e8ff;
+	font-style:italic;	
 }
 .trigger {
 	cursor:pointer;

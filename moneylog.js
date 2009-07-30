@@ -45,6 +45,7 @@ if (lang == 'pt') {
 	var labelNoData = 'Nenhum lançamento.';
 	var labelsDetailed = ['Data', 'Valor', 'Tags', 'Descrição'];
 	var labelsOverview = ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'];
+	var labelTotal = 'Total';
 	var labelAverage = 'Média';
 	var labelMonths = ['mês', 'meses'];
 	var labelRegex = ['regex'];
@@ -61,6 +62,7 @@ if (lang == 'pt') {
 	var labelNoData = 'No data.';
 	var labelsDetailed = ['Date', 'Amount', 'Tags', 'Description'];
 	var labelsOverview = ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'];
+	var labelTotal = 'Total';
 	var labelAverage = 'Average';
 	var labelMonths = ['month', 'months'];
 	var labelRegex = ['regex'];
@@ -249,13 +251,13 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal) {
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
-function getOverviewAverageRow(avgPos, avgNeg, avgTotal) {
+function getOverviewTotalsRow(label, n1, n2, n3) {
 	var theRow = [];
-	theRow.push('<tr class="average">');
-	theRow.push('<td>' + labelAverage + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(avgPos)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(avgNeg)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(avgTotal) + '<\/td>');
+	theRow.push('<tr class="total">');
+	theRow.push('<td class="rowlabel">' + label + '<\/td>');
+	theRow.push('<td class="number">' + prettyFloat(n1)  + '<\/td>');
+	theRow.push('<td class="number">' + prettyFloat(n2)  + '<\/td>');
+	theRow.push('<td class="number">' + prettyFloat(n3) + '<\/td>');
 	theRow.push('<td><\/td>');
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
@@ -595,7 +597,7 @@ function showOverview() {
 	}
 
 	if (overviewData.length || theData.length) {
-		results.push('<table>');
+		results.push('<table class="overview">');
 		results.push('<tr>' + thead + '<\/tr>');
 
 		// The cache is empty. Scan and calculate everything.
@@ -667,7 +669,8 @@ function showOverview() {
 		
 		// Compose the final average row
 		len = overviewData.length;
-		results.push(getOverviewAverageRow(sumPos / len, sumNeg / len, sumTotal / len));
+		results.push(getOverviewTotalsRow(labelTotal, sumPos, sumNeg, sumPos + sumNeg));
+		results.push(getOverviewTotalsRow(labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
 		
 		// And we're done
 		results.push('<\/table>');
