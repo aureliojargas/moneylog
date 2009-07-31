@@ -26,9 +26,9 @@ var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 
 // Program structure and files
-// Note: dataFile must be UTF-8 (Safari, IE) or ISO-8859-1 (Firefox, Camino)
 var oneFile = false;              // Full app is at moneylog.html single file?
 var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneFile=false)
+// Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 
 // Data format
 var dataFieldSeparator = '\t';
