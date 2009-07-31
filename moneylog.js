@@ -24,7 +24,8 @@ var defaultNegate = false;        // Search negate checkbox inits checked?
 var defaultSearch = '';           // Search for this text on init
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
-var highlightWords = '';          // The words you may want to highlight (Ex.: 'XXX TODO')
+var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
+var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
@@ -718,7 +719,7 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, rowDate, rowAmount, rowTags, rowDescription, theTotal, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData;
+	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, theTotal, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData;
 	
 	theTotal = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
@@ -774,6 +775,16 @@ function showDetailed() {
 				rowDescription = rowDescription.replace(
 					highlightRegex,
 					'<span class="hl">$&</span>');
+			}
+			
+			// There are some tags to highlight?
+			for (j = 0; j < highlightTags.length; j++) {
+				for (k = 0; k < rowTags.length; k++) {
+					if (rowTags[k] == highlightTags[j]) {
+						rowTags[k] = '<span class="hl">' + rowTags[k] + '</span>';
+						break;
+					}
+				}
 			}
 			
 			// This row is in the future?
@@ -844,6 +855,9 @@ function init() {
 			RegExp.escape(highlightWords).replace(/\s+/g,'|'),
 			'ig');
 	}
+	
+	// Split highlight string into words 
+	highlightTags = highlightTags.strip().split(/\s+/);
 	
 	// Just show files combo when there are 2 or more
 	if (oneFile || dataFiles.length < 2) {
