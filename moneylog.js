@@ -105,6 +105,18 @@ if (!Number.prototype.toFixed) { // IE5...
 String.prototype.strip = function () {
 	return this.replace(/^\s+/, '').replace(/\s+$/, '');
 };
+String.prototype.unacccent = function () {
+	if (!this.match(/[^a-z0-9 ]/)) { return this; } // no accented char
+	return this.replace(
+		/[àáâãäå]/g, 'a').replace(
+		/[èéêë]/g, 'e').replace(
+		/[ìíîï]/g, 'i').replace(
+		/[òóôõö]/g, 'o').replace(
+		/[ùúûü]/g, 'u').replace(
+		/[ýÿ]/g, 'y').replace(
+		/ç/g, 'c').replace(
+		/ñ/g, 'n');
+};
 Array.prototype.hasItem = function (item) {
 	for (var i = 0; i < this.length; i++) {
 		if (item == this[i]) { return true; }
@@ -145,8 +157,8 @@ function sortArray(a, b)  {
 }
 function sortIgnoreCase(a, b) {
 	try {
-		a = a.toLowerCase();
-		b = b.toLowerCase();
+		a = a.toLowerCase().unacccent();
+		b = b.toLowerCase().unacccent();
 	} catch (e) { }
 	try { // IE6...
 		if (a < b) { return -1; }
