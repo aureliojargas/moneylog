@@ -450,7 +450,7 @@ function readData() {
 		
 		// Hack: Value filtering on the search box!
 		// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
-		temp = filter.match(/^v:([-+>=<][=]?)([+-]?\d*)$/);
+		temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
 		if (temp) {
 			valueFilter = temp[1];
 			valueFilterArg = temp[2] || 0;
