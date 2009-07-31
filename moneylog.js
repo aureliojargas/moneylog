@@ -118,10 +118,10 @@ Array.prototype.removePattern = function (patt) {
 	}
 	return cleaned;
 };
-RegExp.escape = function(str) {
+RegExp.escape = function (str) {
 	var specials = new RegExp('[.*+?|\\^$()\\[\\]{}\\\\]', 'g');
 	return str.replace(specials, '\\$&');
-}
+};
 
 function sortCol(index, isOverview) { // if the same, flip reverse state
 	sortColRev = (sortColIndex == index) ? sortColRev ^= true : false;
