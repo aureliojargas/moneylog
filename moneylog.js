@@ -58,6 +58,8 @@ var i18nDatabase = {
 		labelYearly: 'anual',
 		labelHelp: 'Ajuda',
 		labelReload: 'Recarregar',
+		appUrl: 'http://aurelio.net/moneylog',
+		appDescription: 'Uma página. Um programa.',
 		centsSeparator: ',',
 		thousandSeparator: '.'
 	},
@@ -78,6 +80,8 @@ var i18nDatabase = {
 		labelYearly: 'yearly',
 		labelHelp: 'Help',
 		labelReload: 'Reload',
+		appUrl: 'http://aurelio.net/soft/moneylog',
+		appDescription: 'A webpage. A software.',
 		centsSeparator: '.',
 		thousandSeparator: ','
 	}
@@ -844,7 +848,6 @@ function showReport() {
 	}
 }
 function init() {
-	var sitelink;
 	
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase[lang];
@@ -884,15 +887,13 @@ function init() {
 	document.getElementById('optnegatelabel'    ).innerHTML = i18n.labelNegate;
 	document.getElementById('helpbutton').title = i18n.labelHelp;
 	document.getElementById('reload'    ).title = i18n.labelReload;
-	
-	if (lang == 'pt') {
-		sitelink = document.getElementById('sitelink');
-		sitelink.href = 'http://aurelio.net/moneylog';
-		sitelink.title = 'Uma página. Um programa.';
-		document.getElementById('help-en').style.display = 'none';
-	} else {
-		document.getElementById('help-pt').style.display = 'none';
-	}
+	document.getElementById('sitelink'  ).title = i18n.appDescription;
+	document.getElementById('sitelink'  ).href  = i18n.appUrl;
+
+	// Hide all help content, then enable the current lang
+	document.getElementById('help-en').style.display = 'none';
+	document.getElementById('help-pt').style.display = 'none';
+	document.getElementById('help-' + lang).style.display = '';
 	
 	// Apply user defaults
 	if (defaultOverview)      { document.getElementById('optoverview'  ).click(); }
@@ -903,7 +904,7 @@ function init() {
 	if (defaultNegate)        { document.getElementById('optnegate'    ).click(); }
 	document.getElementById('filter').value = defaultSearch;
 
-	// Load data file
+	// Load data file or embedded data
 	if (!oneFile) {
 		loadDataFile(dataFiles[0]);
 	} else {
