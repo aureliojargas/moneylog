@@ -39,47 +39,49 @@ var dataTagTerminator = '|';
 var dataTagSeparator = ',';
 var commentChar = '#';   // Must be at line start (column 1)
 
-// Screen Labels
-if (lang == 'pt') {
-	var labelOverview = 'Relatório Geral:';
-	var labelLastMonths = 'Somente Recentes:';
-	var labelMonthPartials = 'Mostrar Parciais Mensais';
-	var labelFuture = 'Mostrar Lançamentos Futuros';
-	var labelNoData = 'Nenhum lançamento.';
-	var labelsDetailed = ['Data', 'Valor', 'Tags', 'Descrição'];
-	var labelsOverview = ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'];
-	var labelTotal = 'Total';
-	var labelAverage = 'Média';
-	var labelMonths = ['mês', 'meses'];
-	var labelRegex = 'regex';
-	var labelNegate = 'excluir';
-	var labelMonthly = 'mensal';
-	var labelYearly = 'anual';
-	var labelHelp = 'Ajuda';
-	var labelReload = 'Recarregar';
-	var centsSeparator = ',';
-	var thousandSeparator = '.';
-} else {
-	var labelOverview = 'Overview:';
-	var labelLastMonths = 'Recent Only:';
-	var labelMonthPartials = 'Show Monthly Partials';
-	var labelFuture = 'Show Future Data';
-	var labelNoData = 'No data.';
-	var labelsDetailed = ['Date', 'Amount', 'Tags', 'Description'];
-	var labelsOverview = ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'];
-	var labelTotal = 'Total';
-	var labelAverage = 'Average';
-	var labelMonths = ['month', 'months'];
-	var labelRegex = 'regex';
-	var labelNegate = 'negate';
-	var labelMonthly = 'monthly';
-	var labelYearly = 'yearly';
-	var labelHelp = 'Help';
-	var labelReload = 'Reload';
-	// Screen separators (Inside data both , and . are handled automatically)
-	var centsSeparator = '.';
-	var thousandSeparator = ',';
-}
+// Internationalisation (i18n) - Screen Labels and formatting
+var i18nDatabase = {
+	pt: {
+		labelOverview: 'Relatório Geral:',
+		labelLastMonths: 'Somente Recentes:',
+		labelMonthPartials: 'Mostrar Parciais Mensais',
+		labelFuture: 'Mostrar Lançamentos Futuros',
+		labelNoData: 'Nenhum lançamento.',
+		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição'],
+		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
+		labelTotal: 'Total',
+		labelAverage: 'Média',
+		labelMonths: ['mês', 'meses'],
+		labelRegex: 'regex',
+		labelNegate: 'excluir',
+		labelMonthly: 'mensal',
+		labelYearly: 'anual',
+		labelHelp: 'Ajuda',
+		labelReload: 'Recarregar',
+		centsSeparator: ',',
+		thousandSeparator: '.'
+	},
+	en: {		
+		labelOverview: 'Overview:',
+		labelLastMonths: 'Recent Only:',
+		labelMonthPartials: 'Show Monthly Partials',
+		labelFuture: 'Show Future Data',
+		labelNoData: 'No data.',
+		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description'],
+		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
+		labelTotal: 'Total',
+		labelAverage: 'Average',
+		labelMonths: ['month', 'months'],
+		labelRegex: 'regex',
+		labelNegate: 'negate',
+		labelMonthly: 'monthly',
+		labelYearly: 'yearly',
+		labelHelp: 'Help',
+		labelReload: 'Reload',
+		centsSeparator: '.',
+		thousandSeparator: ','
+	}
+};
 // End of user Config
 
 
@@ -89,6 +91,7 @@ var oldSortColIndex;
 var currentDate;
 var overviewData = [];
 var highlightRegex;
+var i18n;
 
 if (!Array.prototype.push) { // IE5...
 	Array.prototype.push = function (item) {
@@ -208,10 +211,10 @@ function addMonths(yyyymmdd, n) {
 }
 function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
-	num = num.toFixed(2).replace('.', centsSeparator);
-	while (thousandSeparator && num.search(/[0-9]{4}/) > -1) {
+	num = num.toFixed(2).replace('.', i18n.centsSeparator);
+	while (i18n.thousandSeparator && num.search(/[0-9]{4}/) > -1) {
 		num = num.replace(/([0-9])([0-9]{3})([^0-9])/,
-			'$1' + thousandSeparator + '$2$3');
+			'$1' + i18n.thousandSeparator + '$2$3');
 	}
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
 	// Note: all html *end* tags have the / escaped to pass on validator
@@ -219,15 +222,15 @@ function prettyFloat(num, noHtml) {
 function populateOverviewRangeCombo() {
 	var el;
 	el = document.getElementById('overviewrange');
-	el.options[0] = new Option(labelMonthly, 'month');
-	el.options[1] = new Option(labelYearly, 'year');
+	el.options[0] = new Option(i18n.labelMonthly, 'month');
+	el.options[1] = new Option(i18n.labelYearly, 'year');
 }
 function populateMonthsCombo() {
 	var el, label, i;
 	el = document.getElementById('lastmonths');
-	label = labelMonths[0];
+	label = i18n.labelMonths[0];
 	for (i = 1; i <= maxLastMonths; i++) {
-		if (i > 1) { label = labelMonths[1]; }
+		if (i > 1) { label = i18n.labelMonths[1]; }
 		el.options[i - 1] = new Option(i + ' ' + label, i);
 	}
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
@@ -618,11 +621,11 @@ function showOverview() {
 	currSortIndex = sortColIndex;
 
 	// Table headings
-	thead = '<th onClick="sortCol(0, true)">' + labelsOverview[0] + '<\/th>';
-	thead += '<th onClick="sortCol(1, true)">' + labelsOverview[1] + '<\/th>';
-	thead += '<th onClick="sortCol(2, true)">' + labelsOverview[2] + '<\/th>';
-	thead += '<th onClick="sortCol(3, true)">' + labelsOverview[3] + '<\/th>';
-	thead += '<th onClick="sortCol(4, true)">' + labelsOverview[4] + '<\/th>';
+	thead = '<th onClick="sortCol(0, true)">' + i18n.labelsOverview[0] + '<\/th>';
+	thead += '<th onClick="sortCol(1, true)">' + i18n.labelsOverview[1] + '<\/th>';
+	thead += '<th onClick="sortCol(2, true)">' + i18n.labelsOverview[2] + '<\/th>';
+	thead += '<th onClick="sortCol(3, true)">' + i18n.labelsOverview[3] + '<\/th>';
+	thead += '<th onClick="sortCol(4, true)">' + i18n.labelsOverview[4] + '<\/th>';
 	if (showRowCount) {
 		thead = '<th class="row-count"><\/th>' + thead;
 	}
@@ -706,14 +709,14 @@ function showOverview() {
 		
 		// Compose the final average row
 		len = overviewData.length;
-		results.push(getOverviewTotalsRow(labelTotal, sumPos, sumNeg, sumPos + sumNeg));
-		results.push(getOverviewTotalsRow(labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
+		results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
+		results.push(getOverviewTotalsRow(i18n.labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
 		
 		// And we're done
 		results.push('<\/table>');
 		results = results.join('\n');
 	} else {
-		results = labelNoData;
+		results = i18n.labelNoData;
 	}
 	document.getElementById('report').innerHTML = results;
 }
@@ -737,10 +740,10 @@ function showDetailed() {
 		if (sortColRev) { theData.reverse(); }
 
 		// Compose table headings
-		thead = '<th onClick="sortCol(0)">' + labelsDetailed[0] + '<\/th>';
-		thead += '<th onClick="sortCol(1)">' + labelsDetailed[1] + '<\/th>';
-		thead += '<th onClick="sortCol(2)" class="tags">' + labelsDetailed[2] + '<\/th>';
-		thead += '<th onClick="sortCol(3)">' + labelsDetailed[3] + '<\/th>';
+		thead = '<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '<\/th>';
+		thead += '<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>';
+		thead += '<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>';
+		thead += '<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>';
 		if (showRowCount) {
 			thead = '<th class="row-count"><\/th>' + thead;
 		}
@@ -828,7 +831,7 @@ function showDetailed() {
 		/* results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(theTotal)); */
 	}
 	else {
-		results = labelNoData;
+		results = i18n.labelNoData;
 	}
 	document.getElementById('report').innerHTML = results;
 }
@@ -842,6 +845,9 @@ function showReport() {
 }
 function init() {
 	var sitelink;
+	
+	// Load the i18n messages (must be the first)
+	i18n = i18nDatabase[lang];
 
 	setCurrentDate();
 	populateMonthsCombo();
@@ -869,15 +875,15 @@ function init() {
 		document.getElementById('reload').style.visibility = 'hidden';
 	}
 	
-	// Lang-specific info
-	document.getElementById('optoverviewlabel'  ).innerHTML = labelOverview;
-	document.getElementById('optlastmonthslabel').innerHTML = labelLastMonths;
-	document.getElementById('optmonthlylabel'   ).innerHTML = labelMonthPartials;
-	document.getElementById('optfuturelabel'    ).innerHTML = labelFuture;
-	document.getElementById('optregexlabel'     ).innerHTML = labelRegex;
-	document.getElementById('optnegatelabel'    ).innerHTML = labelNegate;
-	document.getElementById('helpbutton').title = labelHelp;
-	document.getElementById('reload'    ).title = labelReload;
+	// Set interface labels
+	document.getElementById('optoverviewlabel'  ).innerHTML = i18n.labelOverview;
+	document.getElementById('optlastmonthslabel').innerHTML = i18n.labelLastMonths;
+	document.getElementById('optmonthlylabel'   ).innerHTML = i18n.labelMonthPartials;
+	document.getElementById('optfuturelabel'    ).innerHTML = i18n.labelFuture;
+	document.getElementById('optregexlabel'     ).innerHTML = i18n.labelRegex;
+	document.getElementById('optnegatelabel'    ).innerHTML = i18n.labelNegate;
+	document.getElementById('helpbutton').title = i18n.labelHelp;
+	document.getElementById('reload'    ).title = i18n.labelReload;
 	
 	if (lang == 'pt') {
 		sitelink = document.getElementById('sitelink');
