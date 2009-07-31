@@ -58,6 +58,11 @@ var i18nDatabase = {
 		labelYearly: 'anual',
 		labelHelp: 'Ajuda',
 		labelReload: 'Recarregar',
+		labelValueFilter: 'Somente Valores:',
+		labelPositive: 'positivo',
+		labelNegative: 'negativo',
+		labelGreaterThan: 'maior que',
+		labelLessThan: 'menor que',
 		appUrl: 'http://aurelio.net/moneylog',
 		appDescription: 'Uma página. Um programa.',
 		centsSeparator: ',',
@@ -80,6 +85,11 @@ var i18nDatabase = {
 		labelYearly: 'yearly',
 		labelHelp: 'Help',
 		labelReload: 'Reload',
+		labelValueFilter: 'Filter Values:',
+		labelPositive: 'positive',
+		labelNegative: 'negative',
+		labelGreaterThan: 'greater than',
+		labelLessThan: 'less than',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'A webpage. A software.',
 		centsSeparator: '.',
@@ -92,6 +102,7 @@ var i18nDatabase = {
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
+var oldValueFilterArgShow;
 var currentDate;
 var overviewData = [];
 var highlightRegex;
@@ -229,6 +240,14 @@ function populateOverviewRangeCombo() {
 	el.options[0] = new Option(i18n.labelMonthly, 'month');
 	el.options[1] = new Option(i18n.labelYearly, 'year');
 }
+function populateValueFilterCombo() {
+	var el;
+	el = document.getElementById('valuefilter');
+	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
+	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
+	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
+	el.options[3] = new Option('< ' + i18n.labelLessThan, '<');
+}
 function populateMonthsCombo() {
 	var el, label, i;
 	el = document.getElementById('lastmonths');
@@ -300,22 +319,37 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	return theRow.join('\n');
 }
 function toggleOverview() {
-	// When active, hide some controls from the toolbar and also the tags
+	var hide, remove, show;
+	
+	// Visibility On/Off - Overview report hides some controls from the toolbar
+	//
+	// Some fields are just hidden to preserve the page layout.
+	// Others must be removed to free some space for the report.
+	
+	remove = ['tagsArea'];
+	hide = ['filterbox', 'optmonthly', 'optmonthlylabel', 'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'];
+
+	show = !document.getElementById('optoverview').checked;
+	for (i = 0; i < hide.length; i++) {
+		document.getElementById(hide[i]).style.visibility = (show) ? '' : 'hidden';
+	}
+	for (i = 0; i < remove.length; i++) {
+		document.getElementById(remove[i]).style.display = (show) ? 'block' : 'none';
+	}
+
+	// Save / restore information
 	if (document.getElementById('optoverview').checked === true) {
-		document.getElementById('filterbox'      ).style.visibility = 'hidden';
-		document.getElementById('optmonthly'     ).style.visibility = 'hidden';
-		document.getElementById('optmonthlylabel').style.visibility = 'hidden';
-		document.getElementById('tagsArea'       ).style.display = 'none';
+		// Special case that needs to save previous state
+		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
+		document.getElementById('valuefilterarg').style.visibility = 'hidden';
 		oldSortColIndex = sortColIndex; // save state
 		sortColIndex = 0; // Default by date
 	} else {
-		document.getElementById('filterbox'      ).style.visibility = '';
-		document.getElementById('optmonthly'     ).style.visibility = '';
-		document.getElementById('optmonthlylabel').style.visibility = '';
-		document.getElementById('tagsArea'       ).style.display = 'block';
+		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
 		sortColIndex = oldSortColIndex;
 		overviewData = [];
 	}
+	
 	showReport();
 }
 function overviewRangeChanged() {
@@ -343,6 +377,19 @@ function toggleFuture() {
 	overviewData = [];
 	showReport();
 }
+function valueFilterChanged() {
+	// autocheck checkbox
+	document.getElementById('optvaluefilter').checked = true;
+	
+	// show/hide the filter argument textbox
+	if (document.getElementById('valuefilter').value.match(/[+\-]/)) {
+		document.getElementById('valuefilterarg').style.visibility = 'hidden';
+	} else {
+		document.getElementById('valuefilterarg').style.visibility = '';
+	}
+	
+	showReport();
+}
 function toggleMonthly() {
 	if (document.getElementById('optmonthly').checked === true) {
 		sortColIndex = 0;
@@ -365,7 +412,7 @@ function reloadData() {
 	loadDataFile(document.getElementById('datafiles').value);
 }
 function readData() {
-	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator;
+	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, valueFilter, valueFilterArg;
 
 	isRegex = false;
 	isNegated = false;
@@ -395,6 +442,11 @@ function readData() {
 		filter = document.getElementById('filter').value;
 		isRegex = document.getElementById('optregex').checked;
 		isNegated = document.getElementById('optnegate').checked;
+		
+		if (document.getElementById('optvaluefilter').checked) {
+			valueFilter = document.getElementById('valuefilter').value;
+			valueFilterArg = document.getElementById('valuefilterarg').value || 0;
+		}
 	}
 	
 	// Prepare filter contents as /regex/ or string, always ignore case
@@ -475,6 +527,17 @@ function readData() {
 			continue;
 		}
 		rowAmount = parseFloat(rowAmount); // str2float
+		
+		// Apply value filter
+		if (valueFilter) {
+			if (valueFilter == '+' && rowAmount < 0) { continue; }
+			if (valueFilter == '-' && rowAmount >= 0) { continue; }
+			if (valueFilter == '=' && rowAmount != valueFilterArg) { continue; }
+			if (valueFilter == '>' && rowAmount <= valueFilterArg) { continue; }
+			if (valueFilter == '<' && rowAmount >= valueFilterArg) { continue; }
+			if (valueFilter == '>=' && rowAmount < valueFilterArg) { continue; }
+			if (valueFilter == '<=' && rowAmount > valueFilterArg) { continue; }
+		}
 		
 		// Ignore dates older than "last N months" option (if checked)
 		if (rowDate < firstDate) { continue; }
@@ -855,6 +918,7 @@ function init() {
 	setCurrentDate();
 	populateMonthsCombo();
 	populateDataFilesCombo();
+	populateValueFilterCombo();
 	populateOverviewRangeCombo();
 	
 	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
@@ -885,6 +949,7 @@ function init() {
 	document.getElementById('optfuturelabel'    ).innerHTML = i18n.labelFuture;
 	document.getElementById('optregexlabel'     ).innerHTML = i18n.labelRegex;
 	document.getElementById('optnegatelabel'    ).innerHTML = i18n.labelNegate;
+	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter;
 	document.getElementById('helpbutton').title = i18n.labelHelp;
 	document.getElementById('reload'    ).title = i18n.labelReload;
 	document.getElementById('sitelink'  ).title = i18n.appDescription;

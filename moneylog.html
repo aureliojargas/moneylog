@@ -100,6 +100,19 @@ You may change the styles if you know what you're doing.
 		 	id="lastmonths" size="1" onChange="lastMonthsChanged()"></select>
 		<br>
 	
+		<!-- Value Filter -->
+		<input
+		 	id="optvaluefilter" class="trigger" type="checkbox"
+			onClick="showReport()"><span
+			id="optvaluefilterlabel" class="trigger"
+			onClick="document.getElementById('optvaluefilter').click()"></span>
+		<select
+		 	id="valuefilter" size="1" onChange="valueFilterChanged()">
+		</select><input
+			id="valuefilterarg" size="3" type="text" onKeyUp="showReport()"
+			style="visibility:hidden">
+		<br>
+			
 		<!-- Future -->
 		<input
 		 	id="optfuture" class="trigger" type="checkbox"
