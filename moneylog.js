@@ -324,10 +324,14 @@ function toggleHelp() {
 	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
 }
 function loadDataFile(filePath) {
+	if (!filePath) { return; }
 	document.getElementById("dataFrame").src = filePath;
 	overviewData = [];
 	setTimeout("showReport()", 100);
 	// The browser won't load the iframe contents unless we schedule it (strange...)
+}
+function reloadData() {
+	loadDataFile(document.getElementById('datafiles').value);
 }
 function readData() {
 	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator;
@@ -800,12 +804,17 @@ function init() {
 
 	setCurrentDate();
 	populateMonthsCombo();
+	populateDataFilesCombo();
 	populateOverviewRangeCombo();
 	
-	if (!oneFile && dataFiles.length > 1) {
-		populateDataFilesCombo();
-	} else {
-		document.getElementById('datafilesbox').style.display = 'none';
+	// Just show files combo when there are 2 or more
+	if (oneFile || dataFiles.length < 2) {
+		document.getElementById('datafiles').style.display = 'none';
+	}
+	
+	// Hide Reload button in oneFile mode. No iframe, so we can't reload.
+	if (oneFile) {
+		document.getElementById('reload').style.visibility = 'hidden';
 	}
 	
 	// Lang-specific info

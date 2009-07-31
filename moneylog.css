@@ -49,7 +49,11 @@ a {
 #toolbar #datafilesbox {
 	clear:right;
 	float:right;
-	padding:10px;
+	text-align:right; /* Camino fix */
+	padding:10px 0;
+}
+#toolbar #datafilesbox #datafiles {
+	margin-top:3px; /* to align with (R) */
 }
 #checkboxes {
 	width:20em;
