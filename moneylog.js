@@ -447,6 +447,15 @@ function readData() {
 			valueFilter = document.getElementById('valuefilter').value;
 			valueFilterArg = document.getElementById('valuefilterarg').value || 0;
 		}
+		
+		// Hack: Value filtering on the search box!
+		// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
+		temp = filter.match(/^v:([-+>=<][=]?)([+-]?\d*)$/);
+		if (temp) {
+			valueFilter = temp[1];
+			valueFilterArg = temp[2] || 0;
+			filter = ''; // The filter was (ab)used, now we can discard it
+		}
 	}
 	
 	// Prepare filter contents as /regex/ or string, always ignore case
