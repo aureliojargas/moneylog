@@ -52,6 +52,8 @@ if (lang == 'pt') {
 	var labelNegate = ['excluir'];
 	var labelMonthly = ['mensal'];
 	var labelYearly = ['anual'];
+	var labelHelp = ['Ajuda'];
+	var labelReload = ['Recarregar'];
 	var centsSeparator = ',';
 	var thousandSeparator = '.';
 } else {
@@ -69,6 +71,8 @@ if (lang == 'pt') {
 	var labelNegate = ['negate'];
 	var labelMonthly = ['monthly'];
 	var labelYearly = ['yearly'];
+	var labelHelp = ['Help'];
+	var labelReload = ['Reload'];
 	// Screen separators (Inside data both , and . are handled automatically)
 	var centsSeparator = '.';
 	var thousandSeparator = ',';
@@ -824,6 +828,8 @@ function init() {
 	document.getElementById('optfuturelabel'    ).innerHTML = labelFuture;
 	document.getElementById('optregexlabel'     ).innerHTML = labelRegex;
 	document.getElementById('optnegatelabel'    ).innerHTML = labelNegate;
+	document.getElementById('helpbutton').title = labelHelp;
+	document.getElementById('reload'    ).title = labelReload;
 	
 	if (lang == 'pt') {
 		sitelink = document.getElementById('sitelink');
