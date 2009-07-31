@@ -169,6 +169,10 @@ table.overview tr.total {
 .neg {
 	color:#e33;
 }
+.hl {
+	color:#e33;
+	background-color: #edf;
+}
 tr.monthtotal td td.mini {
 	font-size:75%;
 	color:#868;

@@ -24,6 +24,7 @@ var defaultNegate = false;        // Search negate checkbox inits checked?
 var defaultSearch = '';           // Search for this text on init
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
+var highlightWords = '';          // The words you may want to highlight (Ex.: 'XXX TODO')
 
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
@@ -36,6 +37,7 @@ var dataRecordSeparator = /[\n\r]+/;
 var dataTagTerminator = '|';
 var dataTagSeparator = ',';
 var commentChar = '#';   // Must be at line start (column 1)
+
 // Screen Labels
 if (lang == 'pt') {
 	var labelOverview = 'Relatório Geral:';
@@ -85,6 +87,7 @@ var sortColRev = false;
 var oldSortColIndex;
 var currentDate;
 var overviewData = [];
+var highlightRegex;
 
 if (!Array.prototype.push) { // IE5...
 	Array.prototype.push = function (item) {
@@ -115,6 +118,10 @@ Array.prototype.removePattern = function (patt) {
 	}
 	return cleaned;
 };
+RegExp.escape = function(str) {
+	var specials = new RegExp('[.*+?|\\^$()\\[\\]{}\\\\]', 'g');
+	return str.replace(specials, '\\$&');
+}
 
 function sortCol(index, isOverview) { // if the same, flip reverse state
 	sortColRev = (sortColIndex == index) ? sortColRev ^= true : false;
@@ -750,6 +757,13 @@ function showDetailed() {
 				}
 			}
 			
+			// There are some words to highlight on the Description?
+			if (highlightRegex) {
+				rowDescription = rowDescription.replace(
+					highlightRegex,
+					'<span class="hl">$&</span>');
+			}
+			
 			// This row is in the future?
 			if (rowDate <= currentDate) {
 				results.push('<tr>');
@@ -810,6 +824,14 @@ function init() {
 	populateMonthsCombo();
 	populateDataFilesCombo();
 	populateOverviewRangeCombo();
+	
+	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
+	// Note: Using regex to allow ignorecase and global *atomic* replace
+	if (highlightWords) {
+		highlightRegex = new RegExp(
+			RegExp.escape(highlightWords).replace(/\s+/g,'|'),
+			'ig');
+	}
 	
 	// Just show files combo when there are 2 or more
 	if (oneFile || dataFiles.length < 2) {
