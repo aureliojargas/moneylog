@@ -15,7 +15,6 @@
 var lang = 'pt';                  // 'pt' or 'en' for Portuguese or English
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
-var defaultOverview = false;      // Init in Overview mode?
 var defaultLastMonths = false;    // Last months combo inits checked?
 var defaultMonthPartials = true;  // Monthly checkbox inits checked?
 var defaultFuture = true;         // Show future checkbox inits checked?
@@ -26,6 +25,7 @@ var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
+var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
@@ -42,7 +42,6 @@ var commentChar = '#';   // Must be at line start (column 1)
 // Internationalisation (i18n) - Screen Labels and formatting
 var i18nDatabase = {
 	pt: {
-		labelOverview: 'Relatório Geral:',
 		labelLastMonths: 'Somente Recentes:',
 		labelMonthPartials: 'Mostrar Parciais Mensais',
 		labelFuture: 'Mostrar Lançamentos Futuros',
@@ -54,6 +53,7 @@ var i18nDatabase = {
 		labelMonths: ['mês', 'meses'],
 		labelRegex: 'regex',
 		labelNegate: 'excluir',
+		labelDaily: 'diário',
 		labelMonthly: 'mensal',
 		labelYearly: 'anual',
 		labelHelp: 'Ajuda',
@@ -63,13 +63,14 @@ var i18nDatabase = {
 		labelNegative: 'negativo',
 		labelGreaterThan: 'maior que',
 		labelLessThan: 'menor que',
+		labelTagEmpty: 'VAZIO',
+		labelTagGroup: 'unir',
 		appUrl: 'http://aurelio.net/moneylog',
 		appDescription: 'Uma página. Um programa.',
 		centsSeparator: ',',
 		thousandSeparator: '.'
 	},
 	en: {		
-		labelOverview: 'Overview:',
 		labelLastMonths: 'Recent Only:',
 		labelMonthPartials: 'Show Monthly Partials',
 		labelFuture: 'Show Future Data',
@@ -81,6 +82,7 @@ var i18nDatabase = {
 		labelMonths: ['month', 'months'],
 		labelRegex: 'regex',
 		labelNegate: 'negate',
+		labelDaily: 'daily',
 		labelMonthly: 'monthly',
 		labelYearly: 'yearly',
 		labelHelp: 'Help',
@@ -90,6 +92,8 @@ var i18nDatabase = {
 		labelNegative: 'negative',
 		labelGreaterThan: 'greater than',
 		labelLessThan: 'less than',
+		labelTagEmpty: 'EMPTY',
+		labelTagGroup: 'group',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'A webpage. A software.',
 		centsSeparator: '.',
@@ -319,7 +323,7 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	return theRow.join('\n');
 }
 function toggleOverview() {
-	var hide, remove, show;
+	var i, hide, remove, show;
 	
 	// Visibility On/Off - Overview report hides some controls from the toolbar
 	//
@@ -329,7 +333,7 @@ function toggleOverview() {
 	remove = ['tagsArea'];
 	hide = ['filterbox', 'optmonthly', 'optmonthlylabel', 'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'];
 
-	show = !document.getElementById('optoverview').checked;
+	show = (reportType != 'd');
 	for (i = 0; i < hide.length; i++) {
 		document.getElementById(hide[i]).style.visibility = (show) ? '' : 'hidden';
 	}
@@ -338,7 +342,7 @@ function toggleOverview() {
 	}
 
 	// Save / restore information
-	if (document.getElementById('optoverview').checked === true) {
+	if (reportType == 'd') {
 		// Special case that needs to save previous state
 		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
 		document.getElementById('valuefilterarg').style.visibility = 'hidden';
@@ -346,23 +350,30 @@ function toggleOverview() {
 		sortColIndex = 0; // Default by date
 	} else {
 		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
-		sortColIndex = oldSortColIndex;
+		sortColIndex = oldSortColIndex || 0;
 		overviewData = [];
 	}
-	
-	showReport();
 }
-function overviewRangeChanged() {
-	// Automatic switch to overview mode when changing range
-	if (!document.getElementById('optoverview').checked) {
-		document.getElementById('optoverview').checked = true;
+function changeReport(el) {
+	var oldType, newType;
+	
+	oldType = reportType;
+	newType = el.id;
+	
+	// Deactivate old report, activate new
+	document.getElementById(oldType).className = '';
+	el.className = 'active';
+	
+	// XXX rework the toggleOverview() function
+	if (oldType == 'd' && newType != 'd') {
 		toggleOverview();
-
-	// Already in overview mode, just update the report
-	} else {
-		overviewData = [];
-		showReport();
 	}
+	if (newType == 'd' && oldType != 'd') {
+		toggleOverview();
+	}
+	reportType = newType;
+	overviewData = [];
+	showReport();	
 }
 function toggleLastMonths() {
 	overviewData = [];
@@ -378,6 +389,8 @@ function toggleFuture() {
 	showReport();
 }
 function valueFilterChanged() {
+	overviewData = [];
+	
 	// autocheck checkbox
 	document.getElementById('optvaluefilter').checked = true;
 	
@@ -438,7 +451,7 @@ function readData() {
 	showFuture = document.getElementById('optfuture').checked;
 	
 	// Get filters data for the detailed report
-	if (!document.getElementById('optoverview').checked) {
+	if (reportType == 'd') {
 		filter = document.getElementById('filter').value;
 		isRegex = document.getElementById('optregex').checked;
 		isNegated = document.getElementById('optnegate').checked;
@@ -622,7 +635,7 @@ function applyTags(theData) {
 
 				thisTag = selectedTags[j];
 				tagMatched = (rowTags.hasItem(thisTag) ||
-					(thisTag == ' ' && rowTags.length === 0));
+					(thisTag == i18n.labelTagEmpty && rowTags.length === 0));
 					// Tip: space means no tag
 				
 				if (tagMatched && (!tagMultiAll)) { break; } // OR
@@ -636,7 +649,7 @@ function applyTags(theData) {
 	
 	// Make sure the menu has all the selected tags
 	for (i = 0; i < selectedTags.length; i++) {
-		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] != ' ') {
+		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] != i18n.labelTagEmpty) {
 			tagsMenu.push(selectedTags[i]);
 		}
 	}
@@ -647,8 +660,8 @@ function applyTags(theData) {
 		// Sorted tags are nice
 		tagsMenu.sort(sortIgnoreCase);
 
-		// Add a last ' ' item to match the rows with no tag
-		tagsMenu.push(' ');
+		// Add a last empty item to match the rows with no tag
+		tagsMenu.push(i18n.labelTagEmpty);
 		
 		// Save the total tag count
 		document.getElementById('tagCount').value = tagsMenu.length;
@@ -664,11 +677,11 @@ function applyTags(theData) {
 			// The ugly code (but better than DOM-walking nightmares)
 			tagsMenu[i] = '<input type="checkbox" class="trigger" onClick="showReport()" ' +
 				checked + ' id="' + tagId + '" value="' + tagName + '">' +
-				'<span class="trigger" onClick="document.getElementById(\'' + tagId + '\').click()">&nbsp;' + tagName + '<\/span>';
+				'<span class="trigger" onClick="document.getElementById(\'' + tagId + '\').click()">' + tagName + '<\/span>';
 		}
 
-		// One tag per line
-		tagsMenu = tagsMenu.join('<br>\n');
+		// All tags in one single line
+		tagsMenu = tagsMenu.join('\n');
 	}
 	
 	// Save the tags menu (or make it empty)
@@ -690,7 +703,7 @@ function applyTags(theData) {
 	}
 }
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeType, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex;
+	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex;
 
 	results = [];
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
@@ -718,8 +731,6 @@ function showOverview() {
 
 		// The cache is empty. Scan and calculate everything.
 		if (!overviewData.length) {
-			
-			rangeType = document.getElementById('overviewrange').value; // month|year
 						
 			for (i = 0; i < theData.length; i++) {
 				rowDate        = theData[i][0];
@@ -728,7 +739,7 @@ function showOverview() {
 				/* rowDescription = theData[i][3]; */
 
 				// rowDate.slice() size, to extract 2000 or 2000-01
-				dateSize = (rangeType == 'year') ? 4 : 7;
+				dateSize = (reportType == 'y') ? 4 : 7;
 				
 				// First row, just save the month/year date
 				if (i === 0) {
@@ -913,10 +924,10 @@ function showDetailed() {
 }
 
 function showReport() {
-	if (document.getElementById('optoverview').checked) {
-		showOverview();
-	} else {
+	if (reportType == 'd') {
 		showDetailed();
+	} else {
+		showOverview();
 	}
 }
 function init() {
@@ -928,7 +939,6 @@ function init() {
 	populateMonthsCombo();
 	populateDataFilesCombo();
 	populateValueFilterCombo();
-	populateOverviewRangeCombo();
 	
 	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
 	// Note: Using regex to allow ignorecase and global *atomic* replace
@@ -952,13 +962,16 @@ function init() {
 	}
 	
 	// Set interface labels
-	document.getElementById('optoverviewlabel'  ).innerHTML = i18n.labelOverview;
 	document.getElementById('optlastmonthslabel').innerHTML = i18n.labelLastMonths;
 	document.getElementById('optmonthlylabel'   ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('optfuturelabel'    ).innerHTML = i18n.labelFuture;
 	document.getElementById('optregexlabel'     ).innerHTML = i18n.labelRegex;
 	document.getElementById('optnegatelabel'    ).innerHTML = i18n.labelNegate;
 	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter;
+	document.getElementById('tagMultiAllLabel'  ).innerHTML = i18n.labelTagGroup;
+	document.getElementById('d'                 ).innerHTML = i18n.labelDaily;
+	document.getElementById('m'                 ).innerHTML = i18n.labelMonthly;
+	document.getElementById('y'                 ).innerHTML = i18n.labelYearly;
 	document.getElementById('helpbutton').title = i18n.labelHelp;
 	document.getElementById('reload'    ).title = i18n.labelReload;
 	document.getElementById('sitelink'  ).title = i18n.appDescription;
@@ -968,9 +981,11 @@ function init() {
 	document.getElementById('help-en').style.display = 'none';
 	document.getElementById('help-pt').style.display = 'none';
 	document.getElementById('help-' + lang).style.display = '';
+
+	// Mark current report as active (CSS)
+	document.getElementById(reportType).className = 'active';
 	
 	// Apply user defaults
-	if (defaultOverview)      { document.getElementById('optoverview'  ).click(); }
 	if (defaultLastMonths)    { document.getElementById('optlastmonths').click(); }
 	if (defaultMonthPartials) { document.getElementById('optmonthly'   ).click(); }
 	if (defaultFuture)        { document.getElementById('optfuture'    ).click(); }

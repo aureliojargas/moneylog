@@ -9,9 +9,11 @@ body {
 	margin:0;
 	padding:0;
 	border:0;
-	overflow:scroll;
 	font-size:85%;
 	font-family:sans-serif;
+}
+th, td {
+	font-size:85%; /* same as in body */	
 }
 a {
 	text-decoration:none;
@@ -26,11 +28,9 @@ a {
 	top:0;
 	left:0;
 	width:100%;
-	height:9em;
-	padding:0.3em 0 0.5em 0;
+	height:7em;
 }
 #toolbar a {
-	float:left;
 	color:#c6f;
 	font-size:185%;
 	padding:0 4px;
@@ -38,6 +38,21 @@ a {
 #toolbar a:hover {
 	background-color:#c6f;
 	color:#444;
+}
+#toolbar #report-nav {
+	text-align:center;
+	margin:1em 0;
+}
+#toolbar #report-nav a {
+	font-size:110%;
+}
+#toolbar #report-nav a:hover {
+	outline:1px dotted #c6f !important;
+	background-color:#444;
+	color:#c6f;
+}
+#toolbar #report-nav a.active {
+	outline:1px solid #c6f;
 }
 #toolbar a.helplink {
 	float:right;
@@ -56,8 +71,6 @@ a {
 	margin-top:3px; /* to align with (R) */
 }
 #checkboxes {
-	width:25em;
-	margin:auto;
 	text-align:left;
 }
 #content {
@@ -65,30 +78,42 @@ a {
 	margin-top:9em;
 }
 #tagsArea {
-	float:left;
+	position:fixed;
+	bottom:0;
+	left:0;
+	font-size:85%;
 	background-color:#eee;
-	padding:1.5em 0.5em 0.5em 0.5em;
-	border:1px solid #ccc;
-	border-width:0 1px 1px 0;
+	border-top:1px solid #ccc;
+	padding:0.5em 0;
+	text-align:center;
 	display:none;
+	width:100%;
+
+	/* Same colors of #toolbar */
+	color:#ddd;
+	background-color:#444;
 }
-#tagsArea p {
-	margin:0.5em 0;
-	padding:0;
+#tagsArea input[checked]+span { /* highlight selected tags */
+	background:#c6f;
+	color:#000;
 }
 #tagsArea input {
 	margin:0;
 	padding:0;
+	display:none; /* hidden, but still used by JavaScript */
 }
 #tagsArea #tagMultiAll {
-	padding-left:0.3em;
+	font-weight:bold;
+}
+#tagsArea #tagMultiAll input {
+	display:inline;
 }
 #tagsArea #tagList {
-	padding-right:1em;
+	display:inline;
 }
 #report {
 	text-align:center;
-	padding:3em 0;
+	padding:2em 3em 8em 2em;
 }
 #help {
 	background-color:#edf;
@@ -104,58 +129,56 @@ a {
 	display:none;
 }
 
-table {
+#report table {
 	margin:0 auto;
 	border-spacing:0;
 	border-collapse:collapse;
 }
-td {
+#report td {
 	border:1px solid #ccc;
 	padding:.1em 10px;
-	font-size:85%;
 }
-td.row-count {
+#report td.row-count {
 	text-align:center;
 	font-size:70%;
 	color:#aaa;
 	border-width:0;
 	background-color:#fff;
 }
-td.date {
+#report td.date {
 	white-space:nowrap;
 }
-td.rowlabel {
+#report td.rowlabel {
 	font-weight:bold;
 }
-tr.future td.row-count {
+#report tr.future td.row-count {
 	font-style:normal;
 }
-th {
+#report th {
 	text-align:center;
-	font-size:85%;
 	cursor:pointer;
 }
-th:hover {
+#report th:hover {
 	color:#000;
 	background-color:#eee;
 }
-tr:hover td {
+#report tr:hover td {
 	background-color: #edf;
 }
-tr.future {
+#report tr.future {
 	background-color:#eee;
 	font-style:italic;
 }
-tr.monthtotal {
+#report tr.monthtotal {
 	background-color:#f8e8ff;
 	line-height:200%;
 	text-align:right;
 }
-tr.monthtotal td {
+#report tr.monthtotal td {
 	border-width:0;
 	font-size:100%;
 }
-table.overview tr.total {
+#report table.overview tr.total {
 	background-color:#f8e8ff;
 	font-style:italic;	
 }
@@ -173,15 +196,15 @@ table.overview tr.total {
 	color:#e33;
 	background-color: #edf;
 }
-tr.monthtotal td td.mini {
+#report tr.monthtotal td td.mini {
 	font-size:75%;
 	color:#868;
 	font-weight:bold;
 }
-table.monthsubtotal {
+#report table.monthsubtotal {
 	margin:0;
 }
-table.monthsubtotal td {
+#report table.monthsubtotal td {
 	padding:0;
 	width:5.5em;
 }
