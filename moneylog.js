@@ -300,18 +300,20 @@ function populateDataFilesCombo() {
 }
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	var partial, theRow;
-	if (monthTotal) {
-		partial = [];
-		partial.push('<table class="monthsubtotal number" align="left"><tr>');
-		partial.push('<td class="mini"> +');
-		partial.push(prettyFloat(monthPos, true) + '<br>');
-		partial.push(prettyFloat(monthNeg, true) + '<\/td>');
-		partial.push('<\/tr><\/table>');
-		partial = partial.join('');
+	
+	partial = [];
+	partial.push('<table class="monthsubtotal number" align="left"><tr>');
+	partial.push('<td class="mini"> +');
+	partial.push(prettyFloat(monthPos, true) + '<br>');
+	partial.push(prettyFloat(monthNeg, true) + '<\/td>');
+	partial.push('<\/tr><\/table>');
+	partial = partial.join('');
+
+	// Show month total?
+	if (monthTotal != '') {
 		monthTotal = '=  ' + prettyFloat(monthTotal);
-	} else {
-		partial = monthTotal = ''; 
 	}
+
 	theRow = '<tr class="monthtotal">';
 	if (showRowCount) {
 		theRow += '<td class="row-count"><\/td>';
@@ -906,9 +908,9 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, theTotal, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData;
+	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal;
 	
-	theTotal = monthTotal = monthPos = monthNeg = rowCount = 0;
+	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
 	
 	monthPartials = document.getElementById('optmonthly');
@@ -948,7 +950,7 @@ function showDetailed() {
 			if (monthPartials.checked && i > 0 &&
 				rowDate.slice(0, 7) !=
 				theData[i - 1][0].slice(0, 7)) {
-				results.push(getTotalsRow(theTotal, monthTotal, monthNeg, monthPos));
+				results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
 				// Partials row shown, reset month totals
 				monthTotal = 0;
 				monthPos = 0;
@@ -959,12 +961,14 @@ function showDetailed() {
 			}
 			
 			// Update totals
-			theTotal += rowAmount;
+			sumTotal += rowAmount;
 			monthTotal += rowAmount;
 			if (rowAmount < 0) {
 				monthNeg += rowAmount;
+				sumNeg += rowAmount;
 			} else {
 				monthPos += rowAmount;
+				sumPos += rowAmount;
 			}
 			
 			// There are some words to highlight on the Description?
@@ -999,23 +1003,23 @@ function showDetailed() {
 			results.push('<td class="number">' + prettyFloat(rowAmount) + '<\/td>');
 			results.push('<td class="tags">'   + rowTags.join(', ')     + '<\/td>');
 			results.push('<td>'                + rowDescription         + '<\/td>');
-			results.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
+			results.push('<td class="number">' + prettyFloat(sumTotal)  + '<\/td>');
 			results.push('<\/tr>');
 				
 		}
 		
 		// Should we show the full month partials at the last row?
 		if (monthPartials.checked) {
-			results.push(getTotalsRow(theTotal, monthTotal, monthNeg, monthPos));
+			results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
 		} else {
-			results.push(getTotalsRow(theTotal));
+			results.push(getTotalsRow(sumTotal, '', sumNeg, sumPos));
 		}
 		
 		results.push('<\/table>');
 		results = results.join('\n');
 
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
-		/* results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(theTotal)); */
+		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos)); 
 	}
 	else {
 		results = i18n.labelNoData;
