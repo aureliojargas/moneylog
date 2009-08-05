@@ -64,6 +64,8 @@ var i18nDatabase = {
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
 		labelTotal: 'Total',
 		labelAverage: 'Média',
+		labelMinimum: 'Mínimo',
+		labelMaximum: 'Máximo',
 		labelMonths: ['mês', 'meses'],
 		labelRegex: 'regex',
 		labelNegate: 'excluir',
@@ -98,6 +100,8 @@ var i18nDatabase = {
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
 		labelTotal: 'Total',
 		labelAverage: 'Average',
+		labelMinimum: 'Min',
+		labelMaximum: 'Max',
 		labelMonths: ['month', 'months'],
 		labelRegex: 'regex',
 		labelNegate: 'negate',
@@ -812,10 +816,11 @@ function applyTags(theData) {
 	}
 }
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex;
+	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, maxPos, maxNeg, maxPartial;
 
 	results = [];
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
+	minPos = minNeg = minPartial = maxPos = maxNeg = maxPartial = 0;
 	currSortIndex = sortColIndex;
 
 	// Table headings
@@ -894,19 +899,41 @@ function showOverview() {
 		
 		// Array2Html
 		for (i = 0; i < overviewData.length; i++) {
+			
 			// Calculate overall totals
 			z = overviewData[i];
 			sumPos   += z[1];
 			sumNeg   += z[2];
 			sumTotal += z[3];
+			
+			// Store min/max values
+			if (i === 0) {
+				// First value, store it as max and min
+				minPos     = maxPos     = z[1];
+				minNeg     = maxNeg     = z[2];
+				minPartial = maxPartial = z[3];
+			} else {
+				// Minimum
+				minPos     = (z[1] < minPos)     ? z[1] : minPos;
+				minNeg     = (z[2] < minNeg)     ? z[2] : minNeg;
+				minPartial = (z[3] < minPartial) ? z[3] : minPartial;
+				// Maximum
+				maxPos     = (z[1] > maxPos)     ? z[1] : maxPos;
+				maxNeg     = (z[2] > maxNeg)     ? z[2] : maxNeg;
+				maxPartial = (z[3] > maxPartial) ? z[3] : maxPartial;
+			}
+			
 			// Save this row to the report table
 			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4], i + 1));
 		}
 		
-		// Compose the final average row
+		// Compose the final rows: total, avg, min, max
 		len = overviewData.length;
 		results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
 		results.push(getOverviewTotalsRow(i18n.labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
+		results.push(getOverviewTotalsRow(i18n.labelMinimum, minPos, maxNeg, minPartial));
+		results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial));
+		// Note: Yes, maxNeg and minNeg are swapped for better reading
 		
 		// And we're done
 		results.push('<\/table>');
