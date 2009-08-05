@@ -238,7 +238,7 @@ function getPastMonth(months) {
 	return y + '-' + m + '-' + '00';
 }
 function addMonths(yyyymmdd, n) {
-	var y, m, d, z;
+	var y, m, d;
 	yyyymmdd = yyyymmdd.replace(/-/g, '');
 	y = parseInt(yyyymmdd.slice(0,4), 10);
 	m = parseInt(yyyymmdd.slice(4,6), 10);
