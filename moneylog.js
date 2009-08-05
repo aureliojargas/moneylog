@@ -34,10 +34,24 @@ var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneF
 
 // Data format
 var dataFieldSeparator = '\t';
-var dataRecordSeparator = /[\n\r]+/;
+var dataRecordSeparator = /\r?\n/;  // \r\n Windows, \n Linux/Mac
 var dataTagTerminator = '|';
 var dataTagSeparator = ',';
 var commentChar = '#';   // Must be at line start (column 1)
+var dataPatterns = {
+	date:
+		// YYYY-MM-DD
+	 	/^ *(\d{4}-\d\d-\d\d) *$/,
+	amountNumber:
+	 	// 7  +7  -7  7.00  7,00  1234567,89  1.234.567,89  1,234,567.89 1234567,89
+	 	/^ *([+\-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
+	amountCents:
+	 	// .12  ,12
+		/[.,](\d\d) *$/,
+	amountRecurrent:
+	 	// *N or /N where N>0
+		/([*\/])([1-9][0-9]*) *$/
+};
 
 // Internationalisation (i18n) - Screen Labels and formatting
 var i18nDatabase = {
@@ -65,6 +79,11 @@ var i18nDatabase = {
 		labelLessThan: 'menor que',
 		labelTagEmpty: 'VAZIO',
 		labelTagGroup: 'unir',
+		errorInvalidData: 'Lançamento inválido na linha ',
+		errorNoFieldSeparator: 'Separador não encontrado:',
+		errorTooManySeparators: 'Há mais de 2 sepadarores',
+		errorInvalidDate: 'Data inválida:',
+		errorInvalidAmount: 'Valor inválido:',
 		appUrl: 'http://aurelio.net/moneylog',
 		appDescription: 'Uma página. Um programa.',
 		centsSeparator: ',',
@@ -94,6 +113,11 @@ var i18nDatabase = {
 		labelLessThan: 'less than',
 		labelTagEmpty: 'EMPTY',
 		labelTagGroup: 'group',
+		errorInvalidData: 'Invalid data at line ',
+		errorNoFieldSeparator: 'No separator found:',
+		errorTooManySeparators: 'Too many separators',
+		errorInvalidDate: 'Invalid date:',
+		errorInvalidAmount: 'Invalid amount:',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'A webpage. A software.',
 		centsSeparator: '.',
@@ -158,6 +182,9 @@ RegExp.escape = function (str) {
 	return str.replace(specials, '\\$&');
 };
 
+function invalidData(lineno, message) {
+	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
+}
 function sortCol(index, isOverview) { // if the same, flip reverse state
 	sortColRev = (sortColIndex == index) ? sortColRev ^= true : false;
 	sortColIndex = index;
@@ -425,7 +452,7 @@ function reloadData() {
 	loadDataFile(document.getElementById('datafiles').value);
 }
 function readData() {
-	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, valueFilter, valueFilterArg;
+	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, valueFilter, valueFilterArg, lineno, fields, rowAmountErrorMsg;
 
 	isRegex = false;
 	isNegated = false;
@@ -482,36 +509,88 @@ function readData() {
 
 	// Scan data rows
 	for (i = 0; i < rawData.length; i++) {
+		lineno = i + 1;
+		rowDate = rowAmount = rowText = '';
+
+		///////////////////////////////////////////////////////////// Firewall
 
 		// Skip commented rows
 		if (rawData[i].indexOf(commentChar) === 0) { continue; }
-		// Skip rows with no separator
-		if (rawData[i].indexOf(dataFieldSeparator) == -1) { continue; }
-		
-		// Filter firewall - Will this line pass it?
-		if (filter) {
-			if (isRegex) {
-				filterPassed = filter.test(rawData[i]);
-			} else {
-				filterPassed = (rawData[i].toLowerCase().indexOf(filter) != -1);
-			}
-			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) { continue; }
+		// Skip blank lines
+		if (!rawData[i].strip()) { continue; }
+
+		// Separate fields
+		fields = rawData[i].split(dataFieldSeparator);
+
+		// Error: rows with no separator
+		if (fields.length == 1) {
+			invalidData(
+				lineno,
+				i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rawData[i]
+			);
+			return [];
+
+		// Error: too much separators
+		} else if (fields.length - 1 > 2) {
+			invalidData(
+				lineno,
+				i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rawData[i]
+			);
+			return [];			
 		}
 
-		// Parse row data
-		temp = rawData[i].split(dataFieldSeparator);
-		while (temp.length < 3) { temp.push(''); } // Force 3 items
-		rowDate   = temp[0];
-		rowAmount = temp[1] || '0';
-		rowText   = temp[2].strip();
+		///////////////////////////////////////////////////////////// Text
+
+		rowText = (fields.length > 2) ? fields[2].strip() : '';
+
+		///////////////////////////////////////////////////////////// Date
 		
-		// Normalize Date
-		rowDate = rowDate.replace(/[^0-9\-]/, '') || '-';
+		rowDate = fields[0].match(dataPatterns.date);
+		if (rowDate) {
+			rowDate = rowDate[1]; // group 1
+		} else {
+			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + rawData[i]);
+		}
+
+		///////////////////////////////////////////////////////////// Amount
 		
-		// Normalize Value (force '.' as cents separator)
-		rowAmount = rowAmount.replace(/[.,]([0-9][0-9]) *([\/*]|$)/, '@$1$2'
-			).replace(/[^0-9@+\/*\-]/g, ''
-			).replace('@', '.');
+		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + rawData[i];
+
+		// Extract (and remove) recurrent information from the amount (if any)
+		recurrentAmount = fields[1].match(dataPatterns.amountRecurrent);
+		if (recurrentAmount) {
+			recTimes = parseInt(recurrentAmount[2], 10);
+			recOperator = recurrentAmount[1];
+			fields[1] = fields[1].replace(dataPatterns.amountRecurrent, '');
+		}
+
+		// Validade the amount value
+		rowAmount = fields[1].match(dataPatterns.amountNumber);
+		if (rowAmount) {
+			rowAmount = rowAmount[1].replace(/\s+/g, ''); // group 1, no blanks
+
+			// Normalize Value
+			// Force '.' as internal cents separator, remove other punctuation
+			// Ex.: 1.234,56 > 1.234@56 > 1234@56 > 1234.56
+			rowAmount = rowAmount.replace(
+				dataPatterns.amountCents, '@$1').replace(
+				/[.,]/g, '').replace(
+				'@', '.');
+
+			// Now we can validate the number (str2float)
+			rowAmount = parseFloat(rowAmount);
+			
+			// Ops, we don't have a valid number
+			if(isNaN(rowAmount)) {
+				invalidData(lineno, rowAmountErrorMsg);
+				return [];
+			}
+		} else {
+			invalidData(lineno, rowAmountErrorMsg);
+			return [];
+		}
+
+		///////////////////////////////////////////////////////////// Recurrent Value
 
 		// A value of -100/10 means I've spent 100 and will pay it in 10x
 		// A value of -100*10 means I'll spent 100/month in the next 10 months
@@ -526,11 +605,10 @@ function readData() {
 		//
 		// XXX It doesn't fix end-of-month day. Uses 2009-02-31 instead 2009-02-28. But it's OK.
 		//
-		recurrentAmount = rowAmount.match(/^([+\-]?[0-9.]+)([\/*])([0-9]+)$/);
+		// Note: the date/value filters must appear *after* the recurrent processing
+		//
 		if (recurrentAmount) {
-			recValue = recurrentAmount[1];
-			recTimes = parseInt(recurrentAmount[3], 10);
-			recOperator = recurrentAmount[2];
+			recValue = rowAmount;
 			
 			if (recOperator == '/') {
 				recValue = (recValue / recTimes).toFixed(2);
@@ -542,24 +620,14 @@ function readData() {
 					addMonths(rowDate, j - 1),
 					recValue,
 					rowText + ' ' + j + '/' + recTimes
-				].join('\t'));
+				].join(dataFieldSeparator));
 			}
 			
 			// Ignore the original recurring row
 			continue;
 		}
-		rowAmount = parseFloat(rowAmount); // str2float
 		
-		// Apply value filter
-		if (valueFilter) {
-			if (valueFilter == '+' && rowAmount < 0) { continue; }
-			if (valueFilter == '-' && rowAmount >= 0) { continue; }
-			if (valueFilter == '=' && rowAmount != valueFilterArg) { continue; }
-			if (valueFilter == '>' && rowAmount <= valueFilterArg) { continue; }
-			if (valueFilter == '<' && rowAmount >= valueFilterArg) { continue; }
-			if (valueFilter == '>=' && rowAmount < valueFilterArg) { continue; }
-			if (valueFilter == '<=' && rowAmount > valueFilterArg) { continue; }
-		}
+		///////////////////////////////////////////////////////////// Filters
 		
 		// Ignore dates older than "last N months" option (if checked)
 		if (rowDate < firstDate) { continue; }
@@ -567,7 +635,30 @@ function readData() {
 		// Ignore future dates
 		if (!showFuture && rowDate > currentDate) { continue; }
 
-		// Normalize desc/tags
+		// Apply value filter
+		if (valueFilter) {
+			if (valueFilter == '+' && rowAmount < 0) { continue; }
+			if (valueFilter == '-' && rowAmount >= 0) { continue; }
+			if (valueFilter == '>' && rowAmount <= valueFilterArg) { continue; }
+			if (valueFilter == '<' && rowAmount >= valueFilterArg) { continue; }
+			if (valueFilter == '=' && rowAmount != valueFilterArg) { continue; }
+			if (valueFilter == '>=' && rowAmount < valueFilterArg) { continue; }
+			if (valueFilter == '<=' && rowAmount > valueFilterArg) { continue; }
+		}
+
+		// Search filter firewall - Will this line pass it?
+		if (filter) {
+			if (isRegex) {
+				filterPassed = filter.test(rawData[i]);
+			} else {
+				filterPassed = (rawData[i].toLowerCase().indexOf(filter) != -1);
+			}
+			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) { continue; }
+		}
+		
+		///////////////////////////////////////////////////////////// Tags + Description
+
+		// Parse tags
 		if (rowText.indexOf(dataTagTerminator) != -1) {
 			// Get tags
 			// FIXME: Can't handle more than one separator
@@ -579,7 +670,10 @@ function readData() {
 			for (j = 0; j < rowTags.length; j++) {
 				rowTags[j] = rowTags[j].strip();
 			}
+			// Remove empty tags
 			rowTags = rowTags.removePattern('');
+			
+		// No tags
 		} else {
 			rowTags = [];
 			rowDescription = rowText || '&nbsp;';
