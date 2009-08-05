@@ -660,12 +660,13 @@ function readData() {
 
 		// Parse tags
 		if (rowText.indexOf(dataTagTerminator) != -1) {
+
 			// Get tags
-			// FIXME: Can't handle more than one separator
+			// Note: tag terminator in description is allowed
 			rowTagsDescription = rowText.split(dataTagTerminator);
-			rowTags        = rowTagsDescription[0].split(dataTagSeparator);
-			rowDescription = rowTagsDescription[1].strip();
-			
+			rowTags = rowTagsDescription.shift().split(dataTagSeparator);
+			rowDescription = rowTagsDescription.join(dataTagTerminator).strip();
+						
 			// Strip all tags
 			for (j = 0; j < rowTags.length; j++) {
 				rowTags[j] = rowTags[j].strip();
