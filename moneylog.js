@@ -310,7 +310,7 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	partial = partial.join('');
 
 	// Show month total?
-	if (monthTotal != '') {
+	if (monthTotal !== '') {
 		monthTotal = '=  ' + prettyFloat(monthTotal);
 	}
 
