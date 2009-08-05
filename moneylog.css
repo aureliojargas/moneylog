@@ -197,12 +197,17 @@ a {
 	background-color: #edf;
 }
 #report tr.monthtotal td td.mini {
-	font-size:75%;
+	font-size:85%;
 	color:#868;
 	font-weight:bold;
 }
+#report tr.monthtotal td {
+/*	border:1px solid blue;*/
+}
+
 #report table.monthsubtotal {
 	margin:0;
+/*	border:1px solid black;*/
 }
 #report table.monthsubtotal td {
 	padding:0;

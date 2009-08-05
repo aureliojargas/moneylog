@@ -60,7 +60,7 @@ var i18nDatabase = {
 		labelMonthPartials: 'Mostrar Parciais Mensais',
 		labelFuture: 'Mostrar Lançamentos Futuros',
 		labelNoData: 'Nenhum lançamento.',
-		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição'],
+		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição', 'Acumulado'],
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
 		labelTotal: 'Total',
 		labelAverage: 'Média',
@@ -94,7 +94,7 @@ var i18nDatabase = {
 		labelMonthPartials: 'Show Monthly Partials',
 		labelFuture: 'Show Future Data',
 		labelNoData: 'No data.',
-		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description'],
+		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description', 'Balance'],
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
 		labelTotal: 'Total',
 		labelAverage: 'Average',
@@ -318,7 +318,7 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	}
 	theRow += '<td><\/td>';
 	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
-	theRow += '<td colspan="2">' + partial + '<\/td><\/tr>';
+	theRow += '<td colspan="2">' + partial + '<\/td><td><\/td><\/tr>';
 	return theRow;
 }
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
@@ -926,6 +926,7 @@ function showDetailed() {
 		thead += '<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>';
 		thead += '<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>';
 		thead += '<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>';
+		thead += '<th onClick="sortCol(4)">' + i18n.labelsDetailed[4] + '<\/th>';
 		if (showRowCount) {
 			thead = '<th class="row-count"><\/th>' + thead;
 		}
@@ -953,6 +954,15 @@ function showDetailed() {
 				if (monthlyRowCount) {
 					rowCount = 1;
 				}
+			}
+			
+			// Update totals
+			theTotal += rowAmount;
+			monthTotal += rowAmount;
+			if (rowAmount < 0) {
+				monthNeg += rowAmount;
+			} else {
+				monthPos += rowAmount;
 			}
 			
 			// There are some words to highlight on the Description?
@@ -987,16 +997,9 @@ function showDetailed() {
 			results.push('<td class="number">' + prettyFloat(rowAmount) + '<\/td>');
 			results.push('<td class="tags">'   + rowTags.join(', ')     + '<\/td>');
 			results.push('<td>'                + rowDescription         + '<\/td>');
+			results.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
 			results.push('<\/tr>');
 				
-			// Update totals
-			theTotal += rowAmount;
-			monthTotal += rowAmount;
-			if (rowAmount < 0) {
-				monthNeg += rowAmount;
-			} else {
-				monthPos += rowAmount;
-			}
 		}
 		
 		// Should we show the full month partials at the last row?
