@@ -402,6 +402,16 @@ function changeReport(el) {
 	if (newType == 'd' && oldType != 'd') {
 		toggleOverview();
 	}
+	
+	// Recent *months* doesn't make sense in yearly report
+	// TODO make a "recent years" feature
+	if (newType == 'y' || oldType == 'y') {
+		show = (newType != 'y');
+		document.getElementById('optlastmonths').style.visibility = (show) ? '' : 'hidden';
+		document.getElementById('optlastmonthslabel').style.visibility = (show) ? '' : 'hidden';
+		document.getElementById('lastmonths').style.visibility = (show) ? '' : 'hidden';
+	}
+	
 	reportType = newType;
 	overviewData = [];
 	showReport();	
@@ -474,7 +484,7 @@ function readData() {
 
 	rawData = rawData.split(dataRecordSeparator);
 	
-	if (document.getElementById('optlastmonths').checked) {
+	if (document.getElementById('optlastmonths').checked && reportType != 'y') {
 		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
 	}
 	
