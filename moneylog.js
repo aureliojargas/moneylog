@@ -302,23 +302,25 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	var partial, theRow;
 	if (monthTotal) {
 		partial = [];
-		partial.push('<table class="monthsubtotal number" align="right"><tr>');
+		partial.push('<table class="monthsubtotal number" align="left"><tr>');
 		partial.push('<td class="mini"> +');
 		partial.push(prettyFloat(monthPos, true) + '<br>');
 		partial.push(prettyFloat(monthNeg, true) + '<\/td>');
-		partial.push('<td>' + prettyFloat(monthTotal) + '<\/td>');
 		partial.push('<\/tr><\/table>');
 		partial = partial.join('');
+		monthTotal = '=  ' + prettyFloat(monthTotal);
 	} else {
-		partial = '';
+		partial = monthTotal = ''; 
 	}
 	theRow = '<tr class="monthtotal">';
 	if (showRowCount) {
 		theRow += '<td class="row-count"><\/td>';
 	}
 	theRow += '<td><\/td>';
+	theRow += '<td>' + partial + '<\/td>';
+	theRow += '<td colspan="2" align="left">' + monthTotal + '<\/td>';
 	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
-	theRow += '<td colspan="2">' + partial + '<\/td><td><\/td><\/tr>';
+	theRow += '<\/tr>';
 	return theRow;
 }
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
