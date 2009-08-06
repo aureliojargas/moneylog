@@ -341,10 +341,10 @@ function getMiniBar(pos, neg) {
 	// The total amount for this period
 	roof = pos + Math.abs(neg);
 	// The size of each bar (pixels)
-	posPx = parseInt(pos * miniBarWidth / roof, 10)
+	posPx = parseInt(pos * miniBarWidth / roof, 10);
 	negPx = miniBarWidth - posPx;
 	// The percentage of each bar (%)
-	posLabel = parseInt(pos * 100 / roof, 10)
+	posLabel = parseInt(pos * 100 / roof, 10);
 	negLabel = 100 - posLabel;
 	
 	// Labels
