@@ -12,7 +12,7 @@ body {
 	font-size:85%;
 	font-family:sans-serif;
 }
-th, td {
+tr {
 	font-size:85%; /* same as in body */	
 }
 a {
@@ -212,10 +212,10 @@ a {
 
 /* Minibars inside report table */
 .posbar {
-	background-color:#4D89F9;
+	background-color:#4D89F9 !important;
 }
 .negbar {
-	background-color:#f66;
+	background-color:#f66 !important;
 }
 td.minibar {
 	border-style:none !important;
@@ -228,6 +228,39 @@ td.minibar .label {
 	float:left;
 	font-size:75%;
 	color:white !important;
+}
+
+
+/* Charts */
+#charts {
+	margin-top:-4em;
+	padding-bottom:3em;
+	text-align:center;
+	display:none;
+}
+table.chart {
+	border:1px solid #ccc;
+	margin:0 auto;
+	padding:10px;
+}
+table.chart td.bar {
+	text-align:center;
+	vertical-align:bottom;
+}
+table.chart td.bar div.bar {
+	width:35px;
+	margin:0 auto;
+}
+table.chart td.bar .label {
+	font-size:11px;
+	color:#444;
+	font-style:italic;
+}
+table.chart tr.label {
+	text-align:center;
+	font-size:10px;
+	line-height:100%;
+	color:#444;
 }
 
 

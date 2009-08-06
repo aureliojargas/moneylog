@@ -31,6 +31,8 @@ var reportType = 'd';             // Initial report type: d m y (daily, monthly,
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
 var showMiniBarsLabels = true;    // Show the labels inside the bars?
 var miniBarWidth = 70;            // The percentage bar width, in pixels
+var showCharts = true;            // Show the bar chart after the monthly/yearly report?
+var showChartBarLabel = true;     // Show the labels above the bars?
 
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
@@ -308,6 +310,14 @@ function populateDataFilesCombo() {
 		}
 	}
 }
+function populateChartColsCombo() {
+	var el, i;
+	el = document.getElementById('chartcol');
+	for (i = 0; i < i18n.labelsOverview.length; i++) {
+		if (i === 0) { continue; } // ignore date column
+		el.options[i - 1] = new Option(i18n.labelsOverview[i], i);
+	}
+}
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	var partial, theRow;
 	
@@ -334,6 +344,24 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
 	theRow += '<\/tr>';
 	return theRow;
+}
+function prettyBarLabel(n) {
+	var negative;
+	negative = (n < 0);
+	if (negative) {
+		n = Math.abs(n);
+	}
+	if (n < 1000) {
+		n = n.toString().replace(/\.(\d).*/, ''); // 123,45 > 123
+	} else if (n >= 1000 && n < 1000000) {
+		n = (n / 1000).toString().replace(/\.(\d).*/, 'k$1'); // 1.234,45 > 1k2
+	} else if (n >= 1000000) {
+		n = (n / 1000).toString().replace(/\.(\d).*/, 'm$1'); // 1.234.567,89 > 1m2
+	}
+	if (negative) {
+		n = '-' + n;
+	}
+	return n.replace(/([km])0/, '$1'); // 2k0 > 2k
 }
 function getMiniBar(pos, neg) {
 	var roof, posPx, negPx, posLabel, negLabel, posMargin, negMargin, labels, labelTemplate;
@@ -411,7 +439,7 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	return theRow.join('\n');
 }
 function toggleOverview() {
-	var i, hide, remove, show;
+	var i, hide, remove, show, add;
 	
 	// Visibility On/Off - Overview report hides some controls from the toolbar
 	//
@@ -420,6 +448,7 @@ function toggleOverview() {
 	
 	remove = ['tagsArea'];
 	hide = ['filterbox', 'optmonthly', 'optmonthlylabel', 'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'];
+	add = ['charts'];
 
 	show = (reportType != 'd');
 	for (i = 0; i < hide.length; i++) {
@@ -427,6 +456,9 @@ function toggleOverview() {
 	}
 	for (i = 0; i < remove.length; i++) {
 		document.getElementById(remove[i]).style.display = (show) ? 'block' : 'none';
+	}
+	for (i = 0; i < add.length; i++) {
+		document.getElementById(add[i]).style.display = (!show) ? 'block' : 'none';
 	}
 
 	// Save / restore information
@@ -869,11 +901,11 @@ function applyTags(theData) {
 	}
 }
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, maxPos, maxNeg, maxPartial;
+	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartBars, chartLabels, chartCol, chartRoof, chartBarSize, chartBarLabel, chartBarClass;
 
 	results = [];
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
-	minPos = minNeg = minPartial = maxPos = maxNeg = maxPartial = 0;
+	minPos = minNeg = minPartial = minBalance = maxPos = maxNeg = maxPartial = maxBalance = 0;
 	currSortIndex = sortColIndex;
 
 	// Table headings
@@ -968,33 +1000,88 @@ function showOverview() {
 				minPos     = maxPos     = z[1];
 				minNeg     = maxNeg     = z[2];
 				minPartial = maxPartial = z[3];
+				minBalance = maxBalance = z[4];
 			} else {
 				// Minimum
 				minPos     = (z[1] < minPos)     ? z[1] : minPos;
 				minNeg     = (z[2] < minNeg)     ? z[2] : minNeg;
 				minPartial = (z[3] < minPartial) ? z[3] : minPartial;
+				minBalance = (z[4] < minBalance) ? z[4] : minBalance;
 				// Maximum
 				maxPos     = (z[1] > maxPos)     ? z[1] : maxPos;
 				maxNeg     = (z[2] > maxNeg)     ? z[2] : maxNeg;
 				maxPartial = (z[3] > maxPartial) ? z[3] : maxPartial;
+				maxBalance = (z[4] > maxBalance) ? z[4] : maxBalance;
 			}
 			
 			// Save this row to the report table
 			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4], i + 1));
 		}
+		maxNumbers = [0, maxPos, maxNeg, maxPartial, maxBalance];
+		minNumbers = [0, minPos, minNeg, minPartial, minBalance];
 		
 		// Compose the final rows: total, avg, min, max
 		len = overviewData.length;
 		results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
 		results.push(getOverviewTotalsRow(i18n.labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
 		results.push(getOverviewTotalsRow(i18n.labelMinimum, minPos, maxNeg, minPartial));
-		results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial));
+		results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial, maxBalance));
 		// Note: Yes, maxNeg and minNeg are swapped for better reading
 		
-		// And we're done
+		// And we're done on the report table
 		results.push('<\/table>');
 		results = results.join('\n');
 		
+		// Now charts!
+		if (showCharts) {
+			chart = [];
+			chartBars = [];
+			chartLabels = [];
+			chartCol = document.getElementById('chartcol').value || 1;
+			
+			// Get the maximum absolute value for this column
+			chartRoof = (Math.abs(minNumbers[chartCol]) > maxNumbers[chartCol]) ?
+			 	Math.abs(minNumbers[chartCol]) :
+				maxNumbers[chartCol];
+			
+			// Calculate each bar size and format labels
+			for (i = 0; i < overviewData.length; i++) {
+				z = overviewData[i];
+				chartBarSize = parseInt(Math.abs(z[chartCol]) * 100 / chartRoof, 10);
+				chartBarLabel = prettyBarLabel(z[chartCol]);
+				chartBars.push([chartBarLabel, chartBarSize]);
+				chartLabels.push(z[0].replace('-', '<br>')); // date
+			}
+		
+			// Compose the chart table
+			chart.push('<table class="chart">');
+
+			// First line is for the bars (label at top)
+			chart.push('<tr>');
+			for (i = 0; i < chartBars.length; i++) {
+				chartBarClass = (chartBars[i][0][0] == '-') ? 'negbar' : 'posbar';
+				chart.push('<td class="bar">');
+				if (showChartBarLabel) {
+					chart.push('<span class="label">' + chartBars[i][0] + '<\/span>');
+				}
+				chart.push('<div class="bar ' + chartBarClass + '" style="height:' + chartBars[i][1] + 'px"><\/div>');
+				chart.push('</td>');
+			}
+			chart.push('<\/tr>');
+
+			// Second line is for the labels
+			chart.push('<tr class="label">');
+			for (i = 0; i < chartLabels.length; i++) {
+				chart.push('<td>' + chartLabels[i] + '<\/td>');
+			}
+			chart.push('<\/tr>');
+			
+			// And we're done
+			chart.push('<\/table>');
+			chart = chart.join('\n');
+			
+			document.getElementById('chart').innerHTML = chart;
+		}
 	} else {
 		results = i18n.labelNoData;
 	}
@@ -1136,6 +1223,7 @@ function init() {
 	setCurrentDate();
 	populateMonthsCombo();
 	populateDataFilesCombo();
+	populateChartColsCombo();
 	populateValueFilterCombo();
 	
 	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
