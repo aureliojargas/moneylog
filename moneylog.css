@@ -209,6 +209,28 @@ a {
 	width:5.5em;
 }
 
+
+/* Minibars inside report table */
+.posbar {
+	background-color:#4D89F9;
+}
+.negbar {
+	background-color:#f66;
+}
+td.minibar {
+	border-style:none !important;
+}
+div.minibar {
+	float:left;
+/*	height:0.7em;*/
+}
+td.minibar .label {
+	float:left;
+	font-size:75%;
+	color:white !important;
+}
+
+
 /* Emulating position:fixed in IE/Win 5+ */
 #toolbar {
 	_position:absolute;

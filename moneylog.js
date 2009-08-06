@@ -27,6 +27,11 @@ var highlightWords = '';          // The words you may want to highlight (ie: 'X
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 
+// Charts
+var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
+var showMiniBarsLabels = true;    // Show the labels inside the bars?
+var miniBarWidth = 70;            // The percentage bar width, in pixels
+
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
 var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneFile=false)
@@ -329,8 +334,50 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	theRow += '<\/tr>';
 	return theRow;
 }
+function getMiniBar(pos, neg) {
+	var roof, posPx, negPx, posLabel, negLabel, posMargin, negMargin, labels, labelTemplate;
+
+	// The total amount for this period
+	roof = pos + Math.abs(neg);
+	// The size of each bar (pixels)
+	posPx = parseInt(pos * miniBarWidth / roof, 10)
+	negPx = miniBarWidth - posPx;
+	// The percentage of each bar (%)
+	posLabel = parseInt(pos * 100 / roof, 10)
+	negLabel = 100 - posLabel;
+	
+	// Labels
+	labels = '';
+	if (showMiniBarsLabels) {
+		labelTemplate = '<span class="label" style="margin-left:-{margin}">{label}<\/span>';
+
+		// The label positioning (negative margin)
+		posMargin = (miniBarWidth - 2) + 'px';                // full bar width
+		negMargin = ((negLabel == 100) ? '2' : '1.4') + 'em'; // 1.4em or 2em
+
+		// Hide label when it's zero
+		if (posLabel > 0) {
+			labels += labelTemplate.replace('{margin}', posMargin).replace('{label}', posLabel);
+		}
+		if (negLabel > 0) {
+			labels += labelTemplate.replace('{margin}', negMargin).replace('{label}', negLabel);
+		}
+	}
+	
+	// Kinda complicated layout
+	// DIVs and SPANs are float:left to be aligned in order, at the same line
+	// SPANs (labels) are moved left (negative margin) precisely to "enter" the bars
+	// The TD width *must* be set to accomodate these tricks
+	//
+	return '<td class="minibar" style="width:' + (miniBarWidth + 2) + 'px">' +
+		'<div class="minibar posbar" style="width:' + posPx + 'px">&nbsp;<\/div>' +
+		'<div class="minibar negbar" style="width:' + negPx + 'px">&nbsp;<\/div>' +
+		labels +
+		'<\/td>';
+}
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
 	var theRow = [];
+	
 	theRow.push((theMonth <= currentDate.slice(0, 7)) ? '<tr>' : '<tr class="future">');
 	if (showRowCount) {
 		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
@@ -340,6 +387,11 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
+	
+	if (showMiniBars) {
+		theRow.push(getMiniBar(monthPos, monthNeg));
+	}	
+	
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
@@ -350,8 +402,8 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 		theRow.push('<td class="row-count"><\/td>');
 	}
 	theRow.push('<td class="rowlabel">' + label + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n1)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n2)  + '<\/td>');
+	theRow.push('<td class="number">' + prettyFloat(n1) + '<\/td>');
+	theRow.push('<td class="number">' + prettyFloat(n2) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(n3) + '<\/td>');
 	theRow.push('<td><\/td>');
 	theRow.push('<\/tr>');
@@ -829,6 +881,9 @@ function showOverview() {
 	thead += '<th onClick="sortCol(2, true)">' + i18n.labelsOverview[2] + '<\/th>';
 	thead += '<th onClick="sortCol(3, true)">' + i18n.labelsOverview[3] + '<\/th>';
 	thead += '<th onClick="sortCol(4, true)">' + i18n.labelsOverview[4] + '<\/th>';
+	if (showMiniBars) {
+		thead += '<th>%<\/th>';	
+	}
 	if (showRowCount) {
 		thead = '<th class="row-count"><\/th>' + thead;
 	}
@@ -938,6 +993,7 @@ function showOverview() {
 		// And we're done
 		results.push('<\/table>');
 		results = results.join('\n');
+		
 	} else {
 		results = i18n.labelNoData;
 	}
