@@ -475,7 +475,7 @@ function toggleOverview() {
 	}
 }
 function changeReport(el) {
-	var oldType, newType;
+	var oldType, newType, show;
 	
 	oldType = reportType;
 	newType = el.id;
