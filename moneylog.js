@@ -714,9 +714,12 @@ function readData() {
 			recValue = rowAmount;
 			
 			if (recOperator == '/') {
-				recValue = (recValue / recTimes).toFixed(2);
+				recValue = (recValue / recTimes);
 			}
 
+			// Make sure we have a valid money value (not float)
+			recValue = recValue.toFixed(2);
+			
 			// Compose and append each new row
 			for (j = 1; j <= recTimes; j++) {
 				rawData.push([
