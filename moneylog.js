@@ -624,7 +624,7 @@ function parseData() {
 				lineno,
 				i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
 			);
-			return [];
+			return;
 
 		// Error: too much separators
 		} else if (fields.length - 1 > 2) {
@@ -632,7 +632,7 @@ function parseData() {
 				lineno,
 				i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
 			);
-			return [];			
+			return;			
 		}
 
 		///////////////////////////////////////////////////////////// Text
@@ -679,11 +679,11 @@ function parseData() {
 			// Ops, we don't have a valid number
 			if(isNaN(rowAmount)) {
 				invalidData(lineno, rowAmountErrorMsg);
-				return [];
+				return;
 			}
 		} else {
 			invalidData(lineno, rowAmountErrorMsg);
-			return [];
+			return;
 		}
 
 		///////////////////////////////////////////////////////////// Recurrent Value
