@@ -587,11 +587,14 @@ function reloadData() {
 	loadDataFile(document.getElementById('datafiles').value);
 }
 function readData() {
+	var iframeDoc;
+	
 	// Read raw data from #data block (<PRE>) or from external dataFile (<IFRAME><PRE>)
 	if (oneFile) {
 		rawData = document.getElementById('data').innerHTML;		
 	} else {
-		rawData = frames[0].document.getElementsByTagName('pre')[0].innerHTML;
+		iframeDoc = document.getElementById('dataFrame').contentWindow.document;
+		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
 	}
 }
 function parseData() {
