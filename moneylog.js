@@ -601,7 +601,7 @@ function readData() {
 	}
 }
 function parseData() {
-	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg;
+	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort;
 
 	// Reset the data holder
 	parsedData = [];
@@ -759,6 +759,13 @@ function parseData() {
 		// Save the validated data
 		parsedData.push([rowDate, rowAmount, rowTags, rowDescription]);
 	}
+
+	// Sort by date
+	// Note: save/restore the global var contents
+	oldSort = sortColIndex;
+	sortColIndex = 0;
+	parsedData.sort(sortArray);
+	sortColIndex = oldSort;	
 }
 function filterData() {
 	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
@@ -821,7 +828,7 @@ function filterData() {
 		if (thisDate < firstDate) { continue; }
 
 		// Ignore future dates
-		if (!showFuture && thisDate > currentDate) { continue; }
+		if (!showFuture && thisDate > currentDate) { break; }
 
 		// Apply value filter
 		if (valueFilter) {
@@ -984,8 +991,6 @@ function showOverview() {
 
 	if (!overviewData.length) { // Data not cached
 		theData = filterData();
-		sortColIndex = 0; // Always scan by date order
-		theData.sort(sortArray);
 	}
 
 	if (overviewData.length || theData.length) {
