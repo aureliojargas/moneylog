@@ -284,12 +284,6 @@ function prettyFloat(num, noHtml) {
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
 	// Note: all html *end* tags have the / escaped to pass on validator
 }
-function populateOverviewRangeCombo() {
-	var el;
-	el = document.getElementById('overviewrange');
-	el.options[0] = new Option(i18n.labelMonthly, 'month');
-	el.options[1] = new Option(i18n.labelYearly, 'year');
-}
 function populateValueFilterCombo() {
 	var el;
 	el = document.getElementById('valuefilter');
