@@ -144,9 +144,16 @@ var sortColRev = false;
 var oldSortColIndex;
 var oldValueFilterArgShow;
 var currentDate;
-var overviewData = [];
 var highlightRegex;
 var i18n;
+var rawData = '';
+var parsedData = [];
+var overviewData = [];
+
+// init and iframe loading are concurrent events that needs to be completed at the initial page load.
+// So we need this silly flags to track the execution of both events.
+var iframeIsLoaded = false;
+var initIsDone = false;
 
 if (!Array.prototype.push) { // IE5...
 	Array.prototype.push = function (item) {
@@ -544,92 +551,84 @@ function toggleHelp() {
 	var el = document.getElementById('help');
 	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
 }
-function loadDataFile(filePath) {
-	if (!filePath) { return; }
-	document.getElementById("dataFrame").src = filePath;
+function iframeLoaded(el) {
+	// Note: This function is attached to the iframe onLoad event.
+
+	if (typeof el.loadCount == 'undefined') {
+		el.loadCount = 0;
+	}
+	el.loadCount++;
+	if (el.loadCount > 1) {
+		// Discard the first iframe load, it's always blank, on the initial page load.
+		// The other loads are for real.
+		iframeIsLoaded = true;
+
+		// Short explanation:
+		// If the initial frame loading delayed, we read/parse the data right here.
+		// Long explanation:
+		// The frame loading is an event occuring in parallel with init().
+		// Maybe the iframe contents is fully loaded before init() ends, maybe not.
+		// The initIsDone flag tell us that init() is already done, so we must take action here.
+		// If the loadCount > 2, it's a reload or new dataFile, so we also must parse the new data.
+		//
+		if ((el.loadCount == 2 && initIsDone) || el.loadCount > 2) {
+			readData();
+			parseData();
+			showReport();
+		}
+	}
+}
+function resetData() {
 	overviewData = [];
-	setTimeout("showReport()", 100);
-	// The browser won't load the iframe contents unless we schedule it (strange...)
+	parsedData = [];
+	rawData = '';
+}
+function loadDataFile(filePath) {
+	resetData();
+	iframeIsLoaded = false;
+	document.getElementById("dataFrame").src = filePath;
+	// This triggers the onLoad iframe event, handled by iframeLoaded()
 }
 function reloadData() {
 	loadDataFile(document.getElementById('datafiles').value);
 }
 function readData() {
-	var i, j, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, theData, rawData, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, valueFilter, valueFilterArg, lineno, fields, rowAmountErrorMsg;
-
-	isRegex = false;
-	isNegated = false;
-	filter = '';
-	firstDate = 0;
-	theData = [];
-
-	// Read raw data from #data block or from external dataFile (iframe)
+	// Read raw data from #data block (<PRE>) or from external dataFile (<IFRAME><PRE>)
 	if (oneFile) {
-		rawData = document.getElementById('data').innerHTML;
-		
+		rawData = document.getElementById('data').innerHTML;		
 	} else {
 		rawData = frames[0].document.getElementsByTagName('pre')[0].innerHTML;
 	}
+}
+function parseData() {
+	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg;
 
-	rawData = rawData.split(dataRecordSeparator);
-	
-	if (document.getElementById('optlastmonths').checked && reportType != 'y') {
-		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
-	}
-	
-	// Show future works for both views
-	showFuture = document.getElementById('optfuture').checked;
-	
-	// Get filters data for the detailed report
-	if (reportType == 'd') {
-		filter = document.getElementById('filter').value;
-		isRegex = document.getElementById('optregex').checked;
-		isNegated = document.getElementById('optnegate').checked;
-		
-		if (document.getElementById('optvaluefilter').checked) {
-			valueFilter = document.getElementById('valuefilter').value;
-			valueFilterArg = document.getElementById('valuefilterarg').value || 0;
-		}
-		
-		// Hack: Value filtering on the search box!
-		// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
-		temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
-		if (temp) {
-			valueFilter = temp[1];
-			valueFilterArg = temp[2] || 0;
-			filter = ''; // The filter was (ab)used, now we can discard it
-		}
-	}
-	
-	// Prepare filter contents as /regex/ or string, always ignore case
-	if (filter) {
-		if (isRegex) {
-			filter = eval('/' + filter.replace('/', '\\/') + '/i');
-		} else {
-			filter = filter.toLowerCase();
-		}
-	}
+	// Reset the data holder
+	parsedData = [];
 
+	// Split lines
+	rows = rawData.split(dataRecordSeparator);
+	
 	// Scan data rows
-	for (i = 0; i < rawData.length; i++) {
+	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
 		rowDate = rowAmount = rowText = '';
 
 		///////////////////////////////////////////////////////////// Firewall
 
 		// Skip commented rows
-		if (rawData[i].indexOf(commentChar) === 0) { continue; }
+		if (rows[i].indexOf(commentChar) === 0) { continue; }
 		// Skip blank lines
-		if (!rawData[i].strip()) { continue; }
+		if (!rows[i].strip()) { continue; }
 
 		// Separate fields
-		fields = rawData[i].split(dataFieldSeparator);
+		fields = rows[i].split(dataFieldSeparator);
 
 		// Error: rows with no separator
 		if (fields.length == 1) {
 			invalidData(
 				lineno,
-				i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rawData[i]
+				i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
 			);
 			return [];
 
@@ -637,7 +636,7 @@ function readData() {
 		} else if (fields.length - 1 > 2) {
 			invalidData(
 				lineno,
-				i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rawData[i]
+				i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
 			);
 			return [];			
 		}
@@ -652,12 +651,12 @@ function readData() {
 		if (rowDate) {
 			rowDate = rowDate[1]; // group 1
 		} else {
-			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + rawData[i]);
+			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + rows[i]);
 		}
 
 		///////////////////////////////////////////////////////////// Amount
 		
-		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + rawData[i];
+		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + rows[i];
 
 		// Extract (and remove) recurrent information from the amount (if any)
 		recurrentAmount = fields[1].match(dataPatterns.amountRecurrent);
@@ -722,7 +721,7 @@ function readData() {
 			
 			// Compose and append each new row
 			for (j = 1; j <= recTimes; j++) {
-				rawData.push([
+				rows.push([
 					addMonths(rowDate, j - 1),
 					recValue,
 					rowText + ' ' + j + '/' + recTimes
@@ -731,35 +730,6 @@ function readData() {
 			
 			// Ignore the original recurring row
 			continue;
-		}
-		
-		///////////////////////////////////////////////////////////// Filters
-		
-		// Ignore dates older than "last N months" option (if checked)
-		if (rowDate < firstDate) { continue; }
-
-		// Ignore future dates
-		if (!showFuture && rowDate > currentDate) { continue; }
-
-		// Apply value filter
-		if (valueFilter) {
-			if (valueFilter == '+' && rowAmount < 0) { continue; }
-			if (valueFilter == '-' && rowAmount >= 0) { continue; }
-			if (valueFilter == '>' && rowAmount <= valueFilterArg) { continue; }
-			if (valueFilter == '<' && rowAmount >= valueFilterArg) { continue; }
-			if (valueFilter == '=' && rowAmount != valueFilterArg) { continue; }
-			if (valueFilter == '>=' && rowAmount < valueFilterArg) { continue; }
-			if (valueFilter == '<=' && rowAmount > valueFilterArg) { continue; }
-		}
-
-		// Search filter firewall - Will this line pass it?
-		if (filter) {
-			if (isRegex) {
-				filterPassed = filter.test(rawData[i]);
-			} else {
-				filterPassed = (rawData[i].toLowerCase().indexOf(filter) != -1);
-			}
-			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) { continue; }
 		}
 		
 		///////////////////////////////////////////////////////////// Tags + Description
@@ -786,11 +756,99 @@ function readData() {
 			rowDescription = rowText || '&nbsp;';
 		}
 		
-		// Save the parsed data
-		theData.push([rowDate, rowAmount, rowTags, rowDescription]);
+		// Save the validated data
+		parsedData.push([rowDate, rowAmount, rowTags, rowDescription]);
+	}
+}
+function filterData() {
+	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
+
+	isRegex = false;
+	isNegated = false;
+	filter = '';
+	firstDate = 0;
+	filteredData = [];
+		
+	if (document.getElementById('optlastmonths').checked && reportType != 'y') {
+		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
 	}
 	
-	return theData;
+	// Show future works for both views
+	showFuture = document.getElementById('optfuture').checked;
+	
+	// Get filters data for the detailed report
+	if (reportType == 'd') {
+		filter = document.getElementById('filter').value;
+		isRegex = document.getElementById('optregex').checked;
+		isNegated = document.getElementById('optnegate').checked;
+		
+		if (document.getElementById('optvaluefilter').checked) {
+			valueFilter = document.getElementById('valuefilter').value;
+			valueFilterArg = document.getElementById('valuefilterarg').value || 0;
+		}
+		
+		// Hack: Value filtering on the search box!
+		// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
+		temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
+		if (temp) {
+			valueFilter = temp[1];
+			valueFilterArg = temp[2] || 0;
+			filter = ''; // The filter was (ab)used, now we can discard it
+		}
+	}
+	
+	// Prepare filter contents as /regex/ or string, always ignore case
+	if (filter) {
+		if (isRegex) {
+			filter = eval('/' + filter.replace('/', '\\/') + '/i');
+		} else {
+			filter = filter.toLowerCase();
+		}
+	}
+
+	// Scan data rows
+	for (i = 0; i < parsedData.length; i++) {
+		
+		// date value [tags] description
+		thisDate = parsedData[i][0];
+		thisValue = parsedData[i][1];
+		thisTags = parsedData[i][2];
+		thisDescription = parsedData[i][3];
+		
+		///////////////////////////////////////////////////////////// Filters
+		
+		// Ignore dates older than "last N months" option (if checked)
+		if (thisDate < firstDate) { continue; }
+
+		// Ignore future dates
+		if (!showFuture && thisDate > currentDate) { continue; }
+
+		// Apply value filter
+		if (valueFilter) {
+			if (valueFilter == '+' && thisValue < 0) { continue; }
+			if (valueFilter == '-' && thisValue >= 0) { continue; }
+			if (valueFilter == '>' && thisValue <= valueFilterArg) { continue; }
+			if (valueFilter == '<' && thisValue >= valueFilterArg) { continue; }
+			if (valueFilter == '=' && thisValue != valueFilterArg) { continue; }
+			if (valueFilter == '>=' && thisValue < valueFilterArg) { continue; }
+			if (valueFilter == '<=' && thisValue > valueFilterArg) { continue; }
+		}
+
+		// Search filter firewall - Will this line pass it?
+		if (filter) {
+			if (isRegex) {
+				filterPassed = filter.test(parsedData[i].join('\t'));
+			} else {
+				filterPassed = (parsedData[i].join('\t').toLowerCase().indexOf(filter) != -1);
+			}
+			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) { continue; }
+		}
+		
+		// Save the results
+		filteredData.push([thisDate, thisValue, thisTags, thisDescription]);
+	}
+	
+	return filteredData;
 }
 function applyTags(theData) {
 	// This function composes the full tag menu and
@@ -925,7 +983,7 @@ function showOverview() {
 	}
 
 	if (!overviewData.length) { // Data not cached
-		theData = readData();
+		theData = filterData();
 		sortColIndex = 0; // Always scan by date order
 		theData.sort(sortArray);
 	}
@@ -1098,7 +1156,7 @@ function showDetailed() {
 	results = [];
 	
 	monthPartials = document.getElementById('optmonthly');
-	theData = applyTags(readData());
+	theData = applyTags(filterData());
 	
 	if (theData.length > 0) {
 
@@ -1240,7 +1298,7 @@ function init() {
 	// Split highlight string into words 
 	highlightTags = highlightTags.strip().split(/\s+/);
 	
-	// Just show files combo when there are 2 or more
+	// Just show the files combo when there are 2 or more files
 	if (oneFile || dataFiles.length < 2) {
 		document.getElementById('datafiles').style.display = 'none';
 	}
@@ -1275,20 +1333,28 @@ function init() {
 	document.getElementById(reportType).className = 'active';
 	
 	// Apply user defaults
-	if (defaultLastMonths)    { document.getElementById('optlastmonths').click(); }
-	if (defaultMonthPartials) { document.getElementById('optmonthly'   ).click(); }
-	if (defaultFuture)        { document.getElementById('optfuture'    ).click(); }
-	if (defaultRegex)         { document.getElementById('optregex'     ).click(); }
-	if (defaultNegate)        { document.getElementById('optnegate'    ).click(); }
+	if (defaultLastMonths)    { document.getElementById('optlastmonths').checked = true; }
+	if (defaultMonthPartials) { document.getElementById('optmonthly'   ).checked = true; }
+	if (defaultFuture)        { document.getElementById('optfuture'    ).checked = true; }
+	if (defaultRegex)         { document.getElementById('optregex'     ).checked = true; }
+	if (defaultNegate)        { document.getElementById('optnegate'    ).checked = true; }
 	document.getElementById('filter').value = defaultSearch;
 
-	// Load data file or embedded data
+	// We need to load the iframe contents first (if using external datafile)
 	if (!oneFile) {
 		loadDataFile(dataFiles[0]);
-	} else {
-		showReport();
 	}
 
+	// Everything is ok, time to read/parse/show the user data
+	if (oneFile || (!oneFile && iframeIsLoaded)) {
+		readData();
+		parseData();
+		showReport();		
+	}
+	
+	// Uncomment this line to focus the search box at init
 	// document.getElementById('filter').focus();
+
+	initIsDone = true;
 }
 window.onload = init;
