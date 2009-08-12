@@ -804,7 +804,7 @@ function filterData() {
 	// Prepare filter contents as /regex/ or string, always ignore case
 	if (filter) {
 		if (isRegex) {
-			filter = eval('/' + filter.replace('/', '\\/') + '/i');
+			filter = new RegExp(filter.replace('/', '\\/'), 'i');
 		} else {
 			filter = filter.toLowerCase();
 		}
