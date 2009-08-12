@@ -80,14 +80,16 @@ input {
 }
 #toolbar #report-nav a {
 	font-size:110%;
+	border:1px solid #444; /* bg2 */
 }
 #toolbar #report-nav a:hover {
-	background-color:#444;               /* bg2 */
-	color:#c6f;                          /* fg2a */
-	outline:1px dotted #c6f !important;  /* fg2a */
+	background-color:#444; /* bg2 */
+	color:#c6f;            /* fg2a */
+	border:1px dotted #c6f; /* fg2a */
 }
 #toolbar #report-nav a.active {
-	outline:1px solid #c6f; /* fg2a */
+	border:1px solid #c6f; /* fg2a */
+	outline-style:none; /* Firefox, Camino */
 }
 #toolbar a.helplink {
 	float:right;
