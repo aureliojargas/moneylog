@@ -63,9 +63,9 @@ You may change the styles if you know what you're doing.
 	<!-- Report Type -->
 	<div id="report-nav">
 		<a
-			id="d" href="#" onClick="changeReport(this)"></a><a
-			id="m" href="#" onClick="changeReport(this)"></a><a
-			id="y" href="#" onClick="changeReport(this)"></a>
+			id="d" href="#" onClick="changeReport(this);return false"></a><a
+			id="m" href="#" onClick="changeReport(this);return false"></a><a
+			id="y" href="#" onClick="changeReport(this);return false"></a>
 	</div>
 	
 </td>
@@ -113,7 +113,7 @@ You may change the styles if you know what you're doing.
 </td>
 <td>
 	<!-- Help -->
-	<a id="helpbutton" class="helplink" href="#" onClick="toggleHelp()">?</a>
+	<a id="helpbutton" class="helplink" href="#" onClick="toggleHelp();return false">?</a>
 
 	<!-- Search -->
 	<div id="filterbox">
@@ -137,7 +137,7 @@ You may change the styles if you know what you're doing.
 	<div id="datafilesbox">
 		<select
 		 	id="datafiles" size="1" onChange="loadDataFile(this.value)"></select>&nbsp;<a
-			id="reload" class="Xhelplink" href="#" onClick="reloadData()">®</a>
+			id="reload" class="Xhelplink" href="#" onClick="reloadData();return false">®</a>
 	</div>
 </td>
 </tr>
