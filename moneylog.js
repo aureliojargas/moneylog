@@ -439,44 +439,67 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
-function toggleOverview() {
-	var i, hide, remove, show, add;
-	
-	// Visibility On/Off - Overview report hides some controls from the toolbar
+function updateToolbar() {
+	var i, add, remove, hide, unhide;
+
+	// Visibility On/Off
+	// Monthly/Yearly report hides some controls from the toolbar.
 	//
 	// Some fields are just hidden to preserve the page layout.
 	// Others must be removed to free some space for the report.
-	
-	remove = ['tagsArea'];
-	hide = ['filterbox', 'optmonthly', 'optmonthlylabel', 'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'];
-	add = ['charts'];
+		
+	add = [];
+	remove = [];
+	hide = [];
+	unhide = [];
 
-	show = (reportType != 'd');
-	for (i = 0; i < hide.length; i++) {
-		document.getElementById(hide[i]).style.visibility = (show) ? '' : 'hidden';
+	// Daily
+	if (reportType == 'd') {
+		add = ['tagsArea'];
+		remove = ['charts'];
+		unhide = [
+			'filterbox',
+			'optmonthly', 'optmonthlylabel',
+			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'];		
+	// Monthly
+	} else if (reportType == 'm') {
+		add = ['charts'];
+		remove = ['tagsArea'];
+		hide = [
+			'filterbox',
+		 	'optmonthly', 'optmonthlylabel',
+		 	'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'];
+		unhide = [
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'];
+	// Yearly
+	} else if (reportType == 'y') {
+		add = ['charts'];		
+		remove = ['tagsArea'];
+		hide = [
+			'filterbox',
+			'optmonthly', 'optmonthlylabel',
+			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'];
+			// Recent *months* doesn't make sense in yearly report
+	}
+	
+	// Show/hide toolbar elements
+	for (i = 0; i < add.length; i++) {
+		document.getElementById(add[i]).style.display = 'block';
 	}
 	for (i = 0; i < remove.length; i++) {
-		document.getElementById(remove[i]).style.display = (show) ? 'block' : 'none';
+		document.getElementById(remove[i]).style.display = 'none';
 	}
-	for (i = 0; i < add.length; i++) {
-		document.getElementById(add[i]).style.display = (!show) ? 'block' : 'none';
+	for (i = 0; i < hide.length; i++) {
+		document.getElementById(hide[i]).style.visibility = 'hidden';
 	}
-
-	// Save / restore information
-	if (reportType == 'd') {
-		// Special case that needs to save previous state
-		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
-		document.getElementById('valuefilterarg').style.visibility = 'hidden';
-		oldSortColIndex = sortColIndex; // save state
-		sortColIndex = 0; // Default by date
-	} else {
-		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
-		sortColIndex = oldSortColIndex || 0;
-		overviewData = [];
+	for (i = 0; i < unhide.length; i++) {
+		document.getElementById(unhide[i]).style.visibility = 'visible';
 	}
 }
 function changeReport(el) {
-	var oldType, newType, show;
+	var oldType, newType;
 	
 	oldType = reportType;
 	newType = el.id;
@@ -485,26 +508,25 @@ function changeReport(el) {
 	document.getElementById(oldType).className = '';
 	el.className = 'active';
 	
-	// XXX rework the toggleOverview() function
+	//// Save / restore information
+	//
+	// From Daily to Monthly/Yearly
 	if (oldType == 'd' && newType != 'd') {
-		toggleOverview();
-	}
-	if (newType == 'd' && oldType != 'd') {
-		toggleOverview();
-	}
-	
-	// Recent *months* doesn't make sense in yearly report
-	// TODO make a "recent years" feature
-	if (newType == 'y' || oldType == 'y') {
-		show = (newType != 'y');
-		document.getElementById('optlastmonths').style.visibility = (show) ? '' : 'hidden';
-		document.getElementById('optlastmonthslabel').style.visibility = (show) ? '' : 'hidden';
-		document.getElementById('lastmonths').style.visibility = (show) ? '' : 'hidden';
-	}
+		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
+		document.getElementById('valuefilterarg').style.visibility = 'hidden';
+		oldSortColIndex = sortColIndex;
+		sortColIndex = 0; // Default by date
+	//
+	// From Monthly/Yearly to Daily
+	} else if (newType == 'd' && oldType != 'd') {
+		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
+		sortColIndex = oldSortColIndex || 0;
+	}	
 	
 	reportType = newType;
 	overviewData = [];
-	showReport();	
+	updateToolbar();
+	showReport();
 }
 function toggleLastMonths() {
 	overviewData = [];
@@ -1342,6 +1364,11 @@ function init() {
 	if (defaultNegate)        { document.getElementById('optnegate'    ).checked = true; }
 	document.getElementById('filter').value = defaultSearch;
 
+	// User choose other default report, let's update the toolbar accordingly
+	if (reportType != 'd') {
+		updateToolbar();
+	}
+	
 	// We need to load the iframe contents first (if using external datafile)
 	if (!oneFile) {
 		loadDataFile(dataFiles[0]);
