@@ -3,56 +3,91 @@
 	http://aurelio.net/moneylog
 */
 
+/* ---------------------------------------------- Reset CSS (from YUI) */
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0;padding:0; }
+table { border-collapse:collapse;border-spacing:0; }
+body { font:12px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; }
+select,input,button,textarea { font:99% arial,helvetica,clean,sans-serif; }
+table { font-size:inherit;font:100%; }
+th,td { border-style:none;padding:.5em; }
+p,blockquote,ul,ol,dl { margin:1em; }
+ol,ul,dl { margin-left:2em; }
+dl dd { margin-left:1em; }
+
+
+/* ---------------------------------------------- Global settings */
+
 body {
-	color:#555;
-	background-color:#fff;
-	margin:0;
-	padding:0;
-	border:0;
-	font-size:85%;
-	font-family:sans-serif;
-}
-tr {
-	font-size:85%; /* same as in body */	
+	color:#555;            /* fg1 */
+	background-color:#fff; /* bg1 */
 }
 a {
 	text-decoration:none;
 	font-weight:bold;
 }
+input {
+	margin-right:0.25em;
+}
+.trigger {
+	cursor:pointer;
+}
+.posbar {
+	background-color:#4D89F9 !important; /* bar1 */
+}
+.negbar {
+	background-color:#f66 !important;   /* bar2 */
+}
+#tagsArea input,
+#toolbar input,
+#toolbar select,
+#toolbar a,
+#toolbar span {
+	vertical-align:middle;
+}
+
+/* ---------------------------------------------- Toolbar */
+
 #toolbar {
-	color:#ddd;
-	background-color:#444;
+	color:#ddd;            /* fg2 */
+	background-color:#444; /* bg2 */
 	text-align:center;
 	z-index:1;
 	position:fixed;
 	top:0;
 	left:0;
 	width:100%;
-	height:7em;
+	height:8em;            /* y1 */
 }
 #toolbar a {
-	color:#c6f;
+	color:#c6f;            /* fg2a */
 	font-size:185%;
 	padding:0 4px;
 }
 #toolbar a:hover {
-	background-color:#c6f;
-	color:#444;
+	background-color:#c6f; /* fg2a */
+	color:#444;            /* bg2 */
+}
+#toolbar .left {
+	padding-left:2em;
+	padding-right:2em;
+}
+#toolbar .middle {
+	padding-left:0;
 }
 #toolbar #report-nav {
-	text-align:center;
 	margin:1em 0;
 }
 #toolbar #report-nav a {
 	font-size:110%;
 }
 #toolbar #report-nav a:hover {
-	outline:1px dotted #c6f !important;
-	background-color:#444;
-	color:#c6f;
+	background-color:#444;               /* bg2 */
+	color:#c6f;                          /* fg2a */
+	outline:1px dotted #c6f !important;  /* fg2a */
 }
 #toolbar #report-nav a.active {
-	outline:1px solid #c6f;
+	outline:1px solid #c6f; /* fg2a */
 }
 #toolbar a.helplink {
 	float:right;
@@ -64,182 +99,195 @@ a {
 #toolbar #datafilesbox {
 	clear:right;
 	float:right;
-	text-align:right; /* Camino fix */
-	padding:10px 0;
+	text-align:right; /* IE7 fix */
+	padding:20px 0 0 0;
 }
-#toolbar #datafilesbox #datafiles {
-	margin-top:3px; /* to align with (R) */
-}
-#checkboxes {
+#toolbar #checkboxes {
 	text-align:left;
+	vertical-align:middle;
+	line-height:185%; /* to fit selects */
 }
+
+/* ---------------------------------------------- Content */
+
 #content {
 	z-index:0;
-	margin-top:9em;
+	margin-top:8em;        /* y1 */
 }
+
+/* ---------------------------------------------- Tags */
+
 #tagsArea {
+	display:none;
 	position:fixed;
 	bottom:0;
 	left:0;
-	font-size:85%;
-	background-color:#eee;
-	border-top:1px solid #ccc;
+	width:100%;
 	padding:0.5em 0;
 	text-align:center;
-	display:none;
-	width:100%;
 
 	/* Same colors of #toolbar */
-	color:#ddd;
-	background-color:#444;
+	color:#ddd;            /* fg2 */
+	background-color:#444; /* bg2 */
 }
 #tagsArea input[checked]+span { /* highlight selected tags */
-	background:#c6f;
+	background:#c6f;       /* fg2a */
 	color:#000;
 }
 #tagsArea input {
+	display:none; /* hidden, but still used by JavaScript */
 	margin:0;
 	padding:0;
-	display:none; /* hidden, but still used by JavaScript */
 }
 #tagsArea #tagMultiAll {
 	font-weight:bold;
 }
 #tagsArea #tagMultiAll input {
 	display:inline;
+	margin-right:0.25em;
 }
 #tagsArea #tagList {
 	display:inline;
 }
-#report {
-	text-align:center;
-	padding:2em 3em 8em 2em;
-}
+
+/* ---------------------------------------------- Help */
+
 #help {
-	background-color:#edf;
-	color:#515;
+	display:none;
+	background-color:#edf; /* bg3 */
+	color:#515;            /* fg3 */
 	padding:2em;
-	margin:0;
-	display:none;
+	line-height:120%;
+	
+	/* IE7 bug: gap between #toolbar and #help if no border */
+	border-top:1px solid #edf; /* bg3 */
 }
-#data {
-	display:none;
-}
+
+/* ---------------------------------------------- Data */
+
+#data,
 #dataFrame {
 	display:none;
 }
 
+/* ---------------------------------------------- Report */
+
+#report {
+	padding:2em 3em 8em 2em;
+	line-height:100%;
+}
 #report table {
 	margin:0 auto;
-	border-spacing:0;
-	border-collapse:collapse;
-}
-#report td {
-	border:1px solid #ccc;
-	padding:.1em 10px;
-}
-#report td.row-count {
-	text-align:center;
-	font-size:70%;
-	color:#aaa;
-	border-width:0;
-	background-color:#fff;
-}
-#report td.date {
-	white-space:nowrap;
-}
-#report td.rowlabel {
-	font-weight:bold;
-}
-#report tr.future td.row-count {
-	font-style:normal;
 }
 #report th {
 	text-align:center;
 	cursor:pointer;
 }
 #report th:hover {
-	color:#000;
-	background-color:#eee;
+	color:#000;            /* fg4 */
+	background-color:#eee; /* bg4 */
 }
-#report tr:hover td {
-	background-color: #edf;
+#report td {
+	border:1px solid #ddd; /* bd1 */
+	padding:3px 10px;
+	vertical-align:middle;
 }
-#report tr.future {
-	background-color:#eee;
-	font-style:italic;
+#report td.row-count {
+	text-align:center;
+	font-size:75%;
+	color:#aaa;            /* fg5 */
+	border-style:none;
+	background-color:#fff; /* bg1 */
 }
-#report tr.monthtotal {
-	background-color:#f8e8ff;
-	line-height:200%;
-	text-align:right;
-}
-#report tr.monthtotal td {
-	border-width:0;
-	font-size:100%;
-}
-#report table.overview tr.total {
-	background-color:#f8e8ff;
-	font-style:italic;	
-}
-.trigger {
-	cursor:pointer;
-}
-.number {
-	text-align:right;
+#report td.date {
 	white-space:nowrap;
 }
-.neg {
-	color:#e33;
+#report tr.future td.row-count {
+	font-style:normal;
 }
-.hl {
-	color:#e33;
-	background-color: #edf;
+#report tr:hover td {
+	background-color:#edf; /* bg3 */
 }
-#report tr.monthtotal td td.mini {
-	font-size:85%;
-	color:#868;
+#report tr.future {
+	background-color:#eee; /* bg4 */
+	font-style:italic;
+}
+#report .number {
+	text-align:right !important;
+	white-space:nowrap;
+}
+#report .neg {
+	color:#e33;            /* fg_red */
+}
+#report .hl {
+	color:#e33;            /* fg_red */
+	background-color:#edf; /* bg3 */
+}
+#report p { /* labelNoData */
+	text-align:center;
+}
+/* ---------------------------------------------- Report - Daily */
+
+#report table.daily tr.total {
+	background-color:#f8e8ff; /* bg5 */
+	text-align:right;
 	font-weight:bold;
 }
-#report table.monthsubtotal {
-	margin:0;
+#report table.daily tr.total td {
+	border-style:none;
 }
-#report table.monthsubtotal td {
+#report table.daily tr.total table.posneg {
+	float:right;
+	color:#868;            /* fg6 */
+	font-size:90%;
+}
+#report table.daily tr.total table.posneg td {
 	padding:0;
-	width:5.5em;
+}
+#report table.daily tr.total td.monthtotal {
+	text-align:left;
+	padding-left:0;
+}
+#report table.daily tr.total td.monthtotal .arrow {
+	margin-right:8px;
+	color:#868;            /* fg6 */
 }
 
 
-/* Minibars inside report table */
-.posbar {
-	background-color:#4D89F9 !important;
+/* ---------------------------------------------- Report - Monthly/Yearly */
+
+#report table.overview tr.total {
+	background-color:#f8e8ff; /* bg5 */
+	font-style:italic;	
 }
-.negbar {
-	background-color:#f66 !important;
+#report td.rowlabel {
+	font-weight:bold;
 }
-td.minibar {
+
+/* ---------------------------------------------- Minibars inside report table */
+
+#report table td.minibar {
 	border-style:none !important;
 }
-div.minibar {
+#report table div.minibar {
 	float:left;
-/*	height:0.7em;*/
 }
-td.minibar .label {
+#report table td.minibar .label {
 	float:left;
 	font-size:75%;
 	color:white !important;
 }
 
+/* ---------------------------------------------- Charts */
 
-/* Charts */
 #charts {
+	display:none;
 	margin-top:-4em;
 	padding-bottom:3em;
 	text-align:center;
-	display:none;
 }
 table.chart {
-	border:1px solid #ccc;
+	border:1px solid #ddd; /* bd1 */
 	margin:0 auto;
 	padding:10px;
 }
@@ -253,19 +301,16 @@ table.chart td.bar div.bar {
 }
 table.chart td.bar .label {
 	font-size:11px;
-	color:#444;
+	color:#444;            /* fg7 */
 	font-style:italic;
 }
 table.chart tr.label {
 	text-align:center;
 	font-size:10px;
 	line-height:100%;
-	color:#444;
+	color:#444;            /* fg7 */
 }
 
 
-/* Emulating position:fixed in IE/Win 5+ */
-#toolbar {
-	_position:absolute;
-	_top:expression(eval(document.body.scrollTop));
-}
+/* Minimum compatibility for IE5.5, IE6 */
+#content { _margin-top:0; }

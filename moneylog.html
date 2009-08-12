@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <!--
@@ -54,7 +54,7 @@ You may change the styles if you know what you're doing.
 <!-- Toolbar -->
 <table id="toolbar">
 <tr>
-<td>
+<td class="left">
 	<a id="sitelink" href="#">MoneyLog<br>Experience β</a>
 	
 	<!-- Report Type -->
@@ -66,7 +66,7 @@ You may change the styles if you know what you're doing.
 	</div>
 	
 </td>
-<td>
+<td class="middle">
 	<div id="checkboxes">
 		<!-- Last Months -->
 		<input
@@ -115,7 +115,7 @@ You may change the styles if you know what you're doing.
 	<!-- Search -->
 	<div id="filterbox">
 		<!-- Note: Not using <form> to avoid action on Enter pressing -->
-		<input id="filter" size="15" type="text" onKeyUp="showReport()">
+		<input id="filter" size="17" type="text" onKeyUp="showReport()">
 		<br>
 		<input
 			id="optregex" class="trigger" type="checkbox"
@@ -132,9 +132,9 @@ You may change the styles if you know what you're doing.
 
 	<!-- Data Files -->
 	<div id="datafilesbox">
-		<a id="reload" class="helplink" href="#" onClick="reloadData()">®</a>
 		<select
-		 	id="datafiles" size="1" onChange="loadDataFile(this.value)"></select>
+		 	id="datafiles" size="1" onChange="loadDataFile(this.value)"></select>&nbsp;<a
+			id="reload" class="Xhelplink" href="#" onClick="reloadData()">®</a>
 	</div>
 </td>
 </tr>

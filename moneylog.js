@@ -323,25 +323,25 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	var partial, theRow;
 	
 	partial = [];
-	partial.push('<table class="monthsubtotal number" align="left"><tr>');
-	partial.push('<td class="mini"> +');
+	partial.push('<table class="posneg number"><tr>');
+	partial.push('<td> +');
 	partial.push(prettyFloat(monthPos, true) + '<br>');
-	partial.push(prettyFloat(monthNeg, true) + '<\/td>');
-	partial.push('<\/tr><\/table>');
+	partial.push(prettyFloat(monthNeg, true));
+	partial.push('<\/td><\/tr><\/table>');
 	partial = partial.join('');
 
 	// Show month total?
 	if (monthTotal !== '') {
-		monthTotal = '=  ' + prettyFloat(monthTotal);
+		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
 	}
 
-	theRow = '<tr class="monthtotal">';
+	theRow = '<tr class="total">';
 	if (showRowCount) {
 		theRow += '<td class="row-count"><\/td>';
 	}
 	theRow += '<td><\/td>';
 	theRow += '<td>' + partial + '<\/td>';
-	theRow += '<td colspan="2" align="left">' + monthTotal + '<\/td>';
+	theRow += '<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>';
 	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
 	theRow += '<\/tr>';
 	return theRow;
@@ -1146,7 +1146,7 @@ function showOverview() {
 			document.getElementById('chart').innerHTML = chart;
 		}
 	} else {
-		results = i18n.labelNoData;
+		results = '<p>' + i18n.labelNoData + '</p>';
 	}
 	document.getElementById('report').innerHTML = results;
 }
@@ -1178,7 +1178,7 @@ function showDetailed() {
 		if (showRowCount) {
 			thead = '<th class="row-count"><\/th>' + thead;
 		}
-		results.push('<table>');
+		results.push('<table class="daily">');
 		results.push('<tr>' + thead + '<\/tr>');
 
 		// Compose table rows
@@ -1266,7 +1266,7 @@ function showDetailed() {
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos)); 
 	}
 	else {
-		results = i18n.labelNoData;
+		results = '<p>' + i18n.labelNoData + '</p>';
 	}
 	document.getElementById('report').innerHTML = results;
 }
