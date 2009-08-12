@@ -1122,7 +1122,7 @@ function showOverview() {
 			// First line is for the bars (label at top)
 			chart.push('<tr>');
 			for (i = 0; i < chartBars.length; i++) {
-				chartBarClass = (chartBars[i][0][0] == '-') ? 'negbar' : 'posbar';
+				chartBarClass = (chartBars[i][0].substring(0, 1) == '-') ? 'negbar' : 'posbar';
 				chart.push('<td class="bar">');
 				if (showChartBarLabel) {
 					chart.push('<span class="label">' + chartBars[i][0] + '<\/span>');
