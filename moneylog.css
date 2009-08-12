@@ -125,6 +125,7 @@ input {
 	width:100%;
 	padding:0.5em 0;
 	text-align:center;
+	line-height:150%;
 
 	/* Same colors of #toolbar */
 	color:#ddd;            /* fg2 */
@@ -133,6 +134,8 @@ input {
 #tagsArea input[checked]+span { /* highlight selected tags */
 	background:#c6f;       /* fg2a */
 	color:#000;
+	padding:1px 2px;
+	border:1px solid #000;
 }
 #tagsArea input {
 	display:none; /* hidden, but still used by JavaScript */
