@@ -246,6 +246,7 @@ input {
 }
 #report table.daily tr.total table.posneg td {
 	padding:0;
+	white-space:nowrap;
 }
 #report table.daily tr.total td.monthtotal {
 	text-align:left;
