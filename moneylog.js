@@ -225,28 +225,28 @@ function sortArray(a, b)  {
 			a = a.toLowerCase();
 			b = b.toLowerCase();
 		}
-	} catch (e) { }
+	} catch (e1) { }
 	try { // IE6...
 		if (a < b) {
 			return -1;
 		} else if (a > b) {
 			return 1;
 		}
-	} catch (e) { }
+	} catch (e2) { }
 	return 0;
 }
 function sortIgnoreCase(a, b) {
 	try {
 		a = a.toLowerCase().unacccent();
 		b = b.toLowerCase().unacccent();
-	} catch (e) { }
+	} catch (e1) { }
 	try { // IE6...
 		if (a < b) {
 			return -1;
 		} else if (a > b) {
 			return 1;
 		}
-	} catch (e) { }
+	} catch (e2) { }
 	return 0;
 }
 function setCurrentDate() {
