@@ -236,6 +236,15 @@ input {
 }
 /* ---------------------------------------------- Report - Daily */
 
+/* Column sorting is not working for Balance, so undo formatting */
+#report table.daily th.balance {
+	cursor:auto;
+}
+#report table.daily th.balance:hover {
+	color:#555;            /* fg1 */
+	background-color:#fff; /* bg1 */
+}
+
 #report table.daily tr.total {
 	background-color:#f8e8ff; /* bg5 */
 	text-align:right;

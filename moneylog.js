@@ -1196,7 +1196,7 @@ function showDetailed() {
 		thead += '<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>';
 		thead += '<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>';
 		thead += '<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>';
-		thead += '<th onClick="sortCol(4)">' + i18n.labelsDetailed[4] + '<\/th>';
+		thead += '<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>';
 		if (showRowCount) {
 			thead = '<th class="row-count"><\/th>' + thead;
 		}
