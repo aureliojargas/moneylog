@@ -142,6 +142,7 @@ var i18nDatabase = {
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
+var oldSortColRev;
 var oldValueFilterArgShow;
 var currentDate;
 var highlightRegex;
@@ -515,12 +516,15 @@ function changeReport(el) {
 		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
 		document.getElementById('valuefilterarg').style.visibility = 'hidden';
 		oldSortColIndex = sortColIndex;
+		oldSortColRev = sortColRev;
 		sortColIndex = 0; // Default by date
+		sortColRev = false;
 	//
 	// From Monthly/Yearly to Daily
 	} else if (newType == 'd' && oldType != 'd') {
 		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
 		sortColIndex = oldSortColIndex || 0;
+		sortColRev = oldSortColRev || false;
 	}	
 	
 	reportType = newType;
