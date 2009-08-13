@@ -211,8 +211,9 @@ RegExp.escape = function (str) {
 function invalidData(lineno, message) {
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
-function sortCol(index, isOverview) { // if the same, flip reverse state
-	sortColRev = (sortColIndex == index) ? sortColRev ^= true : false;
+function sortCol(index, isOverview) {
+	// if the same, flip reverse state
+	sortColRev = (sortColIndex == index) ? !sortColRev : false;
 	sortColIndex = index;
 	showReport();
 }
