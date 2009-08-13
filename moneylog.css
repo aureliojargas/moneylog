@@ -60,12 +60,12 @@ input {
 	height:8em;            /* y1 */
 }
 #toolbar a {
-	color:#c6f;            /* fg2a */
+	color:#f44;            /* fg2a */
 	font-size:185%;
 	padding:0 4px;
 }
 #toolbar a:hover {
-	background-color:#c6f; /* fg2a */
+	background-color:#f44; /* fg2a */
 	color:#444;            /* bg2 */
 }
 #toolbar .left {
@@ -84,11 +84,11 @@ input {
 }
 #toolbar #report-nav a:hover {
 	background-color:#444; /* bg2 */
-	color:#c6f;            /* fg2a */
-	border:1px dotted #c6f; /* fg2a */
+	color:#f44;            /* fg2a */
+	border:1px dotted #f44; /* fg2a */
 }
 #toolbar #report-nav a.active {
-	border:1px solid #c6f; /* fg2a */
+	border:1px solid #f44; /* fg2a */
 	outline-style:none; /* Firefox, Camino */
 }
 #toolbar a.helplink {
@@ -134,13 +134,13 @@ input {
 	background-color:#444; /* bg2 */
 }
 #tagsArea input[checked]+span { /* highlight selected tags */
-	background:#c6f;       /* fg2a */
-	color:#000;
+	background:#f44;       /* fg2a */
+	color:#000;            /* fg4 */
+	border:1px solid #000; /* fg4 */
 	padding:1px 2px;
-	border:1px solid #000;
 }
 #tagsArea input {
-	display:none; /* hidden (except in IE7 - see CC), but still used by JavaScript */
+	display:none; /* hidden, but still used by JavaScript (exception: IE7 - see CC) */
 	margin:0;
 	padding:0;
 }
@@ -159,13 +159,13 @@ input {
 
 #help {
 	display:none;
-	background-color:#edf; /* bg3 */
-	color:#515;            /* fg3 */
+	background-color:#faa; /* bg3 */
+	color:#800;            /* fg3 */
 	padding:2em;
 	line-height:120%;
 	
 	/* IE7 bug: gap between #toolbar and #help if no border */
-	border-top:1px solid #edf; /* bg3 */
+	border-top:1px solid #faa; /* bg3 */
 }
 #help a {
 	text-decoration:underline;
@@ -196,7 +196,7 @@ input {
 }
 #report th:hover {
 	color:#000;            /* fg4 */
-	background-color:#eee; /* bg4 */
+	background-color:#ddd; /* bg4 */
 }
 #report td {
 	border:1px solid #ddd; /* bd1 */
@@ -217,10 +217,11 @@ input {
 	font-style:normal;
 }
 #report tr:hover td {
-	background-color:#edf; /* bg3 */
+	background-color:#ddd; /* bg4 */
+	color:#000;            /* fg4 */
 }
 #report tr.future {
-	background-color:#eee; /* bg4 */
+	background-color:#eee; /* bg6 */
 	font-style:italic;
 }
 #report .number {
@@ -231,12 +232,13 @@ input {
 	color:#e33;            /* fg_red */
 }
 #report .hl {
-	color:#e33;            /* fg_red */
-	background-color:#edf; /* bg3 */
+	color:#000;            /* fg4 */
+	background-color:#faa; /* bg3 */
 }
 #report p { /* labelNoData */
 	text-align:center;
 }
+
 /* ---------------------------------------------- Report - Daily */
 
 /* Column sorting is not working for Balance, so undo formatting */
@@ -247,9 +249,8 @@ input {
 	color:#555;            /* fg1 */
 	background-color:#fff; /* bg1 */
 }
-
 #report table.daily tr.total {
-	background-color:#f8e8ff; /* bg5 */
+	background-color:#fee; /* bg5 */
 	text-align:right;
 	font-weight:bold;
 }
@@ -258,8 +259,8 @@ input {
 }
 #report table.daily tr.total table.posneg {
 	float:right;
-	color:#868;            /* fg6 */
 	font-size:90%;
+	font-weight:normal;
 }
 #report table.daily tr.total table.posneg td {
 	padding:0;
@@ -271,14 +272,12 @@ input {
 }
 #report table.daily tr.total td.monthtotal .arrow {
 	margin-right:8px;
-	color:#868;            /* fg6 */
 }
-
 
 /* ---------------------------------------------- Report - Monthly/Yearly */
 
 #report table.overview tr.total {
-	background-color:#f8e8ff; /* bg5 */
+	background-color:#fee; /* bg5 */
 	font-style:italic;	
 }
 #report td.rowlabel {
