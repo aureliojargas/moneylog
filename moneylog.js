@@ -48,15 +48,15 @@ var commentChar = '#';   // Must be at line start (column 1)
 var dataPatterns = {
 	date:
 		// YYYY-MM-DD
-	 	/^ *(\d{4}-\d\d-\d\d) *$/,
+		/^ *(\d{4}-\d\d-\d\d) *$/,
 	amountNumber:
-	 	// 7  +7  -7  7.00  7,00  1234567,89  1.234.567,89  1,234,567.89 1234567,89
-	 	/^ *([+\-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
+		// 7  +7  -7  7.00  7,00  1234567,89  1.234.567,89  1,234,567.89 1234567,89
+		/^ *([+\-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
 	amountCents:
-	 	// .12  ,12
+		// .12  ,12
 		/[.,](\d\d) *$/,
 	amountRecurrent:
-	 	// *N or /N where N>0
+		// *N or /N where N>0
 		/([*\/])([1-9][0-9]*) *$/
 };
 
@@ -99,7 +99,7 @@ var i18nDatabase = {
 		centsSeparator: ',',
 		thousandSeparator: '.'
 	},
-	en: {		
+	en: {
 		labelLastMonths: 'Recent Only:',
 		labelMonthPartials: 'Show Monthly Partials',
 		labelFuture: 'Show Future Data',
@@ -173,7 +173,9 @@ String.prototype.strip = function () {
 	return this.replace(/^\s+/, '').replace(/\s+$/, '');
 };
 String.prototype.unacccent = function () {
-	if (!this.match(/[^a-z0-9 ]/)) { return this; } // no accented char
+	if (!this.match(/[^a-z0-9 ]/)) { // no accented char
+		return this;
+	}
 	return this.replace(
 		/[àáâãäå]/g, 'a').replace(
 		/[èéêë]/g, 'e').replace(
@@ -186,14 +188,18 @@ String.prototype.unacccent = function () {
 };
 Array.prototype.hasItem = function (item) {
 	for (var i = 0; i < this.length; i++) {
-		if (item == this[i]) { return true; }
+		if (item == this[i]) {
+			return true;
+		}
 	}
 	return false;
 };
 Array.prototype.removePattern = function (patt) {
 	var i, cleaned = [];
 	for (i = 0; i < this.length; i++) {
-		if (this[i] != patt) { cleaned.push(this[i]); }
+		if (this[i] != patt) {
+			cleaned.push(this[i]);
+		}
 	}
 	return cleaned;
 };
@@ -220,8 +226,11 @@ function sortArray(a, b)  {
 		}
 	} catch (e) { }
 	try { // IE6...
-		if (a < b) { return -1; }
-		else if (a > b) { return 1; }
+		if (a < b) {
+			return -1;
+		} else if (a > b) {
+			return 1;
+		}
 	} catch (e) { }
 	return 0;
 }
@@ -231,10 +240,13 @@ function sortIgnoreCase(a, b) {
 		b = b.toLowerCase().unacccent();
 	} catch (e) { }
 	try { // IE6...
-		if (a < b) { return -1; }
-		else if (a > b) { return 1; }
+		if (a < b) {
+			return -1;
+		} else if (a > b) {
+			return 1;
+		}
 	} catch (e) { }
-	return 0;	
+	return 0;
 }
 function setCurrentDate() {
 	var z, m, d;
@@ -250,7 +262,7 @@ function getPastMonth(months) {
 	z = new Date();
 	m = z.getMonth() + 1 - months; // zero based
 	y = z.getFullYear();
-	if (m < 1) {  // past year
+	if (m < 1) { // past year
 		m = 12 + m;
 		y = y - 1;
 	}
@@ -260,9 +272,9 @@ function getPastMonth(months) {
 function addMonths(yyyymmdd, n) {
 	var y, m, d;
 	yyyymmdd = yyyymmdd.replace(/-/g, '');
-	y = parseInt(yyyymmdd.slice(0,4), 10);
-	m = parseInt(yyyymmdd.slice(4,6), 10);
-	d = yyyymmdd.slice(6,8);
+	y = parseInt(yyyymmdd.slice(0, 4), 10);
+	m = parseInt(yyyymmdd.slice(4, 6), 10);
+	d = yyyymmdd.slice(6, 8);
 	m = m + n;
 	if (m > 12) {
 		y = y + Math.floor(m / 12);
@@ -298,7 +310,9 @@ function populateMonthsCombo() {
 	el = document.getElementById('lastmonths');
 	label = i18n.labelMonths[0];
 	for (i = 1; i <= maxLastMonths; i++) {
-		if (i > 1) { label = i18n.labelMonths[1]; }
+		if (i > 1) {
+			label = i18n.labelMonths[1];
+		}
 		el.options[i - 1] = new Option(i + ' ' + label, i);
 	}
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
@@ -316,7 +330,9 @@ function populateChartColsCombo() {
 	var el, i;
 	el = document.getElementById('chartcol');
 	for (i = 0; i < i18n.labelsOverview.length; i++) {
-		if (i === 0) { continue; } // ignore date column
+		if (i === 0) {
+			continue; // ignore date column
+		}
 		el.options[i - 1] = new Option(i18n.labelsOverview[i], i);
 	}
 }
@@ -421,7 +437,7 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	
 	if (showMiniBars) {
 		theRow.push(getMiniBar(monthPos, monthNeg));
-	}	
+	}
 	
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
@@ -462,27 +478,31 @@ function updateToolbar() {
 			'filterbox',
 			'optmonthly', 'optmonthlylabel',
 			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'];		
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+		];
 	// Monthly
 	} else if (reportType == 'm') {
 		add = ['charts'];
 		remove = ['tagsArea'];
 		hide = [
 			'filterbox',
-		 	'optmonthly', 'optmonthlylabel',
-		 	'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'];
+			'optmonthly', 'optmonthlylabel',
+			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'
+		];
 		unhide = [
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'];
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+		];
 	// Yearly
 	} else if (reportType == 'y') {
-		add = ['charts'];		
+		add = ['charts'];
 		remove = ['tagsArea'];
 		hide = [
 			'filterbox',
 			'optmonthly', 'optmonthlylabel',
 			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'];
 			// Recent *months* doesn't make sense in yearly report
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+		];
 	}
 	
 	// Show/hide toolbar elements
@@ -525,7 +545,7 @@ function changeReport(el) {
 		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
-	}	
+	}
 	
 	reportType = newType;
 	overviewData = [];
@@ -617,7 +637,7 @@ function readData() {
 	
 	// Read raw data from #data block (<PRE>) or from external dataFile (<IFRAME><PRE>)
 	if (oneFile) {
-		rawData = document.getElementById('data').innerHTML;		
+		rawData = document.getElementById('data').innerHTML;
 	} else {
 		iframeDoc = document.getElementById('dataFrame').contentWindow.document;
 		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
@@ -640,9 +660,13 @@ function parseData() {
 		///////////////////////////////////////////////////////////// Firewall
 
 		// Skip commented rows
-		if (rows[i].indexOf(commentChar) === 0) { continue; }
+		if (rows[i].indexOf(commentChar) === 0) {
+			continue;
+		}
 		// Skip blank lines
-		if (!rows[i].strip()) { continue; }
+		if (!rows[i].strip()) {
+			continue;
+		}
 
 		// Separate fields
 		fields = rows[i].split(dataFieldSeparator);
@@ -661,7 +685,7 @@ function parseData() {
 				lineno,
 				i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
 			);
-			return;			
+			return;
 		}
 
 		///////////////////////////////////////////////////////////// Text
@@ -706,7 +730,7 @@ function parseData() {
 			rowAmount = parseFloat(rowAmount);
 			
 			// Ops, we don't have a valid number
-			if(isNaN(rowAmount)) {
+			if (isNaN(rowAmount)) {
 				invalidData(lineno, rowAmountErrorMsg);
 				return;
 			}
@@ -723,7 +747,7 @@ function parseData() {
 		//
 		// Compose each payment row, changing: date, value and description
 		// 2009-12-25  -90/3  Foo        |    2009-12-25  -90*3  Foo
-		// turns to                      |    turns to 
+		// turns to                      |    turns to
 		// 2009-12-25  -30    Foo 1/3    |    2009-12-25  -90    Foo 1/3
 		// 2010-01-25  -30    Foo 2/3    |    2010-01-25  -90    Foo 2/3
 		// 2010-02-25  -30    Foo 3/3    |    2010-02-25  -90    Foo 3/3
@@ -788,7 +812,7 @@ function parseData() {
 	oldSort = sortColIndex;
 	sortColIndex = 0;
 	parsedData.sort(sortArray);
-	sortColIndex = oldSort;	
+	sortColIndex = oldSort;
 }
 function filterData() {
 	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
@@ -848,10 +872,14 @@ function filterData() {
 		///////////////////////////////////////////////////////////// Filters
 		
 		// Ignore dates older than "last N months" option (if checked)
-		if (thisDate < firstDate) { continue; }
+		if (thisDate < firstDate) {
+			continue;
+		}
 
 		// Ignore future dates
-		if (!showFuture && thisDate > currentDate) { break; }
+		if (!showFuture && thisDate > currentDate) {
+			break;
+		}
 
 		// Apply value filter
 		if (valueFilter) {
@@ -871,7 +899,9 @@ function filterData() {
 			} else {
 				filterPassed = (parsedData[i].join('\t').toLowerCase().indexOf(filter) != -1);
 			}
-			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) { continue; }
+			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) {
+				continue;
+			}
 		}
 		
 		// Save the results
@@ -1006,7 +1036,7 @@ function showOverview() {
 	thead += '<th onClick="sortCol(3, true)">' + i18n.labelsOverview[3] + '<\/th>';
 	thead += '<th onClick="sortCol(4, true)">' + i18n.labelsOverview[4] + '<\/th>';
 	if (showMiniBars) {
-		thead += '<th>%<\/th>';	
+		thead += '<th>%<\/th>';
 	}
 	if (showRowCount) {
 		thead = '<th class="row-count"><\/th>' + thead;
@@ -1043,7 +1073,7 @@ function showOverview() {
 					theData[i - 1][0].slice(0, dateSize)) {
 					
 					// Send old month/year totals to the report
-					overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);	
+					overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 					// Reset totals
 					rangeTotal = rangePos = rangeNeg = 0;
 					// Save new month/year date
@@ -1058,7 +1088,7 @@ function showOverview() {
 				} else {
 					rangePos += rowAmount;
 				}
-			}		
+			}
 			// No more rows. Send the last range totals to the report.
 			overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 		}
@@ -1130,7 +1160,7 @@ function showOverview() {
 			
 			// Get the maximum absolute value for this column
 			chartRoof = (Math.abs(minNumbers[chartCol]) > maxNumbers[chartCol]) ?
-			 	Math.abs(minNumbers[chartCol]) :
+				Math.abs(minNumbers[chartCol]) :
 				maxNumbers[chartCol];
 			
 			// Calculate each bar size and format labels
@@ -1193,7 +1223,9 @@ function showDetailed() {
 			monthPartials.checked = false;
 		}
 		theData.sort(sortArray);
-		if (sortColRev) { theData.reverse(); }
+		if (sortColRev) {
+			theData.reverse();
+		}
 
 		// Compose table headings
 		thead = '<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '<\/th>';
@@ -1289,7 +1321,7 @@ function showDetailed() {
 		results = results.join('\n');
 
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
-		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos)); 
+		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 	}
 	else {
 		results = '<p>' + i18n.labelNoData + '</p>';
@@ -1319,11 +1351,11 @@ function init() {
 	// Note: Using regex to allow ignorecase and global *atomic* replace
 	if (highlightWords) {
 		highlightRegex = new RegExp(
-			RegExp.escape(highlightWords).replace(/\s+/g,'|'),
+			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
 			'ig');
 	}
 	
-	// Split highlight string into words 
+	// Split highlight string into words
 	highlightTags = highlightTags.strip().split(/\s+/);
 	
 	// Just show the files combo when there are 2 or more files
@@ -1337,16 +1369,16 @@ function init() {
 	}
 	
 	// Set interface labels
-	document.getElementById('optlastmonthslabel').innerHTML = i18n.labelLastMonths;
-	document.getElementById('optmonthlylabel'   ).innerHTML = i18n.labelMonthPartials;
-	document.getElementById('optfuturelabel'    ).innerHTML = i18n.labelFuture;
-	document.getElementById('optregexlabel'     ).innerHTML = i18n.labelRegex;
-	document.getElementById('optnegatelabel'    ).innerHTML = i18n.labelNegate;
+	document.getElementById('optlastmonthslabel' ).innerHTML = i18n.labelLastMonths;
+	document.getElementById('optmonthlylabel'    ).innerHTML = i18n.labelMonthPartials;
+	document.getElementById('optfuturelabel'     ).innerHTML = i18n.labelFuture;
+	document.getElementById('optregexlabel'      ).innerHTML = i18n.labelRegex;
+	document.getElementById('optnegatelabel'     ).innerHTML = i18n.labelNegate;
 	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter;
-	document.getElementById('tagMultiAllLabel'  ).innerHTML = i18n.labelTagGroup;
-	document.getElementById('d'                 ).innerHTML = i18n.labelDaily;
-	document.getElementById('m'                 ).innerHTML = i18n.labelMonthly;
-	document.getElementById('y'                 ).innerHTML = i18n.labelYearly;
+	document.getElementById('tagMultiAllLabel'   ).innerHTML = i18n.labelTagGroup;
+	document.getElementById('d'                  ).innerHTML = i18n.labelDaily;
+	document.getElementById('m'                  ).innerHTML = i18n.labelMonthly;
+	document.getElementById('y'                  ).innerHTML = i18n.labelYearly;
 	document.getElementById('helpbutton').title = i18n.labelHelp;
 	document.getElementById('reload'    ).title = i18n.labelReload;
 	document.getElementById('sitelink'  ).title = i18n.appDescription;
@@ -1382,7 +1414,7 @@ function init() {
 	if (oneFile || (!oneFile && iframeIsLoaded)) {
 		readData();
 		parseData();
-		showReport();		
+		showReport();
 	}
 	
 	// Uncomment this line to focus the search box at init
