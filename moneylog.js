@@ -139,6 +139,7 @@ var i18nDatabase = {
 // End of user Config
 
 
+// Global vars
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
@@ -156,12 +157,18 @@ var overviewData = [];
 var iframeIsLoaded = false;
 var initIsDone = false;
 
+
+/////////////////////////////////////////////////////////////////////
+//                              PROTOTYPES
+/////////////////////////////////////////////////////////////////////
+
 if (!Array.prototype.push) { // IE5...
 	Array.prototype.push = function (item) {
 		this[this.length] = item;
 		return this.length;
 	};
 }
+
 if (!Number.prototype.toFixed) { // IE5...
 	Number.prototype.toFixed = function (n) { // precision hardcoded to 2
 		var k = (Math.round(this * 100) / 100).toString();
@@ -169,9 +176,11 @@ if (!Number.prototype.toFixed) { // IE5...
 		return k.substring(0, k.indexOf('.') + 3);
 	};
 }
+
 String.prototype.strip = function () {
 	return this.replace(/^\s+/, '').replace(/\s+$/, '');
 };
+
 String.prototype.unacccent = function () {
 	if (!this.match(/[^a-z0-9 ]/)) { // no accented char
 		return this;
@@ -186,6 +195,7 @@ String.prototype.unacccent = function () {
 		/ç/g, 'c').replace(
 		/ñ/g, 'n');
 };
+
 Array.prototype.hasItem = function (item) {
 	for (var i = 0; i < this.length; i++) {
 		if (item == this[i]) {
@@ -194,6 +204,7 @@ Array.prototype.hasItem = function (item) {
 	}
 	return false;
 };
+
 Array.prototype.removePattern = function (patt) {
 	var i, cleaned = [];
 	for (i = 0; i < this.length; i++) {
@@ -203,20 +214,21 @@ Array.prototype.removePattern = function (patt) {
 	}
 	return cleaned;
 };
+
 RegExp.escape = function (str) {
 	var specials = new RegExp('[.*+?|\\^$()\\[\\]{}\\\\]', 'g');
 	return str.replace(specials, '\\$&');
 };
 
+
+/////////////////////////////////////////////////////////////////////
+//                              TOOLS
+/////////////////////////////////////////////////////////////////////
+
 function invalidData(lineno, message) {
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
-function sortCol(index, isOverview) {
-	// if the same, flip reverse state
-	sortColRev = (sortColIndex == index) ? !sortColRev : false;
-	sortColIndex = index;
-	showReport();
-}
+
 function sortArray(a, b)  {
 	a = a[sortColIndex];
 	b = b[sortColIndex];
@@ -235,6 +247,7 @@ function sortArray(a, b)  {
 	} catch (e2) { }
 	return 0;
 }
+
 function sortIgnoreCase(a, b) {
 	try {
 		a = a.toLowerCase().unacccent();
@@ -249,6 +262,7 @@ function sortIgnoreCase(a, b) {
 	} catch (e2) { }
 	return 0;
 }
+
 function setCurrentDate() {
 	var z, m, d;
 	z = new Date();
@@ -258,6 +272,7 @@ function setCurrentDate() {
 	d = (d < 10) ? '0' + d : d;
 	currentDate = z.getFullYear() + '-' + m + '-' + d;
 }
+
 function getPastMonth(months) {
 	var z, m, y;
 	z = new Date();
@@ -270,6 +285,7 @@ function getPastMonth(months) {
 	m = (m < 10) ? '0' + m : m;
 	return y + '-' + m + '-' + '00';
 }
+
 function addMonths(yyyymmdd, n) {
 	var y, m, d;
 	yyyymmdd = yyyymmdd.replace(/-/g, '');
@@ -288,6 +304,7 @@ function addMonths(yyyymmdd, n) {
 	m = (m < 10) ? '0' + m : m;
 	return y + '-' + m + '-' + d;
 }
+
 function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
 	num = num.toFixed(2).replace('.', i18n.centsSeparator);
@@ -298,72 +315,7 @@ function prettyFloat(num, noHtml) {
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
 	// Note: all html *end* tags have the / escaped to pass on validator
 }
-function populateValueFilterCombo() {
-	var el;
-	el = document.getElementById('valuefilter');
-	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
-	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
-	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
-	el.options[3] = new Option('< ' + i18n.labelLessThan, '<');
-}
-function populateMonthsCombo() {
-	var el, label, i;
-	el = document.getElementById('lastmonths');
-	label = i18n.labelMonths[0];
-	for (i = 1; i <= maxLastMonths; i++) {
-		if (i > 1) {
-			label = i18n.labelMonths[1];
-		}
-		el.options[i - 1] = new Option(i + ' ' + label, i);
-	}
-	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
-}
-function populateDataFilesCombo() {
-	var el, i;
-	if (!oneFile) {
-		el = document.getElementById('datafiles');
-		for (i = 0; i < dataFiles.length; i++) {
-			el.options[i] = new Option(dataFiles[i]);
-		}
-	}
-}
-function populateChartColsCombo() {
-	var el, i;
-	el = document.getElementById('chartcol');
-	for (i = 0; i < i18n.labelsOverview.length; i++) {
-		if (i === 0) {
-			continue; // ignore date column
-		}
-		el.options[i - 1] = new Option(i18n.labelsOverview[i], i);
-	}
-}
-function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
-	var partial, theRow;
-	
-	partial = [];
-	partial.push('<table class="posneg number"><tr>');
-	partial.push('<td> +');
-	partial.push(prettyFloat(monthPos, true) + '<br>');
-	partial.push(prettyFloat(monthNeg, true));
-	partial.push('<\/td><\/tr><\/table>');
-	partial = partial.join('');
 
-	// Show month total?
-	if (monthTotal !== '') {
-		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
-	}
-
-	theRow = '<tr class="total">';
-	if (showRowCount) {
-		theRow += '<td class="row-count"><\/td>';
-	}
-	theRow += '<td><\/td>';
-	theRow += '<td>' + partial + '<\/td>';
-	theRow += '<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>';
-	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
-	theRow += '<\/tr>';
-	return theRow;
-}
 function prettyBarLabel(n) {
 	var negative;
 	negative = (n < 0);
@@ -382,6 +334,11 @@ function prettyBarLabel(n) {
 	}
 	return n.replace(/([km])0/, '$1'); // 2k0 > 2k
 }
+
+/////////////////////////////////////////////////////////////////////
+//                         REPORT HELPERS
+/////////////////////////////////////////////////////////////////////
+
 function getMiniBar(pos, neg) {
 	var roof, posPx, negPx, posLabel, negLabel, posMargin, negMargin, labels, labelTemplate;
 
@@ -423,6 +380,35 @@ function getMiniBar(pos, neg) {
 		labels +
 		'<\/td>';
 }
+
+function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
+	var partial, theRow;
+	
+	partial = [];
+	partial.push('<table class="posneg number"><tr>');
+	partial.push('<td> +');
+	partial.push(prettyFloat(monthPos, true) + '<br>');
+	partial.push(prettyFloat(monthNeg, true));
+	partial.push('<\/td><\/tr><\/table>');
+	partial = partial.join('');
+
+	// Show month total?
+	if (monthTotal !== '') {
+		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
+	}
+
+	theRow = '<tr class="total">';
+	if (showRowCount) {
+		theRow += '<td class="row-count"><\/td>';
+	}
+	theRow += '<td><\/td>';
+	theRow += '<td>' + partial + '<\/td>';
+	theRow += '<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>';
+	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
+	theRow += '<\/tr>';
+	return theRow;
+}
+
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
 	var theRow = [];
 	
@@ -443,6 +429,7 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
+
 function getOverviewTotalsRow(label, n1, n2, n3) {
 	var theRow = [];
 	theRow.push('<tr class="total">');
@@ -457,182 +444,29 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
-function updateToolbar() {
-	var i, add, remove, hide, unhide;
 
-	// Visibility On/Off
-	// Monthly/Yearly report hides some controls from the toolbar.
-	//
-	// Some fields are just hidden to preserve the page layout.
-	// Others must be removed to free some space for the report.
-		
-	add = [];
-	remove = [];
-	hide = [];
-	unhide = [];
 
-	// Daily
-	if (reportType == 'd') {
-		add = ['tagsArea'];
-		remove = ['charts'];
-		unhide = [
-			'filterbox',
-			'optmonthly', 'optmonthlylabel',
-			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
-		];
-	// Monthly
-	} else if (reportType == 'm') {
-		add = ['charts'];
-		remove = ['tagsArea'];
-		hide = [
-			'filterbox',
-			'optmonthly', 'optmonthlylabel',
-			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'
-		];
-		unhide = [
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
-		];
-	// Yearly
-	} else if (reportType == 'y') {
-		add = ['charts'];
-		remove = ['tagsArea'];
-		hide = [
-			'filterbox',
-			'optmonthly', 'optmonthlylabel',
-			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
-			// Recent *months* doesn't make sense in yearly report
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
-		];
-	}
-	
-	// Show/hide toolbar elements
-	for (i = 0; i < add.length; i++) {
-		document.getElementById(add[i]).style.display = 'block';
-	}
-	for (i = 0; i < remove.length; i++) {
-		document.getElementById(remove[i]).style.display = 'none';
-	}
-	for (i = 0; i < hide.length; i++) {
-		document.getElementById(hide[i]).style.visibility = 'hidden';
-	}
-	for (i = 0; i < unhide.length; i++) {
-		document.getElementById(unhide[i]).style.visibility = 'visible';
-	}
-}
-function changeReport(el) {
-	var oldType, newType;
-	
-	oldType = reportType;
-	newType = el.id;
-	
-	// Deactivate old report, activate new
-	document.getElementById(oldType).className = '';
-	el.className = 'active';
-	
-	//// Save / restore information
-	//
-	// From Daily to Monthly/Yearly
-	if (oldType == 'd' && newType != 'd') {
-		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
-		document.getElementById('valuefilterarg').style.visibility = 'hidden';
-		oldSortColIndex = sortColIndex;
-		oldSortColRev = sortColRev;
-		sortColIndex = 0; // Default by date
-		sortColRev = false;
-	//
-	// From Monthly/Yearly to Daily
-	} else if (newType == 'd' && oldType != 'd') {
-		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
-		sortColIndex = oldSortColIndex || 0;
-		sortColRev = oldSortColRev || false;
-	}
-	
-	reportType = newType;
-	overviewData = [];
-	updateToolbar();
-	showReport();
-}
-function toggleLastMonths() {
-	overviewData = [];
-	showReport();
-}
-function lastMonthsChanged() {
-	document.getElementById('optlastmonths').checked = true;
-	overviewData = [];
-	showReport();
-}
-function toggleFuture() {
-	overviewData = [];
-	showReport();
-}
-function valueFilterChanged() {
-	overviewData = [];
-	
-	// autocheck checkbox
-	document.getElementById('optvaluefilter').checked = true;
-	
-	// show/hide the filter argument textbox
-	if (document.getElementById('valuefilter').value.match(/[+\-]/)) {
-		document.getElementById('valuefilterarg').style.visibility = 'hidden';
-	} else {
-		document.getElementById('valuefilterarg').style.visibility = '';
-	}
-	
-	showReport();
-}
-function toggleMonthly() {
-	if (document.getElementById('optmonthly').checked === true) {
-		sortColIndex = 0;
-		sortColRev = false;
-	}
-	showReport();
-}
-function toggleHelp() {
-	var el = document.getElementById('help');
-	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
-}
-function iframeLoaded(el) {
-	// Note: This function is attached to the iframe onLoad event.
+/////////////////////////////////////////////////////////////////////
+//                        DATA HANDLERS
+/////////////////////////////////////////////////////////////////////
 
-	if (typeof el.loadCount == 'undefined') {
-		el.loadCount = 0;
-	}
-	el.loadCount++;
-	if (el.loadCount > 1) {
-		// Discard the first iframe load, it's always blank, on the initial page load.
-		// The other loads are for real.
-		iframeIsLoaded = true;
-
-		// Short explanation:
-		// If the initial frame loading delayed, we read/parse the data right here.
-		// Long explanation:
-		// The frame loading is an event occuring in parallel with init().
-		// Maybe the iframe contents is fully loaded before init() ends, maybe not.
-		// The initIsDone flag tell us that init() is already done, so we must take action here.
-		// If the loadCount > 2, it's a reload or new dataFile, so we also must parse the new data.
-		//
-		if ((el.loadCount == 2 && initIsDone) || el.loadCount > 2) {
-			readData();
-			parseData();
-			showReport();
-		}
-	}
-}
 function resetData() {
 	overviewData = [];
 	parsedData = [];
 	rawData = '';
 }
+
 function loadDataFile(filePath) {
 	resetData();
 	iframeIsLoaded = false;
 	document.getElementById("dataFrame").src = filePath;
 	// This triggers the onLoad iframe event, handled by iframeLoaded()
 }
+
 function reloadData() {
 	loadDataFile(document.getElementById('datafiles').value);
 }
+
 function readData() {
 	var iframeDoc;
 	
@@ -644,6 +478,7 @@ function readData() {
 		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
 	}
 }
+
 function parseData() {
 	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort;
 
@@ -815,6 +650,7 @@ function parseData() {
 	parsedData.sort(sortArray);
 	sortColIndex = oldSort;
 }
+
 function filterData() {
 	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
@@ -911,6 +747,7 @@ function filterData() {
 	
 	return filteredData;
 }
+
 function applyTags(theData) {
 	// This function composes the full tag menu and
 	// also filters theData if some tag is selected
@@ -1022,6 +859,12 @@ function applyTags(theData) {
 		return theData;
 	}
 }
+
+
+/////////////////////////////////////////////////////////////////////
+//                          REPORTS
+/////////////////////////////////////////////////////////////////////
+
 function showOverview() {
 	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartBars, chartLabels, chartCol, chartRoof, chartBarSize, chartBarLabel, chartBarClass;
 
@@ -1337,6 +1180,242 @@ function showReport() {
 		showOverview();
 	}
 }
+
+/////////////////////////////////////////////////////////////////////
+//                       INTERFACE UPDATE
+/////////////////////////////////////////////////////////////////////
+
+function populateChartColsCombo() {
+	var el, i;
+	el = document.getElementById('chartcol');
+	for (i = 0; i < i18n.labelsOverview.length; i++) {
+		if (i === 0) {
+			continue; // ignore date column
+		}
+		el.options[i - 1] = new Option(i18n.labelsOverview[i], i);
+	}
+}
+
+function populateDataFilesCombo() {
+	var el, i;
+	if (!oneFile) {
+		el = document.getElementById('datafiles');
+		for (i = 0; i < dataFiles.length; i++) {
+			el.options[i] = new Option(dataFiles[i]);
+		}
+	}
+}
+
+function populateMonthsCombo() {
+	var el, label, i;
+	el = document.getElementById('lastmonths');
+	label = i18n.labelMonths[0];
+	for (i = 1; i <= maxLastMonths; i++) {
+		if (i > 1) {
+			label = i18n.labelMonths[1];
+		}
+		el.options[i - 1] = new Option(i + ' ' + label, i);
+	}
+	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
+}
+
+function populateValueFilterCombo() {
+	var el;
+	el = document.getElementById('valuefilter');
+	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
+	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
+	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
+	el.options[3] = new Option('< ' + i18n.labelLessThan, '<');
+}
+
+function updateToolbar() {
+	var i, add, remove, hide, unhide;
+
+	// Visibility On/Off
+	// Monthly/Yearly report hides some controls from the toolbar.
+	//
+	// Some fields are just hidden to preserve the page layout.
+	// Others must be removed to free some space for the report.
+		
+	add = [];
+	remove = [];
+	hide = [];
+	unhide = [];
+
+	// Daily
+	if (reportType == 'd') {
+		add = ['tagsArea'];
+		remove = ['charts'];
+		unhide = [
+			'filterbox',
+			'optmonthly', 'optmonthlylabel',
+			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+		];
+	// Monthly
+	} else if (reportType == 'm') {
+		add = ['charts'];
+		remove = ['tagsArea'];
+		hide = [
+			'filterbox',
+			'optmonthly', 'optmonthlylabel',
+			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'
+		];
+		unhide = [
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+		];
+	// Yearly
+	} else if (reportType == 'y') {
+		add = ['charts'];
+		remove = ['tagsArea'];
+		hide = [
+			'filterbox',
+			'optmonthly', 'optmonthlylabel',
+			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
+			// Recent *months* doesn't make sense in yearly report
+			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+		];
+	}
+	
+	// Show/hide toolbar elements
+	for (i = 0; i < add.length; i++) {
+		document.getElementById(add[i]).style.display = 'block';
+	}
+	for (i = 0; i < remove.length; i++) {
+		document.getElementById(remove[i]).style.display = 'none';
+	}
+	for (i = 0; i < hide.length; i++) {
+		document.getElementById(hide[i]).style.visibility = 'hidden';
+	}
+	for (i = 0; i < unhide.length; i++) {
+		document.getElementById(unhide[i]).style.visibility = 'visible';
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//                         EVENT HANDLERS
+/////////////////////////////////////////////////////////////////////
+
+function sortCol(index, isOverview) {
+	// if the same, flip reverse state
+	sortColRev = (sortColIndex == index) ? !sortColRev : false;
+	sortColIndex = index;
+	showReport();
+}
+
+function changeReport(el) {
+	var oldType, newType;
+	
+	oldType = reportType;
+	newType = el.id;
+	
+	// Deactivate old report, activate new
+	document.getElementById(oldType).className = '';
+	el.className = 'active';
+	
+	//// Save / restore information
+	//
+	// From Daily to Monthly/Yearly
+	if (oldType == 'd' && newType != 'd') {
+		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
+		document.getElementById('valuefilterarg').style.visibility = 'hidden';
+		oldSortColIndex = sortColIndex;
+		oldSortColRev = sortColRev;
+		sortColIndex = 0; // Default by date
+		sortColRev = false;
+	//
+	// From Monthly/Yearly to Daily
+	} else if (newType == 'd' && oldType != 'd') {
+		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
+		sortColIndex = oldSortColIndex || 0;
+		sortColRev = oldSortColRev || false;
+	}
+	
+	reportType = newType;
+	overviewData = [];
+	updateToolbar();
+	showReport();
+}
+
+function iframeLoaded(el) {
+	// Note: This function is attached to the iframe onLoad event.
+
+	if (typeof el.loadCount == 'undefined') {
+		el.loadCount = 0;
+	}
+	el.loadCount++;
+	if (el.loadCount > 1) {
+		// Discard the first iframe load, it's always blank, on the initial page load.
+		// The other loads are for real.
+		iframeIsLoaded = true;
+
+		// Short explanation:
+		// If the initial frame loading delayed, we read/parse the data right here.
+		// Long explanation:
+		// The frame loading is an event occuring in parallel with init().
+		// Maybe the iframe contents is fully loaded before init() ends, maybe not.
+		// The initIsDone flag tell us that init() is already done, so we must take action here.
+		// If the loadCount > 2, it's a reload or new dataFile, so we also must parse the new data.
+		//
+		if ((el.loadCount == 2 && initIsDone) || el.loadCount > 2) {
+			readData();
+			parseData();
+			showReport();
+		}
+	}
+}
+
+function lastMonthsChanged() {
+	document.getElementById('optlastmonths').checked = true;
+	overviewData = [];
+	showReport();
+}
+
+function toggleFuture() {
+	overviewData = [];
+	showReport();
+}
+
+function toggleHelp() {
+	var el = document.getElementById('help');
+	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
+}
+
+function toggleLastMonths() {
+	overviewData = [];
+	showReport();
+}
+
+function toggleMonthly() {
+	if (document.getElementById('optmonthly').checked === true) {
+		sortColIndex = 0;
+		sortColRev = false;
+	}
+	showReport();
+}
+
+function valueFilterChanged() {
+	overviewData = [];
+	
+	// autocheck checkbox
+	document.getElementById('optvaluefilter').checked = true;
+	
+	// show/hide the filter argument textbox
+	if (document.getElementById('valuefilter').value.match(/[+\-]/)) {
+		document.getElementById('valuefilterarg').style.visibility = 'hidden';
+	} else {
+		document.getElementById('valuefilterarg').style.visibility = '';
+	}
+	
+	showReport();
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//                             INIT
+/////////////////////////////////////////////////////////////////////
+
 function init() {
 	
 	// Load the i18n messages (must be the first)
