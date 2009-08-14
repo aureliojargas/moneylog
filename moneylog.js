@@ -93,8 +93,7 @@ var i18nDatabase = {
 		errorTooManySeparators: 'Há mais de 2 sepadarores',
 		errorInvalidDate: 'Data inválida:',
 		errorInvalidAmount: 'Valor inválido:',
-		// appUrl: 'http://aurelio.net/moneylog',
-		appUrl: 'http://aurelio.net/moneylog/beta.html',
+		appUrl: 'http://aurelio.net/moneylog',
 		appDescription: 'Uma página. Um programa.',
 		centsSeparator: ',',
 		thousandSeparator: '.'
