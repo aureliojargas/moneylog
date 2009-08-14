@@ -18,7 +18,7 @@ DOWNLOAD
   Execute este comando somente uma vez.
 
 -----------------------------------------------------------------------------
-MIGRAÇÃO de dados do MoneyLog 3 para o Beta
+MIGRAÇÃO de dados do MoneyLog 1, 2, ou 3 para o Beta
 -----------------------------------------------------------------------------
 
   Copie e cole seus lançamentos dentro do arquivo moneylog.txt
@@ -31,7 +31,7 @@ ATUALIZAÇÃO
   cd $HOME/moneylog-dev
   svn update
 
-  Execute este comando sempre que quiser.
+  Execute este comando sempre que quiser atualizar seu MoneyLog.
 
 
 -----------------------------------------------------------------------------
