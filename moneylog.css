@@ -230,6 +230,9 @@ input {
 	background-color:#ddd; /* bg4 */
 	color:#000;            /* fg4 */
 }
+#report tr:hover .neg {
+	color:#f00;
+}
 #report tr.future {
 	background-color:#eee; /* bg6 */
 	font-style:italic;
