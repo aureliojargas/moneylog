@@ -87,7 +87,7 @@ var i18nDatabase = {
 		labelGreaterThan: 'maior que',
 		labelLessThan: 'menor que',
 		labelTagEmpty: 'VAZIO',
-		labelTagGroup: 'unir',
+		labelTagGroup: 'Unir as tags escolhidas',
 		errorInvalidData: 'Lançamento inválido na linha ',
 		errorNoFieldSeparator: 'Separador não encontrado:',
 		errorTooManySeparators: 'Há mais de 2 sepadarores',
@@ -124,7 +124,7 @@ var i18nDatabase = {
 		labelGreaterThan: 'greater than',
 		labelLessThan: 'less than',
 		labelTagEmpty: 'EMPTY',
-		labelTagGroup: 'group',
+		labelTagGroup: 'Group selected tags',
 		errorInvalidData: 'Invalid data at line ',
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Too many separators',
@@ -850,7 +850,7 @@ function applyTags(theData) {
 
 	// The '+' checkbox is only shown if we have multiple selected tags
 	document.getElementById('tagMultiAll').style.display = (
-		selectedTags.length > 1) ? 'inline' : 'none';
+		selectedTags.length > 1) ? 'block' : 'none';
 
 	// Tag filter was active?
 	if (selectedTags.length > 0) {

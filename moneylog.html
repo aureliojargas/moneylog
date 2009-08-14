@@ -215,16 +215,19 @@ You may change the styles if you know what you're doing.
 
 <!-- Tags -->
 <div id="tagsArea">
-	<b>Tags<span id="tagMultiAll">
-	(<input
-	 	id="tagMultiAllCheck" type="checkbox" class="trigger"
-		onClick="showReport()"><span
-		id="tagMultiAllLabel" class="trigger"
-		onClick="document.getElementById('tagMultiAllCheck').click()"></span>)
-	</span>:</b>
+	<div id="operabug">
+	<div id="tagMultiAll">
+		<input
+		 	id="tagMultiAllCheck" type="checkbox" class="trigger"
+			onClick="showReport()"><span
+			id="tagMultiAllLabel" class="trigger"
+			onClick="document.getElementById('tagMultiAllCheck').click()"></span>
+	</div>
+	<span id="tagsLabel">Tags:</span>
 	<div id="tagList">
 	</div>
 	<input type="hidden" id="tagCount" value="0">
+	</div>
 </div>
 
 <!-- Report -->

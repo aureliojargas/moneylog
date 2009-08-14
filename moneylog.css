@@ -125,19 +125,29 @@ input {
 	bottom:0;
 	left:0;
 	width:100%;
-	padding:0.5em 0;
-	text-align:center;
+	padding:0.5em 0; /* see #operabug */
 	line-height:150%;
 
 	/* Same colors of #toolbar */
 	color:#ddd;            /* fg2 */
 	background-color:#444; /* bg2 */
 }
+#tagsArea #operabug {
+	/* Wrapper needed by Opera9. Can't pad #tagsArea at left/right */
+	padding:0 0.5em 0 1em;
+}
+#tagsArea #tagsLabel {
+	font-weight:bold;
+	color:#f44;            /* fg2a */
+}
+#tagsArea input+span {
+	padding:1px 2px;
+}
 #tagsArea input[checked]+span { /* highlight selected tags */
 	background:#f44;       /* fg2a */
 	color:#000;            /* fg4 */
 	border:1px solid #000; /* fg4 */
-	padding:1px 2px;
+	padding:1px 1px;
 }
 #tagsArea input {
 	display:none; /* hidden, but still used by JavaScript (exception: IE7 - see CC) */
@@ -145,7 +155,7 @@ input {
 	padding:0;
 }
 #tagsArea #tagMultiAll {
-	font-weight:bold;
+	margin-top:-0.5em;
 }
 #tagsArea #tagMultiAll input {
 	display:inline;
