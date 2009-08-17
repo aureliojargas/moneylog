@@ -1,0 +1,31 @@
+# http://nishimura.eti.br/mymoneylog/moneylog2my.html
+
+2009-05-01	-100	Saldo inicial da conta :(		CONTA
+2009-05-15	-74.23		mercado	CONTA
+2009-05-15	-1.99	Prestação do mouse 10/12	nerd	CONTA
+2009-05-23	-39.90	Livro "Horóscopo dos Duendes"	presente; livro	CONTA
+2009-06-03	-342.59	Um Shrubbery	presente	CONTA
+2009-06-11	30	Ganhei a aposta com o Zé		CONTA
+2009-06-12	-35	Poster colorido 3D do Tux em Ascii Art	presente; nerd	CONTA
+2009-06-15	-1.99	Prestação do mouse 11/12	nerd	CONTA
+2009-06-29	-95.67		mercado	CONTA
+2009-07-12	-199.90	Segway usado no Mercado Livre	presente	CONTA
+2009-07-15	-1.99	Prestação do mouse 12/12 (acabou!)	nerd	CONTA
+2009-08-20	-10	Carnê do Baú		CONTA
+2009-05-05	500		salario	CONTA
+2009-06-05	500		salario	CONTA
+2009-07-05	500		salario	CONTA
+2009-08-05	500		salario	CONTA
+2009-05-07	-25		luz	CONTA
+2009-06-07	-20		luz	CONTA
+2009-07-07	-29		luz	CONTA
+2009-08-07	-25		luz	CONTA
+2009-05-07	-20		agua	CONTA
+2009-06-07	-17.80		agua	CONTA
+2009-07-07	-32.37		agua	CONTA
+2009-08-07	-30		agua	CONTA
+2009-12-31	99.99	Bônus	salario	CONTA
+2009-08-05	-500/5	Netbook usado comprado parcelado	nerd	CONTA
+2009-11-25	100/2	Presente de Natal, metade Nov, metade Dez	presente	CONTA
+2009-05-05	-200*6	Aluguel da casa (seis meses)	aluguel	CONTA
+2009-09-10	100*4	O Zé vai me dar 100 pilas por mês até o fim do ano	presente	CONTA

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Importar dados para o MoneyLog</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="author" content="Aurelio Marinho Jargas www.aurelio.net">
+	
+<script type="text/javascript">
+
+var dataFieldSeparator = '\t';
+var dataRecordSeparator = /\r?\n/;  // \r\n Windows, \n Linux/Mac
+var dataTagTerminator = '|';
+var dataTagSeparator = ',';
+var commentChar = '#';   // Must be at line start (column 1)
+
+String.prototype.strip = function () {
+	return this.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
+
+function convertMSMoney97(rawData) {
+	// Thanks Leslie Harlley Watter
+
+	var i, newline, sep, parsedData, rows, rowDate, rowAmount, rowDescription, rowDocNumber;
+	
+	
+	newline = /\r?\n/g;  // \r\n Windows, \n Linux/Mac
+	sep = '@@@';
+	parsedData = [];
+	
+	rawData = rawData.replace(newline, sep);
+	rawData = rawData.replace(new RegExp(sep + '\\^', 'g'), '\n^');
+
+	// Split lines
+	rows = rawData.split('\n');
+	
+	for (i = 0; i < rows.length; i++) {
+
+		rowDate = rowAmount = rowDocNumber = rowDescription = '';
+
+		// ^@@@D04/07'09@@@T4.59@@@N0002313@@@MJUROS POUPANCA
+		
+		// Invalid Line
+		if (rows[i].substring(0, 1) != '^') {
+			continue;
+		}
+		if (rows[i].length < 10) {
+			continue;
+		}
+		
+		// @@@D04/07'09
+		rowDate = rows[i].replace(/.*@@@D(\d\d).(\d\d)'([0123]\d)@@@.*/, '20$3-$2-$1');
+		if (!rowDate) {
+			rowDate = rows[i].replace(/.*@@@D(\d\d)\/(\d\d)'([789]\d)@@@.*/, '19$3-$2-$1');
+		}
+		if (!rowDate) {
+			rowDate = 'DATA_INVÁLIDA';
+		}
+	
+		// @@@T4.59
+		// @@@T-4.59
+		rowAmount = rows[i].replace(/.*@@@T(-?[\d.]+)@@@.*/, '$1');
+		if (!rowAmount) {
+			rowAmount = 'VALOR_INVÁLIDO';
+		} else if (document.getElementById('usecommas').checked) {
+			rowAmount = rowAmount.replace('.', ',');
+		}
+		
+		// @@@N0002313
+		rowDocNumber = rows[i].replace(/.*@@@N(\d+)@@@.*/, '$1');
+		if (rowDocNumber) {
+			rowDocNumber = '(Doc. ' + rowDocNumber + ') ';
+		}
+		
+		// @@@MJUROS POUPANCA
+		rowDescription = rows[i].replace(/.*@@@M(.*)/, '$1');
+		
+		// Prepend Doc number
+		if (!document.getElementById('hidedocnumber').checked) {
+			rowDescription = rowDocNumber + rowDescription;
+		}
+		
+		parsedData.push([
+			rowDate,
+			rowAmount,
+			rowDescription
+			].join(dataFieldSeparator));
+	}
+	return parsedData;
+}
+
+function convertMyMoneyLog(rawData) {
+	var i, parsedData, rows, rowDate, rowAmount, rowTags, fields, rowDescription, rowCategories, rowAccount;
+	
+	// Reset the data holder
+	parsedData = [];
+	// Split lines
+	rows = rawData.split(dataRecordSeparator);
+	// Scan data rows
+	for (i = 0; i < rows.length; i++) {
+		rowDate = rowAmount = rowDescription = rowAccount = '';
+		rowTags = [];
+		rowCategories = [];
+
+		// Preserve commented rows
+		if (rows[i].indexOf(commentChar) === 0) {
+			parsedData.push(rows[i]);
+			continue;
+		}
+		// Preserve blank lines
+		if (!rows[i].strip()) {
+			parsedData.push('');
+			continue;
+		}
+
+		// Separate fields
+		fields = rows[i].split(dataFieldSeparator);
+		
+		rowDate = fields[0];
+		rowAmount = fields[1];
+		rowDescription = fields[2];
+		rowCategories = fields[3];
+		rowAccount = fields[4];
+		
+		// Account turns to Tag
+		if (rowAccount) {
+			rowTags.push(rowAccount);
+		}
+		// Categories turns to Tags
+		if (rowCategories) {
+			rowTags = rowTags.concat(rowCategories.split(/ *; */));
+		}
+		// Compose tags
+		if (rowTags.length > 0) {
+			rowTags = rowTags.join(dataTagSeparator) + dataTagTerminator;
+		} else {
+			rowTags = '';
+		}
+		
+		// Force commas?
+		if (document.getElementById('usecommas').checked) {
+			rowAmount = rowAmount.replace('.', ',');
+		}
+		
+		parsedData.push([
+			rowDate,
+			rowAmount,
+			rowTags + rowDescription
+			].join(dataFieldSeparator));
+	}
+	return parsedData;
+}
+
+function convert() {
+	var mode, rawData, parsedData;
+	
+	// Read input data
+	rawData = document.getElementById('input_data').value;
+
+	mode = document.getElementById('mode').value;
+	if (mode == 'myml') {
+		parsedData = convertMyMoneyLog(rawData);
+	} else if (mode == 'money97') {
+		parsedData = convertMSMoney97(rawData);
+	}
+	
+	// Save output
+	document.getElementById('output_data').value = parsedData.join('\n');
+}
+
+</script>
+
+</head>
+<body>
+
+<h2>Converta lançamentos para o formato do MoneyLog</h2>
+
+<p><br></p>
+
+<p>De:
+	<select id="mode" onchange="convert();">
+		<option value="money97">MS-Money 97 (*.QIF)</option>
+		<option value="myml">myMoneyLog</option>
+	</select>
+</p>
+<blockquote><textarea id="input_data" rows="12" cols="80" onkeyup="convert();"></textarea></blockquote>
+
+<p><br><br></p>
+
+<p>Para: <a href="http://aurelio.net/moneylog">MoneyLog</a></p>
+
+<blockquote>
+	<textarea id="output_data" rows="12" cols="80"></textarea>
+	<br><input id="usecommas" type="checkbox" onclick="convert();"> Forçar o uso de vírgulas nos valores
+	<br><input id="hidedocnumber" type="checkbox" onclick="convert();"> Descartar Número do Documento (MS-Money)
+</blockquote>
+
+<p><br><br></p>
+
+<p>CONFIRA O RESULTADO. Este é um processo automático, pode haver falhas.</p>
+
+</body>
+</html>
