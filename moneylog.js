@@ -1043,9 +1043,13 @@ function showOverview() {
 			chart = chart.join('\n');
 			
 			document.getElementById('chart').innerHTML = chart;
+			document.getElementById('charts').style.display = 'block';
 		}
 	} else {
 		results = '<p>' + i18n.labelNoData + '</p>';
+		
+		// Hide charts when there's no data
+		document.getElementById('charts').style.display = 'none';
 	}
 	document.getElementById('report').innerHTML = results;
 }
