@@ -899,8 +899,8 @@ function showOverview() {
 			for (i = 0; i < theData.length; i++) {
 				rowDate        = theData[i][0];
 				rowAmount      = theData[i][1];
-				/* rowTags        = theData[i][2]; */
-				/* rowDescription = theData[i][3]; */
+				// rowTags        = theData[i][2]; 
+				// rowDescription = theData[i][3]; 
 
 				// rowDate.slice() size, to extract 2000 or 2000-01
 				dateSize = (reportType == 'y') ? 4 : 7;
