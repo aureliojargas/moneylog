@@ -4,17 +4,17 @@
 
 2009-05-01	-100	Saldo inicial da conta :(
 2009-05-15	-74,23	mercado|
-2009-05-15	- 1,99	nerd| Prestação do mouse 10/12
+2009-05-15	-1,99	nerd| Prestação do mouse 10/12
 2009-05-23	-39,90	presente, livro| Livro "Horóscopo dos Duendes"
 
 2009-06-03	-342,59	presente| Um Shrubbery
-2009-06-11	 30,00	Ganhei a aposta com o Zé
+2009-06-11	+30,00	Ganhei a aposta com o Zé
 2009-06-12	-35,00	presente, nerd| Poster colorido 3D do Tux em Ascii Art
-2009-06-15	- 1,99	nerd| Prestação do mouse 11/12
+2009-06-15	-1,99	nerd| Prestação do mouse 11/12
 2009-06-29	-95,67	mercado|
 
 2009-07-12	-199,90	presente| Segway usado no Mercado Livre
-2009-07-15	- 1,99	nerd| Prestação do mouse 12/12 (acabou!)
+2009-07-15	-1,99	nerd| Prestação do mouse 12/12 (acabou!)
 
 2009-08-20	-10,00	Carnê do Baú
 
