@@ -20,6 +20,9 @@ String.prototype.strip = function () {
 
 function convertMSMoney97(rawData) {
 	// Thanks Leslie Harlley Watter
+	
+	// MS Money 97 and 98 use the same format
+	// MS Money 99 uses / instead ' before the year (see rowDate)
 
 	var i, newline, sep, parsedData, rows, rowDate, rowAmount, rowDescription, rowDocNumber;
 	
@@ -48,10 +51,10 @@ function convertMSMoney97(rawData) {
 			continue;
 		}
 		
-		// @@@D04/07'09
-		rowDate = rows[i].replace(/.*@@@D(\d\d).(\d\d)'([0123]\d)@@@.*/, '20$3-$2-$1');
+		// @@@D04/07'09 (Money 97/98) or @@@D04/07/09 (Money 99)
+		rowDate = rows[i].replace(/.*@@@D(\d\d)\/(\d\d)['\/]([0123]\d)@@@.*/, '20$3-$2-$1');
 		if (!rowDate) {
-			rowDate = rows[i].replace(/.*@@@D(\d\d)\/(\d\d)'([789]\d)@@@.*/, '19$3-$2-$1');
+			rowDate = rows[i].replace(/.*@@@D(\d\d)\/(\d\d)['\/]([789]\d)@@@.*/, '19$3-$2-$1');
 		}
 		if (!rowDate) {
 			rowDate = 'DATA_INVÁLIDA';
@@ -160,7 +163,7 @@ function convert() {
 	mode = document.getElementById('mode').value;
 	if (mode == 'myml') {
 		parsedData = convertMyMoneyLog(rawData);
-	} else if (mode == 'money97') {
+	} else if (mode == 'money97' || mode == 'money98' || mode == 'money99') {
 		parsedData = convertMSMoney97(rawData);
 	}
 	
@@ -180,6 +183,8 @@ function convert() {
 <p>De:
 	<select id="mode" onchange="convert();">
 		<option value="money97">MS-Money 97 (*.QIF)</option>
+		<option value="money98">MS-Money 98 (*.QIF)</option>
+		<option value="money99">MS-Money 99 (*.QIF)</option>
 		<option value="myml">myMoneyLog</option>
 	</select>
 </p>
