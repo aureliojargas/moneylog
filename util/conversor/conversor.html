@@ -24,12 +24,16 @@ function formatDocNumber(n) {
 	return '(Doc. ' + n + ') ';
 }
 function formatDescription(s, doc_nr) {
+	s = s.strip();
 	// Prepend Doc number
 	if (doc_nr && !document.getElementById('hidedocnumber').checked) {
-		return formatDocNumber(doc_nr) + s.strip();
-	} else {
-		return s.strip();
+		s = formatDocNumber(doc_nr) + s;
 	}
+	// lowercased
+	if (document.getElementById('lowerdesc').checked) {
+		s = s.toLowerCase();
+	}
+	return s;
 }
 function convertOFX(rawData) {
 	var i, newline, parsedData, rowDate, rowAmount, rowDescription, rowDocNumber, transactions, matches, m;
@@ -286,6 +290,7 @@ function convert() {
 <blockquote>
 	<textarea id="output_data" rows="12" cols="80"></textarea>
 	<br><input id="usecommas" type="checkbox" onclick="convert();"> Forçar o uso de vírgulas nos valores
+	<br><input id="lowerdesc" type="checkbox" onclick="convert();"> Forçar a descrição em minúsculas
 	<br><input id="hidedocnumber" type="checkbox" onclick="convert();"> Descartar o Número do Documento
 </blockquote>
 
