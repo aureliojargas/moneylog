@@ -17,6 +17,80 @@ String.prototype.strip = function () {
 	return this.replace(/^\s+/, '').replace(/\s+$/, '');
 };
 
+function formatValue(n) {
+	return (document.getElementById('usecommas').checked) ? n.replace('.', ',') : n;
+}
+function formatDocNumber(n) {
+	return '(Doc. ' + n + ') ';
+}
+function formatDescription(s, doc_nr) {
+	// Prepend Doc number
+	if (doc_nr && !document.getElementById('hidedocnumber').checked) {
+		return formatDocNumber(doc_nr) + s.strip();
+	} else {
+		return s.strip();
+	}
+}
+function convertOFX(rawData) {
+	var i, newline, parsedData, rowDate, rowAmount, rowDescription, rowDocNumber, transactions, matches, m;
+		
+	newline = /\r?\n\t*/g;  // \r\n Windows, \n Linux/Mac (plus leading TABS)
+	parsedData = [];
+	
+	rawData = rawData.replace(newline, ''); // one big line
+
+	transactions = rawData.match(/<BANKTRANLIST>(.*)<\/BANKTRANLIST>/);
+	if (transactions) {
+		transactions = transactions[1];
+	} else {
+		return [];
+	}
+	
+	matches = transactions.match(/<STMTTRN>.*?<\/STMTTRN>/g);
+	
+	for (i = 0; i < matches.length; i++) {
+
+		rowDate = rowAmount = rowDocNumber = rowDescription = '';
+		
+		// <DTPOSTED>20090801080000
+		m = matches[i].match(/<DTPOSTED>(\d\d\d\d)(\d\d)(\d\d)/);
+		if (m) {
+			rowDate = m[1] + '-' + m[2] + '-' + m[3];
+		} else {
+			rowDate = 'DATA_INVÁLIDA';
+		}
+		
+		// <TRNAMT>1234.00
+		// <TRNAMT>-1234.00
+		m = matches[i].match(/<TRNAMT>(-?[\d.]+)/);
+		if (m) {
+			rowAmount = m[1];
+		} else {
+			rowAmount = 'VALOR_INVÁLIDO';
+		}
+
+		// <CHECKNUM>0223456
+		m = matches[i].match(/<CHECKNUM>(\d+)/);
+		if (m) {
+			rowDocNumber = m[1];
+		} else {
+			rowDocNumber = 'NUMDOC_INVÁLIDO';
+		}
+
+		// <MEMO>CORRECAO POUPANCA
+		m = matches[i].match(/<MEMO>(.*?)[<]/);
+		if (m) {
+			rowDescription = m[1];
+		}
+
+		parsedData.push([
+			rowDate,
+			formatValue(rowAmount),
+			formatDescription(rowDescription, rowDocNumber)
+		].join(dataFieldSeparator));
+	}
+	return parsedData;
+}
 function convertQIF(rawData, version) {
 	// Thanks Leslie Harlley Watter
 	
@@ -86,28 +160,18 @@ function convertQIF(rawData, version) {
 		rowAmount = rows[i].replace(/.*@@@T(-?[\d.]+)@@@.*/, '$1');
 		if (rowAmount.indexOf(sep) != -1) {
 			rowAmount = 'VALOR_INVÁLIDO';
-		} else if (document.getElementById('usecommas').checked) {
-			rowAmount = rowAmount.replace('.', ',');
 		}
 		
 		// @@@N0002313
 		rowDocNumber = rows[i].replace(/.*@@@N(\d+)@@@.*/, '$1');
-		if (rowDocNumber) {
-			rowDocNumber = '(Doc. ' + rowDocNumber + ') ';
-		}
 		
 		// @@@MJUROS POUPANCA
 		rowDescription = rows[i].replace(/.*@@@M(.*)/, '$1');
 		
-		// Prepend Doc number
-		if (!document.getElementById('hidedocnumber').checked) {
-			rowDescription = rowDocNumber + rowDescription;
-		}
-		
 		parsedData.push([
 			rowDate,
-			rowAmount,
-			rowDescription
+			formatValue(rowAmount),
+			formatDescription(rowDescription, rowDocNumber)
 		].join(dataFieldSeparator));
 	}
 	return parsedData;
@@ -161,15 +225,10 @@ function convertMyMoneyLog(rawData) {
 			rowTags = '';
 		}
 		
-		// Force commas?
-		if (document.getElementById('usecommas').checked) {
-			rowAmount = rowAmount.replace('.', ',');
-		}
-		
 		parsedData.push([
 			rowDate,
-			rowAmount,
-			rowTags + rowDescription
+			formatValue(rowAmount),
+			rowTags + formatDescription(rowDescription)
 		].join(dataFieldSeparator));
 	}
 	return parsedData;
@@ -186,12 +245,13 @@ function convert() {
 		parsedData = convertMyMoneyLog(rawData);
 	} else if (mode == 'money97' || mode == 'money98' || mode == 'money99' || mode == 'quicken') {
 		parsedData = convertQIF(rawData, mode);
+	} else if (mode == 'ofx') {
+		parsedData = convertOFX(rawData);
 	}
 	
 	// Save output
 	document.getElementById('output_data').value = parsedData.join('\n');
 }
-
 </script>
 
 </head>
@@ -200,7 +260,7 @@ function convert() {
 <h2>Converta lançamentos para o formato do MoneyLog</h2>
 
 <noscript>
-<p style="color:red;background:yellow;padding:10px">
+<p style="color:red;background:yellow;padding:10px;">
 	Ops! Seu navegador está sem JavaScript, sem ele não vai funcionar.
 	</p>
 </noscript>
@@ -213,6 +273,7 @@ function convert() {
 		<option value="money97">MS-Money 97 (*.QIF)</option>
 		<option value="money98">MS-Money 98 (*.QIF)</option>
 		<option value="money99">MS-Money 99 (*.QIF)</option>
+		<option value="ofx">MS-Money/Finance (*.OFX)</option>
 		<option value="myml">myMoneyLog</option>
 	</select>
 </p>
@@ -225,7 +286,7 @@ function convert() {
 <blockquote>
 	<textarea id="output_data" rows="12" cols="80"></textarea>
 	<br><input id="usecommas" type="checkbox" onclick="convert();"> Forçar o uso de vírgulas nos valores
-	<br><input id="hidedocnumber" type="checkbox" onclick="convert();"> Descartar Número do Documento (MS-Money)
+	<br><input id="hidedocnumber" type="checkbox" onclick="convert();"> Descartar o Número do Documento
 </blockquote>
 
 <p><br><br></p>
