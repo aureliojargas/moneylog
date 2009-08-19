@@ -319,6 +319,9 @@ input {
 	padding-bottom:3em;
 	text-align:center;
 }
+#charts #chartcol {
+	margin-bottom:5px;
+}
 table.chart {
 	border:1px solid #ddd; /* bd1 */
 	margin:0 auto;
