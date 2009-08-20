@@ -1506,3 +1506,5 @@ function init() {
 	initIsDone = true;
 }
 window.onload = init;
+
+/*jslint onevar: true, browser: true, undef: true, nomen: true, bitwise: true, immed: true */
