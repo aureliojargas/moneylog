@@ -26,6 +26,7 @@ var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
+var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -95,6 +96,7 @@ var i18nDatabase = {
 		errorInvalidAmount: 'Valor inválido:',
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appDescription: 'Uma página. Um programa.',
+		dateFormat: 'd/m/Y',
 		centsSeparator: ',',
 		thousandSeparator: '.'
 	},
@@ -131,6 +133,7 @@ var i18nDatabase = {
 		errorInvalidAmount: 'Invalid amount:',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'A webpage. A software.',
+		dateFormat: 'm/d/y',
 		centsSeparator: '.',
 		thousandSeparator: ','
 	}
@@ -304,6 +307,16 @@ function addMonths(yyyymmdd, n) {
 	return y + '-' + m + '-' + d;
 }
 
+function formatDate(date) {
+	var m;
+	m = date.match(/(..(..))-(..)-(..)/); // Y-M-D
+
+	return i18n.dateFormat.replace(
+		'Y', m[1]).replace(
+		'y', m[2]).replace(
+		'm', m[3]).replace(
+		'd', m[4]);
+}
 function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
 	num = num.toFixed(2).replace('.', i18n.centsSeparator);
@@ -1147,6 +1160,11 @@ function showDetailed() {
 			
 			if (showRowCount) {
 				results.push('<td class="row-count">' + (rowCount) + '<\/td>');
+			}
+			
+			// Use local date format?
+			if (showLocaleDate) {
+				rowDate = formatDate(rowDate);
 			}
 			
 			results.push('<td class="date">'   + rowDate                + '<\/td>');
