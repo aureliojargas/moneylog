@@ -834,6 +834,7 @@ function applyTags(theData) {
 			tagsMenu[i] = '<input type="checkbox" class="trigger" onClick="showReport()" ' +
 				checked + ' id="' + tagId + '" value="' + tagName + '">' +
 				'<span class="trigger" onClick="document.getElementById(\'' + tagId + '\').click()">' + tagName + '<\/span>';
+			// Note: Tried to use <label> instead <span>, but IE8 failed at CSS input:checked+label
 		}
 
 		// All tags in one single line

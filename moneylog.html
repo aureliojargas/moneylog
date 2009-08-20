@@ -67,9 +67,8 @@ You may change the styles if you know what you're doing.
 		<!-- Last Months -->
 		<input
 			id="optlastmonths" class="trigger" type="checkbox"
-			onClick="toggleLastMonths()"><span
-			id="optlastmonthslabel" class="trigger"
-			onClick="document.getElementById('optlastmonths').click()"></span>
+			onClick="toggleLastMonths()"><label
+			id="optlastmonthslabel" for="optlastmonths"></label>
 		<select
 		 	id="lastmonths" size="1" onChange="lastMonthsChanged()"></select>
 		<br>
@@ -77,9 +76,8 @@ You may change the styles if you know what you're doing.
 		<!-- Value Filter -->
 		<input
 		 	id="optvaluefilter" class="trigger" type="checkbox"
-			onClick="showReport()"><span
-			id="optvaluefilterlabel" class="trigger"
-			onClick="document.getElementById('optvaluefilter').click()"></span>
+			onClick="showReport()"><label
+			id="optvaluefilterlabel" for="optvaluefilter"></label>
 		<select
 		 	id="valuefilter" size="1" onChange="valueFilterChanged()">
 		</select><input
@@ -90,17 +88,15 @@ You may change the styles if you know what you're doing.
 		<!-- Future -->
 		<input
 		 	id="optfuture" class="trigger" type="checkbox"
-			onClick="toggleFuture()"><span
-			id="optfuturelabel" class="trigger"
-			onClick="document.getElementById('optfuture').click()"></span>
+			onClick="toggleFuture()"><label
+			id="optfuturelabel" for="optfuture"></label>
 			<br>
 
 		<!-- Monthly -->
 		<input
 		 	id="optmonthly" class="trigger" type="checkbox"
-			onClick="toggleMonthly()"><span
-			id="optmonthlylabel" class="trigger"
-			onClick="document.getElementById('optmonthly').click()"></span>
+			onClick="toggleMonthly()"><label
+			id="optmonthlylabel" for="optmonthly"></label>
 
 	</div>
 </td>
@@ -115,15 +111,13 @@ You may change the styles if you know what you're doing.
 		<br>
 		<input
 			id="optregex" class="trigger" type="checkbox"
-			onClick="showReport()"><span
-			id="optregexlabel" class="trigger"
-			onClick="document.getElementById('optregex').click()"></span>
+			onClick="showReport()"><label
+			id="optregexlabel" for="optregex"></label>
 	
 		<input
 			id="optnegate" class="trigger" type="checkbox"
-			onClick="showReport()"><span
-			id="optnegatelabel" class="trigger"
-			onClick="document.getElementById('optnegate').click()"></span>
+			onClick="showReport()"><label
+			id="optnegatelabel" for="optnegate"></label>
 	</div>
 
 	<!-- Data Files -->
@@ -213,9 +207,8 @@ You may change the styles if you know what you're doing.
 	<div id="tagMultiAll">
 		<input
 		 	id="tagMultiAllCheck" type="checkbox" class="trigger"
-			onClick="showReport()"><span
-			id="tagMultiAllLabel" class="trigger"
-			onClick="document.getElementById('tagMultiAllCheck').click()"></span>
+			onClick="showReport()"><label
+			id="tagMultiAllLabel" for="tagMultiAllCheck"></label>
 	</div>
 	<span id="tagsLabel">Tags:</span>
 	<div id="tagList">

@@ -29,6 +29,7 @@ a {
 input {
 	margin-right:0.25em;
 }
+label,
 .trigger {
 	cursor:pointer;
 }
@@ -39,10 +40,11 @@ input {
 	background-color:#f66 !important;   /* bar2 */
 }
 #tagsArea input,
+#tagsArea label,
 #toolbar input,
+#toolbar label,
 #toolbar select,
-#toolbar a,
-#toolbar span {
+#toolbar a {
 	vertical-align:middle;
 }
 
