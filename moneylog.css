@@ -70,6 +70,10 @@ label,
 	background-color:#f44; /* fg2a */
 	color:#444;            /* bg2 */
 }
+#toolbar label:hover,
+#toolbar input:hover + label {
+	color:#fff;
+}
 #toolbar .left {
 	padding-left:2em;
 	padding-right:2em;
@@ -150,6 +154,7 @@ label,
 	color:#000;            /* fg4 */
 	border:1px solid #000; /* fg4 */
 	padding:1px 1px;
+	/* Note: DON'T use input:checked, it fails in Opera9/IE8 */
 }
 #tagsArea input {
 	display:none; /* hidden, but still used by JavaScript (exception: IE7 - see CC) */
