@@ -94,6 +94,7 @@ var i18nDatabase = {
 		errorTooManySeparators: 'Há mais de 2 sepadarores',
 		errorInvalidDate: 'Data inválida:',
 		errorInvalidAmount: 'Valor inválido:',
+		msgLoading: 'Carregando %s...',
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appDescription: 'Uma página. Um programa.',
 		dateFormat: 'd/m/Y',
@@ -131,6 +132,7 @@ var i18nDatabase = {
 		errorTooManySeparators: 'Too many separators',
 		errorInvalidDate: 'Invalid date:',
 		errorInvalidAmount: 'Invalid amount:',
+		msgLoading: 'Loading %s...',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'A webpage. A software.',
 		dateFormat: 'm/d/y',
@@ -469,6 +471,7 @@ function resetData() {
 }
 
 function loadDataFile(filePath) {
+	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
 	resetData();
 	iframeIsLoaded = false;
 	document.getElementById("dataFrame").src = filePath;
