@@ -54,7 +54,7 @@ function convertOFX(rawData) {
 	// As a XML file, it can be indented by spaces or TABs (or both)
 	// and tags could be closed or left open (<foo>bar or <foo>bar</foo>)
 	
-	var i, newline, parsedData, rowDate, rowAmount, rowDescription, rowDocNumber, transactions, matches, m;
+	var i, newline, parsedData, rowDate, rowAmount, rowDescription, rowDocNumber, matches, m;
 		
 	newline = /\r?\n[\t ]*/g;  // \r\n Windows, \n Linux/Mac (plus leading TABS/spaces)
 	parsedData = [];
@@ -124,7 +124,7 @@ function convertQIF(rawData, version) {
 	// MS Money 98: @@@D31/12'09
 	// MS Money 99: @@@D31/12/09
 
-	var i, newline, sep, parsedData, rows, rowDate, rowDateCentury, rowAmount, rowDescription, rowDocNumber, dateReplace;
+	var i, m, newline, sep, parsedData, rows, rowDate, rowDateCentury, rowAmount, rowDescription, rowDocNumber;
 	
 	newline = /\r?\n/g;  // \r\n Windows, \n Linux/Mac
 	sep = '@@@';
