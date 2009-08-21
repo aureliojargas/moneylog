@@ -6,9 +6,11 @@
 2009-08-19
 BB: OFX, OFC, TXT, PALM, CSV, PDF (@botobr)
 Caixa: TXT, OFC, OFX (@oreio)
-Citi: QIF, OFX, CSV e XLS (@badnetmask)
+Citibank: QIF, OFX, CSV e XLS (@badnetmask)
 Itau: XLS, OFC 1.0, OFC 1.6, OFX e TXT (@badnetmask)
 Real: OFX, QIF (Quicken, Money 97, Money 98, Money 99), XLS, DOC (@oreio)
+2009-08-21
+HSBC: OFC (MS Money 2002, Quicken 6.0), TXT, XLS, DOC (@dsracoon @polvaceo @daniel_pm @xexa_sl)
 -->
 
 	<title>Importar dados para o MoneyLog</title>
@@ -131,24 +133,6 @@ function convertQIF(rawData, version) {
 	rawData = rawData.replace(newline, sep);
 	rawData = rawData.replace(new RegExp(sep + '\\^', 'g'), '\n^');
 
-	dateReplace = [];
-	if (version == 'money97' || version == 'money98') {
-		dateReplace = [
-			/.*@@@D(\d\d)\/(\d\d)'(\d\d)@@@.*/,
-			'$3-$2-$1'
-		];
-	} else if (version == 'money99') {
-		dateReplace = [
-			/.*@@@D(\d\d)\/(\d\d)\/(\d\d)@@@.*/,
-			'$3-$2-$1'
-		];
-	} else if (version == 'quicken') {
-		dateReplace = [
-			/.*@@@D(\d\d)\/(\d\d)'(\d\d)@@@.*/,
-			'$3-$1-$2'
-		];
-	}
-	
 	// Split lines
 	rows = rawData.split('\n');
 	
@@ -166,12 +150,18 @@ function convertQIF(rawData, version) {
 			continue;
 		}
 		
-		// @@@D31/12'09 or @@@D31/12/09 or @@@D12/31'09 --> 09-12-31
-		rowDate = rows[i].replace(dateReplace[0], dateReplace[1]);
-		if (rowDate.match(/^\d\d-\d\d-\d\d$/)) {
+		// @@@D31/12'09 or @@@D31/12/09 or @@@D12/31'09 --> 09-12-31		
+		m = rows[i].match(/@@@D(\d\d)\/(\d\d)['\/](\d\d)/);
+		if (m) {
+			if (version == 'quicken') {
+				rowDate = m[3] + '-' + m[1] + '-' + m[2]; // m/d/y > y-m-d
+			} else {
+				rowDate = m[3] + '-' + m[2] + '-' + m[1]; // d/m/y > y-m-d
+			}
+		
 			// YY-MM-DD --> YYYY-MM-DD (where YYYY == 19* || 20*)
 			// Our range: 1960 - 2059
-			rowDateCentury = (rowDate.substring(0, 1) >= 6) ? '19' : '20';
+			rowDateCentury = (m[3].substring(0, 1) >= 6) ? '19' : '20';
 			rowDate = rowDateCentury + rowDate;
 		} else {
 			rowDate = 'DATA_INVÁLIDA';
@@ -179,16 +169,24 @@ function convertQIF(rawData, version) {
 	
 		// @@@T4.59
 		// @@@T-4.59
-		rowAmount = rows[i].replace(/.*@@@T(-?[\d.]+)@@@.*/, '$1');
-		if (rowAmount.indexOf(sep) != -1) {
+		m = rows[i].match(/@@@T(-?[\d.]+)/);
+		if (m) {
+			rowAmount = m[1];
+		} else {
 			rowAmount = 'VALOR_INVÁLIDO';
 		}
 		
 		// @@@N0002313
-		rowDocNumber = rows[i].replace(/.*@@@N(\d+)@@@.*/, '$1');
-		
+		m = rows[i].match(/@@@N(\d+)/);
+		if (m) {
+			rowDocNumber = m[1];
+		} else {
+			rowDocNumber = 'NUMDOC_INVÁLIDO';
+		}
+
 		// @@@MJUROS POUPANCA
-		rowDescription = rows[i].replace(/.*@@@M(.*)/, '$1');
+		m = rows[i].match(/@@@M(.*?)(@@@|$)/);
+		rowDescription = m[1];
 		
 		parsedData.push([
 			rowDate,
@@ -305,7 +303,9 @@ function convert() {
 		<option value="myml">myMoneyLog</option>
 	</select>
 </p>
-<blockquote><textarea id="input_data" rows="12" cols="80" onkeyup="convert();"></textarea></blockquote>
+<blockquote>
+	<textarea id="input_data" rows="12" cols="80" onkeyup="convert();"></textarea>
+</blockquote>
 
 <p><br><br></p>
 
