@@ -155,6 +155,8 @@ var i18n;
 var rawData = '';
 var parsedData = [];
 var overviewData = [];
+var waitingToLoad = [];
+var multiRawData = '';
 
 // init and iframe loading are concurrent events that needs to be completed at the initial page load.
 // So we need this silly flags to track the execution of both events.
@@ -478,9 +480,45 @@ function loadDataFile(filePath) {
 	// This triggers the onLoad iframe event, handled by iframeLoaded()
 }
 
+function loadWaitingDataFiles() {
+	var filePath;
+
+	// This is a pooling function that keeps calling itself until the
+	// waitingToLoad array is empty. I have to do this instead a simple
+	// while loop because the iframe loading occurs in parallel, the
+	// JavaScript engine don't hang up waiting for it to complete.
+	//
+	// See also: iframeLoaded()
+	
+	// The last file has finished loading, so now we can load the next
+	if (iframeIsLoaded) {
+		filePath = waitingToLoad.shift();
+		loadDataFile(filePath);
+	}
+	
+	// There is another file to load? Schedule it 
+	if (waitingToLoad.length > 0) {
+		setTimeout(loadWaitingDataFiles, 500);
+	}
+}
 function reloadData() {
-	loadDataFile(dataFiles[document.getElementById('datafiles').selectedIndex]);
+	var filePath;
+	
+	// Reset multifile data
+	multiRawData = '';
+	waitingToLoad = [];
+	
+	filePath = dataFiles[document.getElementById('datafiles').selectedIndex];
 	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
+
+	// We will load a single file or all of them?
+	if (filePath == '*') {		
+		waitingToLoad = dataFiles.removePattern('*');
+		loadWaitingDataFiles();
+	} else {
+		loadDataFile(filePath);
+	}
+		
 }
 
 function readData() {
@@ -1374,7 +1412,6 @@ function iframeLoaded(el) {
 	if (el.loadCount > 1) {
 		// Discard the first iframe load, it's always blank, on the initial page load.
 		// The other loads are for real.
-		iframeIsLoaded = true;
 
 		// Short explanation:
 		// If the initial frame loading delayed, we read/parse the data right here.
@@ -1386,8 +1423,26 @@ function iframeLoaded(el) {
 		//
 		if ((el.loadCount == 2 && initIsDone) || el.loadCount > 2) {
 			readData();
-			parseData();
-			showReport();
+			iframeIsLoaded = true;
+			
+			// Okay, the iframe is loaded and the data was read. What now?
+			//
+			if (waitingToLoad.length > 0) {
+				// We're on multifiles mode, just append the new data to the holder.
+				multiRawData = multiRawData + '\n' + rawData;
+			} else {
+				// We're on multifiles mode and the last file was loaded.
+				// Join the new data to the holder and save it all to rawData.
+				if (multiRawData) {
+					rawData = multiRawData + '\n' + rawData;
+				}
+				
+				// One file or multifile, now it's time to process what we've read
+				parseData();
+				showReport();
+			}
+		} else {
+			iframeIsLoaded = true;
 		}
 	}
 }
