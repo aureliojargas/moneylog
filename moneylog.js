@@ -479,7 +479,8 @@ function loadDataFile(filePath) {
 }
 
 function reloadData() {
-	loadDataFile(document.getElementById('datafiles').value);
+	loadDataFile(dataFiles[document.getElementById('datafiles').selectedIndex]);
+	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
 }
 
 function readData() {
