@@ -1437,6 +1437,31 @@ function lastMonthsChanged() {
 	showReport();
 }
 
+function toggleFullScreen() {
+	var toolbar, tagbar, content;
+	
+	toolbar = document.getElementById('toolbarwrapper');
+	tagbar = document.getElementById('tagsArea');
+	content = document.getElementById('content');
+	
+	// Note:
+	// This toolbar wrapper is needed because #toolbar is a table (not a div).
+	// When doing the display:block on it, the table cells don't expand to full width.
+	// So we need this silly DIV wrapper so things work as expected.
+	// The only browser who got it right without the wrapper was... IE7/8 (surprise!)
+	
+	if (toolbar.style.display == 'none') {
+		toolbar.style.display = 'block';
+		if (reportType == 'd') {
+			tagbar.style.display = 'block';			
+		}
+		content.style.marginTop = '8em';
+	} else {
+		toolbar.style.display = 'none';
+		tagbar.style.display = 'none';
+		content.style.marginTop = 0;	
+	}
+}
 function toggleFuture() {
 	overviewData = [];
 	showReport();

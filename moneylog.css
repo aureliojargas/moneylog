@@ -50,6 +50,17 @@ label,
 
 /* ---------------------------------------------- Toolbar */
 
+#fullscreen {
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:9;
+	
+	font-size:150%;
+	width:1em;
+	text-align:center;
+	background-color:#444; /* bg2 */	
+}
 #toolbar {
 	color:#ddd;            /* fg2 */
 	background-color:#444; /* bg2 */
@@ -61,11 +72,13 @@ label,
 	width:100%;
 	height:8em;            /* y1 */
 }
+#fullscreen,
 #toolbar a {
 	color:#f44;            /* fg2a */
 	font-size:185%;
 	padding:0 4px;
 }
+#fullscreen:hover,
 #toolbar a:hover {
 	background-color:#f44; /* fg2a */
 	color:#444;            /* bg2 */
