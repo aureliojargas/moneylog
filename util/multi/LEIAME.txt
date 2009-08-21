@@ -18,10 +18,15 @@ dataFiles = [
 
 Cada arquivo pode ser carregado separadamente. Se escolher o
 asterisco, todos são carregados simultaneamente, como se fossem
-apenas um único arquivo. O asterisco deve ser o último item
-dentro do dataFiles.
+apenas um único arquivo.
+
+O asterisco pode ser colocado como primeiro item (default),
+fazendo com que todos os TXT sejam carregados já no início.
 
 Observar o comportamento das tags (selecionadas ou não), das
 outras opções de filtragem e do tipo do extrato.
 
 Usar o botão de Reload para verificar seu funcionamento.
+
+Se usar uma vírgula extra no último item, o IE tenta carregar
+o item undefined.
