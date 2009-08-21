@@ -158,10 +158,8 @@ var overviewData = [];
 var waitingToLoad = [];
 var multiRawData = '';
 
-// init and iframe loading are concurrent events that needs to be completed at the initial page load.
-// So we need this silly flags to track the execution of both events.
-var iframeIsLoaded = false;
-var initIsDone = false;
+// The iframe loading occurs in parallel with the main execution, we need to know when it's done
+var iframeIsLoaded = true;
 
 
 /////////////////////////////////////////////////////////////////////
@@ -501,7 +499,7 @@ function loadWaitingDataFiles() {
 		setTimeout(loadWaitingDataFiles, 500);
 	}
 }
-function reloadData() {
+function loadSelectedFile() {
 	var filePath;
 	
 	// Reset multifile data
@@ -514,11 +512,12 @@ function reloadData() {
 	// We will load a single file or all of them?
 	if (filePath == '*') {		
 		waitingToLoad = dataFiles.removePattern('*');
-		loadWaitingDataFiles();
+		if (waitingToLoad.length > 0) {
+			loadWaitingDataFiles();
+		}
 	} else {
 		loadDataFile(filePath);
 	}
-		
 }
 
 function readData() {
@@ -1405,45 +1404,30 @@ function changeReport(el) {
 function iframeLoaded(el) {
 	// Note: This function is attached to the iframe onLoad event.
 
+	// Discard the first iframe load, it's always blank, on the initial page load.
+	// The other loads are for real.
 	if (typeof el.loadCount == 'undefined') {
-		el.loadCount = 0;
+		el.loadCount = 1;
+		return;
 	}
 	el.loadCount++;
-	if (el.loadCount > 1) {
-		// Discard the first iframe load, it's always blank, on the initial page load.
-		// The other loads are for real.
 
-		// Short explanation:
-		// If the initial frame loading delayed, we read/parse the data right here.
-		// Long explanation:
-		// The frame loading is an event occuring in parallel with init().
-		// Maybe the iframe contents is fully loaded before init() ends, maybe not.
-		// The initIsDone flag tell us that init() is already done, so we must take action here.
-		// If the loadCount > 2, it's a reload or new dataFile, so we also must parse the new data.
-		//
-		if ((el.loadCount == 2 && initIsDone) || el.loadCount > 2) {
-			readData();
-			iframeIsLoaded = true;
-			
-			// Okay, the iframe is loaded and the data was read. What now?
-			//
-			if (waitingToLoad.length > 0) {
-				// We're on multifiles mode, just append the new data to the holder.
-				multiRawData = multiRawData + '\n' + rawData;
-			} else {
-				// We're on multifiles mode and the last file was loaded.
-				// Join the new data to the holder and save it all to rawData.
-				if (multiRawData) {
-					rawData = multiRawData + '\n' + rawData;
-				}
-				
-				// One file or multifile, now it's time to process what we've read
-				parseData();
-				showReport();
-			}
-		} else {
-			iframeIsLoaded = true;
+	// Read iframe contents
+	readData();
+	iframeIsLoaded = true;
+	
+	if (waitingToLoad.length > 0) {
+		// We're on multifiles mode, just append the new data to the temporary holder.
+		multiRawData = multiRawData + '\n' + rawData;
+	} else {
+		if (multiRawData) {
+			// We're on multifiles mode and the last file was loaded.
+			// Join the new data to the holder and save it all to rawData.
+			rawData = multiRawData + '\n' + rawData;
 		}
+		// One file or multifile, now it's time to process what we've read
+		parseData();
+		showReport();
 	}
 }
 
@@ -1566,22 +1550,19 @@ function init() {
 		updateToolbar();
 	}
 	
-	// We need to load the iframe contents first (if using external datafile)
-	if (!oneFile) {
-		loadDataFile(dataFiles[0]);
-	}
-
 	// Everything is ok, time to read/parse/show the user data
-	if (oneFile || (!oneFile && iframeIsLoaded)) {
+	if (oneFile) {
 		readData();
 		parseData();
 		showReport();
+	} else {
+		// By default show the first file
+		document.getElementById('datafiles').selectedIndex = 0;
+		loadSelectedFile();
 	}
 	
 	// Uncomment this line to focus the search box at init
 	// document.getElementById('filter').focus();
-
-	initIsDone = true;
 }
 window.onload = init;
 
