@@ -46,27 +46,31 @@ function formatDescription(s, doc_nr) {
 	return s;
 }
 function convertOFX(rawData) {
+
+	// Handles OFX and OFC.
+	// There are little differences, noted on the comments.
+	// As a XML file, it can be indented by spaces or TABs (or both)
+	// and tags could be closed or left open (<foo>bar or <foo>bar</foo>)
+	
 	var i, newline, parsedData, rowDate, rowAmount, rowDescription, rowDocNumber, transactions, matches, m;
 		
-	newline = /\r?\n\t*/g;  // \r\n Windows, \n Linux/Mac (plus leading TABS)
+	newline = /\r?\n[\t ]*/g;  // \r\n Windows, \n Linux/Mac (plus leading TABS/spaces)
 	parsedData = [];
 	
 	rawData = rawData.replace(newline, ''); // one big line
 
-	transactions = rawData.match(/<BANKTRANLIST>(.*)<\/BANKTRANLIST>/);
-	if (transactions) {
-		transactions = transactions[1];
-	} else {
+	matches = rawData.match(/<STMTTRN>.*?<\/STMTTRN>/g);
+	if (!matches) {
 		return [];
 	}
-	
-	matches = transactions.match(/<STMTTRN>.*?<\/STMTTRN>/g);
-	
+
 	for (i = 0; i < matches.length; i++) {
 
 		rowDate = rowAmount = rowDocNumber = rowDescription = '';
 		
-		// <DTPOSTED>20090801080000
+		// <DTPOSTED>20090801080000 (OFX - Real)
+		// <DTPOSTED>20090211120000[-3:BRT]</DTPOSTED> (OFX - Caixa)
+		// <DTPOSTED>20090801 (OFC - Caixa)
 		m = matches[i].match(/<DTPOSTED>(\d\d\d\d)(\d\d)(\d\d)/);
 		if (m) {
 			rowDate = m[1] + '-' + m[2] + '-' + m[3];
@@ -76,6 +80,7 @@ function convertOFX(rawData) {
 		
 		// <TRNAMT>1234.00
 		// <TRNAMT>-1234.00
+		// <TRNAMT>-1234.00</TRNAMT>
 		m = matches[i].match(/<TRNAMT>(-?[\d.]+)/);
 		if (m) {
 			rowAmount = m[1];
@@ -83,15 +88,18 @@ function convertOFX(rawData) {
 			rowAmount = 'VALOR_INVÁLIDO';
 		}
 
-		// <CHECKNUM>0223456
-		m = matches[i].match(/<CHECKNUM>(\d+)/);
+		// <CHECKNUM>0223456 (OFX - Real)
+		// <CHECKNUM>0223456</CHECKNUM> (OFX - Caixa)
+		// <CHKNUM>0223456 (OFC - Caixa)
+		m = matches[i].match(/<(CHK|CHECK)NUM>(\d+)/);
 		if (m) {
-			rowDocNumber = m[1];
+			rowDocNumber = m[2];
 		} else {
 			rowDocNumber = 'NUMDOC_INVÁLIDO';
 		}
 
 		// <MEMO>CORRECAO POUPANCA
+		// <MEMO>CORRECAO POUPANCA</MEMO>
 		m = matches[i].match(/<MEMO>(.*?)[<]/);
 		if (m) {
 			rowDescription = m[1];
@@ -262,7 +270,7 @@ function convert() {
 		parsedData = convertMyMoneyLog(rawData);
 	} else if (mode == 'money97' || mode == 'money98' || mode == 'money99' || mode == 'quicken') {
 		parsedData = convertQIF(rawData, mode);
-	} else if (mode == 'ofx') {
+	} else if (mode == 'ofx' || mode == 'ofc') {
 		parsedData = convertOFX(rawData);
 	}
 	
@@ -289,6 +297,7 @@ function convert() {
 <p>De:
 	<select id="mode" onchange="convert();">
 		<option value="ofx">OFX</option>
+		<option value="ofc">OFC</option>
 		<option value="quicken">QIF — Quicken</option>
 		<option value="money97">QIF — MS Money 97</option>
 		<option value="money98">QIF — MS Money 98</option>
