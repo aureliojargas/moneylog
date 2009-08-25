@@ -370,3 +370,42 @@ table.chart tr.label {
 
 /* Minimum compatibility for IE5.5, IE6 */
 #content { _margin-top:0; }
+
+
+/* MoneyLog v3 Theme */
+/* Uncomment if you want to use it */
+/*
+body {
+	color:#555; background-color:#fff; }
+#help {
+	color:#515; background-color:#edf; }
+#toolbar {
+	color:#ddd; background-color:#444; }
+#toolbar a, #toolbar #report-nav a:hover, #fullscreen, #tagsArea #tagsLabel {
+	color:#c6f; }
+#toolbar a:hover, #fullscreen:hover {
+	color:#444; background-color:#c6f; }
+#toolbar #report-nav a:hover, #toolbar #report-nav a.active {
+	border-color:#c6f; }
+#tagsArea input[checked]+span {
+	color:#000; background:#c6f; border-color:#000; }
+#report td.row-count {
+	color:#aaa; background-color:#fff; }
+#report th:hover {
+	color:#000; background-color:#eee; }
+#report td, table.chart {
+	border-color:#ccc; }
+#report tr:hover td {
+	background-color:#edf; }
+#report tr.future {
+	background-color:#eee; }
+#report .neg {
+	color:#e33; }
+#report table.daily tr.total table.posneg {
+	color:#868; }
+#report table.daily tr.total {
+	background-color:#f8e8ff; }
+#report table.overview tr.total {
+	background-color:#f8e8ff; }
+*/
+
