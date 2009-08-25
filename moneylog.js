@@ -496,7 +496,7 @@ function loadWaitingDataFiles() {
 	
 	// There is another file to load? Schedule it 
 	if (waitingToLoad.length > 0) {
-		setTimeout(loadWaitingDataFiles, 500);
+		setTimeout(loadWaitingDataFiles, 100);
 	}
 }
 function loadSelectedFile() {
