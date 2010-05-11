@@ -138,6 +138,45 @@ var i18nDatabase = {
 		dateFormat: 'm/d/y',
 		centsSeparator: '.',
 		thousandSeparator: ','
+	},
+	ca: {
+		labelLastMonths: 'Només els Darrers:',
+		labelMonthPartials: 'Mostra els Parcials Mensuals',
+		labelFuture: 'Mostra les dades futures',
+		labelNoData: 'No hi ha dades.',
+		labelsDetailed: ['Data', 'Import', 'Etiquetes', 'Descripció', 'Balanç'],
+		labelsOverview: ['Període', 'Ingressos', 'Despeses', 'Parcials', 'Balanç'],
+		labelTotal: 'Total',
+		labelAverage: 'Mitja',
+		labelMinimum: 'Min',
+		labelMaximum: 'Max',
+		labelMonths: ['mes', 'mesos'],
+		labelRegex: 'regex',
+		labelNegate: 'nega-ho',
+		labelDaily: 'diari',
+		labelMonthly: 'mensual',
+		labelYearly: 'anual',
+		labelHelp: 'Ajuda',
+		labelReload: 'Carrega',
+		labelValueFilter: 'Valors Filtrats:',
+		labelPositive: 'positiu',
+		labelNegative: 'negatiu',
+		labelGreaterThan: 'més gran que',
+		labelLessThan: 'més petit que',
+		labelTagEmpty: 'BUIT',
+		labelTagGroup: 'Etiquetes de grup triades',
+		errorInvalidData: 'Hi ha un adada no vàlida a la línia ',
+		errorNoFieldSeparator: 'No separator found:',
+		errorTooManySeparators: 'Hi ha masses separadors',
+		errorInvalidDate: 'La data no és vàlida:',
+		errorInvalidAmount: "L'import no és vàlid:",
+		appUrl: 'http://aurelio.net/soft/moneylog',
+		appDescription: 'Una pàgina web. Un programari.',
+		centsSeparator: ',',
+		thousandSeparator: '.',
+		
+		dateFormat: 'm/d/y',
+		msgLoading:''
 	}
 };
 // End of user Config
@@ -1557,6 +1596,7 @@ function init() {
 	// Hide all help content, then enable the current lang
 	document.getElementById('help-en').style.display = 'none';
 	document.getElementById('help-pt').style.display = 'none';
+	document.getElementById('help-ca').style.display = 'none';
 	document.getElementById('help-' + lang).style.display = '';
 
 	// Mark current report as active (CSS)
