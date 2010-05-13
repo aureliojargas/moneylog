@@ -584,6 +584,7 @@ function readData() {
 	if (oneFile) {
 		rawData = document.getElementById('data').innerHTML;
 	} else {
+		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
 		iframeDoc = document.getElementById('dataFrame').contentWindow.document;
 		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
 	}
