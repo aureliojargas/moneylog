@@ -174,9 +174,9 @@ var i18nDatabase = {
 		appDescription: 'Una pàgina web. Un programari.',
 		centsSeparator: ',',
 		thousandSeparator: '.',
-		
-		dateFormat: 'm/d/y',
-		msgLoading:''
+	
+		dateFormat: 'd-m-y',
+		msgLoading: 'S\'està carregant %s...'
 	}
 };
 // End of user Config
