@@ -63,6 +63,7 @@ var dataPatterns = {
 
 // Internationalisation (i18n) - Screen Labels and formatting
 var i18nDatabase = {
+	defaultLanguage: 'en',
 	pt: {
 		labelLastMonths: 'Somente Recentes:',
 		labelMonthPartials: 'Mostrar Parciais Mensais',
@@ -174,9 +175,26 @@ var i18nDatabase = {
 		appDescription: 'Una pàgina web. Un programari.',
 		centsSeparator: ',',
 		thousandSeparator: '.',
-	
 		dateFormat: 'd-m-y',
-		msgLoading: 'S\'està carregant %s...'
+		msgLoading: "S'està carregant %s..."
+	},
+	getLanguage: function(lang) {
+		var defaultLang = this.defaultLanguage;
+		if (defaultLang != lang) {
+			if (this[lang]) {
+				// check if all attributes from 'defaultLang' are in 'lang'
+				// if not, copy from 'defaultLang'
+				for (phrase in this[defaultLang]) {
+					if (!this[lang][phrase] || this[lang][phrase].length == 0) {
+						this[lang][phrase] = this[defaultLang][phrase];
+					}
+				}
+			} else {
+				// unknown lang, show default instead
+				lang = defaultLang;
+			}
+		}
+		return this[lang];
 	}
 };
 // End of user Config
@@ -1548,7 +1566,7 @@ function valueFilterChanged() {
 function init() {
 	
 	// Load the i18n messages (must be the first)
-	i18n = i18nDatabase[lang];
+	i18n = i18nDatabase.getLanguage(lang);
 
 	setCurrentDate();
 	populateMonthsCombo();
