@@ -1565,6 +1565,7 @@ function valueFilterChanged() {
 /////////////////////////////////////////////////////////////////////
 
 function init() {
+	var helpLang;
 	
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
@@ -1612,8 +1613,9 @@ function init() {
 	document.getElementById('sitelink'  ).title = i18n.appDescription;
 	document.getElementById('sitelink'  ).href  = i18n.appUrl;
 
-	// Enable the current lang help (others are hidden in CSS)
-	document.getElementById('help-' + lang).style.display = 'block';
+	// Enable the current (or default) lang help - others are hidden in CSS
+	helpLang = (document.getElementById('help-' + lang)) ? lang : i18nDatabase.defaultLanguage;
+	document.getElementById('help-' + helpLang).style.display = 'block';
 
 	// Mark current report as active (CSS)
 	document.getElementById(reportType).className = 'active';
