@@ -203,6 +203,9 @@ label,
 #help ul ul {
 	margin-top:0;
 }
+#help div {
+	display:none; /* All langs hidden, js activate the correct */
+}
 
 /* ---------------------------------------------- Data */
 

@@ -1593,11 +1593,8 @@ function init() {
 	document.getElementById('sitelink'  ).title = i18n.appDescription;
 	document.getElementById('sitelink'  ).href  = i18n.appUrl;
 
-	// Hide all help content, then enable the current lang
-	document.getElementById('help-en').style.display = 'none';
-	document.getElementById('help-pt').style.display = 'none';
-	document.getElementById('help-ca').style.display = 'none';
-	document.getElementById('help-' + lang).style.display = '';
+	// Enable the current lang help (others are hidden in CSS)
+	document.getElementById('help-' + lang).style.display = 'block';
 
 	// Mark current report as active (CSS)
 	document.getElementById(reportType).className = 'active';
