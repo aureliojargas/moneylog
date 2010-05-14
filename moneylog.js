@@ -179,13 +179,14 @@ var i18nDatabase = {
 		msgLoading: "S'està carregant %s..."
 	},
 	getLanguage: function(lang) {
-		var defaultLang = this.defaultLanguage;
+		var phrase, defaultLang = this.defaultLanguage;
+		
 		if (defaultLang != lang) {
 			if (this[lang]) {
 				// check if all attributes from 'defaultLang' are in 'lang'
 				// if not, copy from 'defaultLang'
 				for (phrase in this[defaultLang]) {
-					if (!this[lang][phrase] || this[lang][phrase].length == 0) {
+					if (!this[lang][phrase] || this[lang][phrase].length === 0) {
 						this[lang][phrase] = this[defaultLang][phrase];
 					}
 				}
