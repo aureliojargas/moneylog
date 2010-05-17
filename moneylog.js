@@ -12,7 +12,7 @@
 *
 *********************************************************************/
 // Program interface
-var lang = 'pt';                  // 'pt' or 'en' for Portuguese or English
+var lang = 'pt';                  // 'pt' for Portuguese, 'en' for English, 'ca' for Catalão, 'es' for Spanish (Argentina)
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
@@ -178,6 +178,44 @@ var i18nDatabase = {
 		dateFormat: 'd-m-y',
 		msgLoading: "S'està carregant %s..."
 	},
+        es: {
+                labelLastMonths: 'Solo recientes:',
+                labelMonthPartials: 'Mostrar Parciales Mensuales',
+                labelFuture: 'Mostrar Información Futura',
+                labelNoData: 'Sin información.',
+                labelsDetailed: ['Fecha', 'Monto', 'Etiquetas', 'Descripción', 'Balance'],
+                labelsOverview: ['Período', 'Entrada', 'Gastos', 'Saldo', 'Balance'],
+                labelTotal: 'Total',
+                labelAverage: 'Promedio',
+                labelMinimum: 'Min',
+                labelMaximum: 'Max',
+                labelMonths: ['mes', 'meses'],
+                labelRegex: 'regex',
+                labelNegate: 'negar',
+                labelDaily: 'diario',
+                labelMonthly: 'mensual',
+                labelYearly: 'anual',
+                labelHelp: 'Ayuda',
+                labelReload: 'Recargar',
+                labelValueFilter: 'Filtrar Valores:',
+                labelPositive: 'positivo',
+                labelNegative: 'negativo',
+                labelGreaterThan: 'mayor que',
+                labelLessThan: 'menor que',
+                labelTagEmpty: 'Vacío',
+                labelTagGroup: 'Unir etiquetas seleccionadas',
+                errorInvalidData: 'Información invalida en la línea ',
+                errorNoFieldSeparator: 'No se encontraron separadores:',
+                errorTooManySeparators: 'Demasiados separadores',
+                errorInvalidDate: 'Fecha invalida:',
+                errorInvalidAmount: 'Cantidad invalida:',
+                msgLoading: 'Cargando %s...',
+                appUrl: 'http://aurelio.net/soft/moneylog',
+                appDescription: 'Una página web. Un software.',
+                dateFormat: 'm/d/a', // <- troquei /y (year) por /a (año) mais não sei si deveria ter feito isso
+                centsSeparator: ',',
+                thousandSeparator: '.'
+        },
 	getLanguage: function(lang) {
 		var phrase, defaultLang = this.defaultLanguage;
 		
