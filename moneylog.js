@@ -12,7 +12,7 @@
 *
 *********************************************************************/
 // Program interface
-var lang = 'pt';                  // 'pt' for Portuguese, 'en' for English, 'ca' for Catalan, 'es' for Spanish (Argentina)
+var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
