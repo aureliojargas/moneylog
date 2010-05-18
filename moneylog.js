@@ -12,7 +12,7 @@
 *
 *********************************************************************/
 // Program interface
-var lang = 'pt';                  // 'pt' for Portuguese, 'en' for English, 'ca' for Catalão, 'es' for Spanish (Argentina)
+var lang = 'pt';                  // 'pt' for Portuguese, 'en' for English, 'ca' for Catalan, 'es' for Spanish (Argentina)
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
@@ -212,7 +212,7 @@ var i18nDatabase = {
                 msgLoading: 'Cargando %s...',
                 appUrl: 'http://aurelio.net/soft/moneylog',
                 appDescription: 'Una página web. Un software.',
-                dateFormat: 'm/d/a', // <- troquei /y (year) por /a (año) mais não sei si deveria ter feito isso
+                dateFormat: 'm/d/y',
                 centsSeparator: ',',
                 thousandSeparator: '.'
         },
