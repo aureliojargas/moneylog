@@ -1017,7 +1017,7 @@ function applyTags(theData) {
 /////////////////////////////////////////////////////////////////////
 
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartBars, chartLabels, chartCol, chartRoof, chartBarSize, chartBarLabel, chartBarClass;
+	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartBars, chartLabels, chartCol, chartRoof, chartBarSize, chartBarLabel, chartBarValue, chartBarClass;
 
 	results = [];
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
@@ -1163,7 +1163,8 @@ function showOverview() {
 				z = overviewData[i];
 				chartBarSize = parseInt(Math.abs(z[chartCol]) * 100 / chartRoof, 10);
 				chartBarLabel = prettyBarLabel(z[chartCol]);
-				chartBars.push([chartBarLabel, chartBarSize]);
+				chartBarValue = prettyFloat(z[chartCol], true);
+				chartBars.push([chartBarLabel, chartBarSize, chartBarValue]);
 				chartLabels.push(z[0].replace('-', '<br>')); // date
 			}
 		
@@ -1176,7 +1177,7 @@ function showOverview() {
 				chartBarClass = (chartBars[i][0].substring(0, 1) == '-') ? 'negbar' : 'posbar';
 				chart.push('<td class="bar">');
 				if (showChartBarLabel) {
-					chart.push('<span class="label">' + chartBars[i][0] + '<\/span>');
+					chart.push('<span class="label" title="' + chartBars[i][2] + '">' + chartBars[i][0] + '<\/span>');
 				}
 				chart.push('<div class="bar ' + chartBarClass + '" style="height:' + chartBars[i][1] + 'px"><\/div>');
 				chart.push('</td>');
