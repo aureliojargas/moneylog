@@ -12,7 +12,7 @@
 *
 *********************************************************************/
 // Program interface
-var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
+var lang = 'es';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
@@ -180,8 +180,8 @@ var i18nDatabase = {
 	},
 	es: {
 		labelLastMonths: 'Solo recientes:',
-		labelMonthPartials: 'Mostrar Parciales Mensuales',
-		labelFuture: 'Mostrar Información Futura',
+		labelMonthPartials: 'Mostrar Parcial Mensual',
+		labelFuture: 'Mostrar Transacciones Futuras',
 		labelNoData: 'Sin información.',
 		labelsDetailed: ['Fecha', 'Monto', 'Etiquetas', 'Descripción', 'Balance'],
 		labelsOverview: ['Período', 'Entrada', 'Gastos', 'Saldo', 'Balance'],
