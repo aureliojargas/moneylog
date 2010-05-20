@@ -212,7 +212,7 @@ var i18nDatabase = {
 		msgLoading: 'Cargando %s...',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'Una página web. Un software.',
-		dateFormat: 'm/d/y',
+		dateFormat: 'd/m/y',
 		centsSeparator: ',',
 		thousandSeparator: '.'
 	},
