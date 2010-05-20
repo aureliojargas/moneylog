@@ -201,7 +201,7 @@ var i18nDatabase = {
 		labelPositive: 'positivos',
 		labelNegative: 'negativos',
 		labelGreaterThan: 'mayores a',
-		labelLessThan: 'menores de',
+		labelLessThan: 'menores a',
 		labelTagEmpty: 'Vacío',
 		labelTagGroup: 'Unir conceptos seleccionados',
 		errorInvalidData: 'Información invalida en la línea ',
