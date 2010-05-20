@@ -184,7 +184,7 @@ var i18nDatabase = {
 		labelFuture: 'Mostrar Transacciones Futuras',
 		labelNoData: 'Sin información.',
 		labelsDetailed: ['Fecha', 'Monto', 'Concepto', 'Descripción', 'Balance'],
-		labelsOverview: ['Período', 'Ingresos', 'Gastos', 'Saldo', 'Balance'],
+		labelsOverview: ['Período', 'Ingresos', 'Egresos', 'Saldo', 'Balance'],
 		labelTotal: 'Total',
 		labelAverage: 'Promedio',
 		labelMinimum: 'Min',
