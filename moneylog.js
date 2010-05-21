@@ -1774,8 +1774,10 @@ function init() {
 	document.getElementById('editorsave'         ).innerHTML = i18n.labelSave;
 	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelsDetailed[2] + ':'; // Tags:
 	document.getElementById('sitelink'           ).innerHTML = appName;
-	document.getElementById('sitelink'  ).title = i18n.appDescription;
+	
+	// Set interface tooltips
 	document.getElementById('sitelink'  ).href  = i18n.appUrl;
+	document.getElementById('sitelink'  ).title = i18n.appDescription;
 	document.getElementById('helpbutton').title = i18n.labelHelp;
 	document.getElementById('reload'    ).title = i18n.labelReload;
 
@@ -1798,30 +1800,30 @@ function init() {
 	}
 	
 	// Add event handlers
-	document.getElementById('fullscreen').onclick = toggleFullScreen;
-	document.getElementById('d').onclick = changeReport;
-	document.getElementById('m').onclick = changeReport;
-	document.getElementById('y').onclick = changeReport;
-	document.getElementById('optlastmonths').onclick = toggleLastMonths;
-	document.getElementById('lastmonths').onchange = lastMonthsChanged;
-	document.getElementById('optvaluefilter').onclick = showReport;
-	document.getElementById('valuefilter').onchange = valueFilterChanged;
-	document.getElementById('valuefilterarg').onkeyup = showReport;
-	document.getElementById('optfuture').onclick = toggleFuture;
-	document.getElementById('optmonthly').onclick = toggleMonthly;
-	document.getElementById('helpbutton').onclick = toggleHelp;
-	document.getElementById('filter').onkeyup = showReport;
-	document.getElementById('optregex').onclick = showReport;
-	document.getElementById('optnegate').onclick = showReport;
-	document.getElementById('datafiles').onchange = loadSelectedFile;
-	document.getElementById('reload').onclick = loadSelectedFile;
-	document.getElementById('tagMultiAllCheck').onclick = showReport;
-	document.getElementById('chartcol').onchange = showReport;
+	document.getElementById('fullscreen'      ).onclick  = toggleFullScreen;
+	document.getElementById('d'               ).onclick  = changeReport;
+	document.getElementById('m'               ).onclick  = changeReport;
+	document.getElementById('y'               ).onclick  = changeReport;
+	document.getElementById('optlastmonths'   ).onclick  = toggleLastMonths;
+	document.getElementById('lastmonths'      ).onchange = lastMonthsChanged;
+	document.getElementById('optvaluefilter'  ).onclick  = showReport;
+	document.getElementById('valuefilter'     ).onchange = valueFilterChanged;
+	document.getElementById('valuefilterarg'  ).onkeyup  = showReport;
+	document.getElementById('optfuture'       ).onclick  = toggleFuture;
+	document.getElementById('optmonthly'      ).onclick  = toggleMonthly;
+	document.getElementById('helpbutton'      ).onclick  = toggleHelp;
+	document.getElementById('filter'          ).onkeyup  = showReport;
+	document.getElementById('optregex'        ).onclick  = showReport;
+	document.getElementById('optnegate'       ).onclick  = showReport;
+	document.getElementById('datafiles'       ).onchange = loadSelectedFile;
+	document.getElementById('reload'          ).onclick  = loadSelectedFile;
+	document.getElementById('tagMultiAllCheck').onclick  = showReport;
+	document.getElementById('chartcol'        ).onchange = showReport;
 	if (isOnline) {
-		document.getElementById('editoropen').onclick = editorOn;
+		document.getElementById('editoropen' ).onclick = editorOn;
 		document.getElementById('editorclose').onclick = editorOff;
-		document.getElementById('editorsave').onclick = saveLocalData;
-		document.getElementById('editordata')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
+		document.getElementById('editorsave' ).onclick = saveLocalData;
+		document.getElementById('editordata' )[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 	}
 	
 	// Apply user defaults (this code must be after event handlers adding)
