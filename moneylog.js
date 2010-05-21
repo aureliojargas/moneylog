@@ -1767,6 +1767,7 @@ function init() {
 	document.getElementById('editoropen'         ).innerHTML = i18n.labelEdit;
 	document.getElementById('editorclose'        ).innerHTML = i18n.labelClose;
 	document.getElementById('editorsave'         ).innerHTML = i18n.labelSave;
+	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelsDetailed[2] + ':'; // Tags:
 	document.getElementById('sitelink'           ).innerHTML = appName;
 	document.getElementById('sitelink'  ).title = i18n.appDescription;
 	document.getElementById('sitelink'  ).href  = i18n.appUrl;
