@@ -713,6 +713,7 @@ function loadSelectedFile() {
 	} else {
 		loadDataFile(filePath);
 	}
+	return false; // cancel default link action
 }
 
 function readData() {
@@ -1569,7 +1570,8 @@ function sortCol(index, isOverview) {
 
 function changeReport(el) {
 	var oldType, newType;
-	
+
+	el = this;
 	oldType = reportType;
 	newType = el.id;
 	
@@ -1599,11 +1601,14 @@ function changeReport(el) {
 	overviewData = [];
 	updateToolbar();
 	showReport();
+	
+	return false; // cancel default link action
 }
 
 function iframeLoaded(el) {
 	// Note: This function is attached to the iframe onLoad event.
 
+	el = this;
 	// Discard the first iframe load, it's always blank, on the initial page load.
 	// The other loads are for real.
 	if (typeof el.loadCount == 'undefined') {
@@ -1670,6 +1675,7 @@ function toggleFuture() {
 function toggleHelp() {
 	var el = document.getElementById('help');
 	el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+	return false; // cancel default link action
 }
 
 function toggleLastMonths() {
@@ -1793,6 +1799,26 @@ function init() {
 	}
 	
 	// Add event handlers
+	document.getElementById('fullscreen').onclick = toggleFullScreen;
+	document.getElementById('d').onclick = changeReport;
+	document.getElementById('m').onclick = changeReport;
+	document.getElementById('y').onclick = changeReport;
+	document.getElementById('optlastmonths').onclick = toggleLastMonths;
+	document.getElementById('lastmonths').onchange = lastMonthsChanged;
+	document.getElementById('optvaluefilter').onclick = showReport;
+	document.getElementById('valuefilter').onchange = valueFilterChanged;
+	document.getElementById('valuefilterarg').onkeyup = showReport;
+	document.getElementById('optfuture').onclick = toggleFuture;
+	document.getElementById('optmonthly').onclick = toggleMonthly;
+	document.getElementById('helpbutton').onclick = toggleHelp;
+	document.getElementById('filter').onkeyup = showReport;
+	document.getElementById('optregex').onclick = showReport;
+	document.getElementById('optnegate').onclick = showReport;
+	document.getElementById('datafiles').onchange = loadSelectedFile;
+	document.getElementById('reload').onclick = loadSelectedFile;
+	document.getElementById('tagMultiAllCheck').onclick = showReport;
+	document.getElementById('chartcol').onchange = showReport;
+	document.getElementById('dataFrame').onload = iframeLoaded;
 	if (isOnline) {
 		document.getElementById('editoropen').onclick = editorOn;
 		document.getElementById('editorclose').onclick = editorOff;
@@ -1800,7 +1826,7 @@ function init() {
 		document.getElementById('editordata')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 	}
 	
-	// Apply user defaults
+	// Apply user defaults (this code must be after event handlers adding)
 	if (defaultLastMonths)    { document.getElementById('optlastmonths').checked = true; }
 	if (defaultMonthPartials) { document.getElementById('optmonthly'   ).checked = true; }
 	if (defaultFuture)        { document.getElementById('optfuture'    ).checked = true; }
