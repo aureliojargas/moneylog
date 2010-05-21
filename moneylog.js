@@ -234,10 +234,10 @@ var i18nDatabase = {
 		centsSeparator: ',',
 		thousandSeparator: '.'
 	},
-	getLanguage: function(lang) {
+	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
 		
-		if (defaultLang != lang) {
+		if (defaultLang !== lang) {
 			if (this[lang]) {
 				// check if all attributes from 'defaultLang' are in 'lang'
 				// if not, copy from 'defaultLang'
@@ -609,7 +609,7 @@ function saveLocalData() {
 }
 function loadLocalData() {
 	// first time using localStorage (or empty), load default data from #data (PRE)
-	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() == "") {
+	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
 		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
 	}
 	document.getElementById('editordata').value = localStorage.getItem(localStorageKey);
@@ -705,7 +705,7 @@ function loadSelectedFile() {
 	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
 
 	// We will load a single file or all of them?
-	if (filePath == '*') {		
+	if (filePath === '*') {		
 		waitingToLoad = dataFiles.removePattern('*');
 		if (waitingToLoad.length > 0) {
 			loadWaitingDataFiles();
@@ -760,7 +760,7 @@ function parseData() {
 		fields = rows[i].split(dataFieldSeparator);
 
 		// Error: rows with no separator
-		if (fields.length == 1) {
+		if (fields.length === 1) {
 			invalidData(
 				lineno,
 				i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
@@ -870,7 +870,7 @@ function parseData() {
 		///////////////////////////////////////////////////////////// Tags + Description
 
 		// Parse tags
-		if (rowText.indexOf(dataTagTerminator) != -1) {
+		if (rowText.indexOf(dataTagTerminator) !== -1) {
 
 			// Get tags
 			// Note: tag terminator in description is allowed
@@ -912,7 +912,7 @@ function filterData() {
 	firstDate = 0;
 	filteredData = [];
 		
-	if (document.getElementById('optlastmonths').checked && reportType != 'y') {
+	if (document.getElementById('optlastmonths').checked && reportType !== 'y') {
 		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
 	}
 	
@@ -920,7 +920,7 @@ function filterData() {
 	showFuture = document.getElementById('optfuture').checked;
 	
 	// Get filters data for the detailed report
-	if (reportType == 'd') {
+	if (reportType === 'd') {
 		filter = document.getElementById('filter').value;
 		isRegex = document.getElementById('optregex').checked;
 		isNegated = document.getElementById('optnegate').checked;
@@ -972,13 +972,13 @@ function filterData() {
 
 		// Apply value filter
 		if (valueFilter) {
-			if (valueFilter == '+' && thisValue < 0) { continue; }
-			if (valueFilter == '-' && thisValue >= 0) { continue; }
-			if (valueFilter == '>' && thisValue <= valueFilterArg) { continue; }
-			if (valueFilter == '<' && thisValue >= valueFilterArg) { continue; }
-			if (valueFilter == '=' && thisValue != valueFilterArg) { continue; }
-			if (valueFilter == '>=' && thisValue < valueFilterArg) { continue; }
-			if (valueFilter == '<=' && thisValue > valueFilterArg) { continue; }
+			if (valueFilter === '+' && thisValue < 0) { continue; }
+			if (valueFilter === '-' && thisValue >= 0) { continue; }
+			if (valueFilter === '>' && thisValue <= valueFilterArg) { continue; }
+			if (valueFilter === '<' && thisValue >= valueFilterArg) { continue; }
+			if (valueFilter === '=' && thisValue != valueFilterArg) { continue; }
+			if (valueFilter === '>=' && thisValue < valueFilterArg) { continue; }
+			if (valueFilter === '<=' && thisValue > valueFilterArg) { continue; }
 		}
 
 		// Search filter firewall - Will this line pass it?
@@ -986,7 +986,7 @@ function filterData() {
 			if (isRegex) {
 				filterPassed = filter.test(parsedData[i].join('\t'));
 			} else {
-				filterPassed = (parsedData[i].join('\t').toLowerCase().indexOf(filter) != -1);
+				filterPassed = (parsedData[i].join('\t').toLowerCase().indexOf(filter) !== -1);
 			}
 			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) {
 				continue;
@@ -1157,7 +1157,7 @@ function showOverview() {
 				// rowDescription = theData[i][3]; 
 
 				// rowDate.slice() size, to extract 2000 or 2000-01
-				dateSize = (reportType == 'y') ? 4 : 7;
+				dateSize = (reportType === 'y') ? 4 : 7;
 				
 				// First row, just save the month/year date
 				if (i === 0) {
@@ -1276,7 +1276,7 @@ function showOverview() {
 			// First line is for the bars (label at top)
 			chart.push('<tr>');
 			for (i = 0; i < chartBars.length; i++) {
-				chartBarClass = (chartBars[i][0].substring(0, 1) == '-') ? 'negbar' : 'posbar';
+				chartBarClass = (chartBars[i][0].substring(0, 1) === '-') ? 'negbar' : 'posbar';
 				chart.push('<td class="bar">');
 				if (showChartBarLabel) {
 					chart.push('<span class="label" title="' + chartBars[i][2] + '">' + chartBars[i][0] + '<\/span>');
@@ -1437,7 +1437,7 @@ function showDetailed() {
 }
 
 function showReport() {
-	if (reportType == 'd') {
+	if (reportType === 'd') {
 		showDetailed();
 	} else {
 		showOverview();
@@ -1506,7 +1506,7 @@ function updateToolbar() {
 	unhide = [];
 
 	// Daily
-	if (reportType == 'd') {
+	if (reportType === 'd') {
 		add = ['tagsArea'];
 		remove = ['charts'];
 		unhide = [
@@ -1516,7 +1516,7 @@ function updateToolbar() {
 			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
 		];
 	// Monthly
-	} else if (reportType == 'm') {
+	} else if (reportType === 'm') {
 		add = ['charts'];
 		remove = ['tagsArea'];
 		hide = [
@@ -1528,7 +1528,7 @@ function updateToolbar() {
 			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
 		];
 	// Yearly
-	} else if (reportType == 'y') {
+	} else if (reportType === 'y') {
 		add = ['charts'];
 		remove = ['tagsArea'];
 		hide = [
@@ -1580,7 +1580,7 @@ function changeReport(el) {
 	//// Save / restore information
 	//
 	// From Daily to Monthly/Yearly
-	if (oldType == 'd' && newType != 'd') {
+	if (oldType === 'd' && newType !== 'd') {
 		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
 		document.getElementById('valuefilterarg').style.visibility = 'hidden';
 		oldSortColIndex = sortColIndex;
@@ -1589,7 +1589,7 @@ function changeReport(el) {
 		sortColRev = false;
 	//
 	// From Monthly/Yearly to Daily
-	} else if (newType == 'd' && oldType != 'd') {
+	} else if (newType === 'd' && oldType !== 'd') {
 		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
@@ -1650,9 +1650,9 @@ function toggleFullScreen() {
 	// So we need this silly DIV wrapper so things work as expected.
 	// The only browser who got it right without the wrapper was... IE7/8 (surprise!)
 	
-	if (toolbar.style.display == 'none') {
+	if (toolbar.style.display === 'none') {
 		toolbar.style.display = 'block';
-		if (reportType == 'd') {
+		if (reportType === 'd') {
 			tagbar.style.display = 'block';			
 		}
 		content.style.marginTop = '8em';
@@ -1669,7 +1669,7 @@ function toggleFuture() {
 
 function toggleHelp() {
 	var el = document.getElementById('help');
-	el.style.display = (el.style.display == 'block') ? 'none' : 'block';
+	el.style.display = (el.style.display === 'block') ? 'none' : 'block';
 }
 
 function toggleLastMonths() {
@@ -1808,7 +1808,7 @@ function init() {
 	document.getElementById('filter').value = defaultSearch;
 
 	// User choose other default report, let's update the toolbar accordingly
-	if (reportType != 'd') {
+	if (reportType !== 'd') {
 		updateToolbar();
 	}
 	
