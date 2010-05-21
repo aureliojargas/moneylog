@@ -48,6 +48,17 @@ label,
 	vertical-align:middle;
 }
 
+/* ---------------------------------------------- Error */
+#error {
+	display:none;
+	margin:14em 10% 4em 10%;
+	padding:10px;
+	border:3px solid red;
+	background-color:yellow;
+	color:black;
+	line-height:140%;
+}
+
 /* ---------------------------------------------- Toolbar */
 
 #fullscreen {
@@ -212,6 +223,31 @@ label,
 #data,
 #dataFrame {
 	display:none;
+}
+
+/* ---------------------------------------------- Editor */
+
+#editoropen {
+	display:none;
+	position:fixed;
+	bottom:0;
+	right:0;
+	z-index:99;
+}
+#editor {
+	display:none;
+	position:fixed;
+	bottom:0;
+	right:0;
+	left:0;
+	background:#444; /* bg2 */
+	padding:0 10px 5px 10px;
+}
+#editor textarea {
+	width:100%;
+}
+#editor button {
+	float:right;
 }
 
 /* ---------------------------------------------- Report */

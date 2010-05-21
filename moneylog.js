@@ -1,3 +1,6 @@
+/*global window: false, localStorage: false */
+/*jslint browser: true, devel: true, onevar: true, undef: true, nomen: true, bitwise: true, immed: true */
+
 /*
 	moneylog.js
 	http://aurelio.net/moneylog
@@ -38,6 +41,11 @@ var showChartBarLabel = true;     // Show the labels above the bars?
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
 var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneFile=false)
+
+// localStorage allows editing in-place, saving your data on the browser (like cookies)
+var useLocalStorage = false;      // Turn ON localStorage support?
+var localStorageKey = 'moneylogData'; // Keyname for the localStorage database (don't change)
+
 // Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 
 // Data format
@@ -90,11 +98,16 @@ var i18nDatabase = {
 		labelLessThan: 'menor que',
 		labelTagEmpty: 'VAZIO',
 		labelTagGroup: 'Unir as tags escolhidas',
+		labelEdit: 'Editar',
+		labelClose: 'Fechar',
+		labelSave: 'Salvar',
 		errorInvalidData: 'Lançamento inválido na linha ',
 		errorNoFieldSeparator: 'Separador não encontrado:',
 		errorTooManySeparators: 'Há mais de 2 sepadarores',
 		errorInvalidDate: 'Data inválida:',
 		errorInvalidAmount: 'Valor inválido:',
+		errorNoLocalStorage: 'Ops, seu navegador não tem localStorage. O %s não vai funcionar.',
+		errorRequirements: 'Os requisitos mínimos são:',
 		msgLoading: 'Carregando %s...',
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appDescription: 'Uma página. Um programa.',
@@ -128,11 +141,16 @@ var i18nDatabase = {
 		labelLessThan: 'less than',
 		labelTagEmpty: 'EMPTY',
 		labelTagGroup: 'Group selected tags',
+		labelEdit: 'Edit',
+		labelClose: 'Close',
+		labelSave: 'Save',
 		errorInvalidData: 'Invalid data at line ',
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Too many separators',
 		errorInvalidDate: 'Invalid date:',
 		errorInvalidAmount: 'Invalid amount:',
+		errorNoLocalStorage: 'Sorry, your browser does not have localStorage support. %s will not work.',
+		errorRequirements: 'Minimum requirements:',
 		msgLoading: 'Loading %s...',
 		appUrl: 'http://aurelio.net/soft/moneylog',
 		appDescription: 'A webpage. A software.',
@@ -240,6 +258,7 @@ var i18nDatabase = {
 
 
 // Global vars
+var appName = 'Moneylog Experience ß';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
@@ -253,6 +272,8 @@ var parsedData = [];
 var overviewData = [];
 var waitingToLoad = [];
 var multiRawData = '';
+var isOpera = (window.opera) ? true : false;
+var isOnline = false;
 
 // The iframe loading occurs in parallel with the main execution, we need to know when it's done
 var iframeIsLoaded = true;
@@ -325,6 +346,10 @@ RegExp.escape = function (str) {
 //                              TOOLS
 /////////////////////////////////////////////////////////////////////
 
+function showError(title, msg) {
+	document.getElementById('error').style.display = 'block';
+	document.getElementById('error').innerHTML = '<h2>' + title + '<\/h2>' + msg;
+}
 function invalidData(lineno, message) {
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
@@ -445,6 +470,10 @@ function prettyBarLabel(n) {
 	return n.replace(/([km])0/, '$1'); // 2k0 > 2k
 }
 
+function array2ul(a) {
+	return '<ul><li>' + a.join('<\/li><li>') + '</li></ul>';
+}
+
 /////////////////////////////////////////////////////////////////////
 //                         REPORT HELPERS
 /////////////////////////////////////////////////////////////////////
@@ -557,6 +586,76 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 
 
 /////////////////////////////////////////////////////////////////////
+//                        DATA EDITOR
+/////////////////////////////////////////////////////////////////////
+
+function editorOn() {
+	// show editor, hide Edit button
+	document.getElementById('editor').style.display = 'block';
+	document.getElementById('editoropen').style.display = 'none';
+}
+function editorOff() {
+	// hide editor, show Edit button
+	document.getElementById('editor').style.display = 'none';
+	document.getElementById('editoropen').style.display = 'inline';
+}
+function saveLocalData() {
+	localStorage.setItem(localStorageKey, document.getElementById('editordata').value);
+	// reload report
+	resetData();
+	readData();
+	parseData();
+	showReport();
+}
+function loadLocalData() {
+	// first time using localStorage (or empty), load default data from #data (PRE)
+	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() == "") {
+		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
+	}
+	document.getElementById('editordata').value = localStorage.getItem(localStorageKey);
+}
+// Allows to insert TABs inside textarea
+// Opera bug: needs to be attached to onkeypress instead onkeydown
+// Original from: http://pallieter.org/Projects/insertTab/ (see <script> at page source)
+function insertTab(e)
+{
+	var kC, oS, sS, sE, o = this; // aurelio: make jslint happy
+
+	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
+	o = this; // aurelio: removed this on calling
+	
+	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
+	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey)
+	{
+		oS = o.scrollTop; // Set the current scroll position.
+		if (o.setSelectionRange)
+		{
+			// For: Opera + FireFox + Safari
+			sS = o.selectionStart;
+			sE = o.selectionEnd;
+			o.value = o.value.substring(0, sS) + '\t' + o.value.substr(sE);
+			o.setSelectionRange(sS + 1, sS + 1);
+			o.focus();
+		}
+		else if (o.createTextRange)
+		{
+			// For: MSIE
+			document.selection.createRange().text = '\t'; // String.fromCharCode(9)
+			// o.onblur = function() { o.focus(); o.onblur = null; };
+		}
+		o.scrollTop = oS; // Return to the original scroll position.
+		if (e.preventDefault) {  // aurelio change
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+		return false; // Not needed, but good practice.
+	}
+	return true;
+}
+
+
+/////////////////////////////////////////////////////////////////////
 //                        DATA HANDLERS
 /////////////////////////////////////////////////////////////////////
 
@@ -570,7 +669,7 @@ function loadDataFile(filePath) {
 	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
 	resetData();
 	iframeIsLoaded = false;
-	document.getElementById("dataFrame").src = filePath;
+	document.getElementById('dataFrame').src = filePath;
 	// This triggers the onLoad iframe event, handled by iframeLoaded()
 }
 
@@ -619,8 +718,11 @@ function loadSelectedFile() {
 function readData() {
 	var iframeDoc;
 	
-	// Read raw data from #data block (<PRE>) or from external dataFile (<IFRAME><PRE>)
-	if (oneFile) {
+	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
+	if (useLocalStorage) {
+		loadLocalData();
+		rawData = document.getElementById('editordata').value;
+	} else if (oneFile) {
 		rawData = document.getElementById('data').innerHTML;
 	} else {
 		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
@@ -1359,7 +1461,7 @@ function populateChartColsCombo() {
 
 function populateDataFilesCombo() {
 	var el, i;
-	if (!oneFile) {
+	if (!oneFile && !useLocalStorage) {
 		el = document.getElementById('datafiles');
 		for (i = 0; i < dataFiles.length; i++) {
 			el.options[i] = new Option(dataFiles[i]);
@@ -1609,6 +1711,9 @@ function init() {
 	
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
+	
+	// Online mode uses localStorage
+	isOnline = useLocalStorage;
 
 	setCurrentDate();
 	populateMonthsCombo();
@@ -1628,13 +1733,24 @@ function init() {
 	highlightTags = highlightTags.strip().split(/\s+/);
 	
 	// Just show the files combo when there are 2 or more files
-	if (oneFile || dataFiles.length < 2) {
+	if (oneFile || useLocalStorage || dataFiles.length < 2) {
 		document.getElementById('datafiles').style.display = 'none';
 	}
 	
 	// Hide Reload button in oneFile mode. No iframe, so we can't reload.
-	if (oneFile) {
+	if (oneFile || useLocalStorage) {
 		document.getElementById('reload').style.visibility = 'hidden';
+	}
+
+	if (isOnline) {
+		appName = 'Moneylog Online';
+		i18n.appUrl = 'http://aurelio.net/moneylog/online';
+		
+		// The Edit button only appears in online mode
+		document.getElementById('editoropen').style.display = 'inline';
+		document.getElementById('operabug').style.paddingRight = i18n.labelEdit.length + 'em';
+	} else {
+		appName = appName.replace('og ', 'og<br>'); // dirty layout fix
 	}
 	
 	// Set interface labels
@@ -1648,10 +1764,14 @@ function init() {
 	document.getElementById('d'                  ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                  ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                  ).innerHTML = i18n.labelYearly;
-	document.getElementById('helpbutton').title = i18n.labelHelp;
-	document.getElementById('reload'    ).title = i18n.labelReload;
+	document.getElementById('editoropen'         ).innerHTML = i18n.labelEdit;
+	document.getElementById('editorclose'        ).innerHTML = i18n.labelClose;
+	document.getElementById('editorsave'         ).innerHTML = i18n.labelSave;
+	document.getElementById('sitelink'           ).innerHTML = appName;
 	document.getElementById('sitelink'  ).title = i18n.appDescription;
 	document.getElementById('sitelink'  ).href  = i18n.appUrl;
+	document.getElementById('helpbutton').title = i18n.labelHelp;
+	document.getElementById('reload'    ).title = i18n.labelReload;
 
 	// Enable the current (or default) lang help - others are hidden in CSS
 	helpLang = (document.getElementById('help-' + lang)) ? lang : i18nDatabase.defaultLanguage;
@@ -1659,6 +1779,25 @@ function init() {
 
 	// Mark current report as active (CSS)
 	document.getElementById(reportType).className = 'active';
+
+	// localStorage browser support check
+	if (useLocalStorage && !window.localStorage) {
+		document.getElementById('editoropen').style.display = 'none'; // hide button
+		showError(
+			i18n.errorNoLocalStorage.replace('%s', appName),
+			'<p>' + i18n.errorRequirements +
+			array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.5'.split(', '))
+		);
+		return; // abort
+	}
+	
+	// Add event handlers
+	if (isOnline) {
+		document.getElementById('editoropen').onclick = editorOn;
+		document.getElementById('editorclose').onclick = editorOff;
+		document.getElementById('editorsave').onclick = saveLocalData;
+		document.getElementById('editordata')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
+	}
 	
 	// Apply user defaults
 	if (defaultLastMonths)    { document.getElementById('optlastmonths').checked = true; }
@@ -1674,7 +1813,7 @@ function init() {
 	}
 	
 	// Everything is ok, time to read/parse/show the user data
-	if (oneFile) {
+	if (oneFile || useLocalStorage) {
 		readData();
 		parseData();
 		showReport();
@@ -1689,4 +1828,3 @@ function init() {
 }
 window.onload = init;
 
-/*jslint onevar: true, browser: true, undef: true, nomen: true, bitwise: true, immed: true */

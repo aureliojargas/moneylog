@@ -18,6 +18,7 @@ History/Histórico:
  	v2: Jan-Feb 2007 (english version on May/2007)
  	v3: Oct-Dec 2007
 	v4: Ago 2009
+	online: Mai 2010
 
 License/Licença:
 	MIT - http://en.wikipedia.org/wiki/MIT_license
@@ -54,7 +55,7 @@ You may change the styles if you know what you're doing.
 <table id="toolbar">
 <tr>
 <td class="left">
-	<a id="sitelink" href="#">MoneyLog<br>Experience β</a>
+	<a id="sitelink" href="#">MoneyLog</a>
 	
 	<!-- Report Type -->
 	<div id="report-nav">
@@ -310,6 +311,9 @@ You may change the styles if you know what you're doing.
 			<input type="hidden" id="tagCount" value="0">
 		</div> <!-- operabug -->
 	</div>
+	
+	<div id="error">
+	</div>
 
 	<!-- Report -->
 	<div id="report">
@@ -333,6 +337,14 @@ You may change the styles if you know what you're doing.
 	<p>Sorry. No iframes support detected, please use the all-in-one version.</p>
 	<p>Ops! Seu navegador não entende iframes. Use a versão tudo-em-um.</p>
 </iframe>
+
+<!-- Editor -->
+<button id="editoropen"></button>
+<div id="editor">
+	<button id="editorclose"></button>
+	<button id="editorsave"></button>
+	<textarea rows="10" id="editordata"></textarea>
+</div>
 
 <!-- tudo-em-um / all-in-one -->
 <pre id="data">

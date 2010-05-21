@@ -13,6 +13,7 @@
 #	tudo-em-um              # Embute tudo
 #	tudo-em-um css js txt   # Embute tudo
 #	tudo-em-um css js       # Não embute dados, vai usar TXT externo
+#	tudo-em-um online       # Gera a versão online
 #
 
 mode="css js txt"   # Any combination of css, js, txt
@@ -105,6 +106,24 @@ then
 else
 	change_script='$s/z/z/' # no changes
 fi
+
+# Online is a special case
+[ "$mode" = 'online' ] && {
+	
+	# Vanilla TXT, no instructions
+	insert_txt='$ r ../moneylog.txt'
+	
+	echo "$insert_css $insert_js $insert_txt" > sed_script
+
+	change_script='
+	# Remove config.js call
+	/^<script .* src="config.js"><\/script>/ d
+	
+	# Turn ON localStorage
+	/^var useLocalStorage = false;/ s/false/true/
+	/^var oneFile = true;/ s/true/false/
+	'
+}
 
 # Do it
 control_m=$(printf '\r');
