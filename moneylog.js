@@ -202,7 +202,7 @@ var i18nDatabase = {
 		labelNegative: 'negativos',
 		labelGreaterThan: 'mayores a',
 		labelLessThan: 'menores a',
-		labelTagEmpty: 'Vacío',
+		labelTagEmpty: 'VACÍOS',
 		labelTagGroup: 'Unir conceptos seleccionados',
 		errorInvalidData: 'Información invalida en la línea ',
 		errorNoFieldSeparator: 'No se encontraron separadores:',
