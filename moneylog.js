@@ -1786,7 +1786,7 @@ function init() {
 		showError(
 			i18n.errorNoLocalStorage.replace('%s', appName),
 			'<p>' + i18n.errorRequirements +
-			array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.5'.split(', '))
+			array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.50'.split(', '))
 		);
 		return; // abort
 	}
