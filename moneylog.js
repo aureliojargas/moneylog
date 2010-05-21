@@ -1608,7 +1608,6 @@ function changeReport(el) {
 function iframeLoaded(el) {
 	// Note: This function is attached to the iframe onLoad event.
 
-	el = this;
 	// Discard the first iframe load, it's always blank, on the initial page load.
 	// The other loads are for real.
 	if (typeof el.loadCount == 'undefined') {
@@ -1818,7 +1817,6 @@ function init() {
 	document.getElementById('reload').onclick = loadSelectedFile;
 	document.getElementById('tagMultiAllCheck').onclick = showReport;
 	document.getElementById('chartcol').onchange = showReport;
-	document.getElementById('dataFrame').onload = iframeLoaded;
 	if (isOnline) {
 		document.getElementById('editoropen').onclick = editorOn;
 		document.getElementById('editorclose').onclick = editorOff;
