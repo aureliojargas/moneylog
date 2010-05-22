@@ -299,7 +299,7 @@ var i18nDatabase = {
 		errorInvalidDate: 'Fecha invalida:',
 		errorInvalidAmount: 'Cantidad invalida:',
 		msgLoading: 'Cargando %s...',
-		helpFullScreen: 'Mostrar/Esconder encabezado y pié de página.',
+		helpFullScreen: 'Mostrar/Esconder encabezado y pie de página.',
 		helpReports: 'Reportes: diario, mensual y anual, con gráficas, promedios, balances y totales.',
 		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
 		helpValueFilter: 'Vea solo los valores positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
