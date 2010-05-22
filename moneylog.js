@@ -73,9 +73,29 @@ var dataPatterns = {
 var i18nDatabase = {
 	defaultLanguage: 'en',
 	pt: {
+		dateFormat: 'd/m/Y',
+		centsSeparator: ',',
+		thousandSeparator: '.',
+		appUrl: 'http://aurelio.net/moneylog/beta.html',
+		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
+		labelFullScreen: 'Bolinha',
+		labelReports: 'Extratos',
+		labelDaily: 'diário',
+		labelMonthly: 'mensal',
+		labelYearly: 'anual',
 		labelLastMonths: 'Somente Recentes:',
-		labelMonthPartials: 'Mostrar Parciais Mensais',
+		labelValueFilter: 'Somente Valores:',
+		labelPositive: 'positivo',
+		labelNegative: 'negativo',
+		labelGreaterThan: 'maior que',
+		labelLessThan: 'menor que',
 		labelFuture: 'Mostrar Lançamentos Futuros',
+		labelMonthPartials: 'Mostrar Parciais Mensais',
+		labelFilter: 'Caixa de pesquisa',
+		labelRegex: 'regex',
+		labelNegate: 'excluir',
+		labelHelp: 'Ajuda',
+		labelReload: 'Recarregar',
 		labelNoData: 'Nenhum lançamento.',
 		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição', 'Acumulado'],
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
@@ -84,18 +104,6 @@ var i18nDatabase = {
 		labelMinimum: 'Mínimo',
 		labelMaximum: 'Máximo',
 		labelMonths: ['mês', 'meses'],
-		labelRegex: 'regex',
-		labelNegate: 'excluir',
-		labelDaily: 'diário',
-		labelMonthly: 'mensal',
-		labelYearly: 'anual',
-		labelHelp: 'Ajuda',
-		labelReload: 'Recarregar',
-		labelValueFilter: 'Somente Valores:',
-		labelPositive: 'positivo',
-		labelNegative: 'negativo',
-		labelGreaterThan: 'maior que',
-		labelLessThan: 'menor que',
 		labelTagEmpty: 'VAZIO',
 		labelTagGroup: 'Unir as tags escolhidas',
 		labelEdit: 'Editar',
@@ -109,16 +117,47 @@ var i18nDatabase = {
 		errorNoLocalStorage: 'Ops, seu navegador não tem localStorage. O %s não vai funcionar.',
 		errorRequirements: 'Os requisitos mínimos são:',
 		msgLoading: 'Carregando %s...',
-		appUrl: 'http://aurelio.net/moneylog/beta.html',
-		appDescription: 'Uma página. Um programa.',
-		dateFormat: 'd/m/Y',
-		centsSeparator: ',',
-		thousandSeparator: '.'
+		helpFullScreen: 'Liga/desliga o modo limpo: aparece somente o extrato, sem as barras de ferramentas.',
+		helpReports: 'Extratos diário, mensal e anual, com gráficos, somatório, médias, mínimo, máximo e acumulado.',
+		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
+		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
+		helpFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
+		helpMonthPartials: 'Resumo do mês, com saldo mensal e acumulado, e totais de ganhos e gastos.',
+		helpFilter: 'Filtra os relatórios em tempo real, de acordo com o que você digita.',
+		helpRegex: 'Usa expressões regulares na caixa de pesquisa.',
+		helpNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
+		helpHelp: 'Mostra e esconde o texto de ajuda.',
+		helpReload: 'Recarrega somente os dados (só aparece quando se utiliza arquivo TXT externo).',
+		helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
+		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
+		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
+		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
+		helpSave: 'Salva os lançamentos que você alterou.'
 	},
 	en: {
+		dateFormat: 'm/d/y',
+		centsSeparator: '.',
+		thousandSeparator: ',',
+		appUrl: 'http://aurelio.net/soft/moneylog',
+		appDescription: 'Track your finances the practical way. Think simple!',
+		labelFullScreen: 'Dot',
+		labelReports: 'Reports',
+		labelDaily: 'daily',
+		labelMonthly: 'monthly',
+		labelYearly: 'yearly',
 		labelLastMonths: 'Recent Only:',
-		labelMonthPartials: 'Show Monthly Partials',
+		labelValueFilter: 'Filter Values:',
+		labelPositive: 'positive',
+		labelNegative: 'negative',
+		labelGreaterThan: 'greater than',
+		labelLessThan: 'less than',
 		labelFuture: 'Show Future Data',
+		labelMonthPartials: 'Show Monthly Partials',
+		labelFilter: 'Search field',
+		labelRegex: 'regex',
+		labelNegate: 'negate',
+		labelHelp: 'Help',
+		labelReload: 'Reload',
 		labelNoData: 'No data.',
 		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description', 'Balance'],
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
@@ -127,18 +166,6 @@ var i18nDatabase = {
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
 		labelMonths: ['month', 'months'],
-		labelRegex: 'regex',
-		labelNegate: 'negate',
-		labelDaily: 'daily',
-		labelMonthly: 'monthly',
-		labelYearly: 'yearly',
-		labelHelp: 'Help',
-		labelReload: 'Reload',
-		labelValueFilter: 'Filter Values:',
-		labelPositive: 'positive',
-		labelNegative: 'negative',
-		labelGreaterThan: 'greater than',
-		labelLessThan: 'less than',
 		labelTagEmpty: 'EMPTY',
 		labelTagGroup: 'Group selected tags',
 		labelEdit: 'Edit',
@@ -152,16 +179,46 @@ var i18nDatabase = {
 		errorNoLocalStorage: 'Sorry, your browser does not have localStorage support. %s will not work.',
 		errorRequirements: 'Minimum requirements:',
 		msgLoading: 'Loading %s...',
-		appUrl: 'http://aurelio.net/soft/moneylog',
-		appDescription: 'A webpage. A software.',
-		dateFormat: 'm/d/y',
-		centsSeparator: '.',
-		thousandSeparator: ','
+		helpFullScreen: 'Turns ON/OFF the clean mode: only the report is shown, with no toolbars.',
+		helpReports: 'Daily, monthly and yearly reports, with charts, balance and totals.',
+		helpLastMonths: 'See only the latest data, ignoring oldies.',
+		helpValueFilter: 'See only positive or negative values, or greater/lesser than some value.',
+		helpFuture: 'Shows future incoming and expenses.',
+		helpMonthPartials: 'Shows the monthly balance, with sums of your incoming and expenses on the period.',
+		helpFilter: 'Filter the reports in real time, as you type.',
+		helpRegex: 'Use regular expressions on the search field.',
+		helpNegate: 'Remove the search results from the report.',
+		helpHelp: 'Show/hide the help text.',
+		helpReload: 'Reload only the data, not the full page. This button only appears when using an external TXT file for data.',
+		helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
+		helpTagGroup: 'Show only the entries that have all the selected tags.',
+		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
+		helpClose: 'Close the editor (without saving!)',
+		helpSave: 'Save your data.'
 	},
 	ca: {
+		centsSeparator: ',',
+		thousandSeparator: '.',
+		dateFormat: 'd-m-y',
+		appDescription: 'Seguiu les vostres finances de manera pràctica. De forma simple!',
+		labelFullScreen: '',
+		labelReports: 'Informes',
+		labelDaily: 'diari',
+		labelMonthly: 'mensual',
+		labelYearly: 'anual',
 		labelLastMonths: 'Només els Darrers:',
-		labelMonthPartials: 'Mostra els Parcials Mensuals',
+		labelValueFilter: 'Valors Filtrats:',
+		labelPositive: 'positiu',
+		labelNegative: 'negatiu',
+		labelGreaterThan: 'més gran que',
+		labelLessThan: 'més petit que',
 		labelFuture: 'Mostra les dades futures',
+		labelMonthPartials: 'Mostra els Parcials Mensuals',
+		labelFilter: 'Camp de cerca',
+		labelRegex: 'regex',
+		labelNegate: 'nega-ho',
+		labelHelp: 'Ajuda',
+		labelReload: 'Carrega',
 		labelNoData: 'No hi ha dades.',
 		labelsDetailed: ['Data', 'Import', 'Etiquetes', 'Descripció', 'Balanç'],
 		labelsOverview: ['Període', 'Ingressos', 'Despeses', 'Parcials', 'Balanç'],
@@ -170,18 +227,6 @@ var i18nDatabase = {
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
 		labelMonths: ['mes', 'mesos'],
-		labelRegex: 'regex',
-		labelNegate: 'nega-ho',
-		labelDaily: 'diari',
-		labelMonthly: 'mensual',
-		labelYearly: 'anual',
-		labelHelp: 'Ajuda',
-		labelReload: 'Carrega',
-		labelValueFilter: 'Valors Filtrats:',
-		labelPositive: 'positiu',
-		labelNegative: 'negatiu',
-		labelGreaterThan: 'més gran que',
-		labelLessThan: 'més petit que',
 		labelTagEmpty: 'BUIT',
 		labelTagGroup: 'Etiquetes de grup triades',
 		errorInvalidData: 'Hi ha un adada no vàlida a la línia ',
@@ -189,17 +234,47 @@ var i18nDatabase = {
 		errorTooManySeparators: 'Hi ha masses separadors',
 		errorInvalidDate: 'La data no és vàlida:',
 		errorInvalidAmount: "L'import no és vàlid:",
-		appUrl: 'http://aurelio.net/soft/moneylog',
-		appDescription: 'Una pàgina web. Un programari.',
-		centsSeparator: ',',
-		thousandSeparator: '.',
-		dateFormat: 'd-m-y',
-		msgLoading: "S'està carregant %s..."
+		msgLoading: "S'està carregant %s...",
+		helpFullScreen: '',
+		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
+		helpLastMonths: 'Mostra només les dades més recents, omet les antigues.',
+		helpValueFilter: 'Mostra només els valors positius o negatius, o major / menor que un cert valor.',
+		helpFuture: 'Mostra els ingressos i despeses futures.',
+		helpMonthPartials: 'Mostra el saldo mensual, amb sumes dels vostres ingressos i despeses del període.',
+		helpFilter: 'Filtre dels informes en temps real, a mesura que escriu.',
+		helpRegex: 'Utilitza expressions regulars en el camp de cerca.',
+		helpNegate: "Eliminar els resultats de cerca de l'informe.",
+		helpHelp: "Mostra / oculta aquest text d'ajuda.",
+		helpReload: 'Actualitza només les dades, no la pàgina sencera. Aquest botó només apareix quan es fa servir un arxiu TXT de dades extern.',
+		helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
+		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
+		helpEdit: '',
+		helpClose: '',
+		helpSave: ''
 	},
 	es: {
+		dateFormat: 'd/m/Y',
+		centsSeparator: ',',
+		thousandSeparator: '.',
+		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
+		labelFullScreen: 'Punto',
+		labelReports: 'Reportes',
+		labelDaily: 'diario',
+		labelMonthly: 'mensual',
+		labelYearly: 'anual',
 		labelLastMonths: 'Ver solo últimos:',
-		labelMonthPartials: 'Mostrar Parcial Mensual',
+		labelValueFilter: 'Mostrar Valores:',
+		labelPositive: 'positivos',
+		labelNegative: 'negativos',
+		labelGreaterThan: 'mayores a',
+		labelLessThan: 'menores a',
 		labelFuture: 'Mostrar Transacciones Futuras',
+		labelMonthPartials: 'Mostrar Parcial Mensual',
+		labelFilter: 'Caja de búsqueda',
+		labelRegex: 'regex',
+		labelNegate: 'negar',
+		labelHelp: 'Ayuda',
+		labelReload: 'Recargar',
 		labelNoData: 'Sin información.',
 		labelsDetailed: ['Fecha', 'Monto', 'Concepto', 'Descripción', 'Balance'],
 		labelsOverview: ['Período', 'Ingresos', 'Egresos', 'Saldo', 'Balance'],
@@ -208,18 +283,6 @@ var i18nDatabase = {
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
 		labelMonths: ['mes', 'meses'],
-		labelRegex: 'regex',
-		labelNegate: 'negar',
-		labelDaily: 'diario',
-		labelMonthly: 'mensual',
-		labelYearly: 'anual',
-		labelHelp: 'Ayuda',
-		labelReload: 'Recargar',
-		labelValueFilter: 'Mostrar Valores:',
-		labelPositive: 'positivos',
-		labelNegative: 'negativos',
-		labelGreaterThan: 'mayores a',
-		labelLessThan: 'menores a',
 		labelTagEmpty: 'VACÍOS',
 		labelTagGroup: 'Unir conceptos seleccionados',
 		errorInvalidData: 'Información invalida en la línea ',
@@ -228,11 +291,22 @@ var i18nDatabase = {
 		errorInvalidDate: 'Fecha invalida:',
 		errorInvalidAmount: 'Cantidad invalida:',
 		msgLoading: 'Cargando %s...',
-		appUrl: 'http://aurelio.net/soft/moneylog',
-		appDescription: 'Una página web. Un software.',
-		dateFormat: 'd/m/Y',
-		centsSeparator: ',',
-		thousandSeparator: '.'
+		helpFullScreen: 'Ubicado en el margen superior izquierdo de la pantalla, sirve para mostrar/esconder el encabezado de la página.',
+		helpReports: 'Reportes: diario, mensual y anual, con gráficas, promedios, balances y totales.',
+		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
+		helpValueFilter: 'Vea solo los valores positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
+		helpFuture: 'Vea que transacciones y que gastos se encuentran agendados a futuro.',
+		helpMonthPartials: 'Vea el balance mensual, con el saldo mensual, el acumulado y totales de ingresos y gastos.',
+		helpFilter: 'Evalue los reportes en tiempo real a medida que los va tipeando.',
+		helpRegex: 'Use expresiones regulares en la caja de búsqueda.',
+		helpNegate: 'Invierte el criterio de búsqueda.',
+		helpHelp: 'Ubicado en el margen superior derecho de la pantalla, sirve para mostrar/esconder este texto de ayuda.',
+		helpReload: 'Recargar solo la información y no la página entera. Este botón solo aparecerá cuando se este utilizando un archivo TXT externo para almacenar la información.',
+		helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
+		helpTagGroup: 'Mostrar solo las entradas que contengan los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
+		helpEdit: '',
+		helpClose: '',
+		helpSave: ''
 	},
 	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
@@ -1759,27 +1833,41 @@ function init() {
 	}
 	
 	// Set interface labels
-	document.getElementById('optlastmonthslabel' ).innerHTML = i18n.labelLastMonths;
-	document.getElementById('optmonthlylabel'    ).innerHTML = i18n.labelMonthPartials;
-	document.getElementById('optfuturelabel'     ).innerHTML = i18n.labelFuture;
-	document.getElementById('optregexlabel'      ).innerHTML = i18n.labelRegex;
-	document.getElementById('optnegatelabel'     ).innerHTML = i18n.labelNegate;
-	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter;
-	document.getElementById('tagMultiAllLabel'   ).innerHTML = i18n.labelTagGroup;
+	document.getElementById('sitelink'           ).innerHTML = appName;
 	document.getElementById('d'                  ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                  ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                  ).innerHTML = i18n.labelYearly;
+	document.getElementById('optlastmonthslabel' ).innerHTML = i18n.labelLastMonths;
+	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter;
+	document.getElementById('optfuturelabel'     ).innerHTML = i18n.labelFuture;
+	document.getElementById('optmonthlylabel'    ).innerHTML = i18n.labelMonthPartials;
+	document.getElementById('optregexlabel'      ).innerHTML = i18n.labelRegex;
+	document.getElementById('optnegatelabel'     ).innerHTML = i18n.labelNegate;
+	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelsDetailed[2] + ':'; // Tags:
+	document.getElementById('tagMultiAllLabel'   ).innerHTML = i18n.labelTagGroup;
 	document.getElementById('editoropen'         ).innerHTML = i18n.labelEdit;
 	document.getElementById('editorclose'        ).innerHTML = i18n.labelClose;
 	document.getElementById('editorsave'         ).innerHTML = i18n.labelSave;
-	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelsDetailed[2] + ':'; // Tags:
-	document.getElementById('sitelink'           ).innerHTML = appName;
 	
 	// Set interface tooltips
-	document.getElementById('sitelink'  ).href  = i18n.appUrl;
-	document.getElementById('sitelink'  ).title = i18n.appDescription;
-	document.getElementById('helpbutton').title = i18n.labelHelp;
-	document.getElementById('reload'    ).title = i18n.labelReload;
+	document.getElementById('fullscreen'         ).title = i18n.helpFullScreen;
+	document.getElementById('sitelink'           ).href  = i18n.appUrl;
+	document.getElementById('sitelink'           ).title = i18n.appDescription;
+	document.getElementById('report-nav'         ).title = i18n.helpReports;
+	document.getElementById('optlastmonthslabel' ).title = i18n.helpLastMonths;
+	document.getElementById('optvaluefilterlabel').title = i18n.helpValueFilter;
+	document.getElementById('optfuturelabel'     ).title = i18n.helpFuture;
+	document.getElementById('optmonthlylabel'    ).title = i18n.helpMonthPartials;
+	document.getElementById('filter'             ).title = i18n.helpFilter;
+	document.getElementById('optregexlabel'      ).title = i18n.helpRegex;
+	document.getElementById('optnegatelabel'     ).title = i18n.helpNegate;
+	document.getElementById('helpbutton'         ).title = i18n.helpHelp;
+	document.getElementById('reload'             ).title = i18n.helpReload;
+	document.getElementById('tagsLabel'          ).title = i18n.helpTags;
+	document.getElementById('tagMultiAllLabel'   ).title = i18n.helpTagGroup;
+	document.getElementById('editoropen'         ).title = i18n.helpEdit;
+	document.getElementById('editorclose'        ).title = i18n.helpClose;
+	document.getElementById('editorsave'         ).title = i18n.helpSave;	
 
 	// Enable the current (or default) lang help - others are hidden in CSS
 	helpLang = (document.getElementById('help-' + lang)) ? lang : i18nDatabase.defaultLanguage;
