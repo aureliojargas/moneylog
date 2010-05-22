@@ -1,0 +1,51 @@
+# Cambie estos datos por los suyos, separando las columnas usando la tecla TAB
+# Repito: use la tecla TAB para separar las columnas, NO USE ESPACIOS EN BLANCO!
+# Consejo: verifique que su editor de textos no esté configurado para reemplazar tabulaciones por espacios en blanco!
+# La fecha debe ser ingresada en el formato AÑO-MES-DÍA
+
+2010-02-01	-100	Saldo inicial :(
+2010-02-15	-74,23	comida|
+2010-02-15	-1,99	nerd| Cuota del mouse 10/12
+2010-02-23	-39,90	regalos, libros| Libro "Horóscopo de los Duendes"
+
+2010-03-03	-342,59	regalos| Un Shrubbery
+2010-03-11	+30,00	Le gané una apuesta a Marcos
+2010-03-12	-35,00	regalos, nerd| Poster 3D en colores de Tux en Ascii Art
+2010-03-15	-1,99	nerd| Cuota del mouse 11/12
+2010-03-29	-95,67	comida|
+
+2010-04-12	-199,90	regalos| Segway usado en mercadolibre.com
+2010-04-15	-1,99	nerd| Cuota del mouse 12/12 (terminó!)
+
+2010-05-20	-10,00	Carnet del Club
+
+# Es posible dejar juntas todas las movimientos. El orden no importa en este caso
+
+2010-02-05	500	salario|
+2010-03-05	500	salario|
+2010-04-05	500	salario|
+2010-05-05	500	salario|
+
+2010-02-07	-25,00	luz|
+2010-03-07	-20,00	luz|
+2010-04-07	-29,00	luz|
+2010-05-07	-25,00	luz|
+
+2010-02-07	-20,00	agua|
+2010-03-07	-17,80	agua|
+2010-04-07	-32,37	agua|
+2010-05-07	-30,00	agua|
+
+# Movimientos Futuros!
+
+2010-12-31	+99,99	salario| Bono
+
+# Ingresos y Egresos en cuotas
+
+2010-05-05	-500/5	nerd| Netbook usado comprado en cuotas
+2010-11-25	100/2	regalos| Regalo de Navidad, mitad Nov., mitad Dic.
+
+# Ingresos y Egresos recurrentes
+
+2010-02-05	-200*6	alquiler| Alquiler de la casa (seis meses)
+2010-09-10	100*4	apuestas| Marcos me va a dar 100 pesos por mes hasta fin de año
