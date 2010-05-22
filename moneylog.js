@@ -72,68 +72,6 @@ var dataPatterns = {
 // Internationalisation (i18n) - Screen Labels and formatting
 var i18nDatabase = {
 	defaultLanguage: 'en',
-	pt: {
-		dateFormat: 'd/m/Y',
-		centsSeparator: ',',
-		thousandSeparator: '.',
-		appUrl: 'http://aurelio.net/moneylog/beta.html',
-		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
-		labelFullScreen: 'Bolinha',
-		labelReports: 'Extratos',
-		labelDaily: 'diário',
-		labelMonthly: 'mensal',
-		labelYearly: 'anual',
-		labelLastMonths: 'Somente Recentes:',
-		labelValueFilter: 'Somente Valores:',
-		labelPositive: 'positivo',
-		labelNegative: 'negativo',
-		labelGreaterThan: 'maior que',
-		labelLessThan: 'menor que',
-		labelFuture: 'Mostrar Lançamentos Futuros',
-		labelMonthPartials: 'Mostrar Parciais Mensais',
-		labelFilter: 'Caixa de pesquisa',
-		labelRegex: 'regex',
-		labelNegate: 'excluir',
-		labelHelp: 'Ajuda',
-		labelReload: 'Recarregar',
-		labelNoData: 'Nenhum lançamento.',
-		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição', 'Acumulado'],
-		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
-		labelTotal: 'Total',
-		labelAverage: 'Média',
-		labelMinimum: 'Mínimo',
-		labelMaximum: 'Máximo',
-		labelMonths: ['mês', 'meses'],
-		labelTagEmpty: 'VAZIO',
-		labelTagGroup: 'Unir as tags escolhidas',
-		labelEdit: 'Editar',
-		labelClose: 'Fechar',
-		labelSave: 'Salvar',
-		errorInvalidData: 'Lançamento inválido na linha ',
-		errorNoFieldSeparator: 'Separador não encontrado:',
-		errorTooManySeparators: 'Há mais de 2 sepadarores',
-		errorInvalidDate: 'Data inválida:',
-		errorInvalidAmount: 'Valor inválido:',
-		errorNoLocalStorage: 'Ops, seu navegador não tem localStorage. O %s não vai funcionar.',
-		errorRequirements: 'Os requisitos mínimos são:',
-		msgLoading: 'Carregando %s...',
-		helpFullScreen: 'Liga/desliga o modo limpo: aparece somente o extrato, sem as barras de ferramentas.',
-		helpReports: 'Extratos diário, mensal e anual, com gráficos, somatório, médias, mínimo, máximo e acumulado.',
-		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
-		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
-		helpFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
-		helpMonthPartials: 'Resumo do mês, com saldo mensal e acumulado, e totais de ganhos e gastos.',
-		helpFilter: 'Filtra os relatórios em tempo real, de acordo com o que você digita.',
-		helpRegex: 'Usa expressões regulares na caixa de pesquisa.',
-		helpNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
-		helpHelp: 'Mostra e esconde o texto de ajuda.',
-		helpReload: 'Recarrega somente os dados (só aparece quando se utiliza arquivo TXT externo).',
-		helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
-		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
-		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
-		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
-		helpSave: 'Salva os lançamentos que você alterou.'
-	},
 	en: {
 		dateFormat: 'm/d/y',
 		centsSeparator: '.',
@@ -145,8 +83,8 @@ var i18nDatabase = {
 		labelDaily: 'daily',
 		labelMonthly: 'monthly',
 		labelYearly: 'yearly',
-		labelLastMonths: 'Recent Only:',
-		labelValueFilter: 'Filter Values:',
+		labelLastMonths: 'Recent Only',
+		labelValueFilter: 'Filter Values',
 		labelPositive: 'positive',
 		labelNegative: 'negative',
 		labelGreaterThan: 'greater than',
@@ -156,7 +94,7 @@ var i18nDatabase = {
 		labelFilter: 'Search field',
 		labelRegex: 'regex',
 		labelNegate: 'negate',
-		labelHelp: 'Help',
+		labelHelp: 'Question mark',
 		labelReload: 'Reload',
 		labelNoData: 'No data.',
 		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description', 'Balance'],
@@ -194,7 +132,74 @@ var i18nDatabase = {
 		helpTagGroup: 'Show only the entries that have all the selected tags.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
-		helpSave: 'Save your data.'
+		helpSave: 'Save your data.',
+		helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
+		helpInstall: 'Instructions:	Save this page, use a plain text editor to add your own transactions and open it on the browser.',
+		helpTranslator: ''
+	},
+	pt: {
+		dateFormat: 'd/m/Y',
+		centsSeparator: ',',
+		thousandSeparator: '.',
+		appUrl: 'http://aurelio.net/moneylog/beta.html',
+		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
+		labelFullScreen: 'Bolinha',
+		labelReports: 'Extratos',
+		labelDaily: 'diário',
+		labelMonthly: 'mensal',
+		labelYearly: 'anual',
+		labelLastMonths: 'Somente Recentes',
+		labelValueFilter: 'Somente Valores',
+		labelPositive: 'positivo',
+		labelNegative: 'negativo',
+		labelGreaterThan: 'maior que',
+		labelLessThan: 'menor que',
+		labelFuture: 'Mostrar Lançamentos Futuros',
+		labelMonthPartials: 'Mostrar Parciais Mensais',
+		labelFilter: 'Caixa de pesquisa',
+		labelRegex: 'regex',
+		labelNegate: 'excluir',
+		labelHelp: 'Interrogação',
+		labelReload: 'Recarregar',
+		labelNoData: 'Nenhum lançamento.',
+		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição', 'Acumulado'],
+		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
+		labelTotal: 'Total',
+		labelAverage: 'Média',
+		labelMinimum: 'Mínimo',
+		labelMaximum: 'Máximo',
+		labelMonths: ['mês', 'meses'],
+		labelTagEmpty: 'VAZIO',
+		labelTagGroup: 'Unir as tags escolhidas',
+		labelEdit: 'Editar',
+		labelClose: 'Fechar',
+		labelSave: 'Salvar',
+		errorInvalidData: 'Lançamento inválido na linha ',
+		errorNoFieldSeparator: 'Separador não encontrado:',
+		errorTooManySeparators: 'Há mais de 2 sepadarores',
+		errorInvalidDate: 'Data inválida:',
+		errorInvalidAmount: 'Valor inválido:',
+		errorNoLocalStorage: 'Ops, seu navegador não tem localStorage. O %s não vai funcionar.',
+		errorRequirements: 'Os requisitos mínimos são:',
+		msgLoading: 'Carregando %s...',
+		helpFullScreen: 'Liga/desliga o modo limpo: aparece somente o extrato, sem as barras de ferramentas.',
+		helpReports: 'Extratos diário, mensal e anual, com gráficos, somatório, médias, mínimo, máximo e acumulado.',
+		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
+		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
+		helpFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
+		helpMonthPartials: 'Resumo do mês, com saldo mensal e acumulado, e totais de ganhos e gastos.',
+		helpFilter: 'Filtra os relatórios em tempo real, de acordo com o que você digita.',
+		helpRegex: 'Usa expressões regulares na caixa de pesquisa.',
+		helpNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
+		helpHelp: 'Mostra e esconde o texto de ajuda.',
+		helpReload: 'Recarrega somente os dados (só aparece quando se utiliza arquivo TXT externo).',
+		helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
+		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
+		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
+		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
+		helpSave: 'Salva os lançamentos que você alterou.',
+		helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
+		helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq'		
 	},
 	ca: {
 		centsSeparator: ',',
@@ -206,8 +211,8 @@ var i18nDatabase = {
 		labelDaily: 'diari',
 		labelMonthly: 'mensual',
 		labelYearly: 'anual',
-		labelLastMonths: 'Només els Darrers:',
-		labelValueFilter: 'Valors Filtrats:',
+		labelLastMonths: 'Només els Darrers',
+		labelValueFilter: 'Valors Filtrats',
 		labelPositive: 'positiu',
 		labelNegative: 'negatiu',
 		labelGreaterThan: 'més gran que',
@@ -217,7 +222,7 @@ var i18nDatabase = {
 		labelFilter: 'Camp de cerca',
 		labelRegex: 'regex',
 		labelNegate: 'nega-ho',
-		labelHelp: 'Ajuda',
+		labelHelp: "Signe d'interrogació",
 		labelReload: 'Carrega',
 		labelNoData: 'No hi ha dades.',
 		labelsDetailed: ['Data', 'Import', 'Etiquetes', 'Descripció', 'Balanç'],
@@ -250,7 +255,10 @@ var i18nDatabase = {
 		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
 		helpEdit: '',
 		helpClose: '',
-		helpSave: ''
+		helpSave: '',
+		helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
+		helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
+		helpTranslator: 'Traducció: Paco Rivière, http://pacoriviere.cat'
 	},
 	es: {
 		dateFormat: 'd/m/Y',
@@ -262,8 +270,8 @@ var i18nDatabase = {
 		labelDaily: 'diario',
 		labelMonthly: 'mensual',
 		labelYearly: 'anual',
-		labelLastMonths: 'Ver solo últimos:',
-		labelValueFilter: 'Mostrar Valores:',
+		labelLastMonths: 'Ver solo últimos',
+		labelValueFilter: 'Mostrar Valores',
 		labelPositive: 'positivos',
 		labelNegative: 'negativos',
 		labelGreaterThan: 'mayores a',
@@ -273,7 +281,7 @@ var i18nDatabase = {
 		labelFilter: 'Caja de búsqueda',
 		labelRegex: 'regex',
 		labelNegate: 'negar',
-		labelHelp: 'Ayuda',
+		labelHelp: 'Signo de interrogación',
 		labelReload: 'Recargar',
 		labelNoData: 'Sin información.',
 		labelsDetailed: ['Fecha', 'Monto', 'Concepto', 'Descripción', 'Balance'],
@@ -306,7 +314,10 @@ var i18nDatabase = {
 		helpTagGroup: 'Mostrar solo las entradas que contengan los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
 		helpEdit: '',
 		helpClose: '',
-		helpSave: ''
+		helpSave: '',
+		helpTip: 'Consejo: Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
+		helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus transacciones y luego abrala en su navegador.',
+		helpTranslator: ''
 	},
 	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
@@ -547,6 +558,13 @@ function prettyBarLabel(n) {
 function array2ul(a) {
 	return '<ul><li>' + a.join('<\/li><li>') + '</li></ul>';
 }
+function wrapme(tag, text) {
+	return '<' + tag + '>' + text + '</' + tag + '>';
+}
+function linkme(url, text) {
+	return '<a href="' + url + '">' + text + '</a>';
+}
+
 
 /////////////////////////////////////////////////////////////////////
 //                         REPORT HELPERS
@@ -1786,10 +1804,10 @@ function valueFilterChanged() {
 /////////////////////////////////////////////////////////////////////
 
 function init() {
-	var helpLang;
 	
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
+	i18n.labelTags = i18n.labelsDetailed[2]; // Tags
 	
 	// Online mode uses localStorage
 	isOnline = useLocalStorage;
@@ -1837,13 +1855,13 @@ function init() {
 	document.getElementById('d'                  ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                  ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                  ).innerHTML = i18n.labelYearly;
-	document.getElementById('optlastmonthslabel' ).innerHTML = i18n.labelLastMonths;
-	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter;
+	document.getElementById('optlastmonthslabel' ).innerHTML = i18n.labelLastMonths + ':';
+	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter + ':';
 	document.getElementById('optfuturelabel'     ).innerHTML = i18n.labelFuture;
 	document.getElementById('optmonthlylabel'    ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('optregexlabel'      ).innerHTML = i18n.labelRegex;
 	document.getElementById('optnegatelabel'     ).innerHTML = i18n.labelNegate;
-	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelsDetailed[2] + ':'; // Tags:
+	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelTags + ':';
 	document.getElementById('tagMultiAllLabel'   ).innerHTML = i18n.labelTagGroup;
 	document.getElementById('editoropen'         ).innerHTML = i18n.labelEdit;
 	document.getElementById('editorclose'        ).innerHTML = i18n.labelClose;
@@ -1868,10 +1886,6 @@ function init() {
 	document.getElementById('editoropen'         ).title = i18n.helpEdit;
 	document.getElementById('editorclose'        ).title = i18n.helpClose;
 	document.getElementById('editorsave'         ).title = i18n.helpSave;	
-
-	// Enable the current (or default) lang help - others are hidden in CSS
-	helpLang = (document.getElementById('help-' + lang)) ? lang : i18nDatabase.defaultLanguage;
-	document.getElementById('help-' + helpLang).style.display = 'block';
 
 	// Mark current report as active (CSS)
 	document.getElementById(reportType).className = 'active';
@@ -1921,6 +1935,37 @@ function init() {
 	if (defaultRegex)         { document.getElementById('optregex'     ).checked = true; }
 	if (defaultNegate)        { document.getElementById('optnegate'    ).checked = true; }
 	document.getElementById('filter').value = defaultSearch;
+	
+	// Compose help contents (dirty, but handy)
+	document.getElementById('help').innerHTML = (
+		wrapme('b', linkme(i18n.appUrl, appName) + ': ') + i18n.appDescription +
+		array2ul([wrapme('b', i18n.labelReports + ': ') + i18n.helpReports]) +
+		array2ul([
+			wrapme('b', i18n.labelLastMonths + ': ') + i18n.helpLastMonths,
+			wrapme('b', i18n.labelValueFilter + ': ') + i18n.helpValueFilter,
+			wrapme('b', i18n.labelFuture + ': ') + i18n.helpFuture,
+			wrapme('b', i18n.labelMonthPartials + ': ') + i18n.helpMonthPartials
+		]) +
+		array2ul([
+			wrapme('b', i18n.labelFullScreen + ': ') + i18n.helpFullScreen,
+			wrapme('b', i18n.labelHelp + ': ') + i18n.helpHelp,
+			wrapme('b', '®: ') + i18n.helpReload,
+			wrapme('b', i18n.labelFilter + ': ') + i18n.helpFilter +
+				array2ul([
+					wrapme('b', i18n.labelRegex + ': ') + i18n.helpRegex,
+					wrapme('b', i18n.labelNegate + ': ') + i18n.helpNegate
+				])
+		]) +
+		array2ul([
+			wrapme('b', i18n.labelTags + ': ') + i18n.helpTags +
+			array2ul([
+				wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup
+			])
+		]) +
+		wrapme('p', i18n.helpTip) +
+		wrapme('p', i18n.helpInstall) +
+		wrapme('p', i18n.helpTranslator.replace(/(http:.*)/, '<a href="$1">$1</a>'))
+	);
 
 	// User choose other default report, let's update the toolbar accordingly
 	if (reportType !== 'd') {
