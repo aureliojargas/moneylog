@@ -222,7 +222,7 @@ var i18nDatabase = {
 		labelFilter: 'Camp de cerca',
 		labelRegex: 'regex',
 		labelNegate: 'nega-ho',
-		labelHelp: 'Signe d'interrogació',
+		labelHelp: "Signe d'interrogació",
 		labelReload: 'Carrega',
 		labelNoData: 'No hi ha dades.',
 		labelsDetailed: ['Data', 'Import', 'Etiquetes', 'Descripció', 'Balanç'],
@@ -238,8 +238,8 @@ var i18nDatabase = {
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Hi ha masses separadors',
 		errorInvalidDate: 'La data no és vàlida:',
-		errorInvalidAmount: 'L'import no és vàlid:',
-		msgLoading: 'S'està carregant %s...',
+		errorInvalidAmount: "L'import no és vàlid:",
+		msgLoading: "S'està carregant %s...",
 		helpFullScreen: '',
 		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
 		helpLastMonths: 'Mostra només les dades més recents, omet les antigues.',
@@ -248,10 +248,10 @@ var i18nDatabase = {
 		helpMonthPartials: 'Mostra el saldo mensual, amb sumes dels vostres ingressos i despeses del període.',
 		helpFilter: 'Filtre dels informes en temps real, a mesura que escriu.',
 		helpRegex: 'Utilitza expressions regulars en el camp de cerca.',
-		helpNegate: 'Eliminar els resultats de cerca de l'informe.',
-		helpHelp: 'Mostra / oculta aquest text d'ajuda.',
+		helpNegate: "Eliminar els resultats de cerca de l'informe.",
+		helpHelp: "'Mostra / oculta aquest text d'ajuda.",
 		helpReload: 'Actualitza només les dades, no la pàgina sencera. Aquest botó només apareix quan es fa servir un arxiu TXT de dades extern.',
-		helpTags: 'Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …',
+		helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
 		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
 		helpEdit: '',
 		helpClose: '',
@@ -317,7 +317,7 @@ var i18nDatabase = {
 		helpSave: 'Guarda las transacciones editadas.',
 		helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
 		helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus transacciones y luego abrala en su navegador.',
-		helpTranslator: ''
+		helpTranslator: 'Traducción: Gonzalo Nemmi'
 	},
 	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
