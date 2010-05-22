@@ -1,0 +1,63 @@
+#!/bin/bash
+# gen-online
+# http://aurelio.net/moneylog
+#
+# Script para juntar todos os pedaços do Moneylog em um único arquivo HTML,
+# para gerar o Moneylog Online
+#
+
+# Patterns:
+# <link rel="stylesheet" type="text/css" href="moneylog.css">
+# <script type="text/javascript" src="moneylog.js"></script>
+
+insert_css='
+/^<link .*href="moneylog.css"/ {
+	a \
+<style type="text/css">
+	r ../moneylog.css
+	a \
+</style>
+	d
+}
+'
+insert_js='
+/^<script .*src="moneylog.js"/ {
+	a \
+<script type="text/javascript">
+	r ../moneylog.js
+	a \
+</script>
+	d
+}
+'
+insert_txt='$ r ../moneylog.txt'
+
+echo "$insert_css $insert_js $insert_txt" > sed_script
+
+# Do it
+control_m=$(printf '\r');
+
+sed -f sed_script ../moneylog.html |
+	# dos2unix: remove CR
+	sed "s/$control_m*$//" |
+	# clean up
+	sed '
+		# Remove config.js call
+		/^<script .* src="config.js"><\/script>/ d
+
+		# Turn ON localStorage
+		/^var useLocalStorage = false;/ s/false/true/
+		/^var oneFile = true;/ s/true/false/
+
+		# Remove ml v3 theme
+		/^\/\* MoneyLog v3 Theme/, /^\*\/$/ d
+	
+		# Remove oneFile instructions comments
+		/^<!--$/, /^-->$/ d
+		/^\/\*\*\**$/, /^\*\*\*\**\/$/ d
+	'
+
+echo "</pre></body></html>"
+
+# Clean up
+rm -f sed_script
