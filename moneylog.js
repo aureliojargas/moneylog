@@ -1964,7 +1964,7 @@ function init() {
 			])
 		]) +
 		wrapme('p', i18n.helpTip) +
-		wrapme('p', i18n.helpInstall) +
+		((oneFile) ? wrapme('p', i18n.helpInstall) : '') +
 		wrapme('p', i18n.helpTranslator.replace(/(http:.*)/, '<a href="$1">$1</a>'))
 	);
 
