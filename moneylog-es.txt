@@ -19,7 +19,7 @@
 
 2010-05-20	-10,00	Carnet del Club
 
-# Es posible dejar juntas todas las movimientos. El orden no importa en este caso
+# Es posible dejar juntos todos los movimientos periodicos. El orden no importa en este caso
 
 2010-02-05	500	salario|
 2010-03-05	500	salario|
