@@ -557,13 +557,13 @@ function prettyBarLabel(n) {
 }
 
 function array2ul(a) {
-	return '<ul><li>' + a.join('<\/li><li>') + '</li></ul>';
+	return '<ul><li>' + a.join('<\/li><li>') + '<\/li><\/ul>';
 }
 function wrapme(tag, text) {
 	return '<' + tag + '>' + text + '</' + tag + '>';
 }
 function linkme(url, text) {
-	return '<a href="' + url + '">' + text + '</a>';
+	return '<a href="' + url + '">' + text + '<\/a>';
 }
 
 
@@ -1376,7 +1376,7 @@ function showOverview() {
 					chart.push('<span class="label" title="' + chartBars[i][2] + '">' + chartBars[i][0] + '<\/span>');
 				}
 				chart.push('<div class="bar ' + chartBarClass + '" style="height:' + chartBars[i][1] + 'px"><\/div>');
-				chart.push('</td>');
+				chart.push('<\/td>');
 			}
 			chart.push('<\/tr>');
 
@@ -1395,7 +1395,7 @@ function showOverview() {
 			document.getElementById('charts').style.display = 'block';
 		}
 	} else {
-		results = '<p>' + i18n.labelNoData + '</p>';
+		results = '<p>' + i18n.labelNoData + '<\/p>';
 		
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
@@ -1473,14 +1473,14 @@ function showDetailed() {
 			if (highlightRegex) {
 				rowDescription = rowDescription.replace(
 					highlightRegex,
-					'<span class="hl">$&</span>');
+					'<span class="hl">$&<\/span>');
 			}
 			
 			// There are some tags to highlight?
 			for (j = 0; j < highlightTags.length; j++) {
 				for (k = 0; k < rowTags.length; k++) {
 					if (rowTags[k] == highlightTags[j]) {
-						rowTags[k] = '<span class="hl">' + rowTags[k] + '</span>';
+						rowTags[k] = '<span class="hl">' + rowTags[k] + '<\/span>';
 						break;
 					}
 				}
@@ -1525,7 +1525,7 @@ function showDetailed() {
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 	}
 	else {
-		results = '<p>' + i18n.labelNoData + '</p>';
+		results = '<p>' + i18n.labelNoData + '<\/p>';
 	}
 	document.getElementById('report').innerHTML = results;
 }
@@ -1965,7 +1965,7 @@ function init() {
 		]) +
 		wrapme('p', i18n.helpTip) +
 		((oneFile) ? wrapme('p', i18n.helpInstall) : '') +
-		wrapme('p', i18n.helpTranslator.replace(/(http:.*)/, '<a href="$1">$1</a>'))
+		wrapme('p', i18n.helpTranslator.replace(/(http:.*)/, '<a href="$1">$1<\/a>'))
 	);
 
 	// User choose other default report, let's update the toolbar accordingly
