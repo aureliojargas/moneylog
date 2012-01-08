@@ -1217,11 +1217,11 @@ function showOverview() {
 	currSortIndex = sortColIndex;
 
 	// Table headings
-	thead = '<th onClick="sortCol(0, true)">' + i18n.labelsOverview[0] + '<\/th>';
-	thead += '<th onClick="sortCol(1, true)">' + i18n.labelsOverview[1] + '<\/th>';
-	thead += '<th onClick="sortCol(2, true)">' + i18n.labelsOverview[2] + '<\/th>';
-	thead += '<th onClick="sortCol(3, true)">' + i18n.labelsOverview[3] + '<\/th>';
-	thead += '<th onClick="sortCol(4, true)">' + i18n.labelsOverview[4] + '<\/th>';
+	thead = '<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>';
+	thead += '<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>';
+	thead += '<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>';
+	thead += '<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>';
+	thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
 	if (showMiniBars) {
 		thead += '<th>%<\/th>';
 	}
@@ -1650,7 +1650,7 @@ function updateToolbar() {
 //                         EVENT HANDLERS
 /////////////////////////////////////////////////////////////////////
 
-function sortCol(index, isOverview) {
+function sortCol(index) {
 	// if the same, flip reverse state
 	sortColRev = (sortColIndex == index) ? !sortColRev : false;
 	sortColIndex = index;
