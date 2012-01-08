@@ -1,5 +1,5 @@
 /*global window: false, localStorage: false */
-/*jslint browser: true, devel: true, onevar: true, undef: true, nomen: true, bitwise: true, immed: true */
+/*jslint browser: true, devel: true, undef: true, nomen: true, bitwise: true */
 
 /*
 	moneylog.js
