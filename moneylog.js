@@ -404,7 +404,8 @@ String.prototype.unacccent = function () {
 };
 
 Array.prototype.hasItem = function (item) {
-	for (var i = 0; i < this.length; i++) {
+	var i;
+	for (i = 0; i < this.length; i++) {
 		if (item == this[i]) {
 			return true;
 		}
@@ -440,7 +441,7 @@ function invalidData(lineno, message) {
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
 
-function sortArray(a, b)  {
+function sortArray(a, b) {
 	a = a[sortColIndex];
 	b = b[sortColIndex];
 	try {
@@ -645,8 +646,8 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	var theRow = [];
 
 	theRow.push((theMonth <= currentDate.slice(0, 7)) ?
-	    '<tr onClick="toggleRowHighlight(this)">' :
-	    '<tr onClick="toggleRowHighlight(this)" class="future">');
+			'<tr onClick="toggleRowHighlight(this)">' :
+			'<tr onClick="toggleRowHighlight(this)" class="future">');
 	if (showRowCount) {
 		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
 	}
@@ -712,28 +713,23 @@ function loadLocalData() {
 // Allows to insert TABs inside textarea
 // Opera bug: needs to be attached to onkeypress instead onkeydown
 // Original from: http://pallieter.org/Projects/insertTab/ (see <script> at page source)
-function insertTab(e)
-{
+function insertTab(e) {
 	var kC, oS, sS, sE, o = this; // aurelio: make jslint happy
 
 	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
 	o = this; // aurelio: removed this on calling
 
 	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
-	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey)
-	{
+	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey) {
 		oS = o.scrollTop; // Set the current scroll position.
-		if (o.setSelectionRange)
-		{
+		if (o.setSelectionRange) {
 			// For: Opera + FireFox + Safari
 			sS = o.selectionStart;
 			sE = o.selectionEnd;
 			o.value = o.value.substring(0, sS) + '\t' + o.value.substr(sE);
 			o.setSelectionRange(sS + 1, sS + 1);
 			o.focus();
-		}
-		else if (o.createTextRange)
-		{
+		} else if (o.createTextRange) {
 			// For: MSIE
 			document.selection.createRange().text = '\t'; // String.fromCharCode(9)
 			// o.onblur = function() { o.focus(); o.onblur = null; };
@@ -1194,12 +1190,10 @@ function applyTags(theData) {
 	document.getElementById('tagList').innerHTML = tagsMenu;
 
 	// Show the tags menu if we have at least one tag
-	document.getElementById('tagsArea').style.display = (
-		tagsMenu.length > 0) ? 'block' : 'none';
+	document.getElementById('tagsArea').style.display = (tagsMenu.length > 0) ? 'block' : 'none';
 
 	// The '+' checkbox is only shown if we have multiple selected tags
-	document.getElementById('tagMultiAll').style.display = (
-		selectedTags.length > 1) ? 'block' : 'none';
+	document.getElementById('tagMultiAll').style.display = (selectedTags.length > 1) ? 'block' : 'none';
 
 	// Tag filter was active?
 	if (selectedTags.length > 0) {
@@ -1262,8 +1256,8 @@ function showOverview() {
 
 				// Other rows, detect if this is a new month/year
 				if (i > 0 &&
-					rowDate.slice(0, dateSize) !=
-					theData[i - 1][0].slice(0, dateSize)) {
+						rowDate.slice(0, dateSize) !=
+						theData[i - 1][0].slice(0, dateSize)) {
 
 					// Send old month/year totals to the report
 					overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
@@ -1353,8 +1347,8 @@ function showOverview() {
 
 			// Get the maximum absolute value for this column
 			chartRoof = (Math.abs(minNumbers[chartCol]) > maxNumbers[chartCol]) ?
-				Math.abs(minNumbers[chartCol]) :
-				maxNumbers[chartCol];
+					Math.abs(minNumbers[chartCol]) :
+					maxNumbers[chartCol];
 
 			// Calculate each bar size and format labels
 			for (i = 0; i < overviewData.length; i++) {
@@ -1448,8 +1442,8 @@ function showDetailed() {
 
 			// This row starts a new month? Must we show the partials?
 			if (monthPartials.checked && i > 0 &&
-				rowDate.slice(0, 7) !=
-				theData[i - 1][0].slice(0, 7)) {
+					rowDate.slice(0, 7) !=
+					theData[i - 1][0].slice(0, 7)) {
 				results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
 				// Partials row shown, reset month totals
 				monthTotal = 0;
@@ -1475,7 +1469,8 @@ function showDetailed() {
 			if (highlightRegex) {
 				rowDescription = rowDescription.replace(
 					highlightRegex,
-					'<span class="hl">$&<\/span>');
+					'<span class="hl">$&<\/span>'
+				);
 			}
 
 			// There are some tags to highlight?
@@ -1525,8 +1520,7 @@ function showDetailed() {
 
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
-	}
-	else {
+	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
 	}
 	document.getElementById('report').innerHTML = results;
@@ -1843,7 +1837,8 @@ function init() {
 	if (highlightWords) {
 		highlightRegex = new RegExp(
 			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
-			'ig');
+			'ig'
+		);
 	}
 
 	// Split highlight string into words
@@ -1916,7 +1911,7 @@ function init() {
 		showError(
 			i18n.errorNoLocalStorage.replace('%s', appName),
 			'<p>' + i18n.errorRequirements +
-			array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.50'.split(', '))
+				array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.50'.split(', '))
 		);
 		return; // abort
 	}
@@ -1961,27 +1956,27 @@ function init() {
 		wrapme('b', linkme(i18n.appUrl, appName) + ': ') + i18n.appDescription +
 		array2ul([wrapme('b', i18n.labelReports + ': ') + i18n.helpReports]) +
 		array2ul([
-			wrapme('b', i18n.labelLastMonths + ': ') + i18n.helpLastMonths,
-			wrapme('b', i18n.labelValueFilter + ': ') + i18n.helpValueFilter,
-			wrapme('b', i18n.labelFuture + ': ') + i18n.helpFuture,
-			wrapme('b', i18n.labelMonthPartials + ': ') + i18n.helpMonthPartials
-		]) +
+				wrapme('b', i18n.labelLastMonths + ': ') + i18n.helpLastMonths,
+				wrapme('b', i18n.labelValueFilter + ': ') + i18n.helpValueFilter,
+				wrapme('b', i18n.labelFuture + ': ') + i18n.helpFuture,
+				wrapme('b', i18n.labelMonthPartials + ': ') + i18n.helpMonthPartials
+			]) +
 		array2ul([
-			wrapme('b', i18n.labelFullScreen + ': ') + i18n.helpFullScreen,
-			wrapme('b', i18n.labelHelp + ': ') + i18n.helpHelp,
-			wrapme('b', '®: ') + i18n.helpReload,
-			wrapme('b', i18n.labelFilter + ': ') + i18n.helpFilter +
-				array2ul([
-					wrapme('b', i18n.labelRegex + ': ') + i18n.helpRegex,
-					wrapme('b', i18n.labelNegate + ': ') + i18n.helpNegate
-				])
-		]) +
+				wrapme('b', i18n.labelFullScreen + ': ') + i18n.helpFullScreen,
+				wrapme('b', i18n.labelHelp + ': ') + i18n.helpHelp,
+				wrapme('b', '®: ') + i18n.helpReload,
+				wrapme('b', i18n.labelFilter + ': ') + i18n.helpFilter +
+					array2ul([
+						wrapme('b', i18n.labelRegex + ': ') + i18n.helpRegex,
+						wrapme('b', i18n.labelNegate + ': ') + i18n.helpNegate
+					])
+			]) +
 		array2ul([
-			wrapme('b', i18n.labelTags + ': ') + i18n.helpTags +
-			array2ul([
-				wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup
-			])
-		]) +
+				wrapme('b', i18n.labelTags + ': ') + i18n.helpTags +
+					array2ul([
+						wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup
+					])
+			]) +
 		wrapme('p', i18n.helpTip) +
 		((oneFile) ? wrapme('p', i18n.helpInstall) : '') +
 		wrapme('p', i18n.helpTranslator.replace(/(http:.*)/, '<a href="$1">$1<\/a>'))
