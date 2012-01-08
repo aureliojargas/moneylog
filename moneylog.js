@@ -199,7 +199,7 @@ var i18nDatabase = {
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpSave: 'Salva os lançamentos que você alterou.',
 		helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
-		helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq'		
+		helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq'
 	},
 	ca: {
 		centsSeparator: ',',
@@ -322,7 +322,7 @@ var i18nDatabase = {
 	},
 	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
-		
+
 		if (defaultLang !== lang) {
 			if (this[lang]) {
 				// check if all attributes from 'defaultLang' are in 'lang'
@@ -582,7 +582,7 @@ function getMiniBar(pos, neg) {
 	// The percentage of each bar (%)
 	posLabel = parseInt(pos * 100 / roof, 10);
 	negLabel = 100 - posLabel;
-	
+
 	// Labels
 	labels = '';
 	if (showMiniBarsLabels) {
@@ -600,7 +600,7 @@ function getMiniBar(pos, neg) {
 			labels += labelTemplate.replace('{margin}', negMargin).replace('{label}', negLabel);
 		}
 	}
-	
+
 	// Kinda complicated layout
 	// DIVs and SPANs are float:left to be aligned in order, at the same line
 	// SPANs (labels) are moved left (negative margin) precisely to "enter" the bars
@@ -615,7 +615,7 @@ function getMiniBar(pos, neg) {
 
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	var partial, theRow;
-	
+
 	partial = [];
 	partial.push('<table class="posneg number"><tr>');
 	partial.push('<td> +');
@@ -643,7 +643,7 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
 	var theRow = [];
-	
+
 	theRow.push((theMonth <= currentDate.slice(0, 7)) ?
 	    '<tr onClick="toggleRowHighlight(this)">' :
 	    '<tr onClick="toggleRowHighlight(this)" class="future">');
@@ -655,11 +655,11 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
-	
+
 	if (showMiniBars) {
 		theRow.push(getMiniBar(monthPos, monthNeg));
 	}
-	
+
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
@@ -718,7 +718,7 @@ function insertTab(e)
 
 	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
 	o = this; // aurelio: removed this on calling
-	
+
 	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
 	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey)
 	{
@@ -777,30 +777,30 @@ function loadWaitingDataFiles() {
 	// JavaScript engine don't hang up waiting for it to complete.
 	//
 	// See also: iframeLoaded()
-	
+
 	// The last file has finished loading, so now we can load the next
 	if (iframeIsLoaded) {
 		filePath = waitingToLoad.shift();
 		loadDataFile(filePath);
 	}
-	
-	// There is another file to load? Schedule it 
+
+	// There is another file to load? Schedule it
 	if (waitingToLoad.length > 0) {
 		setTimeout(loadWaitingDataFiles, 100);
 	}
 }
 function loadSelectedFile() {
 	var filePath;
-	
+
 	// Reset multifile data
 	multiRawData = '';
 	waitingToLoad = [];
-	
+
 	filePath = dataFiles[document.getElementById('datafiles').selectedIndex];
 	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
 
 	// We will load a single file or all of them?
-	if (filePath === '*') {		
+	if (filePath === '*') {
 		waitingToLoad = dataFiles.removePattern('*');
 		if (waitingToLoad.length > 0) {
 			loadWaitingDataFiles();
@@ -813,7 +813,7 @@ function loadSelectedFile() {
 
 function readData() {
 	var iframeDoc;
-	
+
 	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
 	if (useLocalStorage) {
 		loadLocalData();
@@ -835,7 +835,7 @@ function parseData() {
 
 	// Split lines
 	rows = rawData.split(dataRecordSeparator);
-	
+
 	// Scan data rows
 	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
@@ -877,7 +877,7 @@ function parseData() {
 		rowText = (fields.length > 2) ? fields[2].strip() : '';
 
 		///////////////////////////////////////////////////////////// Date
-		
+
 		rowDate = fields[0].match(dataPatterns.date);
 		if (rowDate) {
 			rowDate = rowDate[1]; // group 1
@@ -886,7 +886,7 @@ function parseData() {
 		}
 
 		///////////////////////////////////////////////////////////// Amount
-		
+
 		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + rows[i];
 
 		// Extract (and remove) recurrent information from the amount (if any)
@@ -912,7 +912,7 @@ function parseData() {
 
 			// Now we can validate the number (str2float)
 			rowAmount = parseFloat(rowAmount);
-			
+
 			// Ops, we don't have a valid number
 			if (isNaN(rowAmount)) {
 				invalidData(lineno, rowAmountErrorMsg);
@@ -942,14 +942,14 @@ function parseData() {
 		//
 		if (recurrentAmount) {
 			recValue = rowAmount;
-			
+
 			if (recOperator == '/') {
 				recValue = (recValue / recTimes);
 			}
 
 			// Make sure we have a valid money value (not float)
 			recValue = recValue.toFixed(2);
-			
+
 			// Compose and append each new row
 			for (j = 1; j <= recTimes; j++) {
 				rows.push([
@@ -958,11 +958,11 @@ function parseData() {
 					rowText + ' ' + j + '/' + recTimes
 				].join(dataFieldSeparator));
 			}
-			
+
 			// Ignore the original recurring row
 			continue;
 		}
-		
+
 		///////////////////////////////////////////////////////////// Tags + Description
 
 		// Parse tags
@@ -973,20 +973,20 @@ function parseData() {
 			rowTagsDescription = rowText.split(dataTagTerminator);
 			rowTags = rowTagsDescription.shift().split(dataTagSeparator);
 			rowDescription = rowTagsDescription.join(dataTagTerminator).strip();
-						
+
 			// Strip all tags
 			for (j = 0; j < rowTags.length; j++) {
 				rowTags[j] = rowTags[j].strip();
 			}
 			// Remove empty tags
 			rowTags = rowTags.removePattern('');
-			
+
 		// No tags
 		} else {
 			rowTags = [];
 			rowDescription = rowText || '&nbsp;';
 		}
-		
+
 		// Save the validated data
 		parsedData.push([rowDate, rowAmount, rowTags, rowDescription]);
 	}
@@ -1007,25 +1007,25 @@ function filterData() {
 	filter = '';
 	firstDate = 0;
 	filteredData = [];
-		
+
 	if (document.getElementById('optlastmonths').checked && reportType !== 'y') {
 		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
 	}
-	
+
 	// Show future works for both views
 	showFuture = document.getElementById('optfuture').checked;
-	
+
 	// Get filters data for the detailed report
 	if (reportType === 'd') {
 		filter = document.getElementById('filter').value;
 		isRegex = document.getElementById('optregex').checked;
 		isNegated = document.getElementById('optnegate').checked;
-		
+
 		if (document.getElementById('optvaluefilter').checked) {
 			valueFilter = document.getElementById('valuefilter').value;
 			valueFilterArg = document.getElementById('valuefilterarg').value || 0;
 		}
-		
+
 		// Hack: Value filtering on the search box!
 		// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
 		temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
@@ -1035,7 +1035,7 @@ function filterData() {
 			filter = ''; // The filter was (ab)used, now we can discard it
 		}
 	}
-	
+
 	// Prepare filter contents as /regex/ or string, always ignore case
 	if (filter) {
 		if (isRegex) {
@@ -1047,15 +1047,15 @@ function filterData() {
 
 	// Scan data rows
 	for (i = 0; i < parsedData.length; i++) {
-		
+
 		// date value [tags] description
 		thisDate = parsedData[i][0];
 		thisValue = parsedData[i][1];
 		thisTags = parsedData[i][2];
 		thisDescription = parsedData[i][3];
-		
+
 		///////////////////////////////////////////////////////////// Filters
-		
+
 		// Ignore dates older than "last N months" option (if checked)
 		if (thisDate < firstDate) {
 			continue;
@@ -1088,27 +1088,27 @@ function filterData() {
 				continue;
 			}
 		}
-		
+
 		// Save the results
 		filteredData.push([thisDate, thisValue, thisTags, thisDescription]);
 	}
-	
+
 	return filteredData;
 }
 
 function applyTags(theData) {
 	// This function composes the full tag menu and
 	// also filters theData if some tag is selected
-	
+
 	var i, j, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagsMenu, selectedTags, filteredData, tagMultiAll;
-	
+
 	tagsMenu = [];
 	selectedTags = [];
 	filteredData = [];
-	
+
 	// Get multiple selection mode (true=AND, false=OR)
 	tagMultiAll = document.getElementById('tagMultiAllCheck').checked;
-	
+
 	// Get currently selected tags (from interface)
 	try {
 		tagCount = document.getElementById('tagCount').value;
@@ -1119,13 +1119,13 @@ function applyTags(theData) {
 			}
 		}
 	} catch (e) { }
-	
+
 	// Filter data to match current tags
 	for (i = 0; i < theData.length; i++) {
-		
+
 		// Array order: date, amount, tags, desc
 		rowTags = theData[i][2];
-		
+
 		// Populate tags array with UNIQUE row tags
 		for (j = 0; j < rowTags.length; j++) {
 			if (!tagsMenu.hasItem(rowTags[j])) {
@@ -1135,14 +1135,14 @@ function applyTags(theData) {
 
 		// Tag Filter is active. This line matches it?
 		if (selectedTags.length > 0) {
-		
+
 			for (j = 0; j < selectedTags.length; j++) {
 
 				thisTag = selectedTags[j];
 				tagMatched = (rowTags.hasItem(thisTag) ||
 					(thisTag == i18n.labelTagEmpty && rowTags.length === 0));
 					// Tip: space means no tag
-				
+
 				if (tagMatched && (!tagMultiAll)) { break; } // OR
 				if (!tagMatched && (tagMultiAll)) { break; } // AND
 			}
@@ -1151,7 +1151,7 @@ function applyTags(theData) {
 			}
 		}
 	}
-	
+
 	// Make sure the menu has all the selected tags
 	for (i = 0; i < selectedTags.length; i++) {
 		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] != i18n.labelTagEmpty) {
@@ -1161,24 +1161,24 @@ function applyTags(theData) {
 
 	// Compose the tags menu HTML code (if we have at least one tag)
 	if (tagsMenu.length > 0) {
-		
+
 		// Sorted tags are nice
 		tagsMenu.sort(sortIgnoreCase);
 
 		// Add a last empty item to match the rows with no tag
 		tagsMenu.push(i18n.labelTagEmpty);
-		
+
 		// Save the total tag count
 		document.getElementById('tagCount').value = tagsMenu.length;
-		
+
 		// Add one checkbox for each tag
 		for (i = 0; i < tagsMenu.length; i++) {
 			tagName = tagsMenu[i];
 			tagId = 'tag_' + (i + 1);
-			
+
 			// Selected tags remain selected
 			checked = selectedTags.hasItem(tagName) ? 'checked="checked"' : '';
-			
+
 			// The ugly code (but better than DOM-walking nightmares)
 			tagsMenu[i] = '<input type="checkbox" class="trigger" onClick="showReport()" ' +
 				checked + ' id="' + tagId + '" value="' + tagName + '">' +
@@ -1189,10 +1189,10 @@ function applyTags(theData) {
 		// All tags in one single line
 		tagsMenu = tagsMenu.join('\n');
 	}
-	
+
 	// Save the tags menu (or make it empty)
 	document.getElementById('tagList').innerHTML = tagsMenu;
-	
+
 	// Show the tags menu if we have at least one tag
 	document.getElementById('tagsArea').style.display = (
 		tagsMenu.length > 0) ? 'block' : 'none';
@@ -1245,16 +1245,16 @@ function showOverview() {
 
 		// The cache is empty. Scan and calculate everything.
 		if (!overviewData.length) {
-						
+
 			for (i = 0; i < theData.length; i++) {
 				rowDate        = theData[i][0];
 				rowAmount      = theData[i][1];
-				// rowTags        = theData[i][2]; 
-				// rowDescription = theData[i][3]; 
+				// rowTags        = theData[i][2];
+				// rowDescription = theData[i][3];
 
 				// rowDate.slice() size, to extract 2000 or 2000-01
 				dateSize = (reportType === 'y') ? 4 : 7;
-				
+
 				// First row, just save the month/year date
 				if (i === 0) {
 					rangeDate = rowDate.slice(0, dateSize);
@@ -1264,7 +1264,7 @@ function showOverview() {
 				if (i > 0 &&
 					rowDate.slice(0, dateSize) !=
 					theData[i - 1][0].slice(0, dateSize)) {
-					
+
 					// Send old month/year totals to the report
 					overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 					// Reset totals
@@ -1272,7 +1272,7 @@ function showOverview() {
 					// Save new month/year date
 					rangeDate = rowDate.slice(0, dateSize);
 				}
-				
+
 				// Common processing for all rows: update totals
 				grandTotal += rowAmount;
 				rangeTotal += rowAmount;
@@ -1286,26 +1286,26 @@ function showOverview() {
 			overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 		}
 		// End of cache filling
-		
+
 		//// Report data is OK inside overviewData array
 		//// Now we must compose the report table
-		
+
 		// Perform the user-selected sorting column and order
 		sortColIndex = currSortIndex;
 		overviewData.sort(sortArray);
 		if (sortColRev) {
 			overviewData.reverse();
 		}
-		
+
 		// Array2Html
 		for (i = 0; i < overviewData.length; i++) {
-			
+
 			// Calculate overall totals
 			z = overviewData[i];
 			sumPos   += z[1];
 			sumNeg   += z[2];
 			sumTotal += z[3];
-			
+
 			// Store min/max values
 			if (i === 0) {
 				// First value, store it as max and min
@@ -1325,13 +1325,13 @@ function showOverview() {
 				maxPartial = (z[3] > maxPartial) ? z[3] : maxPartial;
 				maxBalance = (z[4] > maxBalance) ? z[4] : maxBalance;
 			}
-			
+
 			// Save this row to the report table
 			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4], i + 1));
 		}
 		maxNumbers = [0, maxPos, maxNeg, maxPartial, maxBalance];
 		minNumbers = [0, minPos, minNeg, minPartial, minBalance];
-		
+
 		// Compose the final rows: total, avg, min, max
 		len = overviewData.length;
 		results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
@@ -1339,23 +1339,23 @@ function showOverview() {
 		results.push(getOverviewTotalsRow(i18n.labelMinimum, minPos, maxNeg, minPartial));
 		results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial, maxBalance));
 		// Note: Yes, maxNeg and minNeg are swapped for better reading
-		
+
 		// And we're done on the report table
 		results.push('<\/table>');
 		results = results.join('\n');
-		
+
 		// Now charts!
 		if (showCharts) {
 			chart = [];
 			chartBars = [];
 			chartLabels = [];
 			chartCol = document.getElementById('chartcol').value || 1;
-			
+
 			// Get the maximum absolute value for this column
 			chartRoof = (Math.abs(minNumbers[chartCol]) > maxNumbers[chartCol]) ?
 				Math.abs(minNumbers[chartCol]) :
 				maxNumbers[chartCol];
-			
+
 			// Calculate each bar size and format labels
 			for (i = 0; i < overviewData.length; i++) {
 				z = overviewData[i];
@@ -1365,7 +1365,7 @@ function showOverview() {
 				chartBars.push([chartBarLabel, chartBarSize, chartBarValue]);
 				chartLabels.push(z[0].replace('-', '<br>')); // date
 			}
-		
+
 			// Compose the chart table
 			chart.push('<table class="chart">');
 
@@ -1388,17 +1388,17 @@ function showOverview() {
 				chart.push('<td>' + chartLabels[i] + '<\/td>');
 			}
 			chart.push('<\/tr>');
-			
+
 			// And we're done
 			chart.push('<\/table>');
 			chart = chart.join('\n');
-			
+
 			document.getElementById('chart').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
 		}
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
-		
+
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
 	}
@@ -1407,13 +1407,13 @@ function showOverview() {
 
 function showDetailed() {
 	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal;
-	
+
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
-	
+
 	monthPartials = document.getElementById('optmonthly');
 	theData = applyTags(filterData());
-	
+
 	if (theData.length > 0) {
 
 		// Data sorting procedures
@@ -1439,13 +1439,13 @@ function showDetailed() {
 
 		// Compose table rows
 		for (i = 0; i < theData.length; i++) {
-			
+
 			rowDate        = theData[i][0];
 			rowAmount      = theData[i][1];
 			rowTags        = theData[i][2];
 			rowDescription = theData[i][3];
 			rowCount      += 1;
-			
+
 			// This row starts a new month? Must we show the partials?
 			if (monthPartials.checked && i > 0 &&
 				rowDate.slice(0, 7) !=
@@ -1459,7 +1459,7 @@ function showDetailed() {
 					rowCount = 1;
 				}
 			}
-			
+
 			// Update totals
 			sumTotal += rowAmount;
 			monthTotal += rowAmount;
@@ -1470,14 +1470,14 @@ function showDetailed() {
 				monthPos += rowAmount;
 				sumPos += rowAmount;
 			}
-			
+
 			// There are some words to highlight on the Description?
 			if (highlightRegex) {
 				rowDescription = rowDescription.replace(
 					highlightRegex,
 					'<span class="hl">$&<\/span>');
 			}
-			
+
 			// There are some tags to highlight?
 			for (j = 0; j < highlightTags.length; j++) {
 				for (k = 0; k < rowTags.length; k++) {
@@ -1487,39 +1487,39 @@ function showDetailed() {
 					}
 				}
 			}
-			
+
 			// This row is in the future?
 			if (rowDate <= currentDate) {
 				results.push('<tr onClick="toggleRowHighlight(this)">');
 			} else {
 				results.push('<tr onClick="toggleRowHighlight(this)" class="future">');
 			}
-			
+
 			if (showRowCount) {
 				results.push('<td class="row-count">' + (rowCount) + '<\/td>');
 			}
-			
+
 			// Use local date format?
 			if (showLocaleDate) {
 				rowDate = formatDate(rowDate);
 			}
-			
+
 			results.push('<td class="date">'   + rowDate                + '<\/td>');
 			results.push('<td class="number">' + prettyFloat(rowAmount) + '<\/td>');
 			results.push('<td class="tags">'   + rowTags.join(', ')     + '<\/td>');
 			results.push('<td>'                + rowDescription         + '<\/td>');
 			results.push('<td class="number">' + prettyFloat(sumTotal)  + '<\/td>');
 			results.push('<\/tr>');
-				
+
 		}
-		
+
 		// Should we show the full month partials at the last row?
 		if (monthPartials.checked) {
 			results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
 		} else {
 			results.push(getTotalsRow(sumTotal, '', sumNeg, sumPos));
 		}
-		
+
 		results.push('<\/table>');
 		results = results.join('\n');
 
@@ -1595,7 +1595,7 @@ function updateToolbar() {
 	//
 	// Some fields are just hidden to preserve the page layout.
 	// Others must be removed to free some space for the report.
-		
+
 	add = [];
 	remove = [];
 	hide = [];
@@ -1635,7 +1635,7 @@ function updateToolbar() {
 			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
 		];
 	}
-	
+
 	// Show/hide toolbar elements
 	for (i = 0; i < add.length; i++) {
 		document.getElementById(add[i]).style.display = 'block';
@@ -1669,11 +1669,11 @@ function changeReport(el) {
 	el = this;
 	oldType = reportType;
 	newType = el.id;
-	
+
 	// Deactivate old report, activate new
 	document.getElementById(oldType).className = '';
 	el.className = 'active';
-	
+
 	//// Save / restore information
 	//
 	// From Daily to Monthly/Yearly
@@ -1691,12 +1691,12 @@ function changeReport(el) {
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
 	}
-	
+
 	reportType = newType;
 	overviewData = [];
 	updateToolbar();
 	showReport();
-	
+
 	return false; // cancel default link action
 }
 
@@ -1714,7 +1714,7 @@ function iframeLoaded(el) {
 	// Read iframe contents
 	readData();
 	iframeIsLoaded = true;
-	
+
 	if (waitingToLoad.length > 0) {
 		// We're on multifiles mode, just append the new data to the temporary holder.
 		multiRawData = multiRawData + '\n' + rawData;
@@ -1738,27 +1738,27 @@ function lastMonthsChanged() {
 
 function toggleFullScreen() {
 	var toolbar, tagbar, content;
-	
+
 	toolbar = document.getElementById('toolbarwrapper');
 	tagbar = document.getElementById('tagsArea');
 	content = document.getElementById('content');
-	
+
 	// Note:
 	// This toolbar wrapper is needed because #toolbar is a table (not a div).
 	// When doing the display:block on it, the table cells don't expand to full width.
 	// So we need this silly DIV wrapper so things work as expected.
 	// The only browser who got it right without the wrapper was... IE7/8 (surprise!)
-	
+
 	if (toolbar.style.display === 'none') {
 		toolbar.style.display = 'block';
 		if (reportType === 'd') {
-			tagbar.style.display = 'block';			
+			tagbar.style.display = 'block';
 		}
 		content.style.marginTop = '8em';
 	} else {
 		toolbar.style.display = 'none';
 		tagbar.style.display = 'none';
-		content.style.marginTop = 0;	
+		content.style.marginTop = 0;
 	}
 }
 function toggleFuture() {
@@ -1787,34 +1787,34 @@ function toggleMonthly() {
 
 function toggleRowHighlight(el) {
 	var names = [];
-	
+
 	if (el.className) {
 		names = el.className.split(' ');
 	}
-	
+
 	// Add or remove the class 'selected' for this row
 	if (names.hasItem('selected')) {
 		names = names.removePattern('selected');
 	} else {
 		names.push('selected');
 	}
-	
+
 	el.className = names.join(' ');
 }
 
 function valueFilterChanged() {
 	overviewData = [];
-	
+
 	// autocheck checkbox
 	document.getElementById('optvaluefilter').checked = true;
-	
+
 	// show/hide the filter argument textbox
 	if (document.getElementById('valuefilter').value.match(/[+\-]/)) {
 		document.getElementById('valuefilterarg').style.visibility = 'hidden';
 	} else {
 		document.getElementById('valuefilterarg').style.visibility = '';
 	}
-	
+
 	showReport();
 }
 
@@ -1824,11 +1824,11 @@ function valueFilterChanged() {
 /////////////////////////////////////////////////////////////////////
 
 function init() {
-	
+
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
 	i18n.labelTags = i18n.labelsDetailed[2]; // Tags
-	
+
 	// Online mode uses localStorage
 	isOnline = useLocalStorage;
 
@@ -1837,7 +1837,7 @@ function init() {
 	populateDataFilesCombo();
 	populateChartColsCombo();
 	populateValueFilterCombo();
-	
+
 	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
 	// Note: Using regex to allow ignorecase and global *atomic* replace
 	if (highlightWords) {
@@ -1845,15 +1845,15 @@ function init() {
 			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
 			'ig');
 	}
-	
+
 	// Split highlight string into words
 	highlightTags = highlightTags.strip().split(/\s+/);
-	
+
 	// Just show the files combo when there are 2 or more files
 	if (oneFile || useLocalStorage || dataFiles.length < 2) {
 		document.getElementById('datafiles').style.display = 'none';
 	}
-	
+
 	// Hide Reload button in oneFile mode. No iframe, so we can't reload.
 	if (oneFile || useLocalStorage) {
 		document.getElementById('reload').style.visibility = 'hidden';
@@ -1862,14 +1862,14 @@ function init() {
 	if (isOnline) {
 		appName = 'Moneylog Online';
 		i18n.appUrl = 'http://aurelio.net/moneylog/online';
-		
+
 		// The Edit button only appears in online mode
 		document.getElementById('editoropen').style.display = 'inline';
 		document.getElementById('operabug').style.paddingRight = i18n.labelEdit.length + 'em';
 	} else {
 		appName = appName.replace('og ', 'og<br>'); // dirty layout fix
 	}
-	
+
 	// Set interface labels
 	document.getElementById('sitelink'           ).innerHTML = appName;
 	document.getElementById('d'                  ).innerHTML = i18n.labelDaily;
@@ -1886,7 +1886,7 @@ function init() {
 	document.getElementById('editoropen'         ).innerHTML = i18n.labelEdit;
 	document.getElementById('editorclose'        ).innerHTML = i18n.labelClose;
 	document.getElementById('editorsave'         ).innerHTML = i18n.labelSave;
-	
+
 	// Set interface tooltips
 	document.getElementById('fullscreen'         ).title = i18n.helpFullScreen;
 	document.getElementById('sitelink'           ).href  = i18n.appUrl;
@@ -1905,7 +1905,7 @@ function init() {
 	document.getElementById('tagMultiAllLabel'   ).title = i18n.helpTagGroup;
 	document.getElementById('editoropen'         ).title = i18n.helpEdit;
 	document.getElementById('editorclose'        ).title = i18n.helpClose;
-	document.getElementById('editorsave'         ).title = i18n.helpSave;	
+	document.getElementById('editorsave'         ).title = i18n.helpSave;
 
 	// Mark current report as active (CSS)
 	document.getElementById(reportType).className = 'active';
@@ -1920,7 +1920,7 @@ function init() {
 		);
 		return; // abort
 	}
-	
+
 	// Add event handlers
 	document.getElementById('fullscreen'      ).onclick  = toggleFullScreen;
 	document.getElementById('d'               ).onclick  = changeReport;
@@ -1947,7 +1947,7 @@ function init() {
 		document.getElementById('editorsave' ).onclick = saveLocalData;
 		document.getElementById('editordata' )[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 	}
-	
+
 	// Apply user defaults (this code must be after event handlers adding)
 	if (defaultLastMonths)    { document.getElementById('optlastmonths').checked = true; }
 	if (defaultMonthPartials) { document.getElementById('optmonthly'   ).checked = true; }
@@ -1955,7 +1955,7 @@ function init() {
 	if (defaultRegex)         { document.getElementById('optregex'     ).checked = true; }
 	if (defaultNegate)        { document.getElementById('optnegate'    ).checked = true; }
 	document.getElementById('filter').value = defaultSearch;
-	
+
 	// Compose help contents (dirty, but handy)
 	document.getElementById('help').innerHTML = (
 		wrapme('b', linkme(i18n.appUrl, appName) + ': ') + i18n.appDescription +
@@ -1991,7 +1991,7 @@ function init() {
 	if (reportType !== 'd') {
 		updateToolbar();
 	}
-	
+
 	// Everything is ok, time to read/parse/show the user data
 	if (oneFile || useLocalStorage) {
 		readData();
@@ -2002,7 +2002,7 @@ function init() {
 		document.getElementById('datafiles').selectedIndex = 0;
 		loadSelectedFile();
 	}
-	
+
 	// Uncomment this line to focus the search box at init
 	// document.getElementById('filter').focus();
 }
