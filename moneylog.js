@@ -1,5 +1,5 @@
 /*global window: false, localStorage: false */
-/*jslint browser: true, devel: true, undef: true, nomen: true, bitwise: true */
+/*jslint devel: true, regexp: true, browser: true, undef: true, continue: true, sloppy: true, eqeq: true, white: true, forin: true, plusplus: true, maxerr: 500 */
 
 /*
 	moneylog.js
