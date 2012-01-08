@@ -299,6 +299,9 @@ label,
 	background-color:#eee; /* bg6 */
 	font-style:italic;
 }
+#report tr.selected {
+	background-color:yellow !important; /* bg_yellow */
+}
 #report .number {
 	text-align:right !important;
 	white-space:nowrap;

@@ -644,7 +644,9 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
 	var theRow = [];
 	
-	theRow.push((theMonth <= currentDate.slice(0, 7)) ? '<tr>' : '<tr class="future">');
+	theRow.push((theMonth <= currentDate.slice(0, 7)) ?
+	    '<tr onClick="toggleRowHighlight(this)">' :
+	    '<tr onClick="toggleRowHighlight(this)" class="future">');
 	if (showRowCount) {
 		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
 	}
@@ -1488,9 +1490,9 @@ function showDetailed() {
 			
 			// This row is in the future?
 			if (rowDate <= currentDate) {
-				results.push('<tr>');
+				results.push('<tr onClick="toggleRowHighlight(this)">');
 			} else {
-				results.push('<tr class="future">');
+				results.push('<tr onClick="toggleRowHighlight(this)" class="future">');
 			}
 			
 			if (showRowCount) {
@@ -1781,6 +1783,23 @@ function toggleMonthly() {
 		sortColRev = false;
 	}
 	showReport();
+}
+
+function toggleRowHighlight(el) {
+    var names = [];
+    
+    if (el.className) {
+        names = el.className.split(' ');
+    }
+    
+    // Add or remove the class 'selected' for this row
+    if (names.hasItem('selected')) {
+        names = names.removePattern('selected');
+    } else {
+        names.push('selected');
+    }
+    
+    el.className = names.join(' ');
 }
 
 function valueFilterChanged() {
