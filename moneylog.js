@@ -1786,20 +1786,20 @@ function toggleMonthly() {
 }
 
 function toggleRowHighlight(el) {
-    var names = [];
-    
-    if (el.className) {
-        names = el.className.split(' ');
-    }
-    
-    // Add or remove the class 'selected' for this row
-    if (names.hasItem('selected')) {
-        names = names.removePattern('selected');
-    } else {
-        names.push('selected');
-    }
-    
-    el.className = names.join(' ');
+	var names = [];
+	
+	if (el.className) {
+		names = el.className.split(' ');
+	}
+	
+	// Add or remove the class 'selected' for this row
+	if (names.hasItem('selected')) {
+		names = names.removePattern('selected');
+	} else {
+		names.push('selected');
+	}
+	
+	el.className = names.join(' ');
 }
 
 function valueFilterChanged() {
