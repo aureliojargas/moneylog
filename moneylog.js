@@ -379,7 +379,7 @@ if (!Array.prototype.push) { // IE5...
 if (!Number.prototype.toFixed) { // IE5...
 	Number.prototype.toFixed = function (n) { // precision hardcoded to 2
 		var k = (Math.round(this * 100) / 100).toString();
-		k += (k.indexOf('.') == -1) ? '.00' : '00';
+		k += (k.indexOf('.') === -1) ? '.00' : '00';
 		return k.substring(0, k.indexOf('.') + 3);
 	};
 }
@@ -939,7 +939,7 @@ function parseData() {
 		if (recurrentAmount) {
 			recValue = rowAmount;
 
-			if (recOperator == '/') {
+			if (recOperator === '/') {
 				recValue = (recValue / recTimes);
 			}
 
@@ -1136,7 +1136,7 @@ function applyTags(theData) {
 
 				thisTag = selectedTags[j];
 				tagMatched = (rowTags.hasItem(thisTag) ||
-					(thisTag == i18n.labelTagEmpty && rowTags.length === 0));
+					(thisTag === i18n.labelTagEmpty && rowTags.length === 0));
 					// Tip: space means no tag
 
 				if (tagMatched && (!tagMultiAll)) { break; } // OR
@@ -1150,7 +1150,7 @@ function applyTags(theData) {
 
 	// Make sure the menu has all the selected tags
 	for (i = 0; i < selectedTags.length; i++) {
-		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] != i18n.labelTagEmpty) {
+		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] !== i18n.labelTagEmpty) {
 			tagsMenu.push(selectedTags[i]);
 		}
 	}
@@ -1476,7 +1476,7 @@ function showDetailed() {
 			// There are some tags to highlight?
 			for (j = 0; j < highlightTags.length; j++) {
 				for (k = 0; k < rowTags.length; k++) {
-					if (rowTags[k] == highlightTags[j]) {
+					if (rowTags[k] === highlightTags[j]) {
 						rowTags[k] = '<span class="hl">' + rowTags[k] + '<\/span>';
 						break;
 					}
