@@ -37,6 +37,10 @@ var showMiniBarsLabels = true;    // Show the labels inside the bars?
 var miniBarWidth = 70;            // The percentage bar width, in pixels
 var showCharts = true;            // Show the bar chart after the monthly/yearly report?
 var showChartBarLabel = true;     // Show the labels above the bars?
+var initChartDaily = 1;           // Initial selected item for the daily chart [1-4]
+var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
+var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
+
 
 // Program structure and files
 var oneFile = false;              // Full app is at moneylog.html single file?
@@ -2002,6 +2006,15 @@ function init() {
 				array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.50'.split(', '))
 		);
 		return; // abort
+	}
+
+	// Set initial chart type for the reports (before event handlers)
+	if (reportType === 'd') {
+		document.getElementById('chartcol').value = initChartDaily;
+	} else if (reportType === 'm') {
+		document.getElementById('chartcol').value = initChartMonthly;
+	} else {
+		document.getElementById('chartcol').value = initChartYearly;
 	}
 
 	// Add event handlers
