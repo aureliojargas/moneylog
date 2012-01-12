@@ -1897,6 +1897,7 @@ function toggleFullScreen() {
 	toolbar = document.getElementById('toolbarwrapper');
 	tagbar = document.getElementById('tagsArea');
 	content = document.getElementById('content');
+	tagsummary = document.getElementById('tagSummary');
 
 	// Note:
 	// This toolbar wrapper is needed because #toolbar is a table (not a div).
@@ -1908,12 +1909,17 @@ function toggleFullScreen() {
 		toolbar.style.display = 'block';
 		if (reportType === 'd') {
 			tagbar.style.display = 'block';
+			tagsummary.style.display = oldTagSummary || 'none';
 		}
 		content.style.marginTop = '8em';
 	} else {
 		toolbar.style.display = 'none';
 		tagbar.style.display = 'none';
 		content.style.marginTop = 0;
+		if (reportType === 'd') {
+			oldTagSummary = tagsummary.style.display;
+			tagsummary.style.display = 'none';
+		}
 	}
 }
 function toggleFuture() {
