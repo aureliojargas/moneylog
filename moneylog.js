@@ -384,6 +384,18 @@ if (!Number.prototype.toFixed) { // IE5...
 	};
 }
 
+// http://ejohn.org/blog/fast-javascript-maxmin/
+if (!Array.prototype.max) {
+	Array.prototype.max = function () {
+	    return Math.max.apply(null, this);
+	};
+}
+if (!Array.prototype.min) {
+	Array.prototype.min = function () {
+	    return Math.min.apply(null, this);
+	};
+}
+
 String.prototype.strip = function () {
 	return this.replace(/^\s+/, '').replace(/\s+$/, '');
 };
@@ -538,7 +550,7 @@ function prettyFloat(num, noHtml) {
 	// Note: all html *end* tags have the / escaped to pass on validator
 }
 
-function prettyBarLabel(n) {
+function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 	var negative;
 	negative = (n < 0);
 	if (negative) {
@@ -565,6 +577,79 @@ function wrapme(tag, text) {
 }
 function linkme(url, text) {
 	return '<a href="' + url + '">' + text + '<\/a>';
+}
+
+function drawChart(values, labels) {
+	var i, label, height, value, valueShort, roof, chart, chartData, barType;
+
+	chart = [];
+	chartData = [];
+
+	// Get the maximum absolute value
+	// That will be the highest chart bar, using 100px
+	// Other bars will be lower, proportionally
+	roof = Math.max(
+		Math.abs(values.max()),
+		Math.abs(values.min())
+	);
+
+	// Calculate and format chart data
+	for (i = 0; i < values.length; i++) {
+
+		// This bar height = percentage of roof (but in pixels)
+		height = parseInt(Math.abs(values[i]) * 100 / roof, 10);
+
+		// Format the float value. For example 1234.56 turns to...
+		value = prettyFloat(values[i], true);   // 1.234,56
+		valueShort = prettyBarLabel(values[i]); // 1k2
+
+		// Date: 2010-12 -> 2010<br>12
+		label =  labels[i].replace('-', '<br>');
+
+		chartData.push([label, height, value, valueShort]);
+	}
+
+	// Compose the chart table
+	chart.push('<table class="chart">');
+
+	// First line: the bars (label at top)
+	chart.push('<tr>');
+
+	// Compose each table column (== chart bar)
+	for (i = 0; i < chartData.length; i++) {
+
+		chart.push('<td class="bar">');
+
+		// Will show bar value at top?
+		if (showChartBarLabel) {
+			chart.push(
+				'<span class="label" title="' + chartData[i][2] + '">' +
+				chartData[i][3] +
+				'<\/span>'
+				// Showing short value. Real value is stored as a tooltip.
+			);
+		}
+
+		// The bar, a painted div with exact height
+		barType = (chartData[i][3].substring(0, 1) === '-') ? 'negbar' : 'posbar';
+		chart.push('<div class="bar ' + barType + '" style="height:' + chartData[i][1] + 'px"><\/div>');
+
+		chart.push('<\/td>');
+	}
+	chart.push('<\/tr>');
+
+	// Second line: the labels
+	chart.push('<tr class="label">');
+	for (i = 0; i < chartData.length; i++) {
+		chart.push('<td>' + chartData[i][0] + '<\/td>');
+	}
+	chart.push('<\/tr>');
+
+	// And we're done
+	chart.push('<\/table>');
+	chart = chart.join('\n');
+
+	return chart;
 }
 
 
@@ -1209,7 +1294,8 @@ function applyTags(theData) {
 /////////////////////////////////////////////////////////////////////
 
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartBars, chartLabels, chartCol, chartRoof, chartBarSize, chartBarLabel, chartBarValue, chartBarClass;
+	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels;
+
 
 	results = [];
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
@@ -1340,53 +1426,19 @@ function showOverview() {
 
 		// Now charts!
 		if (showCharts) {
-			chart = [];
-			chartBars = [];
+
+			chartValues = [];
 			chartLabels = [];
+
+			// Get all values for the selected column
 			chartCol = document.getElementById('chartcol').value || 1;
-
-			// Get the maximum absolute value for this column
-			chartRoof = (Math.abs(minNumbers[chartCol]) > maxNumbers[chartCol]) ?
-					Math.abs(minNumbers[chartCol]) :
-					maxNumbers[chartCol];
-
-			// Calculate each bar size and format labels
 			for (i = 0; i < overviewData.length; i++) {
-				z = overviewData[i];
-				chartBarSize = parseInt(Math.abs(z[chartCol]) * 100 / chartRoof, 10);
-				chartBarLabel = prettyBarLabel(z[chartCol]);
-				chartBarValue = prettyFloat(z[chartCol], true);
-				chartBars.push([chartBarLabel, chartBarSize, chartBarValue]);
-				chartLabels.push(z[0].replace('-', '<br>')); // date
+				chartValues.push(overviewData[i][chartCol]);
+				chartLabels.push(overviewData[i][0]);  // month or year
 			}
 
-			// Compose the chart table
-			chart.push('<table class="chart">');
-
-			// First line is for the bars (label at top)
-			chart.push('<tr>');
-			for (i = 0; i < chartBars.length; i++) {
-				chartBarClass = (chartBars[i][0].substring(0, 1) === '-') ? 'negbar' : 'posbar';
-				chart.push('<td class="bar">');
-				if (showChartBarLabel) {
-					chart.push('<span class="label" title="' + chartBars[i][2] + '">' + chartBars[i][0] + '<\/span>');
-				}
-				chart.push('<div class="bar ' + chartBarClass + '" style="height:' + chartBars[i][1] + 'px"><\/div>');
-				chart.push('<\/td>');
-			}
-			chart.push('<\/tr>');
-
-			// Second line is for the labels
-			chart.push('<tr class="label">');
-			for (i = 0; i < chartLabels.length; i++) {
-				chart.push('<td>' + chartLabels[i] + '<\/td>');
-			}
-			chart.push('<\/tr>');
-
-			// And we're done
-			chart.push('<\/table>');
-			chart = chart.join('\n');
-
+			// Get chart and show it
+			chart = drawChart(chartValues, chartLabels);
 			document.getElementById('chart').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
 		}
