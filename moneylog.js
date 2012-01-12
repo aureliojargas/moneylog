@@ -1674,6 +1674,9 @@ function showDetailed() {
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
 
+		// Clear Tag Summary contents
+		updateTagSummary([]);
+
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
 		
