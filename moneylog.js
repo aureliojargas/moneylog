@@ -37,7 +37,7 @@ var showMiniBarsLabels = true;    // Show the labels inside the bars?
 var miniBarWidth = 70;            // The percentage bar width, in pixels
 var showCharts = true;            // Show the bar chart after the monthly/yearly report?
 var showChartBarLabel = true;     // Show the labels above the bars?
-var initChartDaily = 1;           // Initial selected item for the daily chart [1-4]
+var initChartDaily = 3;           // Initial selected item for the daily chart [1-4]
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
 var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
 
