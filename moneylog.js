@@ -1441,6 +1441,7 @@ function showOverview() {
 			chart = drawChart(chartValues, chartLabels);
 			document.getElementById('chart').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
+			document.getElementById('chartcol').style.display = 'inline';
 		}
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
@@ -1452,10 +1453,12 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal;
+	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartValues, chartLabels;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
+	chartValues = [];
+	chartLabels = [];
 
 	monthPartials = document.getElementById('optmonthly');
 	theData = applyTags(filterData());
@@ -1497,6 +1500,9 @@ function showDetailed() {
 					rowDate.slice(0, 7) !=
 					theData[i - 1][0].slice(0, 7)) {
 				results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
+				// Save month data for the chart
+				chartValues.push(monthTotal);
+				chartLabels.push(theData[i - 1][0].slice(0, 7)); // month
 				// Partials row shown, reset month totals
 				monthTotal = 0;
 				monthPos = 0;
@@ -1567,11 +1573,25 @@ function showDetailed() {
 			results.push(getTotalsRow(sumTotal, '', sumNeg, sumPos));
 		}
 
+		// Save chart data for this last month
+		chartValues.push(monthTotal);
+		chartLabels.push(theData[theData.length - 1][0].slice(0, 7)); // month
+
 		results.push('<\/table>');
 		results = results.join('\n');
 
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
+
+		// Now charts!
+		if (showCharts) {
+			chart = drawChart(chartValues, chartLabels);
+			document.getElementById('chart').innerHTML = chart;
+			document.getElementById('charts').style.display = 'block';
+			// Hide chart control, there's only one option for now
+			document.getElementById('chartcol').style.display = 'none';
+		}
+
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
 	}
