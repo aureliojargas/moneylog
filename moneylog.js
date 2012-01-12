@@ -1441,8 +1441,10 @@ function showOverview() {
 			chart = drawChart(chartValues, chartLabels);
 			document.getElementById('chart').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
-			document.getElementById('chartcol').style.display = 'inline';
+		} else {
+			document.getElementById('charts').style.display = 'none';
 		}
+
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
 
@@ -1453,7 +1455,7 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartValues, chartLabels;
+	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
@@ -1500,8 +1502,8 @@ function showDetailed() {
 					rowDate.slice(0, 7) !=
 					theData[i - 1][0].slice(0, 7)) {
 				results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
-				// Save month data for the chart
-				chartValues.push(monthTotal);
+				// Save month data for the chart (-1 is a fake entry, one-based array)
+				chartValues.push([-1, monthPos, monthNeg, monthTotal, sumTotal]);
 				chartLabels.push(theData[i - 1][0].slice(0, 7)); // month
 				// Partials row shown, reset month totals
 				monthTotal = 0;
@@ -1574,7 +1576,7 @@ function showDetailed() {
 		}
 
 		// Save chart data for this last month
-		chartValues.push(monthTotal);
+		chartValues.push([-1, monthPos, monthNeg, monthTotal, sumTotal]);
 		chartLabels.push(theData[theData.length - 1][0].slice(0, 7)); // month
 
 		results.push('<\/table>');
@@ -1584,16 +1586,30 @@ function showDetailed() {
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 
 		// Now charts!
-		if (showCharts) {
-			chart = drawChart(chartValues, chartLabels);
+		// Note: monthPartials option is required to be ON
+		if (showCharts && monthPartials.checked) {
+
+			// Get all values for the selected column
+			chartValuesSelected = [];
+			chartCol = document.getElementById('chartcol').value || 1;
+			for (i = 0; i < chartValues.length; i++) {
+				chartValuesSelected.push(chartValues[i][chartCol]);
+			}
+
+			// Get chart and show it
+			chart = drawChart(chartValuesSelected, chartLabels);
 			document.getElementById('chart').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
-			// Hide chart control, there's only one option for now
-			document.getElementById('chartcol').style.display = 'none';
+		} else {
+			document.getElementById('charts').style.display = 'none';
 		}
 
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
+
+		// Hide charts when there's no data
+		document.getElementById('charts').style.display = 'none';
+		
 	}
 	document.getElementById('report').innerHTML = results;
 }
