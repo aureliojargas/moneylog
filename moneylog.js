@@ -344,7 +344,7 @@ var i18nDatabase = {
 
 
 // Global vars
-var appName = 'Moneylog Experience ß';
+var appName = 'Moneylog Experience ∞';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
