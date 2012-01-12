@@ -39,6 +39,16 @@ label,
 .negbar {
 	background-color:#f66 !important;   /* bar2 */
 }
+.number {
+	text-align:right !important;
+	white-space:nowrap;
+}
+.neg {
+	color:#e33;            /* fg_red */
+}
+tr:hover .neg {
+	color:#f00;
+}
 #tagsArea input,
 #tagsArea label,
 #toolbar input,
@@ -70,7 +80,7 @@ label,
 	font-size:150%;
 	width:1em;
 	text-align:center;
-	background-color:#444; /* bg2 */	
+	background-color:#444; /* bg2 */
 }
 #toolbar {
 	color:#ddd;            /* fg2 */
@@ -84,12 +94,14 @@ label,
 	height:8em;            /* y1 */
 }
 #fullscreen,
+#tagSummaryButton,
 #toolbar a {
 	color:#f44;            /* fg2a */
 	font-size:185%;
 	padding:0 4px;
 }
 #fullscreen:hover,
+#tagSummaryButton:hover,
 #toolbar a:hover {
 	background-color:#f44; /* fg2a */
 	color:#444;            /* bg2 */
@@ -288,12 +300,10 @@ label,
 #report tr.future td.row-count {
 	font-style:normal;
 }
-#report tr:hover td {
+#report tr:hover td,
+#tagSummary tr:hover td {
 	background-color:#ddd; /* bg4 */
 	color:#000;            /* fg4 */
-}
-#report tr:hover .neg {
-	color:#f00;
 }
 #report tr.future {
 	background-color:#eee; /* bg6 */
@@ -301,13 +311,6 @@ label,
 }
 #report tr.selected {
 	background-color:yellow !important; /* bg_yellow */
-}
-#report .number {
-	text-align:right !important;
-	white-space:nowrap;
-}
-#report .neg {
-	color:#e33;            /* fg_red */
 }
 #report .hl {
 	color:#000;            /* fg4 */
@@ -356,7 +359,7 @@ label,
 
 #report table.overview tr.total {
 	background-color:#fee; /* bg5 */
-	font-style:italic;	
+	font-style:italic;
 }
 #report td.rowlabel {
 	font-weight:bold;
@@ -374,6 +377,32 @@ label,
 	float:left;
 	font-size:75%;
 	color:white !important;
+}
+
+/* ---------------------------------------------- Tag summary */
+
+#tagSummary {
+	display:none;
+	position: fixed;
+	margin: 0;
+	right: 0.5em;
+	bottom: 2.5em;  /* padding 0.5*2 + font-size:150% */
+	background-color: #eee; /* bg6 */
+	overflow: auto;
+	max-height: 50%; /* for huge tag lists */
+}
+#tagSummary table {
+	border: 1px solid #444; /* bg2 */
+	border-width: 1px 1px 0 1px;
+}
+#tagSummary table td {
+	border-width: 0;
+	padding: 3px 10px;
+}
+#tagSummaryButton {
+	float: right;
+	font-size: 130%;
+	font-weight: bold;
 }
 
 /* ---------------------------------------------- Charts */
@@ -426,9 +455,9 @@ body {
 	color:#515; background-color:#edf; }
 #toolbar {
 	color:#ddd; background-color:#444; }
-#toolbar a, #toolbar #report-nav a:hover, #fullscreen, #tagsArea #tagsLabel {
+#toolbar a, #toolbar #report-nav a:hover, #fullscreen, #tagsArea #tagsLabel, #tagSummaryButton, {
 	color:#c6f; }
-#toolbar a:hover, #fullscreen:hover {
+#toolbar a:hover, #fullscreen:hover, #tagSummaryButton:hover, {
 	color:#444; background-color:#c6f; }
 #toolbar #report-nav a:hover, #toolbar #report-nav a.active {
 	border-color:#c6f; }

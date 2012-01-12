@@ -1297,6 +1297,60 @@ function applyTags(theData) {
 //                          REPORTS
 /////////////////////////////////////////////////////////////////////
 
+function updateTagSummary(theData) {
+	var i, j, tag, value, results, tagNames, tagData, rowAmount, rowTags;
+
+	results = [];
+	tagNames = [];
+	tagData = [];
+
+	// Scan report rows
+	for (i = 0; i < theData.length; i++) {
+		// rowDate        = theData[i][0];
+		rowAmount      = theData[i][1];
+		rowTags        = theData[i][2];  // array
+		// rowDescription = theData[i][3];
+
+		// Sum all values for the same tag
+		for (j = 0; j < rowTags.length; j++) {
+			tag = rowTags[j];
+
+			// New tag?
+			if (!tagNames.hasItem(tag)) {
+				tagData[tag] = 0;
+				tagNames.push(tag);
+			}
+			tagData[tag] = tagData[tag] + rowAmount;
+		}
+	}
+
+	// We have tags?
+	if (tagNames.length) {
+		tagNames.sort(sortIgnoreCase);
+
+		// Compose the HTML table
+		results.push('<table>');
+		for (i = 0; i < tagNames.length; i++) {
+			tag = tagNames[i];
+			value = prettyFloat(tagData[tag]);
+			results.push(
+				'<tr>' +
+				'<td>' + tag +  '<\/td>' +
+				'<td class="number"> ' + value + '<\/td>' +
+				'<\/tr>'
+			);
+		}
+		results.push('<\/table>');
+	}
+
+	// Save results to the respective DIV
+	results = results.join('\n');
+	document.getElementById('tagSummary').innerHTML = results;
+
+	// Position tag summary right above the tagbar, which has variable height
+	document.getElementById('tagSummary').style.bottom = document.getElementById('tagsArea').offsetHeight + 'px';
+}
+
 function showOverview() {
 	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels;
 
@@ -1589,6 +1643,10 @@ function showDetailed() {
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 
+
+		// Tag Summary
+		updateTagSummary(theData);
+
 		// Now charts!
 		// Note: monthPartials option is required to be ON
 		if (showCharts && monthPartials.checked) {
@@ -1858,6 +1916,12 @@ function toggleHelp() {
 	return false; // cancel default link action
 }
 
+function toggleTagSummary() {
+	var el = document.getElementById('tagSummary');
+	el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+	return false; // cancel default link action
+}
+
 function toggleLastMonths() {
 	overviewData = [];
 	showReport();
@@ -2037,6 +2101,7 @@ function init() {
 	document.getElementById('reload'          ).onclick  = loadSelectedFile;
 	document.getElementById('tagMultiAllCheck').onclick  = showReport;
 	document.getElementById('chartcol'        ).onchange = showReport;
+	document.getElementById('tagSummaryButton').onclick  = toggleTagSummary;
 	if (isOnline) {
 		document.getElementById('editoropen' ).onclick = editorOn;
 		document.getElementById('editorclose').onclick = editorOff;
