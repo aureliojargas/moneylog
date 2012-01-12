@@ -134,6 +134,7 @@ var i18nDatabase = {
 		helpReload: 'Reload only the data, not the full page. This button only appears when using an external TXT file for data.',
 		helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
 		helpTagGroup: 'Show only the entries that have all the selected tags.',
+		helpTagSummary: 'Show/hide the tag summary box.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
 		helpSave: 'Save your data.',
@@ -199,6 +200,7 @@ var i18nDatabase = {
 		helpReload: 'Recarrega somente os dados (só aparece quando se utiliza arquivo TXT externo).',
 		helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
 		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
+		helpTagSummary: 'Mostra e esconde a caixa com o somatório das tags.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpSave: 'Salva os lançamentos que você alterou.',
@@ -257,6 +259,7 @@ var i18nDatabase = {
 		helpReload: 'Actualitza només les dades, no la pàgina sencera. Aquest botó només apareix quan es fa servir un arxiu TXT de dades extern.',
 		helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
 		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
+		helpTagSummary: '',
 		helpEdit: '',
 		helpClose: '',
 		helpSave: '',
@@ -317,6 +320,7 @@ var i18nDatabase = {
 		helpReload: 'Recargar solo la información y no la página entera. Este botón solo aparecerá cuando se este utilizando un archivo TXT externo para almacenar la información.',
 		helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
 		helpTagGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
+		helpTagSummary: '',
 		helpEdit: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
 		helpClose: 'Cierra el editor de movimientos (solo cierra, no guarda los cambios!).',
 		helpSave: 'Guarda las movimientos editados.',
@@ -2054,6 +2058,7 @@ function init() {
 	document.getElementById('reload'             ).title = i18n.helpReload;
 	document.getElementById('tagsLabel'          ).title = i18n.helpTags;
 	document.getElementById('tagMultiAllLabel'   ).title = i18n.helpTagGroup;
+	document.getElementById('tagSummaryButton'   ).title = i18n.helpTagSummary;
 	document.getElementById('editoropen'         ).title = i18n.helpEdit;
 	document.getElementById('editorclose'        ).title = i18n.helpClose;
 	document.getElementById('editorsave'         ).title = i18n.helpSave;
@@ -2140,7 +2145,8 @@ function init() {
 		array2ul([
 				wrapme('b', i18n.labelTags + ': ') + i18n.helpTags +
 					array2ul([
-						wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup
+						wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup,
+						wrapme('b', '@: ') + i18n.helpTagSummary
 					])
 			]) +
 		wrapme('p', i18n.helpTip) +
