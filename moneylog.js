@@ -358,6 +358,7 @@ var sortColRev = false;
 var oldSortColIndex;
 var oldSortColRev;
 var oldValueFilterArgShow;
+var oldTagSummary;
 var currentDate;
 var highlightRegex;
 var i18n;
@@ -1828,6 +1829,8 @@ function changeReport(el) {
 	if (oldType === 'd' && newType !== 'd') {
 		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
 		document.getElementById('valuefilterarg').style.visibility = 'hidden';
+		oldTagSummary = document.getElementById('tagSummary').style.display;
+		document.getElementById('tagSummary').style.display = 'none';
 		oldSortColIndex = sortColIndex;
 		oldSortColRev = sortColRev;
 		sortColIndex = 0; // Default by date
@@ -1836,6 +1839,7 @@ function changeReport(el) {
 	// From Monthly/Yearly to Daily
 	} else if (newType === 'd' && oldType !== 'd') {
 		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
+		document.getElementById('tagSummary').style.display = oldTagSummary;
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
 	}
