@@ -301,7 +301,7 @@ tr:hover .neg {
 	font-style:normal;
 }
 #report tr:hover td,
-#tagSummary tr:hover td {
+.popup tr:hover td {
 	background-color:#ddd; /* bg4 */
 	color:#000;            /* fg4 */
 }
@@ -382,27 +382,32 @@ tr:hover .neg {
 /* ---------------------------------------------- Tag summary */
 
 #tagSummary {
-	display:none;
+	display: none;
 	position: fixed;
-	margin: 0;
-	right: 0.5em;
+	left: 0.5em;
 	bottom: 2.5em;  /* padding 0.5*2 + font-size:150% */
-	background-color: #eee; /* bg6 */
-	overflow: auto;
-	max-height: 50%; /* for huge tag lists */
-}
-#tagSummary table {
-	border: 1px solid #444; /* bg2 */
-	border-width: 1px 1px 0 1px;
-}
-#tagSummary table td {
-	border-width: 0;
-	padding: 3px 10px;
+	max-height: 40%; /* for huge tag lists */
 }
 #tagSummaryButton {
-	float: right;
 	font-size: 130%;
 	font-weight: bold;
+	margin-right: .5em;
+}
+
+/* ---------------------------------------------- Popup */
+
+.popup {
+	margin: 0;
+	background-color: #eee; /* bg6 */
+	background-color: #ccc; /* bg6 */
+	overflow: auto;	
+}
+.popup table {
+	border: 0px solid #444; /* bg2 */
+}
+.popup td {
+	border-width: 0;
+	padding: 3px 8px;
 }
 
 /* ---------------------------------------------- Charts */
