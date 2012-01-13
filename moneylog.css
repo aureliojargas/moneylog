@@ -394,6 +394,14 @@ tr:hover .neg {
 	margin-right: .5em;
 }
 
+/* ---------------------------------------------- Rows summary */
+
+#rowsSummary {
+	position: fixed;
+	left: 0;
+	bottom: 50%;
+}
+
 /* ---------------------------------------------- Popup */
 
 .popup {

@@ -107,6 +107,7 @@ var i18nDatabase = {
 		labelAverage: 'Average',
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
+		labelCount: 'Count',
 		labelMonths: ['month', 'months'],
 		labelTagEmpty: 'EMPTY',
 		labelTagGroup: 'Group selected tags',
@@ -173,6 +174,7 @@ var i18nDatabase = {
 		labelAverage: 'Média',
 		labelMinimum: 'Mínimo',
 		labelMaximum: 'Máximo',
+		labelCount: 'Linhas',
 		labelMonths: ['mês', 'meses'],
 		labelTagEmpty: 'VAZIO',
 		labelTagGroup: 'Unir as tags escolhidas',
@@ -366,6 +368,7 @@ var rawData = '';
 var parsedData = [];
 var overviewData = [];
 var waitingToLoad = [];
+var selectedRowsData = [];
 var multiRawData = '';
 var isOpera = (window.opera) ? true : false;
 var isOnline = false;
@@ -842,6 +845,19 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	theRow.push('<td><\/td>');
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
+}
+
+function getDetailedReportColumnContents(tr_element, column_index) {
+	// (zero-based) Columns: Row count, Date, Amount, Tags, Description, Balance
+	td = tr_element.getElementsByTagName('td')[column_index];
+
+	if (column_index === 2) {
+		// Example: <span class="neg">-123,45</span>
+		// Example: <span class="pos">123,45</span>
+		return td.getElementsByTagName('span')[0].firstChild.nodeValue;
+	} else {
+		alert("getDetailedReportColumnContents: Columns other than AMOUNT are not supported yet.");
+	}
 }
 
 
@@ -1372,6 +1388,40 @@ function applyTags(theData) {
 //                          REPORTS
 /////////////////////////////////////////////////////////////////////
 
+function updateSelectedRowsSummary() {
+	var i, data, arr, table, label, value;
+
+	data = selectedRowsData;
+	arr = [];
+	table = [];
+
+	if (data.length > 0) {
+
+		// Calculate
+		arr.push([i18n.labelTotal,   prettyFloat(data.sum())]);
+		arr.push([i18n.labelAverage, prettyFloat(data.avg())]);
+		arr.push([i18n.labelMinimum, prettyFloat(data.min())]);
+		arr.push([i18n.labelMaximum, prettyFloat(data.max())]);
+		arr.push([i18n.labelCount,   data.length]);
+
+		// Compose the HTML table
+		table.push('<table>');
+		for (i = 0; i < arr.length; i++) {
+			label = arr[i][0];
+			value = arr[i][1];
+			table.push(
+				'<tr>' +
+				'<td>' + label +  '<\/td>' +
+				'<td class="number"> ' + value + '<\/td>' +
+				'<\/tr>'
+			);
+		}
+		table.push('<\/table>');
+	}
+
+	document.getElementById('rowsSummary').innerHTML = table.join('\n');
+}
+
 function updateTagSummary(theData) {
 	var i, j, tag, value, results, tagNames, tagData, rowAmount, rowTags;
 
@@ -1594,6 +1644,7 @@ function showDetailed() {
 	results = [];
 	chartValues = [];
 	chartLabels = [];
+	selectedRowsData = [];
 
 	monthPartials = document.getElementById('optmonthly');
 	theData = applyTags(filterData());
@@ -2024,11 +2075,25 @@ function toggleMonthly() {
 
 function toggleRowHighlight(el) {
 	// This function is called when user clicks a report row.
+	// Besides the visual highlight, it also updates the summary
+	// for all the selected rows. It will appear when the first
+	// row is clicked.
+
+	// Save this row Amount as float
+	var rowAmount = prettyFloatUndo(getDetailedReportColumnContents(el, 2));
+
 	if (hasClass(el, 'selected')) {
+		// Unselect row, remove amount from holder
 		removeClass(el, 'selected');
+		selectedRowsData = selectedRowsData.removePattern(rowAmount, 1);
 	} else {
+		// Select row, add amount to holder
 		addClass(el, 'selected');
+		selectedRowsData.push(rowAmount);		
 	}
+	
+	// Refresh the summary
+	updateSelectedRowsSummary();
 }
 
 function valueFilterChanged() {
