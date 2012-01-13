@@ -30,6 +30,7 @@ var highlightWords = '';          // The words you may want to highlight (ie: 'X
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
+var showEmptyTagInSummary = false; // The EMPTY tag sum should appear in Tag Summary?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -1423,11 +1424,12 @@ function updateSelectedRowsSummary() {
 }
 
 function updateTagSummary(theData) {
-	var i, j, tag, value, results, tagNames, tagData, rowAmount, rowTags;
+	var i, j, tag, value, results, tagNames, tagData, rowAmount, rowTags, noTagSum;
 
 	results = [];
 	tagNames = [];
 	tagData = [];
+	noTagSum = undefined;  // Do not use 0. The final result may be zero.
 
 	// Scan report rows
 	for (i = 0; i < theData.length; i++) {
@@ -1436,22 +1438,37 @@ function updateTagSummary(theData) {
 		rowTags        = theData[i][2];  // array
 		// rowDescription = theData[i][3];
 
-		// Sum all values for the same tag
-		for (j = 0; j < rowTags.length; j++) {
-			tag = rowTags[j];
-
-			// New tag?
-			if (!tagNames.hasItem(tag)) {
-				tagData[tag] = 0;
-				tagNames.push(tag);
+		if (rowTags.length === 0) {
+			// No tag in this row
+			if (noTagSum === undefined) {
+				noTagSum = 0;
 			}
-			tagData[tag] = tagData[tag] + rowAmount;
+			noTagSum += rowAmount;
+
+		} else {
+			// Sum all values for the same tag
+			for (j = 0; j < rowTags.length; j++) {
+				tag = rowTags[j];
+
+				// New tag?
+				if (!tagNames.hasItem(tag)) {
+					tagData[tag] = 0;
+					tagNames.push(tag);
+				}
+				tagData[tag] = tagData[tag] + rowAmount;
+			}
 		}
 	}
 
 	// We have tags?
-	if (tagNames.length) {
+	if (tagNames.length || noTagSum !== undefined) {
 		tagNames.sort(sortIgnoreCase);
+		
+		// Append no-tag data to the end of the table
+		if (noTagSum !== undefined && showEmptyTagInSummary) {
+			tagNames.push(i18n.labelTagEmpty);
+			tagData[i18n.labelTagEmpty] = noTagSum;
+		}
 
 		// Compose the HTML table
 		results.push('<table>');
