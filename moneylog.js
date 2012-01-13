@@ -2019,20 +2019,12 @@ function toggleClass(el, klass) {
 }
 
 function toggleRowHighlight(el) {
-	var names = [];
-
-	if (el.className) {
-		names = el.className.split(' ');
-	}
-
-	// Add or remove the class 'selected' for this row
-	if (names.hasItem('selected')) {
-		names = names.removePattern('selected');
+	// This function is called when user clicks a report row.
+	if (hasClass(el, 'selected')) {
+		removeClass(el, 'selected');
 	} else {
-		names.push('selected');
+		addClass(el, 'selected');
 	}
-
-	el.className = names.join(' ');
 }
 
 function valueFilterChanged() {
