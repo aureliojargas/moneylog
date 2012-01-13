@@ -2125,7 +2125,7 @@ function valueFilterChanged() {
 	if (document.getElementById('valuefilter').value.match(/[+\-]/)) {
 		document.getElementById('valuefilterarg').style.visibility = 'hidden';
 	} else {
-		document.getElementById('valuefilterarg').style.visibility = '';
+		document.getElementById('valuefilterarg').style.visibility = 'visible';
 	}
 
 	showReport();
