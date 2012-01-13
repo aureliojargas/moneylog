@@ -371,6 +371,7 @@ var overviewData = [];
 var waitingToLoad = [];
 var selectedRowsData = [];
 var multiRawData = '';
+var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
 var isOnline = false;
 
@@ -2045,13 +2046,14 @@ function toggleFullScreen() {
 	// So we need this silly DIV wrapper so things work as expected.
 	// The only browser who got it right without the wrapper was... IE7/8 (surprise!)
 
-	if (toolbar.style.display === 'none') {
+	if (isFullScreen) {
 		toolbar.style.display = 'block';
 		if (reportType === 'd') {
 			tagbar.style.display = 'block';
 			tagsummary.style.display = oldTagSummary || 'none';
 		}
 		content.style.marginTop = '8em';
+		isFullScreen = false;
 	} else {
 		toolbar.style.display = 'none';
 		tagbar.style.display = 'none';
@@ -2060,6 +2062,7 @@ function toggleFullScreen() {
 			oldTagSummary = tagsummary.style.display;
 			tagsummary.style.display = 'none';
 		}
+		isFullScreen = true;
 	}
 }
 function toggleFuture() {
