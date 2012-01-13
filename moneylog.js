@@ -1371,8 +1371,8 @@ function applyTags(theData) {
 	// Save the tags menu (or make it empty)
 	document.getElementById('tagList').innerHTML = tagsMenu;
 
-	// Show the tags menu if we have at least one tag
-	document.getElementById('tagsArea').style.display = (tagsMenu.length > 0) ? 'block' : 'none';
+	// Show the tags menu if we have at least one tag (except Full Screen)
+	document.getElementById('tagsArea').style.display = (tagsMenu.length > 0 && !isFullScreen) ? 'block' : 'none';
 
 	// The '+' checkbox is only shown if we have multiple selected tags
 	document.getElementById('tagMultiAll').style.display = (selectedTags.length > 1) ? 'block' : 'none';
