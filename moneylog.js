@@ -580,6 +580,12 @@ function prettyFloat(num, noHtml) {
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
 	// Note: all html *end* tags have the / escaped to pass on validator
 }
+function prettyFloatUndo(str) {
+	str = str.replace(/<[^>]*>/g, '');              // remove HTML
+	str = str.replace(i18n.thousandSeparator, '');  // remove separator chars
+	str = str.replace(i18n.centsSeparator, '.');    // restore floating point
+	return parseFloat(str);                         // str2float
+}
 
 function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 	var negative;
