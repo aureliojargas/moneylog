@@ -480,6 +480,7 @@ function showError(title, msg) {
 	document.getElementById('error').style.display = 'block';
 	document.getElementById('error').innerHTML = '<h2>' + title + '<\/h2>' + msg;
 }
+
 function invalidData(lineno, message) {
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
@@ -570,6 +571,7 @@ function formatDate(date) {
 		'm', m[3]).replace(
 		'd', m[4]);
 }
+
 function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
 	num = num.toFixed(2).replace('.', i18n.centsSeparator);
@@ -580,6 +582,7 @@ function prettyFloat(num, noHtml) {
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
 	// Note: all html *end* tags have the / escaped to pass on validator
 }
+
 function prettyFloatUndo(str) {
 	str = str.replace(/<[^>]*>/g, '');              // remove HTML
 	str = str.replace(i18n.thousandSeparator, '');  // remove separator chars
@@ -614,6 +617,45 @@ function wrapme(tag, text) {
 }
 function linkme(url, text) {
 	return '<a href="' + url + '">' + text + '<\/a>';
+}
+
+// DOM Class helpers
+function getClass(el) {
+	if (el.className) {
+		return el.className.strip().split(' ');
+	} else {
+		return [];
+	}
+}
+function setClass(el, arr) {
+	el.className = arr.join(' ');
+}
+function hasClass(el, klass) {
+	return getClass(el).hasItem(klass);
+}
+function addClass(el, klass) {
+	var arr = getClass(el);
+	if (!arr.hasItem(klass)) {
+		arr.push(klass);
+		setClass(el, arr);
+	}
+}
+function removeClass(el, klass) {
+	var arr = getClass(el);
+	if (arr.hasItem(klass)) {
+		setClass(el, arr.removePattern(klass));
+	}	
+}
+function toggleClass(el, klass) {
+	var arr = getClass(el);
+	if (arr.hasItem(klass)) {
+		setClass(el, arr.removePattern(klass));
+		return false
+	} else {
+		arr.push(klass);
+		setClass(el, arr);
+		return true;
+	}
 }
 
 function drawChart(values, labels) {
@@ -1978,44 +2020,6 @@ function toggleMonthly() {
 		sortColRev = false;
 	}
 	showReport();
-}
-
-function getClass(el) {
-	if (el.className) {
-		return el.className.strip().split(' ');
-	} else {
-		return [];
-	}
-}
-function setClass(el, arr) {
-	el.className = arr.join(' ');
-}
-function hasClass(el, klass) {
-	return getClass(el).hasItem(klass);
-}
-function addClass(el, klass) {
-	var arr = getClass(el);
-	if (!arr.hasItem(klass)) {
-		arr.push(klass);
-		setClass(el, arr);
-	}
-}
-function removeClass(el, klass) {
-	var arr = getClass(el);
-	if (arr.hasItem(klass)) {
-		setClass(el, arr.removePattern(klass));
-	}	
-}
-function toggleClass(el, klass) {
-	var arr = getClass(el);
-	if (arr.hasItem(klass)) {
-		setClass(el, arr.removePattern(klass));
-		return false
-	} else {
-		arr.push(klass);
-		setClass(el, arr);
-		return true;
-	}
 }
 
 function toggleRowHighlight(el) {
