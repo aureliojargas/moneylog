@@ -1959,6 +1959,8 @@ function changeReport(el) {
 		oldSortColRev = sortColRev;
 		sortColIndex = 0; // Default by date
 		sortColRev = false;
+		selectedRowsData = [];
+		updateSelectedRowsSummary();
 	//
 	// From Monthly/Yearly to Daily
 	} else if (newType === 'd' && oldType !== 'd') {
