@@ -1625,6 +1625,10 @@ function showOverview() {
 		results.push('<\/table>');
 		results = results.join('\n');
 
+		// Always reset Rows Summary when generating reports
+		selectedRowsData = [];
+		updateSelectedRowsSummary();
+
 		// Now charts!
 		if (showCharts) {
 
@@ -1790,6 +1794,10 @@ function showDetailed() {
 
 		// Tag Summary
 		updateTagSummary(theData);
+
+		// Always reset Rows Summary when generating reports
+		selectedRowsData = [];
+		updateSelectedRowsSummary();
 
 		// Now charts!
 		// Note: monthPartials option is required to be ON
