@@ -434,11 +434,18 @@ Array.prototype.hasItem = function (item) {
 	return false;
 };
 
-Array.prototype.removePattern = function (patt) {
-	var i, cleaned = [];
+Array.prototype.removePattern = function (patt, n) { // n = number of removes
+	var i, count = 0, cleaned = [];
+
+	if (!n) {
+		n = Infinity;
+	}
+
 	for (i = 0; i < this.length; i++) {
-		if (this[i] != patt) {
-			cleaned.push(this[i]);
+		if (this[i] == patt && count < n) { // must remove
+			count += 1;
+		} else {
+			cleaned.push(this[i]);          // otherwise save
 		}
 	}
 	return cleaned;
