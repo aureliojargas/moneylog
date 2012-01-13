@@ -2159,7 +2159,7 @@ function init() {
 				wrapme('b', i18n.labelTags + ': ') + i18n.helpTags +
 					array2ul([
 						wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup,
-						wrapme('b', '@: ') + i18n.helpTagSummary
+						wrapme('b', '∑: ') + i18n.helpTagSummary
 					])
 			]) +
 		wrapme('p', i18n.helpTip) +
