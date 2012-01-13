@@ -1980,6 +1980,44 @@ function toggleMonthly() {
 	showReport();
 }
 
+function getClass(el) {
+	if (el.className) {
+		return el.className.strip().split(' ');
+	} else {
+		return [];
+	}
+}
+function setClass(el, arr) {
+	el.className = arr.join(' ');
+}
+function hasClass(el, klass) {
+	return getClass(el).hasItem(klass);
+}
+function addClass(el, klass) {
+	var arr = getClass(el);
+	if (!arr.hasItem(klass)) {
+		arr.push(klass);
+		setClass(el, arr);
+	}
+}
+function removeClass(el, klass) {
+	var arr = getClass(el);
+	if (arr.hasItem(klass)) {
+		setClass(el, arr.removePattern(klass));
+	}	
+}
+function toggleClass(el, klass) {
+	var arr = getClass(el);
+	if (arr.hasItem(klass)) {
+		setClass(el, arr.removePattern(klass));
+		return false
+	} else {
+		arr.push(klass);
+		setClass(el, arr);
+		return true;
+	}
+}
+
 function toggleRowHighlight(el) {
 	var names = [];
 
