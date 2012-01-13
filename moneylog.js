@@ -30,7 +30,7 @@ var highlightWords = '';          // The words you may want to highlight (ie: 'X
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
-var showEmptyTagInSummary = false; // The EMPTY tag sum should appear in Tag Summary?
+var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
