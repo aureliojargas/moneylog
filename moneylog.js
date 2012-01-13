@@ -404,6 +404,21 @@ if (!Array.prototype.min) {
 	    return Math.min.apply(null, this);
 	};
 }
+// http://snippets.dzone.com/posts/show/769
+// http://jsfromhell.com/array/sum
+if (!Array.prototype.sum) {
+	Array.prototype.sum = function () {
+		var i, sum;
+		// for (i=0, sum=0 ; i<this.length ; sum += this[i++]);
+		for (sum = 0, i = this.length; i; sum += this[--i]);
+		return sum;
+	};
+}
+if (!Array.prototype.avg) {
+	Array.prototype.avg = function () {
+		return this.sum() / this.length;
+	};
+}
 
 String.prototype.strip = function () {
 	return this.replace(/^\s+/, '').replace(/\s+$/, '');
