@@ -647,13 +647,13 @@ function removeClass(el, klass) {
 	var arr = getClass(el);
 	if (arr.hasItem(klass)) {
 		setClass(el, arr.removePattern(klass));
-	}	
+	}
 }
 function toggleClass(el, klass) {
 	var arr = getClass(el);
 	if (arr.hasItem(klass)) {
 		setClass(el, arr.removePattern(klass));
-		return false
+		return false;
 	} else {
 		arr.push(klass);
 		setClass(el, arr);
@@ -849,7 +849,7 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 
 function getDetailedReportColumnContents(tr_element, column_index) {
 	// (zero-based) Columns: Row count, Date, Amount, Tags, Description, Balance
-	td = tr_element.getElementsByTagName('td')[column_index];
+	var td = tr_element.getElementsByTagName('td')[column_index];
 
 	if (column_index === 2) {
 		// Example: <span class="neg">-123,45</span>
@@ -1800,7 +1800,7 @@ function showDetailed() {
 
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
-		
+
 	}
 	document.getElementById('report').innerHTML = results;
 }
@@ -2013,7 +2013,7 @@ function lastMonthsChanged() {
 }
 
 function toggleFullScreen() {
-	var toolbar, tagbar, content;
+	var toolbar, tagbar, content, tagsummary;
 
 	toolbar = document.getElementById('toolbarwrapper');
 	tagbar = document.getElementById('tagsArea');
@@ -2089,9 +2089,9 @@ function toggleRowHighlight(el) {
 	} else {
 		// Select row, add amount to holder
 		addClass(el, 'selected');
-		selectedRowsData.push(rowAmount);		
+		selectedRowsData.push(rowAmount);
 	}
-	
+
 	// Refresh the summary
 	updateSelectedRowsSummary();
 }
