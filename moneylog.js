@@ -1977,8 +1977,6 @@ function changeReport(el) {
 		oldSortColRev = sortColRev;
 		sortColIndex = 0; // Default by date
 		sortColRev = false;
-		selectedRowsData = [];
-		updateSelectedRowsSummary();
 	//
 	// From Monthly/Yearly to Daily
 	} else if (newType === 'd' && oldType !== 'd') {
@@ -1987,6 +1985,10 @@ function changeReport(el) {
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
 	}
+
+	// Always reset Rows Summary when changing reports
+	selectedRowsData = [];
+	updateSelectedRowsSummary();
 
 	reportType = newType;
 	overviewData = [];
