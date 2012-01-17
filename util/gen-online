@@ -1,10 +1,9 @@
 #!/bin/bash
-# gen-online
-# http://aurelio.net/moneylog
+# Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Script para juntar todos os pedaços do Moneylog em um único arquivo HTML,
-# para gerar o Moneylog Online
-#
+# Script to join all the Moneylog pieces in one singe HTML file, generating
+# the Moneylog Online version, who uses localStorage instead of text files.
+
 
 # Patterns:
 # <link rel="stylesheet" type="text/css" href="moneylog.css">
