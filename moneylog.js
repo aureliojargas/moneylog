@@ -3,7 +3,7 @@
 
 /*
 	moneylog.js
-	http://aurelio.net/moneylog
+	http://aurelio.net/moneylog/
 */
 
 /*********************************************************************

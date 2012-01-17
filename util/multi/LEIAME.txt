@@ -1,4 +1,4 @@
-MoneyLog - http://aurelio.net/moneylog
+MoneyLog - http://aurelio.net/moneylog/
 /util/multi
 ---------------------------------------------------------------------
 
