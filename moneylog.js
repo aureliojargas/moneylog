@@ -81,7 +81,7 @@ var i18nDatabase = {
 		dateFormat: 'm/d/y',
 		centsSeparator: '.',
 		thousandSeparator: ',',
-		appUrl: 'http://aurelio.net/soft/moneylog',
+		appUrl: 'http://aurelio.net/soft/moneylog/',
 		appDescription: 'Track your finances the practical way. Think simple!',
 		labelFullScreen: 'Dot',
 		labelReports: 'Reports',
@@ -208,7 +208,7 @@ var i18nDatabase = {
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpSave: 'Salva os lançamentos que você alterou.',
 		helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
-		helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq'
+		helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
 	},
 	ca: {
 		centsSeparator: ',',
@@ -2188,7 +2188,7 @@ function init() {
 
 	if (isOnline) {
 		appName = 'Moneylog Online';
-		i18n.appUrl = 'http://aurelio.net/moneylog/online';
+		i18n.appUrl = 'http://aurelio.net/moneylog/online/';
 
 		// The Edit button only appears in online mode
 		document.getElementById('editoropen').style.display = 'inline';
