@@ -3,7 +3,34 @@
 #
 # Script to join all the Moneylog pieces in one singe HTML file, generating
 # the Moneylog Online version, who uses localStorage instead of text files.
+#
+# Usage:
+#	gen-online [--lang XX]
+#
+# Examples:
+#	gen-online                   # Portuguese online version
+#	gen-online --lang en         # English online version
 
+
+lang="pt"           # pt, en, es, ca. Use --lang to change it.
+
+# Files
+html_path="../moneylog.html"
+txt_path="../moneylog.txt"
+
+# Option --lang
+if test "$1" = '--lang'
+then
+	lang=$2
+	shift
+	shift
+fi
+
+# Language adjustments
+if test "$lang" != 'pt'
+then
+	txt_path="../moneylog-$lang.txt"
+fi
 
 # Patterns:
 # <link rel="stylesheet" type="text/css" href="moneylog.css">
@@ -29,16 +56,20 @@ insert_js='
 	d
 }
 '
-insert_txt='$ r ../moneylog.txt'
+insert_txt="
+$ r $txt_path
+"
 
 echo "$insert_css $insert_js $insert_txt" > sed_script
 
 # Do it
 control_m=$(printf '\r');
 
-sed -f sed_script ../moneylog.html |
+sed -f sed_script "$html_path" |
 	# dos2unix: remove CR
 	sed "s/$control_m*$//" |
+	# Set language
+	sed "/^var lang = 'pt';/ s/pt/$lang/" |
 	# clean up
 	sed '
 		# Remove config.js call
@@ -51,11 +82,12 @@ sed -f sed_script ../moneylog.html |
 		# Remove ml v3 theme
 		/^\/\* MoneyLog v3 Theme/, /^\*\/$/ d
 	
-		# Remove oneFile instructions comments
-		/^<!--$/, /^-->$/ d
-		/^\/\*\*\**$/, /^\*\*\*\**\/$/ d
+		# # Remove all comment blocks (DISABLED)
+		# /^<!--$/, /^-->$/ d
+		# /^\/\*\*\**$/, /^\*\*\*\**\/$/ d
 	'
 
+# Close the opened tags, since user won't edit this file
 echo "</pre></body></html>"
 
 # Clean up
