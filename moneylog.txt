@@ -3,20 +3,21 @@
 # A data é no formato ANO-MES-DIA
 
 2011-09-01	-100	Saldo inicial da conta :(
-2011-09-15	-74,23	mercado|
-2011-09-15	-1,99	nerd| Prestação do mouse 10/12
-2011-09-23	-39,90	presente, livro| Livro "Horóscopo dos Duendes"
+2011-09-15	 -74,23	mercado|
+2011-09-15	  -1,99	nerd| Prestação do mouse 10/12
+2011-09-23	 -39,90	presente, livro| Livro "Horóscopo dos Duendes"
 
 2011-10-03	-342,59	presente| Um Shrubbery
-2011-10-11	+30,00	Ganhei a aposta com o Zé
-2011-10-12	-35,00	presente, nerd| Poster colorido 3D do Tux em Ascii Art
-2011-10-15	-1,99	nerd| Prestação do mouse 11/12
-2011-10-29	-95,67	mercado|
+2011-10-11	 +30,00	Ganhei a aposta com o Zé
+2011-10-12	 -35,00	presente, nerd| Poster colorido 3D do Tux em Ascii Art
+2011-10-15	  -1,99	nerd| Prestação do mouse 11/12
+2011-10-29	 -95,67	mercado|
 
 2011-11-12	-199,90	presente| Segway usado no Mercado Livre
-2011-11-15	-1,99	nerd| Prestação do mouse 12/12 (acabou!)
+2011-11-15	  -1,99	nerd| Prestação do mouse 12/12 (acabou!)
 
-2011-12-20	-10,00	Carnê do Baú
+2011-12-20	 -10,00	Carnê do Baú
+
 
 # A ordem não importa, é possível deixar juntas as transações periódicas
 2011-09-05	500	salario|
@@ -41,8 +42,8 @@
 
 # Pagamentos e ganhos parcelados
 2011-12-05	-500/5	nerd| Netbook usado comprado parcelado
-2011-11-25	100/2	presente| Presente de Natal, metade Nov, metade Dez
+2011-11-25	 100/2	presente| Presente de Natal, metade Nov, metade Dez
 
 # Pagamentos e ganhos recorrentes
 2011-09-05	-200*6	aluguel| Aluguel da casa (seis meses)
-2011-09-10	100*4	presente| O Zé vai me dar 100 pilas por mês até o fim do ano
+2011-09-10	 100*4	presente| O Zé vai me dar 100 pilas por mês até o fim do ano
