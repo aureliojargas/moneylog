@@ -10,12 +10,22 @@
 #	tudo-em-um [componentes-a-embutir]
 #
 # Exemplos:
-#	tudo-em-um              # Embute tudo
-#	tudo-em-um css js txt   # Embute tudo
-#	tudo-em-um css js       # Não embute dados, vai usar TXT externo
+#	tudo-em-um                   # Embute tudo
+#	tudo-em-um css js txt        # Embute tudo
+#	tudo-em-um css js            # Não embute dados, vai usar TXT externo
+#	tudo-em-um --lang en css js  # Em inglês, vai usar TXT externo
 #
 
 mode="css js txt"   # Any combination of css, js, txt
+lang="pt"           # pt, en, es, ca. Use --lang to change it.
+
+# Option --lang
+if test "$1" = '--lang'
+then
+	lang=$2
+	shift
+	shift
+fi
 
 [ "$1" ] && mode="$*"
 
@@ -76,6 +86,7 @@ insert_js='
 '
 insert_warning='5 r temp1'
 insert_txt='$ r temp2'
+change_lang="/^var lang = 'pt';/ s/pt/$lang/"
 
 # Compose sed script
 echo > sed_script
@@ -91,19 +102,32 @@ change_script='
 
 # Remove config.js call
 /^<script .* src="config.js"><\/script>/ d
-' 
+'
+
+# Language must be changed?
+if test $lang != 'pt'
+then
+	change_script="$change_script$change_lang"
+fi
 
 # Mode settings
 if grepvar txt "$mode"
 then
 	# Warning on top
 	echo "$warning" > temp1
+
 	# # Replace instructions on top of TXT file
 	# echo "$instructions" > temp2
 	# sed '1,5 { /^#/d; }' ../moneylog.txt >> temp2
-	cat ../moneylog.txt > temp2
+
+	if test $lang = 'pt'
+	then
+		cat ../moneylog.txt > temp2
+	else
+		cat ../moneylog-$lang.txt > temp2
+	fi
 else
-	change_script='$s/z/z/' # no changes
+	change_script='1 s/z/z/' # no changes
 fi
 
 # Do it
