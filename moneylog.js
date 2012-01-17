@@ -82,6 +82,7 @@ var i18nDatabase = {
 		centsSeparator: '.',
 		thousandSeparator: ',',
 		appUrl: 'http://aurelio.net/soft/moneylog/',
+		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
 		labelFullScreen: 'Dot',
 		labelReports: 'Reports',
@@ -149,6 +150,7 @@ var i18nDatabase = {
 		centsSeparator: ',',
 		thousandSeparator: '.',
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
+		appUrlOnline: 'http://aurelio.net/moneylog/online/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
 		labelFullScreen: 'Bolinha',
 		labelReports: 'Extratos',
@@ -2188,7 +2190,7 @@ function init() {
 
 	if (isOnline) {
 		appName = 'Moneylog Online';
-		i18n.appUrl = 'http://aurelio.net/moneylog/online/';
+		i18n.appUrl = i18n.appUrlOnline;
 
 		// The Edit button only appears in online mode
 		document.getElementById('editoropen').style.display = 'inline';
