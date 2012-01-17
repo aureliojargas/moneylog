@@ -39,7 +39,10 @@ then
 fi
 
 # Get mode from command line (if any) 
-[ "$1" ] && mode="$*"
+if test $# -gt 0
+then
+	mode="$*"
+fi
 
 # Handy tool to grep a variable contents
 grepvar() {
