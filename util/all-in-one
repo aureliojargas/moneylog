@@ -1,20 +1,18 @@
 #!/bin/bash
-# tudo-em-um
-# http://aurelio.net/moneylog
+# Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Script para juntar todos os pedaços do Moneylog em um único arquivo HTML.
-# - São embutidos: moneylog.css, moneylog.js, moneylog.txt
-# - É modificada a opção: oneFile
+# Script to join all the Moneylog pieces in one singe HTML file.
+# Besides joining the files into one, it also changes the necessary settings.
 #
-# Uso:
-#	tudo-em-um [componentes-a-embutir]
+# Usage:
+#	all-in-one [--lang XX] [components-to-embed]
 #
-# Exemplos:
-#	tudo-em-um                   # Embute tudo
-#	tudo-em-um css js txt        # Embute tudo
-#	tudo-em-um css js            # Não embute dados, vai usar TXT externo
-#	tudo-em-um --lang en css js  # Em inglês, vai usar TXT externo
-#
+# Examples:
+#	all-in-one                   # Embed everything
+#	all-in-one css js txt        # Embed everything
+#	all-in-one --lang en         # Embed everything, english version
+#	all-in-one css js            # Don't embed data, use external TXT
+#	all-in-one --lang en css js  # English version, use external TXT
 
 # Defaults
 mode="css js txt"   # Any combination of css, js, txt
