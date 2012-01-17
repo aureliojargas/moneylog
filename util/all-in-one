@@ -16,8 +16,13 @@
 #	tudo-em-um --lang en css js  # Em inglês, vai usar TXT externo
 #
 
+# Defaults
 mode="css js txt"   # Any combination of css, js, txt
 lang="pt"           # pt, en, es, ca. Use --lang to change it.
+
+# Files
+html_path="../moneylog.html"
+txt_path="../moneylog.txt"
 
 # Option --lang
 if test "$1" = '--lang'
@@ -27,9 +32,19 @@ then
 	shift
 fi
 
+# Language adjustments
+if test "$lang" != 'pt'
+then
+	txt_path="../moneylog-$lang.txt"
+fi
+
+# Get mode from command line (if any) 
 [ "$1" ] && mode="$*"
 
-grepvar() { test "${2#*$1}" != "$2"; }
+# Handy tool to grep a variable contents
+grepvar() {
+	test "${2#*$1}" != "$2"
+}
 
 # This warning and instructions are for the all-in-one version only
 warning='
@@ -115,17 +130,11 @@ if grepvar txt "$mode"
 then
 	# Warning on top
 	echo "$warning" > temp1
+	cat "$txt_path" > temp2
 
 	# # Replace instructions on top of TXT file
 	# echo "$instructions" > temp2
-	# sed '1,5 { /^#/d; }' ../moneylog.txt >> temp2
-
-	if test $lang = 'pt'
-	then
-		cat ../moneylog.txt > temp2
-	else
-		cat ../moneylog-$lang.txt > temp2
-	fi
+	# sed '1,5 { /^#/d; }' "$txt_path" >> temp2
 else
 	change_script='1 s/z/z/' # no changes
 fi
@@ -133,7 +142,7 @@ fi
 # Do it
 control_m=$(printf '\r');
 
-sed -f sed_script ../moneylog.html |
+sed -f sed_script "$html_path" |
  	sed "$change_script" |
 	sed "s/$control_m*$/$control_m/"
 	# unix2dos: Remove any CR, then add one per line, becoming CR+LF
