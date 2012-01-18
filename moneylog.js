@@ -1861,7 +1861,7 @@ function populateChartColsCombo() {
 
 function populateDataFilesCombo() {
 	var el, i;
-	if (!oneFile && !useLocalStorage) {
+	if (!oneFile && !useLocalStorage && !useDropboxStorage) {
 		el = document.getElementById('datafiles');
 		for (i = 0; i < dataFiles.length; i++) {
 			el.options[i] = new Option(dataFiles[i]);
@@ -2352,7 +2352,9 @@ function init() {
 	}
 
 	// Everything is ok, time to read/parse/show the user data
-	if (oneFile || useLocalStorage) {
+	if (useDropboxStorage) {
+		initDropbox();
+	} else if (oneFile || useLocalStorage) {
 		readData();
 		parseData();
 		showReport();
