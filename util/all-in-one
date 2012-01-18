@@ -14,6 +14,9 @@
 #	all-in-one css js            # Don't embed data, use external TXT
 #	all-in-one --lang en css js  # English version, use external TXT
 
+
+cd $(dirname "$0")
+
 # Defaults
 mode="css js txt"   # Any combination of css, js, txt
 lang="pt"           # pt, en, es, ca. Use --lang to change it.

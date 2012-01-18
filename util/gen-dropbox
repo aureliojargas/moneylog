@@ -12,6 +12,8 @@
 #	gen-dropbox --lang en         # English online version
 
 
+cd $(dirname "$0")
+
 lang="pt"           # pt, en, es, ca. Use --lang to change it.
 
 # Files
