@@ -2312,7 +2312,11 @@ function init() {
 
 	// Compose help contents (dirty, but handy)
 	document.getElementById('help').innerHTML = (
-		wrapme('b', linkme(i18n.appUrl, appName) + ': ') + i18n.appDescription +
+		wrapme(
+			'b',
+			linkme(i18n.appUrl, appName) + 
+			((useDropboxStorage) ? ' by ' + linkme('http://twitter.com/xupisco', '@xupisco') : '') +
+			': ') + i18n.appDescription +
 		array2ul([wrapme('b', i18n.labelReports + ': ') + i18n.helpReports]) +
 		array2ul([
 				wrapme('b', i18n.labelLastMonths + ': ') + i18n.helpLastMonths,
