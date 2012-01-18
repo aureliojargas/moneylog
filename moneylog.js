@@ -2298,7 +2298,7 @@ function init() {
 	if (isOnline) {
 		document.getElementById('editoropen' ).onclick = editorOn;
 		document.getElementById('editorclose').onclick = editorOff;
-		document.getElementById('editorsave' ).onclick = saveLocalData;
+		document.getElementById('editorsave' ).onclick = (useDropboxStorage) ? saveDropboxData : saveLocalData;
 		document.getElementById('editordata' )[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 	}
 
