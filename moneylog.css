@@ -309,8 +309,11 @@ tr:hover .neg {
 	background-color:#eee; /* bg6 */
 	font-style:italic;
 }
-#report tr.selected {
-	background-color:yellow !important; /* bg_yellow */
+#report tr.selected {  /* not using td to exclude the row number cell */
+	background-color:#FF6 !important; /* bg_yellow_light */
+}
+#report tr.selected:hover td {
+	background-color:#FF0 !important; /* bg_yellow */
 }
 #report .hl {
 	color:#000;            /* fg4 */
