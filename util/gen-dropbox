@@ -1,0 +1,96 @@
+#!/bin/bash
+# Aurelio Jargas, http://aurelio.net/moneylog/
+#
+# Script to join all the Moneylog pieces in one singe HTML file, generating
+# the Moneylog Dropbox version.
+#
+# Usage:
+#	gen-dropbox [--lang XX]
+#
+# Examples:
+#	gen-dropbox                   # Portuguese online version
+#	gen-dropbox --lang en         # English online version
+
+
+lang="pt"           # pt, en, es, ca. Use --lang to change it.
+
+# Files
+html_path="../moneylog.html"
+txt_path="../moneylog.txt"
+
+# Option --lang
+if test "$1" = '--lang'
+then
+	lang=$2
+	shift
+	shift
+fi
+
+# Language adjustments
+if test "$lang" != 'pt'
+then
+	txt_path="../moneylog-$lang.txt"
+fi
+
+# Patterns:
+# <link rel="stylesheet" type="text/css" href="moneylog.css">
+# <script type="text/javascript" src="moneylog.js"></script>
+
+insert_css='
+/^<link .*href="moneylog.css"/ {
+	a \
+<style type="text/css">
+	r ../moneylog.css
+	a \
+</style>
+	d
+}
+'
+insert_js='
+/^<script .*src="moneylog.js"/ {
+	a \
+<script src="js/jquery-1.7.1.min.js" type="text/javascript" ></script>\
+<script src="/js/moneylog_dropbox.js" type="text/javascript"></script>\
+\
+<script type="text/javascript">
+	r ../moneylog.js
+	a \
+</script>
+	d
+}
+'
+insert_txt="
+$ r $txt_path
+"
+
+echo "$insert_css $insert_js $insert_txt" > sed_script
+
+# Do it
+control_m=$(printf '\r');
+
+sed -f sed_script "$html_path" |
+	# dos2unix: remove CR
+	sed "s/$control_m*$//" |
+	# Set language
+	sed "/^var lang = 'pt';/ s/pt/$lang/" |
+	# clean up
+	sed '
+		# Remove config.js call
+		/^<script .* src="config.js"><\/script>/ d
+
+		# Turn ON Dropbox support
+		/^var useDropboxStorage = false;/ s/false/true/
+
+		# Remove ml v3 theme
+		/^\/\* MoneyLog v3 Theme/, /^\*\/$/ d
+	
+		# # Remove all comment blocks (DISABLED)
+		# /^<!--$/, /^-->$/ d
+		# /^\/\*\*\**$/, /^\*\*\*\**\/$/ d
+	'
+
+# Close the opened tags, since user won't edit this file
+echo "</pre></body></html>"
+
+# Clean up
+rm -f sed_script
