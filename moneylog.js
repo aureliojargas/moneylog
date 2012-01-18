@@ -51,6 +51,9 @@ var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneF
 var useLocalStorage = false;      // Turn ON localStorage support?
 var localStorageKey = 'moneylogData'; // Keyname for the localStorage database (don't change)
 
+// Dropbox storage
+var useDropboxStorage = false;    // Turn ON Dropbox storage support?
+
 // Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 
 // Data format
@@ -2157,8 +2160,14 @@ function init() {
 	i18n = i18nDatabase.getLanguage(lang);
 	i18n.labelTags = i18n.labelsDetailed[2]; // Tags
 
-	// Online mode uses localStorage
-	isOnline = useLocalStorage;
+	// Dropbox version settings
+	if (useDropboxStorage) {
+		oneFile = true;
+		useLocalStorage = false;
+	}
+
+	// Online mode uses localStorage or Dropbox
+	isOnline = useLocalStorage || useDropboxStorage;
 
 	setCurrentDate();
 	populateMonthsCombo();
@@ -2179,18 +2188,23 @@ function init() {
 	highlightTags = highlightTags.strip().split(/\s+/);
 
 	// Just show the files combo when there are 2 or more files
-	if (oneFile || useLocalStorage || dataFiles.length < 2) {
+	if (oneFile || useLocalStorage || useDropboxStorage || dataFiles.length < 2) {
 		document.getElementById('datafiles').style.display = 'none';
 	}
 
 	// Hide Reload button in oneFile mode. No iframe, so we can't reload.
-	if (oneFile || useLocalStorage) {
+	if (oneFile || useLocalStorage || useDropboxStorage) {
 		document.getElementById('reload').style.visibility = 'hidden';
 	}
 
 	if (isOnline) {
 		appName = 'Moneylog Online';
 		i18n.appUrl = i18n.appUrlOnline;
+
+		if (useDropboxStorage) {
+			appName = 'Moneylog Dropbox';
+			i18n.appUrl = 'http://mlogbox.appspot.com/';
+		}
 
 		// The Edit button only appears in online mode
 		document.getElementById('editoropen').style.display = 'inline';
