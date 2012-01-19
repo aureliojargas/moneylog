@@ -884,6 +884,13 @@ function editorOff() {
 	document.getElementById('editor').style.display = 'none';
 	document.getElementById('editoropen').style.display = 'inline';
 }
+function editorSave() {
+	if (useDropboxStorage) {
+		saveDropboxData();
+	} else {
+		saveLocalData();
+	}
+}
 function saveLocalData() {
 	localStorage.setItem(localStorageKey, document.getElementById('editordata').value);
 	// reload report
@@ -2306,7 +2313,7 @@ function init() {
 	if (isOnline) {
 		document.getElementById('editoropen' ).onclick = editorOn;
 		document.getElementById('editorclose').onclick = editorOff;
-		document.getElementById('editorsave' ).onclick = (useDropboxStorage) ? saveDropboxData : saveLocalData;
+		document.getElementById('editorsave' ).onclick = editorSave;
 		document.getElementById('editordata' )[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 	}
 
