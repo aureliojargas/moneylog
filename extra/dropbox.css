@@ -30,3 +30,11 @@
 #report .hl {
 	background-color:#edf6ff;
 }
+
+/* Total Row - bg5 (using bg3) */
+#report table.daily tr.total {
+	background-color:#edf6ff;
+}
+#report table.overview tr.total {
+	background-color:#edf6ff;
+}
