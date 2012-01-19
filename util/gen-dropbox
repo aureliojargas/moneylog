@@ -51,13 +51,13 @@ insert_css='
 insert_js='
 /^<script .*src="moneylog.js"/ {
 	a \
-<script src="js/jquery-1.7.1.min.js" type="text/javascript" ></script>\
-<script src="/js/moneylog_dropbox.js" type="text/javascript"></script>\
-\
 <script type="text/javascript">
 	r ../moneylog.js
 	a \
-</script>
+</script>\
+\
+<script src="js/jquery-1.7.1.min.js" type="text/javascript" ></script>\
+<script src="/js/moneylog_dropbox.js" type="text/javascript"></script>
 	d
 }
 '
