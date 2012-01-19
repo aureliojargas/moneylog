@@ -1003,7 +1003,7 @@ function readData() {
 	if (useLocalStorage) {
 		loadLocalData();
 		rawData = document.getElementById('editordata').value;
-	} else if (oneFile) {
+	} else if (oneFile || useDropboxStorage) {
 		rawData = document.getElementById('data').innerHTML;
 	} else {
 		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
@@ -2164,7 +2164,7 @@ function init() {
 
 	// Dropbox version settings
 	if (useDropboxStorage) {
-		oneFile = true;
+		oneFile = false;
 		useLocalStorage = false;
 	}
 
@@ -2195,7 +2195,10 @@ function init() {
 	}
 
 	// Hide Reload button in oneFile mode. No iframe, so we can't reload.
-	if (oneFile || useLocalStorage || useDropboxStorage) {
+	// Hide Reload button in localStorage mode. Not needed.
+	// Dropbox mode: reloads files from the remote server.
+	// Multi-files mode: realoads local files.
+	if (oneFile || useLocalStorage) {
 		document.getElementById('reload').style.visibility = 'hidden';
 	}
 
