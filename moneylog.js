@@ -2198,7 +2198,7 @@ function init() {
 	highlightTags = highlightTags.strip().split(/\s+/);
 
 	// Just show the files combo when there are 2 or more files
-	if (oneFile || useLocalStorage || dataFiles.length < 2) {
+	if (oneFile || useLocalStorage || useDropboxStorage || dataFiles.length < 2) {
 		document.getElementById('datafiles').style.display = 'none';
 	}
 
