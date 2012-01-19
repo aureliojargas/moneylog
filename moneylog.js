@@ -1863,7 +1863,7 @@ function populateChartColsCombo() {
 
 function populateDataFilesCombo() {
 	var el, i;
-	if (!oneFile && !useLocalStorage && !useDropboxStorage) {
+	if (!oneFile && !useLocalStorage) {
 		el = document.getElementById('datafiles');
 		for (i = 0; i < dataFiles.length; i++) {
 			el.options[i] = new Option(dataFiles[i]);
@@ -2190,7 +2190,7 @@ function init() {
 	highlightTags = highlightTags.strip().split(/\s+/);
 
 	// Just show the files combo when there are 2 or more files
-	if (oneFile || useLocalStorage || useDropboxStorage || dataFiles.length < 2) {
+	if (oneFile || useLocalStorage || dataFiles.length < 2) {
 		document.getElementById('datafiles').style.display = 'none';
 	}
 
