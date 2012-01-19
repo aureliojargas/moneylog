@@ -1,8 +1,8 @@
 #!/bin/bash
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Script to join all the Moneylog pieces in one singe HTML file, generating
-# the Moneylog Online version, who uses localStorage instead of text files.
+# Script to join all the MoneyLog pieces in one singe HTML file, generating
+# the MoneyLog Online version, who uses localStorage instead of text files.
 #
 # Usage:
 #	gen-online [--lang XX]

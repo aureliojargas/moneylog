@@ -1,8 +1,8 @@
 #!/bin/bash
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Script to join all the Moneylog pieces in one singe HTML file, generating
-# the Moneylog Dropbox version.
+# Script to join all the MoneyLog pieces in one singe HTML file, generating
+# the MoneyLog Dropbox version.
 #
 # Usage:
 #	gen-dropbox [--lang XX]

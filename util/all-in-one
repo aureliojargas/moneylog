@@ -1,7 +1,7 @@
 #!/bin/bash
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Script to join all the Moneylog pieces in one singe HTML file.
+# Script to join all the MoneyLog pieces in one singe HTML file.
 # Besides joining the files into one, it also changes the necessary settings.
 #
 # Usage:

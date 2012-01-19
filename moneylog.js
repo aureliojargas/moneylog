@@ -364,7 +364,7 @@ var i18nDatabase = {
 
 
 // Global vars
-var appName = 'Moneylog Experience ∞';
+var appName = 'MoneyLog Experience ∞';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
@@ -2259,11 +2259,11 @@ function init() {
 	}
 
 	if (isOnline) {
-		appName = 'Moneylog Online';
+		appName = 'MoneyLog Online';
 		i18n.appUrl = i18n.appUrlOnline;
 
 		if (useDropboxStorage) {
-			appName = 'Moneylog Cloud';
+			appName = 'MoneyLog Cloud';
 			// Can't use the word Dropbox in app name
 			// https://www.dropbox.com/developers/reference/branding
 			i18n.appUrl = 'http://moneylog-cloud.appspot.com';
