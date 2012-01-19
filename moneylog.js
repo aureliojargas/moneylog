@@ -885,11 +885,7 @@ function editorOff() {
 	document.getElementById('editoropen').style.display = 'inline';
 }
 function editorSave() {
-	if (useDropboxStorage) {
-		saveDropboxData();
-	} else {
-		saveLocalData();
-	}
+	saveLocalData();
 }
 function saveLocalData() {
 	localStorage.setItem(localStorageKey, document.getElementById('editordata').value);
