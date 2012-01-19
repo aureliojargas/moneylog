@@ -2223,6 +2223,11 @@ function init() {
 		// The Edit button only appears in online mode
 		document.getElementById('editoropen').style.display = 'inline';
 		document.getElementById('operabug').style.paddingRight = i18n.labelEdit.length + 'em';
+
+		// Dropbox: Hide the Edit button for the '*' file
+		if (useDropboxStorage && getSelectedFile() === '*') {
+			document.getElementById('editoropen').style.display = 'none';
+		}
 	} else {
 		appName = appName.replace('og ', 'og<br>'); // dirty layout fix
 	}
