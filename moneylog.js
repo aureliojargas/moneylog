@@ -125,6 +125,7 @@ var i18nDatabase = {
 		errorInvalidDate: 'Invalid date:',
 		errorInvalidAmount: 'Invalid amount:',
 		errorNoLocalStorage: 'Sorry, your browser does not have localStorage support. %s will not work.',
+		errorNoDropboxSupport: 'Cannot find the Dropbox support files. %s will not work.',
 		errorRequirements: 'Minimum requirements:',
 		msgLoading: 'Loading %s...',
 		msgSaving: 'Saving...',
@@ -2372,7 +2373,12 @@ function init() {
 
 	// Everything is ok, time to read/parse/show the user data
 	if (useDropboxStorage) {
-		initDropbox();
+		if (typeof initDropbox === "undefined") {
+			showError(i18n.errorNoDropboxSupport.replace('%s', appName), '');
+			return; // abort
+		} else {
+			initDropbox();
+		}
 	} else if (oneFile || useLocalStorage) {
 		readData();
 		parseData();
