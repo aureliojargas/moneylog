@@ -1,0 +1,32 @@
+/*
+	Moneylog Cloud theme
+	http://aurelio.net/moneylog/
+*/
+
+/* Toolbar links - fg2a */
+#fullscreen, #tagSummaryButton, #toolbar a {
+	color:#93cbff;
+}
+#fullscreen:hover, #tagSummaryButton:hover, #toolbar a:hover {
+	background-color:#93cbff;
+}
+#toolbar #report-nav a:hover {
+	color:#93cbff; border-color:#93cbff;
+}
+#toolbar #report-nav a.active {
+	border-color:#93cbff;
+}
+#tagsArea #tagsLabel {
+	color:#93cbff;
+}
+#tagsArea input[checked]+span {
+	background-color:#93cbff;
+}
+
+/* Help - bg3 */
+#help {
+	color:#103860; background-color:#edf6ff; border-color:#edf6ff;
+}
+#report .hl {
+	background-color:#edf6ff;
+}
