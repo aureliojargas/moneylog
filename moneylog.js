@@ -2204,7 +2204,9 @@ function init() {
 		i18n.appUrl = i18n.appUrlOnline;
 
 		if (useDropboxStorage) {
-			appName = 'Moneylog Dropbox';
+			appName = 'Moneylog Cloud';
+			// Can't use the word Dropbox in app name
+			// https://www.dropbox.com/developers/reference/branding
 			i18n.appUrl = 'http://mlogbox.appspot.com/';
 		}
 
