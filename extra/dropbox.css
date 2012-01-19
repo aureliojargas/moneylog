@@ -25,7 +25,7 @@
 
 /* Help - bg3 */
 #help {
-	color:#103860; background-color:#edf6ff; border-color:#edf6ff;
+	background-color:#edf6ff; border-color:#edf6ff; color:#103860;
 }
 #report .hl {
 	background-color:#edf6ff;
@@ -37,4 +37,9 @@
 }
 #report table.overview tr.total {
 	background-color:#edf6ff;
+}
+
+/* Chart - bar1 (using fg2a) */
+.posbar {
+	background-color:#93cbff !important;
 }
