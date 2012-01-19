@@ -2412,6 +2412,15 @@ function init() {
 		updateToolbar();
 	}
 
+	// Set the default file to load when using multiple files: dataFilesDefault or first
+	if (dataFiles.length > 1) {
+		if (dataFilesDefault && dataFiles.indexOf(dataFilesDefault) !== -1) {
+			document.getElementById('datafiles').selectedIndex = dataFiles.indexOf(dataFilesDefault);
+		} else {
+			document.getElementById('datafiles').selectedIndex = 0;
+		}
+	}
+
 	// Everything is ok, time to read/parse/show the user data
 	if (useDropboxStorage) {
 		if (typeof initDropbox === "undefined") {
@@ -2425,12 +2434,6 @@ function init() {
 		parseData();
 		showReport();
 	} else {
-		// By default show dataFilesDefault or the first file
-		if (dataFilesDefault && dataFiles.indexOf(dataFilesDefault) !== -1) {
-			document.getElementById('datafiles').selectedIndex = dataFiles.indexOf(dataFilesDefault);
-		} else {
-			document.getElementById('datafiles').selectedIndex = 0;
-		}
 		loadSelectedFile();
 	}
 
