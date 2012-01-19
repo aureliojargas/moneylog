@@ -946,8 +946,8 @@ function resetData() {
 }
 
 function loadDataFile(filePath) {
-	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
 	document.getElementById('charts').style.display = 'none';  // hide charts when loading
+	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
 	resetData();
 	iframeIsLoaded = false;
 	document.getElementById('dataFrame').src = filePath;
