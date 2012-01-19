@@ -179,6 +179,7 @@ tr:hover .neg {
 }
 #tagsArea #operabug {
 	/* Wrapper needed by Opera9. Can't pad #tagsArea at left/right */
+	/* Padding-right will be reset by showHideEditButton() */
 	padding:0 0.5em 0 1em;
 }
 #tagsArea #tagsLabel {

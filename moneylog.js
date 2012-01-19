@@ -992,6 +992,8 @@ function loadSelectedFile() {
 
 	filePath = getSelectedFile();
 
+	showHideEditButton();
+
 	// We will load a single file or all of them?
 	if (filePath === '*') {
 		waitingToLoad = dataFiles.removePattern('*');
@@ -2159,6 +2161,18 @@ function valueFilterChanged() {
 	showReport();
 }
 
+function showHideEditButton() {
+	if (useLocalStorage || useDropboxStorage && getSelectedFile() !== '*') {
+		// show
+		document.getElementById('editoropen').style.display = 'inline';
+		document.getElementById('operabug').style.paddingRight = i18n.labelEdit.length + 'em';
+	} else {
+		// hide
+		document.getElementById('editoropen').style.display = 'none';
+		document.getElementById('operabug').style.paddingRight = '0.5em';
+	}
+}
+
 
 /////////////////////////////////////////////////////////////////////
 //                             INIT
@@ -2221,14 +2235,7 @@ function init() {
 			i18n.appUrl = 'http://mlogbox.appspot.com/';
 		}
 
-		// The Edit button only appears in online mode
-		document.getElementById('editoropen').style.display = 'inline';
-		document.getElementById('operabug').style.paddingRight = i18n.labelEdit.length + 'em';
-
-		// Dropbox: Hide the Edit button for the '*' file
-		if (useDropboxStorage && getSelectedFile() === '*') {
-			document.getElementById('editoropen').style.display = 'none';
-		}
+		showHideEditButton();
 	} else {
 		appName = appName.replace('og ', 'og<br>'); // dirty layout fix
 	}
