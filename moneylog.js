@@ -978,6 +978,10 @@ function loadWaitingDataFiles() {
 		setTimeout(loadWaitingDataFiles, 100);
 	}
 }
+function getSelectedFile() {
+	return dataFiles[document.getElementById('datafiles').selectedIndex];
+	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
+}
 function loadSelectedFile() {
 	var filePath;
 
@@ -985,8 +989,7 @@ function loadSelectedFile() {
 	multiRawData = '';
 	waitingToLoad = [];
 
-	filePath = dataFiles[document.getElementById('datafiles').selectedIndex];
-	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
+	filePath = getSelectedFile();
 
 	// We will load a single file or all of them?
 	if (filePath === '*') {
