@@ -58,12 +58,16 @@ var useDropboxStorage = false;    // Turn ON Dropbox storage support?
 // Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 
 // Data format
+var useBlankFieldSeparator = false; // Use blanks (TABs and spaces) as field separator?
 var dataFieldSeparator = '\t';
 var dataRecordSeparator = /\r?\n/;  // \r\n Windows, \n Linux/Mac
 var dataTagTerminator = '|';
 var dataTagSeparator = ',';
 var commentChar = '#';   // Must be at line start (column 1)
 var dataPatterns = {
+	rowBlankSeparated:
+		// Uses multiple TAB and spaces as field separators
+		/^[ \t]*(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]+(.*)$/,
 	date:
 		// YYYY-MM-DD
 		/^ *(\d{4}-\d\d-\d\d) *$/,
@@ -1057,7 +1061,7 @@ function readData() {
 }
 
 function parseData() {
-	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort;
+	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash;
 
 	// Reset the data holder
 	parsedData = [];
@@ -1081,25 +1085,48 @@ function parseData() {
 			continue;
 		}
 
-		// Separate fields
-		fields = rows[i].split(dataFieldSeparator);
+		// New style matching method: regex
+		if (useBlankFieldSeparator) {
 
-		// Error: rows with no separator
-		if (fields.length === 1) {
-			invalidData(
-				lineno,
-				i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
-			);
-			return;
+			fields = rows[i].match(dataPatterns.rowBlankSeparated);
 
-		// Error: too much separators
-		} else if (fields.length - 1 > 2) {
-			invalidData(
-				lineno,
-				i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
-			);
-			return;
+			if (!fields) {
+				invalidData(lineno, rows[i]);
+				return;  // abort at first error
+			}
+
+			trash = fields.shift();  // field[0] is the full match
+
+		// Old style matching method: split
+		} else {
+
+			// Separate fields
+			fields = rows[i].split(dataFieldSeparator);
+
+			// Error: rows with no separator
+			if (fields.length === 1) {
+				invalidData(
+					lineno,
+					i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
+				);
+				return;  // abort at first error
+
+			// Error: too much separators
+			} else if (fields.length - 1 > 2) {
+				invalidData(
+					lineno,
+					i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
+				);
+				return;  // abort at first error
+			}
 		}
+
+		//// At this point we have:
+		// fields[0] -> date
+		// fields[1] -> amount
+		// fields[2] -> text (tags + description)
+		//
+		// The contents will be validated in the following lines.
 
 		///////////////////////////////////////////////////////////// Text
 
