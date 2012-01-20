@@ -135,14 +135,14 @@
 
 ////// ARQUIVOS TXT
 //
-//@@@Dropbox
+//<Dropbox>
 // Se você usa mais de um arquivo TXT, o MoneyLog automaticamente carrega
 // todos os arquivos que encontrar em sua pasta. Com essa opção você pode
 // mudar isso e carregar somente um arquivo específico no início.
 //
 // dataFilesDefault = 'meu-arquivo.txt';
-//@@@
-//@@@SVN
+//</Dropbox>
+//<SVN>
 // Se você quer usar mais de um arquivo TXT, deverá cadastrar todos eles no
 // array dataFiles. Podem ser inúmeros, tantos quantos você queira. Se você
 // colocar um asterisco (*), ele significa TODOS os arquivos. Útil para
@@ -159,4 +159,4 @@
 // mudar isso e carregar outro, basta usar esta opção:
 //
 // dataFilesDefault = 'carro.txt';
-//@@@
+//</SVN>
