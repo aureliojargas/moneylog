@@ -1,0 +1,41 @@
+#!/bin/bash
+# Aurelio Jargas, http://aurelio.net/moneylog/
+#
+# Generates the commented config.js sample, with SVN specific sections.
+#
+# Usage:
+#	gen-svn-config [--lang XX]
+#
+# Examples:
+#	gen-svn-config                   # Portuguese version
+#	gen-svn-config --lang en         # English version
+
+
+cd $(dirname "$0")
+
+lang="pt"           # pt, en, es, ca. Use --lang to change it.
+
+# Option --lang
+if test "$1" = '--lang'
+then
+	lang=$2
+	shift
+	shift
+fi
+
+file_path="../extra/config-$lang.js"
+
+if test -f "$file_path"
+then
+	sed '
+		# Remove Dropbox-specific data
+		/^\/\/<Dropbox>/, /^\/\/<\/Dropbox>/ d
+
+		# Remove marker lines
+		/^\/\/<SVN>/ d
+		/^\/\/<\/SVN>/ d
+	
+	' "$file_path"
+else
+	echo "Sorry, file not found: $file_path"
+fi
