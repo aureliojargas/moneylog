@@ -83,7 +83,7 @@ sed -f sed_script "$html_path" |
 
 		# Remove ml v3 theme
 		/^\/\* MoneyLog v3 Theme/, /^\*\/$/ d
-	
+
 		# # Remove all comment blocks (DISABLED)
 		# /^<!--$/, /^-->$/ d
 		# /^\/\*\*\**$/, /^\*\*\*\**\/$/ d

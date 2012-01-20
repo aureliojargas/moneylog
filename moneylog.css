@@ -76,7 +76,7 @@ tr:hover .neg {
 	top:0;
 	left:0;
 	z-index:9;
-	
+
 	font-size:150%;
 	width:1em;
 	text-align:center;
@@ -224,7 +224,7 @@ tr:hover .neg {
 	color:#800;            /* fg3 */
 	padding:2em;
 	line-height:120%;
-	
+
 	/* IE7 bug: gap between #toolbar and #help if no border */
 	border-top:1px solid #faa; /* bg3 */
 }
@@ -416,7 +416,7 @@ tr:hover .neg {
 	margin: 0;
 	background-color: #eee; /* bg6 */
 	background-color: #ccc; /* bg6 */
-	overflow: auto;	
+	overflow: auto;
 }
 .popup table {
 	border: 0px solid #444; /* bg2 */

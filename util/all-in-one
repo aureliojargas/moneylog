@@ -39,7 +39,7 @@ then
 	txt_path="../moneylog-$lang.txt"
 fi
 
-# Get mode from command line (if any) 
+# Get mode from command line (if any)
 if test $# -gt 0
 then
 	mode="$*"
@@ -114,7 +114,7 @@ grepvar js  "$mode" && echo "$insert_js"  >> sed_script
 grepvar txt "$mode" && echo "$insert_txt" >> sed_script
 grepvar txt "$mode" && echo "$insert_warning" >> sed_script
 
-# Changes from Beta to All-in-one 
+# Changes from Beta to All-in-one
 change_script='
 # Activate one-file mode
 /^var oneFile = false;/ s/false/true/
