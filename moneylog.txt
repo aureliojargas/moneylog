@@ -20,25 +20,25 @@
 
 # A ordem não importa, é possível deixar juntas as transações periódicas
 
-2011-09-05	500	salario|
-2011-10-05	500	salario|
-2011-11-05	500	salario|
-2011-12-05	500	salario|
-2012-01-05	500	salario|
+2011-09-05	500	salário|
+2011-10-05	500	salário|
+2011-11-05	500	salário|
+2011-12-05	500	salário|
+2012-01-05	500	salário|
 
 2011-09-07	-25,00	luz|
 2011-10-07	-20,00	luz|
 2011-11-07	-29,00	luz|
 2011-12-07	-25,00	luz|
 
-2011-09-07	-20,00	agua|
-2011-10-07	-17,80	agua|
-2011-11-07	-32,37	agua|
-2011-12-07	-30,00	agua|
+2011-09-07	-20,00	água|
+2011-10-07	-17,80	água|
+2011-11-07	-32,37	água|
+2011-12-07	-30,00	água|
 
 # Transações futuras!
 
-2012-07-31	+99,99	salario| Bônus
+2012-07-31	+99,99	salário| Bônus
 
 # Pagamentos e ganhos parcelados: use uma / e o número de meses
 
