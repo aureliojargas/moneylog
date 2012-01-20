@@ -2049,8 +2049,8 @@ function changeReport(el) {
 	newType = el.id;
 
 	// Deactivate old report, activate new
-	document.getElementById(oldType).className = '';
-	el.className = 'active';
+	removeClass(document.getElementById(oldType), 'active');
+	addClass(el, 'active');
 
 	//// Save / restore information
 	//
@@ -2341,7 +2341,7 @@ function init() {
 	document.getElementById('editorsave'         ).title = i18n.helpSave;
 
 	// Mark current report as active (CSS)
-	document.getElementById(reportType).className = 'active';
+	addClass(document.getElementById(reportType), 'active');
 
 	// localStorage browser support check
 	if (useLocalStorage && !window.localStorage) {
