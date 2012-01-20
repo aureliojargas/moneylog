@@ -91,7 +91,6 @@ tr:hover .neg {
 	top:0;
 	left:0;
 	width:100%;
-	height:8em;            /* y1 */
 }
 #fullscreen,
 #tagSummaryButton,
@@ -110,12 +109,17 @@ tr:hover .neg {
 #toolbar input:hover + label {
 	color:#fff;
 }
-#toolbar .left {
-	padding-left:2em;
-	padding-right:2em;
+#toolbar .toolbarpane.left {
+	float:left;
+	width:30%;
 }
-#toolbar .middle {
-	padding-left:0;
+#toolbar .toolbarpane.middle {
+	float:left;
+	width:40%;
+}
+#toolbar .toolbarpane.right {
+	float:right;
+	width:30%;
 }
 #toolbar #report-nav {
 	margin:1em 0;

@@ -52,9 +52,9 @@ You may change the styles if you know what you're doing.
 
 <!-- Toolbar -->
 <div id="toolbarwrapper">
-<table id="toolbar">
-<tr>
-<td class="left">
+<div id="toolbar">
+
+<div class="toolbarpane left">
 	<a id="sitelink" href="#">MoneyLog</a>
 	
 	<!-- Report Type -->
@@ -65,8 +65,9 @@ You may change the styles if you know what you're doing.
 			id="y" href="#"></a>
 	</div>
 	
-</td>
-<td class="middle">
+</div>
+
+<div class="toolbarpane middle">
 	<div id="checkboxes">
 		<!-- Last Months -->
 		<input
@@ -97,9 +98,10 @@ You may change the styles if you know what you're doing.
 			id="optmonthly" class="trigger" type="checkbox"><label
 			id="optmonthlylabel" for="optmonthly"></label>
 
-	</div>
-</td>
-<td>
+	</div> <!-- #checkboxes -->
+</div>
+
+<div class="toolbarpane right">
 	<!-- Help -->
 	<a id="helpbutton" class="helplink" href="#">?</a>
 
@@ -123,10 +125,9 @@ You may change the styles if you know what you're doing.
 			id="datafiles" size="1"></select>&nbsp;<a
 			id="reload" href="#">®</a>
 	</div>
-</td>
-</tr>
-</table> <!-- #toolbar -->
 </div>
+</div> <!-- #toolbar -->
+</div> <!-- #toolbarwrapper -->
 
 <div id="content">
 
