@@ -1476,7 +1476,7 @@ function updateSelectedRowsSummary() {
 	arr = [];
 	table = [];
 
-	if (data.length > 0) {
+	if (data.length > 1) {  // Summary for 2 or more rows
 
 		// Calculate
 		arr.push([i18n.labelTotal,   prettyFloat(data.sum())]);
