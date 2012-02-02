@@ -150,13 +150,13 @@ var i18nDatabase = {
 		helpRegex: 'Use regular expressions on the search field.',
 		helpNegate: 'Remove the search results from the report.',
 		// helpHelp: 'Show/hide the help text.',
-		helpReload: 'Reload only the data, not the full page. This button only appears when using an external TXT file for data.',
+		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
 		helpTagGroup: 'Show only the entries that have all the selected tags.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
-		helpClose: 'Close the editor (without saving!)',
+		helpClose: 'Discard changes and close the editor.',
 		helpSave: 'Save your data.'
 
 		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
@@ -224,13 +224,13 @@ var i18nDatabase = {
 		helpRegex: 'Usa expressões regulares na caixa de pesquisa.',
 		helpNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
 		// helpHelp: 'Mostra e esconde o texto de ajuda.',
-		helpReload: 'Recarrega somente os dados (só aparece quando se utiliza arquivo TXT externo).',
+		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
 		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
-		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
+		helpClose: 'Descarta as alterações e fecha o editor sem salvar nada.',
 		helpSave: 'Salva os lançamentos que você alterou.'
 
 		// helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
@@ -282,7 +282,7 @@ var i18nDatabase = {
 		helpRegex: 'Utilitza expressions regulars en el camp de cerca.',
 		helpNegate: "Eliminar els resultats de cerca de l'informe.",
 		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
-		helpReload: 'Actualitza només les dades, no la pàgina sencera. Aquest botó només apareix quan es fa servir un arxiu TXT de dades extern.',
+		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
 		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
 		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
 
@@ -337,7 +337,7 @@ var i18nDatabase = {
 		helpRegex: 'Use expresiones regulares en la caja de búsqueda.',
 		helpNegate: 'Invierte el criterio de búsqueda.',
 		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
-		helpReload: 'Recargar solo la información y no la página entera. Este botón solo aparecerá cuando se este utilizando un archivo TXT externo para almacenar la información.',
+		helpReload: 'Recargar solo la información y no la página entera.',
 		// helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
 		helpTagGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
 		helpEdit: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
