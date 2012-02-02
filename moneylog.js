@@ -2257,17 +2257,11 @@ function initAppMode() {
 		case 'one':
 			appName = 'MoneyLog Experience';
 			i18n.appUrl = 'http://aurelio.net/moneylog/moneylog5.html';
-			oneFile = true;
-			useLocalStorage = false;
-			useDropboxStorage = false;
 			break;
 
 		case 'localStorage':
 			appName = 'MoneyLog Browser';
 			i18n.appUrl = i18n.appUrlOnline;
-			useLocalStorage = true;
-			oneFile = false;
-			useDropboxStorage = false;
 			break;
 
 		case 'dropbox':
@@ -2275,18 +2269,12 @@ function initAppMode() {
 			// https://www.dropbox.com/developers/reference/branding
 			appName = 'MoneyLog Cloud';
 			i18n.appUrl = 'http://moneylog-cloud.appspot.com';
-			useDropboxStorage = true;
-			oneFile = false;
-			useLocalStorage = false;
 			break;
 
 		case 'txt':
 			appName = 'MoneyLog TXT';
 			appVersion = '∞';
 			i18n.appUrl = 'http://aurelio.net/moneylog/beta.html';
-			oneFile = false;
-			useLocalStorage = false;
-			useDropboxStorage = false;
 			break;
 
 		default:
@@ -2299,12 +2287,8 @@ function init() {
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
 
-	// Sanity: solve inconsistences in app mode
-	if (appMode) {
-		// User informed appMode, this is the priority
-		initAppMode();
-	} else {
-		// No appMode set, let's find out in which mode we are
+	// Legacy: discover app mode using obsoleted settings
+	if (!appMode) {
 		if (oneFile) {
 			appMode = 'one';
 		} else if (useLocalStorage) {
@@ -2314,8 +2298,10 @@ function init() {
 		} else {  // local TXT
 			appMode = 'txt';
 		}
-		initAppMode();
 	}
+
+	// Check app mode
+	initAppMode();
 
 	// UI surgery for each mode
 	switch(appMode) {
