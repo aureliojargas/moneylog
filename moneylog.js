@@ -31,6 +31,7 @@ var highlightTags = '';           // The tags you may want to highlight (ie: 'wo
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
+var initFullScreen = false;       // Start app in Full Screen mode?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -2453,6 +2454,7 @@ function init() {
 	document.getElementById('editor-data')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 
 	// Apply user defaults (this code must be after event handlers adding)
+	if (initFullScreen)       { toggleFullScreen(); }
 	if (defaultMonthPartials) { document.getElementById('opt-monthly').checked = true; }
 	if (defaultFuture)        { document.getElementById('opt-future' ).checked = true; }
 	if (defaultRegex)         { document.getElementById('opt-regex'  ).checked = true; }
