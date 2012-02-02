@@ -104,7 +104,7 @@ insert_js='
 }
 '
 insert_warning='5 r temp1'
-insert_txt='$ r temp2'
+insert_txt='/^<pre/ r temp2'
 change_lang="/^var lang = 'pt';/ s/pt/$lang/"
 
 # Compose sed script
@@ -121,6 +121,9 @@ change_script='
 
 # Remove config.js call
 /^<script .* src="config.js"><\/script>/ d
+
+# Remove closing tags at the end
+/^<\/pre>/, $ d
 '
 
 # Language must be changed?
