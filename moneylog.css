@@ -403,9 +403,6 @@ tr.total {
 
 /* ---------------------------------------------- Report - Monthly/Yearly */
 
-#report table.overview tr.total {
-	font-style: italic;
-}
 #report td.rowlabel {
 	font-weight: bold;
 }
