@@ -2319,13 +2319,16 @@ function init() {
 			// Remove all file-related options
 			document.getElementById('source-file-box').style.display = 'none';
 			document.getElementById('toolbar-sep-1').style.display = 'none';
+			break;
 
 		case 'localStorage':
 			// Hide Reload button in localStorage mode. Not needed.
 			document.getElementById('source-reload').style.visibility = 'hidden';
+			break;
 
 		case 'dropbox':
 			showHideEditButton();
+			break;
 
 		case 'txt':
 			// Hide Edit button in TXT mode. Not functional.
