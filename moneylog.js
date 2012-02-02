@@ -42,18 +42,22 @@ var initChartDaily = 3;           // Initial selected item for the daily chart [
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
 var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
 
+
 // Program structure and files
-var appMode = 'txt';              // txt, one, dropbox, localStorage
-                                  // [txt] Read user data from local TXT files
-                                  // [one] Full app is at moneylog.html single file
-                                  // [dropbox] Read data from TXT files in a Dropbox account
-                                  // [localStorage] Edit data in-place, saving to the browser
+// Please be careful when changing anything here.
+//
 var dataFiles = ['moneylog.txt']; // The paths for the data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
 var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
-
-
 // Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
+//
+// The appMode sets the Moneylog flavor:
+// txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
+// one          Full app is in a single moneylog.html file, with user data at the end.
+// dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
+// localStorage Read/edit/save user data to the browser. Must always use the same browser.
+var appMode = 'txt';
+
 
 // Data format
 var useBlankFieldSeparator = false; // Use blanks (TABs and spaces) as field separator?
