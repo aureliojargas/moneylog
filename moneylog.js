@@ -932,15 +932,20 @@ function editorOff() {
 	document.getElementById('content').style.display = 'block';
 }
 function editorSave() {
+	editorOff();
 	saveLocalData();
 }
 function saveLocalData() {
+	var editButton = document.getElementById('editor-open');
+	
+	editButton.innerHTML = i18n.msgSaving;
 	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
 	// reload report
 	resetData();
 	readData();
 	parseData();
 	showReport();
+	editButton.innerHTML = i18n.labelEdit;
 }
 function loadLocalData() {
 	// first time using localStorage (or empty), load default data from #data (PRE)
