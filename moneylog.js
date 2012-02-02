@@ -42,18 +42,16 @@ var initChartDaily = 3;           // Initial selected item for the daily chart [
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
 var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
 
-
 // Program structure and files
-var oneFile = false;              // Full app is at moneylog.html single file?
-var dataFiles = ['moneylog.txt']; // The paths for the data files (requires oneFile=false)
+var appMode = 'txt';              // txt, one, dropbox, localStorage
+                                  // [txt] Read user data from local TXT files
+                                  // [one] Full app is at moneylog.html single file
+                                  // [dropbox] Read data from TXT files in a Dropbox account
+                                  // [localStorage] Edit data in-place, saving to the browser
+var dataFiles = ['moneylog.txt']; // The paths for the data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
+var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
-// localStorage allows editing in-place, saving your data on the browser (like cookies)
-var useLocalStorage = false;      // Turn ON localStorage support?
-var localStorageKey = 'moneylogData'; // Keyname for the localStorage database (don't change)
-
-// Dropbox storage
-var useDropboxStorage = false;    // Turn ON Dropbox storage support?
 
 // Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 
@@ -363,8 +361,8 @@ var i18nDatabase = {
 
 
 // Global vars
-var appName = 'MoneyLog Experience ∞';
-var appMode = '';
+var appVersion = '5b';
+var appName = '';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
@@ -380,7 +378,6 @@ var selectedRowsData = [];
 var multiRawData = '';
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
-var isOnline = false;
 
 // The iframe loading occurs in parallel with the main execution, we need to know when it's done
 var iframeIsLoaded = true;
@@ -912,7 +909,7 @@ function editorOn() {
 
 	// Load the current data to the editor
 	// Note: already loaded when localStorage
-	if (!useLocalStorage) {
+	if (appMode !== 'localStorage') {
 		document.getElementById('editor-data').value = rawData;
 	}
 
@@ -1055,10 +1052,10 @@ function readData() {
 	var iframeDoc;
 
 	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
-	if (useLocalStorage) {
+	if (appMode === 'localStorage') {
 		loadLocalData();
 		rawData = document.getElementById('editor-data').value;
-	} else if (oneFile || useDropboxStorage) {
+	} else if (appMode === 'one' || appMode === 'dropbox') {
 		rawData = document.getElementById('data').innerHTML;
 	} else {
 		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
@@ -1940,7 +1937,7 @@ function populateChartColsCombo() {
 
 function populateDataFilesCombo() {
 	var el, i;
-	if (!oneFile && !useLocalStorage) {
+	if (appMode !== 'one' && appMode !== 'localStorage') {
 		el = document.getElementById('source-file');
 		for (i = 0; i < dataFiles.length; i++) {
 			el.options[i] = new Option(dataFiles[i]);
@@ -2238,7 +2235,7 @@ function valueFilterChanged() {
 
 function showHideEditButton() {
 	var el;
-	if (useDropboxStorage) {
+	if (appMode === 'dropbox') {
 		// Hide Edit button when current file is '*'
 		el = document.getElementById('editor-open');
 		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
@@ -2250,20 +2247,92 @@ function showHideEditButton() {
 //                             INIT
 /////////////////////////////////////////////////////////////////////
 
+function initAppMode() {
+	switch(appMode) {
+
+		case 'one':
+			appName = 'MoneyLog Experience';
+			i18n.appUrl = 'http://aurelio.net/moneylog/moneylog5.html';
+			oneFile = true;
+			useLocalStorage = false;
+			useDropboxStorage = false;
+			break;
+
+		case 'localStorage':
+			appName = 'MoneyLog Browser';
+			i18n.appUrl = i18n.appUrlOnline;
+			useLocalStorage = true;
+			oneFile = false;
+			useDropboxStorage = false;
+			break;
+
+		case 'dropbox':
+			// Can't use the word Dropbox in app name
+			// https://www.dropbox.com/developers/reference/branding
+			appName = 'MoneyLog Cloud';
+			i18n.appUrl = 'http://moneylog-cloud.appspot.com';
+			useDropboxStorage = true;
+			oneFile = false;
+			useLocalStorage = false;
+			break;
+
+		case 'txt':
+			appName = 'MoneyLog TXT';
+			appVersion = '∞';
+			i18n.appUrl = 'http://aurelio.net/moneylog/beta.html';
+			oneFile = false;
+			useLocalStorage = false;
+			useDropboxStorage = false;
+			break;
+
+		default:
+			alert('FATAL ERROR: Invalid setting appMode = ' + appMode);
+	}
+}
+
 function init() {
 
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
 
-	// Dropbox version settings
-	if (useDropboxStorage) {
-		oneFile = false;
-		useLocalStorage = false;
+	// Sanity: solve inconsistences in app mode
+	if (appMode) {
+		// User informed appMode, this is the priority
+		initAppMode();
+	} else {
+		// No appMode set, let's find out in which mode we are
+		if (oneFile) {
+			appMode = 'one';
+		} else if (useLocalStorage) {
+			appMode = 'localStorage';
+		} else if (useDropboxStorage) {
+			appMode = 'dropbox';
+		} else {  // local TXT
+			appMode = 'txt';
+		}
+		initAppMode();
 	}
 
-	// Online mode uses localStorage or Dropbox
-	isOnline = useLocalStorage || useDropboxStorage;
+	// UI surgery for each mode
+	switch(appMode) {
+		case 'one':
+			// Remove all file-related options
+			document.getElementById('source-file-box').style.display = 'none';
+			document.getElementById('toolbar-sep-1').style.display = 'none';
 
+		case 'localStorage':
+			// Hide Reload button in localStorage mode. Not needed.
+			document.getElementById('source-reload').style.visibility = 'hidden';
+
+		case 'dropbox':
+			showHideEditButton();
+
+		case 'txt':
+			// Hide Edit button in TXT mode. Not functional.
+			document.getElementById('editor-open').style.visibility = 'hidden';
+	}
+
+	// Prepare UI elements
 	setCurrentDate();
 	populateMonthsCombo();
 	populateDataFilesCombo();
@@ -2281,22 +2350,6 @@ function init() {
 
 	// Split highlight string into words
 	highlightTags = highlightTags.strip().split(/\s+/);
-
-	if (isOnline) {
-		appName = 'MoneyLog Online';
-		i18n.appUrl = i18n.appUrlOnline;
-
-		if (useDropboxStorage) {
-			appName = 'MoneyLog Cloud';
-			// Can't use the word Dropbox in app name
-			// https://www.dropbox.com/developers/reference/branding
-			i18n.appUrl = 'http://moneylog-cloud.appspot.com';
-		}
-
-		showHideEditButton();
-	} else {
-		appName = appName.replace('og ', 'og<br>'); // dirty layout fix
-	}
 
 	// Set interface labels
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
@@ -2342,7 +2395,7 @@ function init() {
 	addClass(document.getElementById(reportType), 'active');
 
 	// localStorage browser support check
-	if (useLocalStorage && !window.localStorage) {
+	if (appMode === 'localStorage' && !window.localStorage) {
 		document.getElementById('editor-open').style.display = 'none'; // hide button
 		showError(
 			i18n.errorNoLocalStorage.replace('%s', appName),
@@ -2418,18 +2471,18 @@ function init() {
 	}
 
 	// Everything is ok, time to read/parse/show the user data
-	if (useDropboxStorage) {
-		if (typeof initDropbox === "undefined") {
+	if (appMode === 'dropbox') {
+		if (typeof initDropbox === 'undefined') {
 			showError(i18n.errorNoDropboxSupport.replace('%s', appName), '');
 			return; // abort
 		} else {
 			initDropbox();
 		}
-	} else if (oneFile || useLocalStorage) {
+	} else if (appMode === 'one' || appMode === 'localStorage') {
 		readData();
 		parseData();
 		showReport();
-	} else {
+	} else {  // txt
 		loadSelectedFile();
 	}
 
