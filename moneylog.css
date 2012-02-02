@@ -494,15 +494,21 @@ table.chart tr:hover td {
 	left: 0;
 	background: white;  /* content_bg */
 }
-#editor-data {  /* position:fixed so we can set textarea height:~100% */
+#editor-data-wrapper {  /* position:fixed so we can set textarea height:~100% */
 	position: fixed;
 	top: 30px;
 	right: 30px;
 	bottom: 70px;  /* space for the buttons */
 	left: 30px;
 	border: 8px solid black;  /* _dark */
-	padding: 15px;
+	padding: 15px 0 15px 15px;
+}
+#editor-data {
+	width: 100%;
+	height: 100%;
 	outline-width: 0;  /* disable focus ring */
+	border-style: none;
+	margin: 0;
 }
 #editor-buttons {
 	position: fixed;
