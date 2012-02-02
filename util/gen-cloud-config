@@ -4,11 +4,11 @@
 # Generates the commented config.js sample, with Dropbox specific sections.
 #
 # Usage:
-#	gen-dropbox-config [--lang XX]
+#	gen-cloud-config [--lang XX]
 #
 # Examples:
-#	gen-dropbox-config                   # Portuguese version
-#	gen-dropbox-config --lang en         # English version
+#	gen-cloud-config                   # Portuguese version
+#	gen-cloud-config --lang en         # English version
 
 
 cd $(dirname "$0")

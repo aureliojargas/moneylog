@@ -2,14 +2,14 @@
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
 # Script to join all the MoneyLog pieces in one singe HTML file, generating
-# the MoneyLog Dropbox version.
+# the MoneyLog Cloud (Dropbox) version.
 #
 # Usage:
-#	gen-dropbox [--lang XX]
+#	gen-cloud [--lang XX]
 #
 # Examples:
-#	gen-dropbox                   # Portuguese online version
-#	gen-dropbox --lang en         # English online version
+#	gen-cloud                   # Portuguese cloud version
+#	gen-cloud --lang en         # English cloud version
 
 
 cd $(dirname "$0")
