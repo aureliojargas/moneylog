@@ -5,14 +5,14 @@
 # Besides joining the files into one, it also changes the necessary settings.
 #
 # Usage:
-#	all-in-one [--lang XX] [components-to-embed]
+#	gen-one [--lang XX] [components-to-embed]
 #
 # Examples:
-#	all-in-one                   # Embed everything
-#	all-in-one css js txt        # Embed everything
-#	all-in-one --lang en         # Embed everything, english version
-#	all-in-one css js            # Don't embed data, use external TXT
-#	all-in-one --lang en css js  # English version, use external TXT
+#	gen-one                   # Embed everything
+#	gen-one css js txt        # Embed everything
+#	gen-one --lang en         # Embed everything, english version
+#	gen-one css js            # Don't embed data, use external TXT
+#	gen-one --lang en css js  # English version, use external TXT
 
 
 cd $(dirname "$0")
