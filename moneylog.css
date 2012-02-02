@@ -419,6 +419,7 @@ tr.total {
 	float: left;
 	font-size: 75%;
 	color: white !important;
+	line-height: 14px;
 }
 
 /* ---------------------------------------------- Charts */
