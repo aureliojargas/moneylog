@@ -350,7 +350,7 @@ tr.total {
 
 /* Rows padding */
 #report td {
-	padding: 7px 10px;
+	padding: 6px 10px;
 }
 #report tr.total td {
 	padding: 1px 10px; /* top/bottom: td - 6px */
