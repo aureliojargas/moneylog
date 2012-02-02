@@ -46,7 +46,7 @@ insert_css='
 	a \
 </style>\
 <style type="text/css">
-	r ../extra/dropbox.css
+	r ../extra/cloud.css
 	a \
 </style>
 	d
