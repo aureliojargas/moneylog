@@ -155,6 +155,7 @@ a.button {
 	text-transform: lowercase;
 	border: 1px solid #bbb;  /* element_border */
 	background-color: white;
+	background-color: #F4F4F4;  /* button_bg */
 }
 .button.active,
 a.button:active {
@@ -227,6 +228,10 @@ a.button.active {
 }
 #filter {
 	width: 100%;
+	border: 1px solid #C9C9C9;
+	background-color: #F4F4F4;  /* button_bg */
+	padding: 3px 0;
+	margin-bottom: 5px;
 }
 #opt-negate {
 	margin-left: 1em;
