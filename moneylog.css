@@ -104,6 +104,13 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 #app-name {
 	padding-left: 20px;
 }
+#app-version {
+	padding-top: 10px;
+}
+#app-version a {
+	color: #2B97E9;  /* cloud_blue */
+	text-decoration: underline;
+}
 
 /* ---------------------------------------------- Full screen */
 
@@ -423,7 +430,7 @@ tr.total {
 	margin-bottom: 5px;
 }
 .posbar {
-	background-color: #2B97E9; /* bar1_bg */
+	background-color: #2B97E9; /* bar1_bg cloud_blue */
 }
 .negbar {
 	background-color: #f66;   /* bar2_bg */
