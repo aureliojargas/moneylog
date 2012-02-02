@@ -2321,7 +2321,7 @@ function init() {
 			document.getElementById('source-reload').style.display = 'none';
 			document.getElementById('source-file').style.display = 'none';
 			// Stretch Edit button
-			document.getElementById('editor-open').style.width = '100%';
+			addClass(document.getElementById('editor-open'), 'wide');
 			document.getElementById('editor-open').style.marginTop = 0;
 			break;
 
@@ -2333,8 +2333,7 @@ function init() {
 			// Hide Edit button. Not functional.
 			document.getElementById('editor-open').style.display = 'none';
 			// Stretch Reload button
-			document.getElementById('source-reload').style.float = 'none';
-			document.getElementById('source-reload').style.width = '100%';
+			addClass(document.getElementById('source-reload'), 'wide');
 			break;
 	}
 

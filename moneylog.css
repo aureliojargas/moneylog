@@ -176,6 +176,11 @@ a.button {
 a.button.active {
 	color: white;
 }
+.button.wide {
+	display: block !important;
+	float: none !important;
+	width: 100% !important;
+}
 
 /* ---------------------------------------------- [ boxes ] */
 
