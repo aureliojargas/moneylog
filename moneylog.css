@@ -66,6 +66,9 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 #toolbar select {
 	vertical-align:middle;
 }
+#toolbar input {
+	border: 1px solid #bbb;  /* element_border */
+}
 
 /* ---------------------------------------------- Error */
 
