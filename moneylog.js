@@ -2331,7 +2331,11 @@ function init() {
 
 		case 'txt':
 			// Hide Edit button. Not functional.
-			document.getElementById('editor-open').style.visibility = 'hidden';
+			document.getElementById('editor-open').style.display = 'none';
+			// Stretch Reload button
+			document.getElementById('source-reload').style.float = 'none';
+			document.getElementById('source-reload').style.width = '100%';
+			break;
 	}
 
 	// Prepare UI elements
