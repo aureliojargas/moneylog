@@ -151,7 +151,8 @@ var i18nDatabase = {
 		helpTagCloud: 'Show/hide the tag cloud.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
-		helpSave: 'Save your data.',
+		helpSave: 'Save your data.'
+
 		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
 		// helpInstall: 'Instructions: Save this page, use a plain text editor to add your own transactions and open it on the browser.',
 		// helpTranslator: ''
@@ -223,7 +224,8 @@ var i18nDatabase = {
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
-		helpSave: 'Salva os lançamentos que você alterou.',
+		helpSave: 'Salva os lançamentos que você alterou.'
+
 		// helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
 		// helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
 	},
@@ -275,7 +277,8 @@ var i18nDatabase = {
 		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
 		helpReload: 'Actualitza només les dades, no la pàgina sencera. Aquest botó només apareix quan es fa servir un arxiu TXT de dades extern.',
 		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
-		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
+		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
+
 		// helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
 		// helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
 		// helpTranslator: 'Traducció: Paco Rivière, http://pacoriviere.cat'
@@ -332,7 +335,8 @@ var i18nDatabase = {
 		helpTagGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
 		helpEdit: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
 		helpClose: 'Cierra el editor de movimientos (solo cierra, no guarda los cambios!).',
-		helpSave: 'Guarda las movimientos editados.',
+		helpSave: 'Guarda las movimientos editados.'
+
 		// helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
 		// helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
 		// helpTranslator: 'Traducción: Gonzalo Nemmi'
