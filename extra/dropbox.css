@@ -1,45 +1,55 @@
 /*
 	MoneyLog Cloud theme
+	by Aurelio Jargas
 	http://aurelio.net/moneylog/
+
+	Light blue: #D5EAFB
+	 Dark blue: #2B97E9
 */
 
-/* Toolbar links - fg2a */
-#fullscreen, #tagSummaryButton, #toolbar a {
-	color:#93cbff;
-}
-#fullscreen:hover, #tagSummaryButton:hover, #toolbar a:hover {
-	background-color:#93cbff;
-}
-#toolbar #report-nav a:hover {
-	color:#93cbff; border-color:#93cbff;
-}
-#toolbar #report-nav a.active {
-	border-color:#93cbff;
-}
-#tagsArea #tagsLabel {
-	color:#93cbff;
-}
-#tagsArea input[checked]+span {
-	background-color:#93cbff;
+
+/* Dark background for active/special buttons */
+#fullscreen,
+#report th:hover,
+.button.active,
+a.button:active {
+	background-color: #2B97E9;
 }
 
-/* Help - bg3 */
-#help {
-	background-color:#edf6ff; border-color:#edf6ff; color:#103860;
-}
-#report .hl {
-	background-color:#edf6ff;
-}
-
-/* Total Row - bg5 (using bg3) */
-#report table.daily tr.total {
-	background-color:#edf6ff;
-}
-#report table.overview tr.total {
-	background-color:#edf6ff;
+/* Dark background for selected rows */
+#report tr.selected,
+#report tr.selected:hover td,
+#report tr.selected .neg {
+	background-color: #2B97E9;
 }
 
-/* Chart - bar1 (using fg2a) */
+/* Dark color for borders */
+#editor-data,
+#rows-summary,
+.button.active,
+a.button:active {
+	border-color: #2B97E9;
+}
+
+/* Light background for selections */
+.hl,
+#tag-cloud-tags input[checked]+span {
+	background-color: #D5EAFB;
+}
+
+/* Light background for totals */
+#report tr.total,
+#rows-summary {
+	background-color: #D5EAFB;
+}
+
+/* Light color for the report borders */
+#report td {
+	border-color: #D5EAFB;
+}
+
+
+/* Dropbox special: interface dark blue for the positive chart bar */
 .posbar {
-	background-color:#93cbff !important;
+	background-color: #2B97E9;
 }
