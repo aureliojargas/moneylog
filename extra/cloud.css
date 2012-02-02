@@ -24,7 +24,7 @@ a.button:active {
 }
 
 /* Dark color for borders */
-#editor-data,
+#editor-data-wrapper,
 #rows-summary,
 .button.active,
 a.button:active {
