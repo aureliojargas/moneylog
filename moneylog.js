@@ -1937,7 +1937,7 @@ function populateChartColsCombo() {
 
 function populateDataFilesCombo() {
 	var el, i;
-	if (appMode !== 'one' && appMode !== 'localStorage') {
+	if (appMode === 'txt' || appMode === 'dropbox') {
 		el = document.getElementById('source-file');
 		for (i = 0; i < dataFiles.length; i++) {
 			el.options[i] = new Option(dataFiles[i]);
@@ -2322,8 +2322,12 @@ function init() {
 			break;
 
 		case 'localStorage':
-			// Hide Reload button in localStorage mode. Not needed.
-			document.getElementById('source-reload').style.visibility = 'hidden';
+			// Hide Reload button and files combo. Not needed.
+			document.getElementById('source-reload').style.display = 'none';
+			document.getElementById('source-file').style.display = 'none';
+			// Stretch Edit button
+			document.getElementById('editor-open').style.width = '100%';
+			document.getElementById('editor-open').style.marginTop = 0;
 			break;
 
 		case 'dropbox':
@@ -2331,7 +2335,7 @@ function init() {
 			break;
 
 		case 'txt':
-			// Hide Edit button in TXT mode. Not functional.
+			// Hide Edit button. Not functional.
 			document.getElementById('editor-open').style.visibility = 'hidden';
 	}
 
