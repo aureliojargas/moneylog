@@ -92,7 +92,6 @@ var i18nDatabase = {
 		appUrl: 'http://aurelio.net/soft/moneylog/',
 		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
-		labelFullScreen: 'Dot',
 		labelReports: 'Reports',
 		labelDaily: 'daily',
 		labelMonthly: 'monthly',
@@ -103,13 +102,16 @@ var i18nDatabase = {
 		labelNegative: 'negative',
 		labelGreaterThan: 'greater than',
 		labelLessThan: 'less than',
-		labelFuture: 'Show Future Data',
-		labelMonthPartials: 'Show Monthly Partials',
-		labelFilter: 'Search field',
+		labelFuture: 'Future Data',
+		labelMonthPartials: 'Monthly Partials',
+		// labelFilter: 'Search field',
 		labelRegex: 'regex',
 		labelNegate: 'negate',
-		labelHelp: 'Question mark',
+		// labelHelp: 'Question mark',
 		labelReload: 'Reload',
+		labelViewOptions: 'View',
+		labelTagCloud: 'Tag Cloud',
+		labelTagSummary: 'Tag Summary',
 		labelNoData: 'No data.',
 		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description', 'Balance'],
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
@@ -134,7 +136,7 @@ var i18nDatabase = {
 		errorRequirements: 'Minimum requirements:',
 		msgLoading: 'Loading %s...',
 		msgSaving: 'Saving...',
-		helpFullScreen: 'Turns ON/OFF the clean mode: only the report is shown, with no toolbars.',
+		helpFullScreen: 'Turns ON/OFF the Full Screen mode: only the report is shown, with no toolbar.',
 		helpReports: 'Daily, monthly and yearly reports, with charts, balance and totals.',
 		helpLastMonths: 'See only the latest data, ignoring oldies.',
 		helpValueFilter: 'See only positive or negative values, or greater/lesser than some value.',
@@ -143,17 +145,18 @@ var i18nDatabase = {
 		helpFilter: 'Filter the reports in real time, as you type.',
 		helpRegex: 'Use regular expressions on the search field.',
 		helpNegate: 'Remove the search results from the report.',
-		helpHelp: 'Show/hide the help text.',
+		// helpHelp: 'Show/hide the help text.',
 		helpReload: 'Reload only the data, not the full page. This button only appears when using an external TXT file for data.',
-		helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
+		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
 		helpTagGroup: 'Show only the entries that have all the selected tags.',
-		helpTagSummary: 'Show/hide the tag summary box.',
+		helpTagSummary: 'Show/hide the tag summary.',
+		helpTagCloud: 'Show/hide the tag cloud.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
 		helpSave: 'Save your data.',
-		helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
-		helpInstall: 'Instructions:	Save this page, use a plain text editor to add your own transactions and open it on the browser.',
-		helpTranslator: ''
+		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
+		// helpInstall: 'Instructions: Save this page, use a plain text editor to add your own transactions and open it on the browser.',
+		// helpTranslator: ''
 	},
 	pt: {
 		dateFormat: 'd/m/Y',
@@ -162,7 +165,6 @@ var i18nDatabase = {
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appUrlOnline: 'http://aurelio.net/moneylog/online/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
-		labelFullScreen: 'Bolinha',
 		labelReports: 'Extratos',
 		labelDaily: 'diário',
 		labelMonthly: 'mensal',
@@ -173,13 +175,16 @@ var i18nDatabase = {
 		labelNegative: 'negativo',
 		labelGreaterThan: 'maior que',
 		labelLessThan: 'menor que',
-		labelFuture: 'Mostrar Lançamentos Futuros',
-		labelMonthPartials: 'Mostrar Parciais Mensais',
-		labelFilter: 'Caixa de pesquisa',
+		labelFuture: 'Lançamentos Futuros',
+		labelMonthPartials: 'Parciais Mensais',
+		// labelFilter: 'Caixa de pesquisa',
 		labelRegex: 'regex',
 		labelNegate: 'excluir',
-		labelHelp: 'Interrogação',
+		// labelHelp: 'Ajuda',
 		labelReload: 'Recarregar',
+		labelViewOptions: 'Visualizar',
+		labelTagCloud: 'Tags',
+		labelTagSummary: 'Somatório de tags',
 		labelNoData: 'Nenhum lançamento.',
 		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição', 'Acumulado'],
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
@@ -203,7 +208,7 @@ var i18nDatabase = {
 		errorRequirements: 'Os requisitos mínimos são:',
 		msgLoading: 'Carregando %s...',
 		msgSaving: 'Salvando...',
-		helpFullScreen: 'Liga/desliga o modo limpo: aparece somente o extrato, sem as barras de ferramentas.',
+		helpFullScreen: 'Liga/desliga o modo tela cheia: aparece somente o extrato, sem a barra de ferramentas.',
 		helpReports: 'Extratos diário, mensal e anual, com gráficos, somatório, médias, mínimo, máximo e acumulado.',
 		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
 		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
@@ -212,23 +217,23 @@ var i18nDatabase = {
 		helpFilter: 'Filtra os relatórios em tempo real, de acordo com o que você digita.',
 		helpRegex: 'Usa expressões regulares na caixa de pesquisa.',
 		helpNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
-		helpHelp: 'Mostra e esconde o texto de ajuda.',
+		// helpHelp: 'Mostra e esconde o texto de ajuda.',
 		helpReload: 'Recarrega somente os dados (só aparece quando se utiliza arquivo TXT externo).',
-		helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
+		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
 		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
-		helpTagSummary: 'Mostra e esconde a caixa com o somatório das tags.',
+		helpTagSummary: 'Mostra e esconde o somatório das tags.',
+		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpSave: 'Salva os lançamentos que você alterou.',
-		helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
-		helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
+		// helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
+		// helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
 	},
 	ca: {
 		centsSeparator: ',',
 		thousandSeparator: '.',
 		dateFormat: 'd-m-y',
 		appDescription: 'Seguiu les vostres finances de manera pràctica. De forma simple!',
-		labelFullScreen: '',
 		labelReports: 'Informes',
 		labelDaily: 'diari',
 		labelMonthly: 'mensual',
@@ -241,10 +246,9 @@ var i18nDatabase = {
 		labelLessThan: 'més petit que',
 		labelFuture: 'Mostra les dades futures',
 		labelMonthPartials: 'Mostra els Parcials Mensuals',
-		labelFilter: 'Camp de cerca',
+		// labelFilter: 'Camp de cerca',
 		labelRegex: 'regex',
 		labelNegate: 'nega-ho',
-		labelHelp: "Signe d'interrogació",
 		labelReload: 'Carrega',
 		labelNoData: 'No hi ha dades.',
 		labelsDetailed: ['Data', 'Import', 'Etiquetes', 'Descripció', 'Balanç'],
@@ -262,7 +266,6 @@ var i18nDatabase = {
 		errorInvalidDate: 'La data no és vàlida:',
 		errorInvalidAmount: "L'import no és vàlid:",
 		msgLoading: "S'està carregant %s...",
-		helpFullScreen: '',
 		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
 		helpLastMonths: 'Mostra només les dades més recents, omet les antigues.',
 		helpValueFilter: 'Mostra només els valors positius o negatius, o major / menor que un cert valor.',
@@ -271,17 +274,13 @@ var i18nDatabase = {
 		helpFilter: 'Filtre dels informes en temps real, a mesura que escriu.',
 		helpRegex: 'Utilitza expressions regulars en el camp de cerca.',
 		helpNegate: "Eliminar els resultats de cerca de l'informe.",
-		helpHelp: "'Mostra / oculta aquest text d'ajuda.",
+		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
 		helpReload: 'Actualitza només les dades, no la pàgina sencera. Aquest botó només apareix quan es fa servir un arxiu TXT de dades extern.',
-		helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
+		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
 		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
-		helpTagSummary: '',
-		helpEdit: '',
-		helpClose: '',
-		helpSave: '',
-		helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
-		helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
-		helpTranslator: 'Traducció: Paco Rivière, http://pacoriviere.cat'
+		// helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
+		// helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
+		// helpTranslator: 'Traducció: Paco Rivière, http://pacoriviere.cat'
 	},
 	es: {
 		dateFormat: 'd/m/Y',
@@ -289,7 +288,6 @@ var i18nDatabase = {
 		thousandSeparator: '.',
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
-		labelFullScreen: 'Punto',
 		labelReports: 'Reportes',
 		labelDaily: 'diario',
 		labelMonthly: 'mensual',
@@ -302,10 +300,9 @@ var i18nDatabase = {
 		labelLessThan: 'menores a',
 		labelFuture: 'Mostrar movimientos futuros',
 		labelMonthPartials: 'Mostrar parcial mensual',
-		labelFilter: 'Caja de búsqueda',
+		// labelFilter: 'Caja de búsqueda',
 		labelRegex: 'regex',
 		labelNegate: 'negar',
-		labelHelp: 'Signo de interrogación',
 		labelReload: 'Recargar',
 		labelNoData: 'Sin movimientos.',
 		labelsDetailed: ['Fecha', 'Monto', 'Concepto', 'Descripción', 'Balance'],
@@ -323,7 +320,6 @@ var i18nDatabase = {
 		errorInvalidDate: 'Fecha invalida:',
 		errorInvalidAmount: 'Cantidad invalida:',
 		msgLoading: 'Cargando %s...',
-		helpFullScreen: 'Mostrar/Esconder encabezado y pie de página.',
 		helpReports: 'Reporte diario, mensual o anual, con gráficas, promedios, balances y totales.',
 		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
 		helpValueFilter: 'Vea solo los montos positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
@@ -332,17 +328,16 @@ var i18nDatabase = {
 		helpFilter: 'Evalue los reportes en tiempo real a medida que los va tipeando.',
 		helpRegex: 'Use expresiones regulares en la caja de búsqueda.',
 		helpNegate: 'Invierte el criterio de búsqueda.',
-		helpHelp: 'Mostrar/Esconder texto de ayuda.',
+		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
 		helpReload: 'Recargar solo la información y no la página entera. Este botón solo aparecerá cuando se este utilizando un archivo TXT externo para almacenar la información.',
-		helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
+		// helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
 		helpTagGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
-		helpTagSummary: '',
 		helpEdit: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
 		helpClose: 'Cierra el editor de movimientos (solo cierra, no guarda los cambios!).',
 		helpSave: 'Guarda las movimientos editados.',
-		helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
-		helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
-		helpTranslator: 'Traducción: Gonzalo Nemmi'
+		// helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
+		// helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
+		// helpTranslator: 'Traducción: Gonzalo Nemmi'
 	},
 	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
@@ -369,12 +364,11 @@ var i18nDatabase = {
 
 // Global vars
 var appName = 'MoneyLog Experience ∞';
+var appMode = '';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
 var oldSortColRev;
-var oldValueFilterArgShow;
-var oldTagSummary;
 var currentDate;
 var highlightRegex;
 var i18n;
@@ -915,20 +909,32 @@ function getDetailedReportColumnContents(tr_element, column_index) {
 /////////////////////////////////////////////////////////////////////
 
 function editorOn() {
-	// show editor, hide Edit button
+
+	// Load the current data to the editor
+	// Note: already loaded when localStorage
+	if (!useLocalStorage) {
+		document.getElementById('editor-data').value = rawData;
+	}
+
+	// Hide content to avoid scroll bars
+	document.getElementById('content').style.display = 'none';
+
+	// Show editor
 	document.getElementById('editor').style.display = 'block';
-	document.getElementById('editoropen').style.display = 'none';
 }
 function editorOff() {
-	// hide editor, show Edit button
+
+	// Hide editor
 	document.getElementById('editor').style.display = 'none';
-	document.getElementById('editoropen').style.display = 'inline';
+
+	// Restore content
+	document.getElementById('content').style.display = 'block';
 }
 function editorSave() {
 	saveLocalData();
 }
 function saveLocalData() {
-	localStorage.setItem(localStorageKey, document.getElementById('editordata').value);
+	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
 	// reload report
 	resetData();
 	readData();
@@ -940,7 +946,7 @@ function loadLocalData() {
 	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
 		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
 	}
-	document.getElementById('editordata').value = localStorage.getItem(localStorageKey);
+	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
 }
 // Allows to insert TABs inside textarea
 // Opera bug: needs to be attached to onkeypress instead onkeydown
@@ -993,7 +999,7 @@ function loadDataFile(filePath) {
 	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
 	resetData();
 	iframeIsLoaded = false;
-	document.getElementById('dataFrame').src = filePath;
+	document.getElementById('data-frame').src = filePath;
 	// This triggers the onLoad iframe event, handled by iframeLoaded()
 }
 
@@ -1019,7 +1025,7 @@ function loadWaitingDataFiles() {
 	}
 }
 function getSelectedFile() {
-	return dataFiles[document.getElementById('datafiles').selectedIndex];
+	return dataFiles[document.getElementById('source-file').selectedIndex];
 	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
 }
 function loadSelectedFile() {
@@ -1051,12 +1057,12 @@ function readData() {
 	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
 	if (useLocalStorage) {
 		loadLocalData();
-		rawData = document.getElementById('editordata').value;
+		rawData = document.getElementById('editor-data').value;
 	} else if (oneFile || useDropboxStorage) {
 		rawData = document.getElementById('data').innerHTML;
 	} else {
 		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
-		iframeDoc = document.getElementById('dataFrame').contentWindow.document;
+		iframeDoc = document.getElementById('data-frame').contentWindow.document;
 		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
 	}
 }
@@ -1265,22 +1271,22 @@ function filterData() {
 	firstDate = 0;
 	filteredData = [];
 
-	if (document.getElementById('optlastmonths').checked && reportType !== 'y') {
-		firstDate = getPastMonth(document.getElementById('lastmonths').value - 1);
+	if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
+		firstDate = getPastMonth(document.getElementById('last-months').value - 1);
 	}
 
 	// Show future works for both views
-	showFuture = document.getElementById('optfuture').checked;
+	showFuture = document.getElementById('opt-future').checked;
 
 	// Get filters data for the detailed report
 	if (reportType === 'd') {
 		filter = document.getElementById('filter').value;
-		isRegex = document.getElementById('optregex').checked;
-		isNegated = document.getElementById('optnegate').checked;
+		isRegex = document.getElementById('opt-regex').checked;
+		isNegated = document.getElementById('opt-negate').checked;
 
-		if (document.getElementById('optvaluefilter').checked) {
-			valueFilter = document.getElementById('valuefilter').value;
-			valueFilterArg = document.getElementById('valuefilterarg').value || 0;
+		if (document.getElementById('opt-value-filter').checked) {
+			valueFilter = document.getElementById('value-filter').value;
+			valueFilterArg = document.getElementById('value-filter-arg').value || 0;
 		}
 
 		// Hack: Value filtering on the search box!
@@ -1357,18 +1363,18 @@ function applyTags(theData) {
 	// This function composes the full tag menu and
 	// also filters theData if some tag is selected
 
-	var i, j, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagsMenu, selectedTags, filteredData, tagMultiAll;
+	var i, j, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagsMenu, selectedTags, filteredData, tagMustGroup;
 
 	tagsMenu = [];
 	selectedTags = [];
 	filteredData = [];
 
 	// Get multiple selection mode (true=AND, false=OR)
-	tagMultiAll = document.getElementById('tagMultiAllCheck').checked;
+	tagMustGroup = document.getElementById('tag-cloud-opt-group').checked;
 
 	// Get currently selected tags (from interface)
 	try {
-		tagCount = document.getElementById('tagCount').value;
+		tagCount = document.getElementById('tag-cloud-count').value;
 		for (i = 1; i <= tagCount; i++) {
 			tagElement = document.getElementById('tag_' + i);
 			if (tagElement && tagElement.checked) {
@@ -1400,8 +1406,8 @@ function applyTags(theData) {
 					(thisTag === i18n.labelTagEmpty && rowTags.length === 0));
 					// Tip: space means no tag
 
-				if (tagMatched && (!tagMultiAll)) { break; } // OR
-				if (!tagMatched && (tagMultiAll)) { break; } // AND
+				if (tagMatched && (!tagMustGroup)) { break; } // OR
+				if (!tagMatched && (tagMustGroup)) { break; } // AND
 			}
 			if (tagMatched) {
 				filteredData.push(theData[i]);
@@ -1426,7 +1432,7 @@ function applyTags(theData) {
 		tagsMenu.push(i18n.labelTagEmpty);
 
 		// Save the total tag count
-		document.getElementById('tagCount').value = tagsMenu.length;
+		document.getElementById('tag-cloud-count').value = tagsMenu.length;
 
 		// Add one checkbox for each tag
 		for (i = 0; i < tagsMenu.length; i++) {
@@ -1448,13 +1454,10 @@ function applyTags(theData) {
 	}
 
 	// Save the tags menu (or make it empty)
-	document.getElementById('tagList').innerHTML = tagsMenu;
+	document.getElementById('tag-cloud-tags').innerHTML = tagsMenu;
 
-	// Show the tags menu if we have at least one tag (except Full Screen)
-	document.getElementById('tagsArea').style.display = (tagsMenu.length > 0 && !isFullScreen) ? 'block' : 'none';
-
-	// The '+' checkbox is only shown if we have multiple selected tags
-	document.getElementById('tagMultiAll').style.display = (selectedTags.length > 1) ? 'block' : 'none';
+	// The group checkbox is only shown if we have multiple selected tags
+	document.getElementById('tag-cloud-options').style.display = (selectedTags.length > 1) ? 'block' : 'none';
 
 	// Tag filter was active?
 	if (selectedTags.length > 0) {
@@ -1470,8 +1473,9 @@ function applyTags(theData) {
 /////////////////////////////////////////////////////////////////////
 
 function updateSelectedRowsSummary() {
-	var i, data, arr, table, label, value;
+	var el, i, data, arr, table, label, value;
 
+	el = document.getElementById('rows-summary');
 	data = selectedRowsData;
 	arr = [];
 	table = [];
@@ -1498,9 +1502,13 @@ function updateSelectedRowsSummary() {
 			);
 		}
 		table.push('<\/table>');
-	}
 
-	document.getElementById('rowsSummary').innerHTML = table.join('\n');
+		el.innerHTML = table.join('\n');
+		el.style.display = 'block';
+
+	} else {
+		el.style.display = 'none';
+	}
 }
 
 function updateTagSummary(theData) {
@@ -1567,10 +1575,7 @@ function updateTagSummary(theData) {
 
 	// Save results to the respective DIV
 	results = results.join('\n');
-	document.getElementById('tagSummary').innerHTML = results;
-
-	// Position tag summary right above the tagbar, which has variable height
-	document.getElementById('tagSummary').style.bottom = document.getElementById('tagsArea').offsetHeight + 'px';
+	document.getElementById('tag-summary-content').innerHTML = results;
 }
 
 function showOverview() {
@@ -1715,7 +1720,7 @@ function showOverview() {
 			chartLabels = [];
 
 			// Get all values for the selected column
-			chartCol = document.getElementById('chartcol').value || 1;
+			chartCol = document.getElementById('chart-data').value || 1;
 			for (i = 0; i < overviewData.length; i++) {
 				chartValues.push(overviewData[i][chartCol]);
 				chartLabels.push(overviewData[i][0]);  // month or year
@@ -1723,7 +1728,7 @@ function showOverview() {
 
 			// Get chart and show it
 			chart = drawChart(chartValues, chartLabels);
-			document.getElementById('chart').innerHTML = chart;
+			document.getElementById('chart-content').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
 		} else {
 			document.getElementById('charts').style.display = 'none';
@@ -1747,7 +1752,7 @@ function showDetailed() {
 	chartLabels = [];
 	selectedRowsData = [];
 
-	monthPartials = document.getElementById('optmonthly');
+	monthPartials = document.getElementById('opt-monthly');
 	theData = applyTags(filterData());
 
 	if (theData.length > 0) {
@@ -1884,14 +1889,14 @@ function showDetailed() {
 
 			// Get all values for the selected column
 			chartValuesSelected = [];
-			chartCol = document.getElementById('chartcol').value || 1;
+			chartCol = document.getElementById('chart-data').value || 1;
 			for (i = 0; i < chartValues.length; i++) {
 				chartValuesSelected.push(chartValues[i][chartCol]);
 			}
 
 			// Get chart and show it
 			chart = drawChart(chartValuesSelected, chartLabels);
-			document.getElementById('chart').innerHTML = chart;
+			document.getElementById('chart-content').innerHTML = chart;
 			document.getElementById('charts').style.display = 'block';
 		} else {
 			document.getElementById('charts').style.display = 'none';
@@ -1924,7 +1929,7 @@ function showReport() {
 
 function populateChartColsCombo() {
 	var el, i;
-	el = document.getElementById('chartcol');
+	el = document.getElementById('chart-data');
 	for (i = 0; i < i18n.labelsOverview.length; i++) {
 		if (i === 0) {
 			continue; // ignore date column
@@ -1936,7 +1941,7 @@ function populateChartColsCombo() {
 function populateDataFilesCombo() {
 	var el, i;
 	if (!oneFile && !useLocalStorage) {
-		el = document.getElementById('datafiles');
+		el = document.getElementById('source-file');
 		for (i = 0; i < dataFiles.length; i++) {
 			el.options[i] = new Option(dataFiles[i]);
 		}
@@ -1945,7 +1950,7 @@ function populateDataFilesCombo() {
 
 function populateMonthsCombo() {
 	var el, label, i;
-	el = document.getElementById('lastmonths');
+	el = document.getElementById('last-months');
 	label = i18n.labelMonths[0];
 	for (i = 1; i <= maxLastMonths; i++) {
 		if (i > 1) {
@@ -1958,7 +1963,7 @@ function populateMonthsCombo() {
 
 function populateValueFilterCombo() {
 	var el;
-	el = document.getElementById('valuefilter');
+	el = document.getElementById('value-filter');
 	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
 	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
 	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
@@ -1981,36 +1986,36 @@ function updateToolbar() {
 
 	// Daily
 	if (reportType === 'd') {
-		add = ['tagsArea'];
-		remove = ['charts'];
 		unhide = [
-			'filterbox',
-			'optmonthly', 'optmonthlylabel',
-			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+			'search-box',
+			'opt-monthly', 'opt-monthly-label',
+			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
+			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'tag-cloud-box',
+			'tag-summary-box'
 		];
 	// Monthly
 	} else if (reportType === 'm') {
-		add = ['charts'];
-		remove = ['tagsArea'];
 		hide = [
-			'filterbox',
-			'optmonthly', 'optmonthlylabel',
-			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter'
+			'search-box',
+			'opt-monthly', 'opt-monthly-label',
+			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
+			'tag-cloud-box',
+			'tag-summary-box'
 		];
 		unhide = [
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
 		];
 	// Yearly
 	} else if (reportType === 'y') {
-		add = ['charts'];
-		remove = ['tagsArea'];
 		hide = [
-			'filterbox',
-			'optmonthly', 'optmonthlylabel',
-			'optvaluefilter', 'optvaluefilterlabel', 'valuefilter',
+			'search-box',
+			'opt-monthly', 'opt-monthly-label',
+			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
 			// Recent *months* doesn't make sense in yearly report
-			'optlastmonths', 'optlastmonthslabel', 'lastmonths'
+			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'tag-cloud-box',
+			'tag-summary-box'
 		];
 	}
 
@@ -2056,10 +2061,6 @@ function changeReport(el) {
 	//
 	// From Daily to Monthly/Yearly
 	if (oldType === 'd' && newType !== 'd') {
-		oldValueFilterArgShow = document.getElementById('valuefilterarg').style.visibility;
-		document.getElementById('valuefilterarg').style.visibility = 'hidden';
-		oldTagSummary = document.getElementById('tagSummary').style.display;
-		document.getElementById('tagSummary').style.display = 'none';
 		oldSortColIndex = sortColIndex;
 		oldSortColRev = sortColRev;
 		sortColIndex = 0; // Default by date
@@ -2067,8 +2068,6 @@ function changeReport(el) {
 	//
 	// From Monthly/Yearly to Daily
 	} else if (newType === 'd' && oldType !== 'd') {
-		document.getElementById('valuefilterarg').style.visibility = oldValueFilterArgShow;
-		document.getElementById('tagSummary').style.display = oldTagSummary;
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
 	}
@@ -2116,41 +2115,27 @@ function iframeLoaded(el) {
 }
 
 function lastMonthsChanged() {
-	document.getElementById('optlastmonths').checked = true;
+	document.getElementById('opt-last-months').checked = true;
 	overviewData = [];
 	showReport();
 }
 
 function toggleFullScreen() {
-	var toolbar, tagbar, content, tagsummary;
+	var toolbar, logo, content;
 
-	toolbar = document.getElementById('toolbarwrapper');
-	tagbar = document.getElementById('tagsArea');
+	toolbar = document.getElementById('toolbar-controls-wrapper');
+	logo = document.getElementById('logo');
 	content = document.getElementById('content');
-	tagsummary = document.getElementById('tagSummary');
-
-	// Note:
-	// This toolbar wrapper is needed because #toolbar is a table (not a div).
-	// When doing the display:block on it, the table cells don't expand to full width.
-	// So we need this silly DIV wrapper so things work as expected.
-	// The only browser who got it right without the wrapper was... IE7/8 (surprise!)
 
 	if (isFullScreen) {
 		toolbar.style.display = 'block';
-		if (reportType === 'd') {
-			tagbar.style.display = 'block';
-			tagsummary.style.display = oldTagSummary || 'none';
-		}
-		content.style.marginTop = '8em';
+		logo.style.display = 'block';
+		content.style.marginLeft = '216px';  // #toolbar width
 		isFullScreen = false;
 	} else {
 		toolbar.style.display = 'none';
-		tagbar.style.display = 'none';
-		content.style.marginTop = 0;
-		if (reportType === 'd') {
-			oldTagSummary = tagsummary.style.display;
-			tagsummary.style.display = 'none';
-		}
+		logo.style.display = 'none';
+		content.style.marginLeft = 0;
 		isFullScreen = true;
 	}
 }
@@ -2159,25 +2144,53 @@ function toggleFuture() {
 	showReport();
 }
 
-function toggleHelp() {
-	var el = document.getElementById('help');
-	el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+function toggleToolbarBox(header_id, content_id) {
+	// Handle toolbar box header clicking: show/hide contents
+	var header, content;
+	header = document.getElementById(header_id);
+	content = document.getElementById(content_id);
+	if (content.style.display === 'block') {
+		content.style.display = 'none';
+		removeClass(header, 'active');
+	} else {
+		content.style.display = 'block';
+		addClass(header, 'active');
+	}
 	return false; // cancel default link action
 }
-
+function toggleViewOptions() {
+	return toggleToolbarBox('view-options-header', 'view-options-content');
+}
+function toggleTagCloud() {
+	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
+}
 function toggleTagSummary() {
-	var el = document.getElementById('tagSummary');
-	el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-	return false; // cancel default link action
+	return toggleToolbarBox('tag-summary-header', 'tag-summary-content');
 }
 
 function toggleLastMonths() {
+
+	// show/hide extra options
+	var extra = document.getElementById('opt-last-months-extra');
+	extra.style.display = (this.checked) ? 'block' : 'none';
+
+	// reload report
 	overviewData = [];
 	showReport();
 }
 
+function toggleValueFilter() {
+
+	// show/hide extra options
+	var extra = document.getElementById('opt-value-filter-extra');
+	extra.style.display = (this.checked) ? 'block' : 'none';
+
+	// reload report
+	showReport();
+}
+
 function toggleMonthly() {
-	if (document.getElementById('optmonthly').checked === true) {
+	if (document.getElementById('opt-monthly').checked === true) {
 		sortColIndex = 0;
 		sortColRev = false;
 	}
@@ -2211,27 +2224,24 @@ function valueFilterChanged() {
 	overviewData = [];
 
 	// autocheck checkbox
-	document.getElementById('optvaluefilter').checked = true;
+	document.getElementById('opt-value-filter').checked = true;
 
 	// show/hide the filter argument textbox
-	if (document.getElementById('valuefilter').value.match(/[+\-]/)) {
-		document.getElementById('valuefilterarg').style.visibility = 'hidden';
+	if (document.getElementById('value-filter').value.match(/[+\-]/)) {
+		document.getElementById('value-filter-arg').style.display = 'none';
 	} else {
-		document.getElementById('valuefilterarg').style.visibility = 'visible';
+		document.getElementById('value-filter-arg').style.display = 'inline';
 	}
 
 	showReport();
 }
 
 function showHideEditButton() {
-	if (useLocalStorage || useDropboxStorage && getSelectedFile() !== '*') {
-		// show
-		document.getElementById('editoropen').style.display = 'inline';
-		document.getElementById('operabug').style.paddingRight = i18n.labelEdit.length + 'em';
-	} else {
-		// hide
-		document.getElementById('editoropen').style.display = 'none';
-		document.getElementById('operabug').style.paddingRight = '0.5em';
+	var el;
+	if (useDropboxStorage) {
+		// Hide Edit button when current file is '*'
+		el = document.getElementById('editor-open');
+		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
 	}
 }
 
@@ -2244,7 +2254,6 @@ function init() {
 
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
-	i18n.labelTags = i18n.labelsDetailed[2]; // Tags
 
 	// Dropbox version settings
 	if (useDropboxStorage) {
@@ -2273,19 +2282,6 @@ function init() {
 	// Split highlight string into words
 	highlightTags = highlightTags.strip().split(/\s+/);
 
-	// Just show the files combo when there are 2 or more files
-	if (oneFile || useLocalStorage || dataFiles.removePattern('*').length < 2) {
-		document.getElementById('datafiles').style.display = 'none';
-	}
-
-	// Hide Reload button in oneFile mode. No iframe, so we can't reload.
-	// Hide Reload button in localStorage mode. Not needed.
-	// Dropbox mode: reloads files from the remote server.
-	// Multi-files mode: realoads local files.
-	if (oneFile || useLocalStorage) {
-		document.getElementById('reload').style.visibility = 'hidden';
-	}
-
 	if (isOnline) {
 		appName = 'MoneyLog Online';
 		i18n.appUrl = i18n.appUrlOnline;
@@ -2303,49 +2299,51 @@ function init() {
 	}
 
 	// Set interface labels
-	document.getElementById('sitelink'           ).innerHTML = appName;
-	document.getElementById('d'                  ).innerHTML = i18n.labelDaily;
-	document.getElementById('m'                  ).innerHTML = i18n.labelMonthly;
-	document.getElementById('y'                  ).innerHTML = i18n.labelYearly;
-	document.getElementById('optlastmonthslabel' ).innerHTML = i18n.labelLastMonths + ':';
-	document.getElementById('optvaluefilterlabel').innerHTML = i18n.labelValueFilter + ':';
-	document.getElementById('optfuturelabel'     ).innerHTML = i18n.labelFuture;
-	document.getElementById('optmonthlylabel'    ).innerHTML = i18n.labelMonthPartials;
-	document.getElementById('optregexlabel'      ).innerHTML = i18n.labelRegex;
-	document.getElementById('optnegatelabel'     ).innerHTML = i18n.labelNegate;
-	document.getElementById('tagsLabel'          ).innerHTML = i18n.labelTags + ':';
-	document.getElementById('tagMultiAllLabel'   ).innerHTML = i18n.labelTagGroup;
-	document.getElementById('editoropen'         ).innerHTML = i18n.labelEdit;
-	document.getElementById('editorclose'        ).innerHTML = i18n.labelClose;
-	document.getElementById('editorsave'         ).innerHTML = i18n.labelSave;
+	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
+	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
+	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
+	document.getElementById('opt-last-months-label'    ).innerHTML = i18n.labelLastMonths + ':';
+	document.getElementById('opt-value-filter-label'   ).innerHTML = i18n.labelValueFilter + ':';
+	document.getElementById('opt-future-label'         ).innerHTML = i18n.labelFuture;
+	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
+	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelRegex;
+	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelNegate;
+	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagGroup;
+	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
+	document.getElementById('editor-open'              ).innerHTML = i18n.labelEdit;
+	document.getElementById('editor-close'             ).innerHTML = i18n.labelClose;
+	document.getElementById('editor-save'              ).innerHTML = i18n.labelSave;
+	document.getElementById('view-options-header'      ).innerHTML = i18n.labelViewOptions;
+	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
+	document.getElementById('tag-summary-header'       ).innerHTML = i18n.labelTagSummary;
 
 	// Set interface tooltips
-	document.getElementById('fullscreen'         ).title = i18n.helpFullScreen;
-	document.getElementById('sitelink'           ).href  = i18n.appUrl;
-	document.getElementById('sitelink'           ).title = i18n.appDescription;
-	document.getElementById('report-nav'         ).title = i18n.helpReports;
-	document.getElementById('optlastmonthslabel' ).title = i18n.helpLastMonths;
-	document.getElementById('optvaluefilterlabel').title = i18n.helpValueFilter;
-	document.getElementById('optfuturelabel'     ).title = i18n.helpFuture;
-	document.getElementById('optmonthlylabel'    ).title = i18n.helpMonthPartials;
-	document.getElementById('filter'             ).title = i18n.helpFilter;
-	document.getElementById('optregexlabel'      ).title = i18n.helpRegex;
-	document.getElementById('optnegatelabel'     ).title = i18n.helpNegate;
-	document.getElementById('helpbutton'         ).title = i18n.helpHelp;
-	document.getElementById('reload'             ).title = i18n.helpReload;
-	document.getElementById('tagsLabel'          ).title = i18n.helpTags;
-	document.getElementById('tagMultiAllLabel'   ).title = i18n.helpTagGroup;
-	document.getElementById('tagSummaryButton'   ).title = i18n.helpTagSummary;
-	document.getElementById('editoropen'         ).title = i18n.helpEdit;
-	document.getElementById('editorclose'        ).title = i18n.helpClose;
-	document.getElementById('editorsave'         ).title = i18n.helpSave;
+	document.getElementById('fullscreen'               ).title = i18n.helpFullScreen;
+	document.getElementById('sitelink'                 ).href  = i18n.appUrl;
+	document.getElementById('sitelink'                 ).title = i18n.appDescription;
+	document.getElementById('report-nav'               ).title = i18n.helpReports;
+	document.getElementById('opt-last-months-label'    ).title = i18n.helpLastMonths;
+	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;
+	document.getElementById('opt-future-label'         ).title = i18n.helpFuture;
+	document.getElementById('opt-monthly-label'        ).title = i18n.helpMonthPartials;
+	document.getElementById('filter'                   ).title = i18n.helpFilter;
+	document.getElementById('opt-regex-label'          ).title = i18n.helpRegex;
+	document.getElementById('opt-negate-label'         ).title = i18n.helpNegate;
+	document.getElementById('source-reload'            ).title = i18n.helpReload;
+	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
+	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
+	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
+	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
+	document.getElementById('editor-open'              ).title = i18n.helpEdit;
+	document.getElementById('editor-close'             ).title = i18n.helpClose;
+	document.getElementById('editor-save'              ).title = i18n.helpSave;
 
 	// Mark current report as active (CSS)
 	addClass(document.getElementById(reportType), 'active');
 
 	// localStorage browser support check
 	if (useLocalStorage && !window.localStorage) {
-		document.getElementById('editoropen').style.display = 'none'; // hide button
+		document.getElementById('editor-open').style.display = 'none'; // hide button
 		showError(
 			i18n.errorNoLocalStorage.replace('%s', appName),
 			'<p>' + i18n.errorRequirements +
@@ -2356,84 +2354,54 @@ function init() {
 
 	// Set initial chart type for the reports (before event handlers)
 	if (reportType === 'd') {
-		document.getElementById('chartcol').value = initChartDaily;
+		document.getElementById('chart-data').value = initChartDaily;
 	} else if (reportType === 'm') {
-		document.getElementById('chartcol').value = initChartMonthly;
+		document.getElementById('chart-data').value = initChartMonthly;
 	} else {
-		document.getElementById('chartcol').value = initChartYearly;
+		document.getElementById('chart-data').value = initChartYearly;
 	}
 
 	// Add event handlers
-	document.getElementById('fullscreen'      ).onclick  = toggleFullScreen;
-	document.getElementById('d'               ).onclick  = changeReport;
-	document.getElementById('m'               ).onclick  = changeReport;
-	document.getElementById('y'               ).onclick  = changeReport;
-	document.getElementById('optlastmonths'   ).onclick  = toggleLastMonths;
-	document.getElementById('lastmonths'      ).onchange = lastMonthsChanged;
-	document.getElementById('optvaluefilter'  ).onclick  = showReport;
-	document.getElementById('valuefilter'     ).onchange = valueFilterChanged;
-	document.getElementById('valuefilterarg'  ).onkeyup  = showReport;
-	document.getElementById('optfuture'       ).onclick  = toggleFuture;
-	document.getElementById('optmonthly'      ).onclick  = toggleMonthly;
-	document.getElementById('helpbutton'      ).onclick  = toggleHelp;
-	document.getElementById('filter'          ).onkeyup  = showReport;
-	document.getElementById('optregex'        ).onclick  = showReport;
-	document.getElementById('optnegate'       ).onclick  = showReport;
-	document.getElementById('datafiles'       ).onchange = loadSelectedFile;
-	document.getElementById('reload'          ).onclick  = loadSelectedFile;
-	document.getElementById('tagMultiAllCheck').onclick  = showReport;
-	document.getElementById('chartcol'        ).onchange = showReport;
-	document.getElementById('tagSummaryButton').onclick  = toggleTagSummary;
-	if (isOnline) {
-		document.getElementById('editoropen' ).onclick = editorOn;
-		document.getElementById('editorclose').onclick = editorOff;
-		document.getElementById('editorsave' ).onclick = editorSave;
-		document.getElementById('editordata' )[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
-	}
+	document.getElementById('fullscreen'         ).onclick  = toggleFullScreen;
+	document.getElementById('d'                  ).onclick  = changeReport;
+	document.getElementById('m'                  ).onclick  = changeReport;
+	document.getElementById('y'                  ).onclick  = changeReport;
+	document.getElementById('opt-last-months'    ).onclick  = toggleLastMonths;
+	document.getElementById('last-months'        ).onchange = lastMonthsChanged;
+	document.getElementById('opt-value-filter'   ).onclick  = toggleValueFilter;
+	document.getElementById('value-filter'       ).onchange = valueFilterChanged;
+	document.getElementById('value-filter-arg'   ).onkeyup  = showReport;
+	document.getElementById('opt-future'         ).onclick  = toggleFuture;
+	document.getElementById('opt-monthly'        ).onclick  = toggleMonthly;
+	document.getElementById('filter'             ).onkeyup  = showReport;
+	document.getElementById('opt-regex'          ).onclick  = showReport;
+	document.getElementById('opt-negate'         ).onclick  = showReport;
+	document.getElementById('source-file'        ).onchange = loadSelectedFile;
+	document.getElementById('source-reload'      ).onclick  = loadSelectedFile;
+	document.getElementById('tag-cloud-opt-group').onclick  = showReport;
+	document.getElementById('chart-data'         ).onchange = showReport;
+	document.getElementById('view-options-header').onclick  = toggleViewOptions;
+	document.getElementById('tag-cloud-header'   ).onclick  = toggleTagCloud;
+	document.getElementById('tag-summary-header' ).onclick  = toggleTagSummary;
+	document.getElementById('editor-open'        ).onclick  = editorOn;
+	document.getElementById('editor-close'       ).onclick  = editorOff;
+	document.getElementById('editor-save'        ).onclick  = editorSave;
+	document.getElementById('editor-data')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 
 	// Apply user defaults (this code must be after event handlers adding)
-	if (defaultLastMonths)    { document.getElementById('optlastmonths').checked = true; }
-	if (defaultMonthPartials) { document.getElementById('optmonthly'   ).checked = true; }
-	if (defaultFuture)        { document.getElementById('optfuture'    ).checked = true; }
-	if (defaultRegex)         { document.getElementById('optregex'     ).checked = true; }
-	if (defaultNegate)        { document.getElementById('optnegate'    ).checked = true; }
+	if (defaultMonthPartials) { document.getElementById('opt-monthly').checked = true; }
+	if (defaultFuture)        { document.getElementById('opt-future' ).checked = true; }
+	if (defaultRegex)         { document.getElementById('opt-regex'  ).checked = true; }
+	if (defaultNegate)        { document.getElementById('opt-negate' ).checked = true; }
+	if (defaultLastMonths) {
+		document.getElementById('opt-last-months').checked = true;
+		document.getElementById('opt-last-months-extra').style.display = 'block';
+	}
 	document.getElementById('filter').value = defaultSearch;
 
-	// Compose help contents (dirty, but handy)
-	document.getElementById('help').innerHTML = (
-		wrapme(
-			'b',
-			linkme(i18n.appUrl, appName) +
-			((useDropboxStorage) ? ' by ' + linkme('http://twitter.com/xupisco', '@xupisco') : '') +
-			': ') + i18n.appDescription +
-		array2ul([wrapme('b', i18n.labelReports + ': ') + i18n.helpReports]) +
-		array2ul([
-				wrapme('b', i18n.labelLastMonths + ': ') + i18n.helpLastMonths,
-				wrapme('b', i18n.labelValueFilter + ': ') + i18n.helpValueFilter,
-				wrapme('b', i18n.labelFuture + ': ') + i18n.helpFuture,
-				wrapme('b', i18n.labelMonthPartials + ': ') + i18n.helpMonthPartials
-			]) +
-		array2ul([
-				wrapme('b', i18n.labelFullScreen + ': ') + i18n.helpFullScreen,
-				wrapme('b', i18n.labelHelp + ': ') + i18n.helpHelp,
-				wrapme('b', '®: ') + i18n.helpReload,
-				wrapme('b', i18n.labelFilter + ': ') + i18n.helpFilter +
-					array2ul([
-						wrapme('b', i18n.labelRegex + ': ') + i18n.helpRegex,
-						wrapme('b', i18n.labelNegate + ': ') + i18n.helpNegate
-					])
-			]) +
-		array2ul([
-				wrapme('b', i18n.labelTags + ': ') + i18n.helpTags +
-					array2ul([
-						wrapme('b', i18n.labelTagGroup + ': ') + i18n.helpTagGroup,
-						wrapme('b', '∑: ') + i18n.helpTagSummary
-					])
-			]) +
-		wrapme('p', i18n.helpTip) +
-		((oneFile) ? wrapme('p', i18n.helpInstall) : '') +
-		wrapme('p', i18n.helpTranslator.replace(/(http:.*)/, '<a href="$1">$1<\/a>'))
-	);
+	// Always show these toolbar boxes opened at init
+	toggleTagCloud();
+	toggleViewOptions();
 
 	// User choose other default report, let's update the toolbar accordingly
 	if (reportType !== 'd') {
@@ -2443,9 +2411,9 @@ function init() {
 	// Set the default file to load when using multiple files: dataFilesDefault or first
 	if (dataFiles.length > 1) {
 		if (dataFilesDefault && dataFiles.indexOf(dataFilesDefault) !== -1) {
-			document.getElementById('datafiles').selectedIndex = dataFiles.indexOf(dataFilesDefault);
+			document.getElementById('source-file').selectedIndex = dataFiles.indexOf(dataFilesDefault);
 		} else {
-			document.getElementById('datafiles').selectedIndex = 0;
+			document.getElementById('source-file').selectedIndex = 0;
 		}
 	}
 

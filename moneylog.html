@@ -19,6 +19,7 @@ History/Histórico:
 	v3: Oct-Dec 2007
 	v4: Aug 2009
 	online: May 2010
+	cloud (dropbox): Jan 2012
 
 License/Licença:
 	MIT - http://en.wikipedia.org/wiki/MIT_license
@@ -38,7 +39,7 @@ You may change the styles if you know what you're doing.
 -->
 <link rel="stylesheet" type="text/css" href="moneylog.css">
 <!--[if lte IE 7]>
-    <style type="text/css">#tagsArea input { display:inline; }</style>
+    <style type="text/css">#tag-cloud-content input { display:inline; }</style>
 <![endif]-->
 
 <script type="text/javascript" src="moneylog.js"></script>
@@ -47,109 +48,157 @@ You may change the styles if you know what you're doing.
 </head>
 
 <body>
-
-<span id="fullscreen" class="trigger">&bull;</span>
+<div id="container">
 
 <!-- Toolbar -->
-<div id="toolbarwrapper">
 <div id="toolbar">
 
-<div class="toolbarpane left">
-	<a id="sitelink" href="#">MoneyLog</a>
-
-	<!-- Report Type -->
-	<div id="report-nav">
-		<a
-			id="d" href="#"></a><a
-			id="m" href="#"></a><a
-			id="y" href="#"></a>
-	</div>
-
-</div>
-
-<div class="toolbarpane middle">
-	<div id="checkboxes">
-		<!-- Last Months -->
-		<input
-			id="optlastmonths" class="trigger" type="checkbox"><label
-			id="optlastmonthslabel" for="optlastmonths"></label>
-		<select
-			id="lastmonths" size="1"></select>
-		<br>
-
-		<!-- Value Filter -->
-		<input
-			id="optvaluefilter" class="trigger" type="checkbox"><label
-			id="optvaluefilterlabel" for="optvaluefilter"></label>
-		<select
-			id="valuefilter" size="1">
-		</select><input
-			id="valuefilterarg" size="3" type="text">
-		<br>
-
-		<!-- Future -->
-		<input
-			id="optfuture" class="trigger" type="checkbox"><label
-			id="optfuturelabel" for="optfuture"></label>
-			<br>
-
-		<!-- Monthly -->
-		<input
-			id="optmonthly" class="trigger" type="checkbox"><label
-			id="optmonthlylabel" for="optmonthly"></label>
-
-	</div> <!-- #checkboxes -->
-</div>
-
-<div class="toolbarpane right">
-	<!-- Help -->
-	<a id="helpbutton" class="helplink" href="#">?</a>
-
-	<!-- Search -->
-	<div id="filterbox">
-		<!-- Note: Not using <form> to avoid action on Enter pressing -->
-		<input id="filter" size="17" type="text">
-		<br>
-		<input
-			id="optregex" class="trigger" type="checkbox"><label
-			id="optregexlabel" for="optregex"></label>
-
-		<input
-			id="optnegate" class="trigger" type="checkbox"><label
-			id="optnegatelabel" for="optnegate"></label>
-	</div>
-
-	<!-- Data Files -->
-	<div id="datafilesbox">
-		<select
-			id="datafiles" size="1"></select>&nbsp;<a
-			id="reload" href="#">®</a>
-	</div>
-</div>
-
-</div> <!-- #toolbar -->
-</div> <!-- #toolbarwrapper -->
-
-<!-- Tags -->
-<div id="tagsArea">
-	<div id="operabug">
-		<div id="tagMultiAll">
-			<input
-				id="tagMultiAllCheck" type="checkbox" class="trigger"><label
-				id="tagMultiAllLabel" for="tagMultiAllCheck"></label>
+	<div id="logo-wrapper">
+		<div id="logo">
+			<div id="app-name"><a id="sitelink" href="#">MoneyLog</a></div>
 		</div>
-		<a id="tagSummaryButton" class="trigger" href="#">∑</a>
-		<span id="tagsLabel"></span>
-		<div id="tagList">
-		</div>
-		<input type="hidden" id="tagCount" value="0">
-	</div> <!-- operabug -->
-</div>
+
+		<div id="fullscreen" class="trigger">||</div>
+	</div>
+
+	<div id="toolbar-controls-wrapper">
+		<div id="toolbar-controls">
+
+			<!-- Data Files -->
+			<div id="source-file-box">
+				<select
+					id="source-file" size="1"></select>
+				<a
+				 	id="editor-open" class="button" href="#"></a><a
+					id="source-reload" class="button" href="#"></a>
+			</div>
+
+			<hr id="toolbar-sep-1" />
+
+			<!-- Report Type -->
+			<div id="report-nav">
+				<a
+					id="d" class="button" href="#"></a><a
+					id="m" class="button" href="#"></a><a
+					id="y" class="button" href="#"></a>
+			</div>
+
+			<hr id="toolbar-sep-2" />
+
+			<!-- Search -->
+			<div id="search-box" class="toolbar-box">
+				<div id="search-content" class="box-content">
+					<!-- Note: Not using <form> to avoid action on Enter pressing -->
+					<input id="filter" type="text">
+					<div class="checkbox-option">
+						<input
+							id="opt-regex" class="trigger" type="checkbox">
+						<label
+							id="opt-regex-label" for="opt-regex"></label>
+
+						<input
+							id="opt-negate" class="trigger" type="checkbox">
+						<label
+						 	id="opt-negate-label" for="opt-negate"></label>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- View -->
+			<div id="view-options-box" class="toolbar-box">
+				<a id="view-options-header" class="button" href="#"></a>
+				<div id="view-options-content" class="box-content">
+
+					<!-- Monthly -->
+					<div class="checkbox-option">
+						<input
+							id="opt-monthly" class="trigger" type="checkbox">
+						<label
+							id="opt-monthly-label" for="opt-monthly"></label>
+					</div>
+
+					<!-- Future -->
+					<div class="checkbox-option">
+						<input
+							id="opt-future" class="trigger" type="checkbox">
+						<label
+							id="opt-future-label" for="opt-future"></label>
+					</div>
+
+					<!-- Last Months -->
+					<div class="checkbox-option">
+						<input
+							id="opt-last-months" class="trigger" type="checkbox">
+						<label
+							id="opt-last-months-label" for="opt-last-months"></label>
+
+						<div id="opt-last-months-extra" class="checkbox-option-extra">
+							<select
+								id="last-months" size="1"></select>
+						</div>
+					</div>
+
+					<!-- Value Filter -->
+					<div class="checkbox-option">
+						<input
+							id="opt-value-filter" class="trigger" type="checkbox">
+						<label
+							id="opt-value-filter-label" for="opt-value-filter"></label>
+
+						<div id="opt-value-filter-extra" class="checkbox-option-extra">
+							<select
+								id="value-filter" size="1">
+							</select><input
+								id="value-filter-arg" size="3" type="text">
+						</div>
+					</div>
+
+				</div><!-- view-options-content -->
+			</div><!-- view-options-box -->
+
+
+			<!-- Tag Cloud -->
+			<div id="tag-cloud-box" class="toolbar-box">
+				<a id="tag-cloud-header" class="button" href="#"></a>
+				<div id="tag-cloud-content" class="box-content">
+
+					<div id="tag-cloud-tags">
+					</div>
+
+					<div id="tag-cloud-options" class="box-options">
+						<hr />
+						<div class="checkbox-option">
+							<input
+								id="tag-cloud-opt-group" type="checkbox" class="trigger">
+							<label
+								id="tag-cloud-opt-group-label" for="tag-cloud-opt-group"></label>
+						</div>
+					</div>
+
+					<input type="hidden" id="tag-cloud-count" value="0">
+				</div>
+			</div>
+
+
+			<!-- Tag Summary -->
+			<div id="tag-summary-box" class="toolbar-box">
+				<a id="tag-summary-header" class="button" href="#"></a>
+				<div id="tag-summary-content" class="box-content">
+				</div>
+			</div>
+
+		</div><!-- toolbar-controls -->
+	</div><!-- toolbar-controls-wrapper -->
+</div><!-- #toolbar -->
+
 
 <div id="content">
 
-	<div id="help">
-	</div>
+	<noscript>
+		<p>Sorry. No JavaScript detected, it won't work.</p>
+		<p>Ops! Seu navegador está sem JavaScript, sem ele não vai funcionar.</p>
+	</noscript>
 
 	<div id="error">
 	</div>
@@ -158,41 +207,41 @@ You may change the styles if you know what you're doing.
 	<div id="report">
 	</div>
 
-	<!-- Tag Summary -->
-	<div id="tagSummary" class="popup">
+	<!-- Chart -->
+	<div id="charts">
+		<select id="chart-data" size="1"></select>
+		<div id="chart-content"></div>
 	</div>
 
 	<!-- Rows Summary -->
-	<div id="rowsSummary" class="popup">
+	<div id="rows-summary">
 	</div>
 
-	<!-- Chart -->
-	<div id="charts">
-		<select id="chartcol" size="1"></select>
-		<div id="chart"></div>
+</div><!-- #content -->
+
+
+<!-- Editor -->
+<div id="editor">
+	<!-- <div id="editor-data-wrapper"> -->
+		<textarea rows="25" id="editor-data"></textarea>
+	<!-- </div> -->
+	<div id="editor-buttons">
+		<a id="editor-close" class="button active" href="#"></a>
+		<a id="editor-save" class="button active" href="#"></a>
 	</div>
+</div>
 
-	<noscript>
-		<p>Sorry. No JavaScript detected, it won't work.</p>
-		<p>Ops! Seu navegador está sem JavaScript, sem ele não vai funcionar.</p>
-	</noscript>
-
-</div> <!-- #content -->
 
 <!-- modular -->
-<iframe id="dataFrame" onload="iframeLoaded(this)">
+<iframe id="data-frame" onload="iframeLoaded(this)">
 	<p>Sorry. No iframes support detected, please use the all-in-one version.</p>
 	<p>Ops! Seu navegador não entende iframes. Use a versão tudo-em-um.</p>
 </iframe>
 
-<!-- Editor -->
-<button id="editoropen"></button>
-<div id="editor">
-	<button id="editorclose"></button>
-	<button id="editorsave"></button>
-	<textarea rows="10" id="editordata"></textarea>
-</div>
-
 <!-- tudo-em-um / all-in-one -->
 <pre id="data">
+</pre>
 
+</div><!-- #container -->
+</body>
+</html>

@@ -1,5 +1,6 @@
 /*
-	moneylog.css
+	MoneyLog default CSS
+	by Aurelio Jargas
 	http://aurelio.net/moneylog/
 */
 
@@ -10,497 +11,497 @@ table { border-collapse:collapse;border-spacing:0; }
 body { font:12px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; }
 select,input,button,textarea { font:99% arial,helvetica,clean,sans-serif; }
 table { font-size:inherit;font:100%; }
-th,td { border-style:none;padding:.5em; }
+th,td { border-style:none;padding:0; }
 p,blockquote,ul,ol,dl { margin:1em; }
 ol,ul,dl { margin-left:2em; }
 dl dd { margin-left:1em; }
 
 
-/* ---------------------------------------------- Global settings */
+/* ---------------------------------------------- Structure */
 
 body {
-	color:#555;            /* fg1 */
-	background-color:#fff; /* bg1 */
+	background-color: white;  /* content_bg */
+	color: #333;  /* text_color */
 }
-a {
-	text-decoration:none;
-	font-weight:bold;
+#container {
+	width: 100%;
+	margin: 0 auto;
+	overflow: hidden;
 }
-input {
-	margin-right:0.25em;
+#toolbar {
+	position: fixed;
+	height: 100%;
+	width: 216px;
+	overflow: auto;
 }
+#content {
+	margin-left: 216px;  /* See toggleFullScreen, #toolbar */
+	padding: 30px;
+}
+
+/* ---------------------------------------------- Misc */
+
 label,
 .trigger {
-	cursor:pointer;
-}
-.posbar {
-	background-color:#4D89F9 !important; /* bar1 */
-}
-.negbar {
-	background-color:#f66 !important;   /* bar2 */
+	cursor: pointer;
 }
 .number {
-	text-align:right !important;
-	white-space:nowrap;
+	text-align: right !important;
+	white-space: nowrap;
 }
-.neg {
-	color:#e33;            /* fg_red */
+.neg {  /* Negative numbers */
+	color: #e33;
 }
-tr:hover .neg {
-	color:#f00;
+.hl {  /* Highlighted words */
+	color: black;
+	background-color: silver;  /* _light */
 }
-#tagsArea input,
-#tagsArea label,
+tr:hover td,
+tr.future:hover td {  /* explicit TD to exclude TH */
+	background-color: #eee;  /* hover_bg */
+	color: black;
+}
 #toolbar input,
 #toolbar label,
-#toolbar select,
-#toolbar a {
+#toolbar select {
 	vertical-align:middle;
 }
 
 /* ---------------------------------------------- Error */
+
 #error {
-	display:none;
-	margin:14em 10% 4em 10%;
-	padding:10px;
-	border:3px solid red;
-	background-color:yellow;
-	color:black;
-	line-height:140%;
+	display: none;
+	margin: 5em 10%;
+	padding: 10px;
+	border: 8px solid red;
+	background-color: yellow;
+	color: black;
+	line-height: 180%;
+}
+
+/* ---------------------------------------------- Logo */
+
+#logo-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+#logo {
+	background-color: #EBEBEB;
+	font-size: 30px;
+	width: 200px;
+	height: 57px;
+	float: left;
+	margin-right: 2px;
+	line-height: 55px;
+}
+#logo a {
+	color: #333;  /* text_color */
+}
+#app-name {
+	padding-left: 20px;
+}
+
+/* ---------------------------------------------- Full screen */
+
+#fullscreen {
+	font-size: 11px;
+	background-color: black;  /* _dark */
+	color: white;
+	width: 14px;
+	float: left;
+	text-align: center;
+	height: 57px;
+	line-height: 55px;
 }
 
 /* ---------------------------------------------- Toolbar */
 
-#fullscreen {
-	position:fixed;
-	top:0;
-	left:0;
-	z-index:9;
+#toolbar a,
+a.button {
+	text-decoration: none;
+}
 
-	font-size:150%;
-	width:1em;
-	text-align:center;
-	background-color:#444; /* bg2 */
+#toolbar hr {
+	clear: both;
+	border: 1px solid #ddd;  /* toolbar_sep */
+	border-width: 1px 0 0 0;
+	margin: 1em 0;
 }
-#toolbar {
-	color:#ddd;            /* fg2 */
-	background-color:#444; /* bg2 */
-	text-align:center;
-	z-index:1;
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
+
+#toolbar-controls-wrapper {
+	background-color: #FAFAFA;
+	clear: both;
+	margin-top: 57px;
+	width: 200px;
 }
-#fullscreen,
-#tagSummaryButton,
-#toolbar a {
-	color:#f44;            /* fg2a */
-	font-size:185%;
-	padding:0 4px;
+
+#toolbar-controls {
+	padding: 15px 17px;
 }
-#fullscreen:hover,
-#tagSummaryButton:hover,
-#toolbar a:hover {
-	background-color:#f44; /* fg2a */
-	color:#444;            /* bg2 */
+
+/* ---------------------------------------------- Button */
+
+.button {
+	display: block;
+	margin: 1em 0 0 0;
+	text-align: center;
+	font-weight: normal;
+	font-size: 100%;
+	line-height: 200%;
+	text-transform: lowercase;
+	border: 1px solid #bbb;  /* element_border */
+	background-color: white;
 }
-#toolbar label:hover,
-#toolbar input:hover + label {
-	color:#fff;
+.button.active,
+a.button:active {
+	border-color: black;  /* _dark */
+	background-color: black;  /* _dark */
+	color: white;
 }
-#toolbar .toolbarpane.left {
-	float:left;
-	width:30%;
+a.button {
+	color: #333;  /* text_color */
 }
-#toolbar .toolbarpane.middle {
-	float:left;
-	width:40%;
+a.button.active {
+	color: white;
 }
-#toolbar .toolbarpane.right {
-	float:right;
-	width:30%;
+
+/* ---------------------------------------------- [ boxes ] */
+
+.box-content {
+	background-color: white;
+	border: 1px solid #bbb;  /* element_border */
+	border-top-width: 0;
+	padding: 0.5em 10px;
+	padding: 8px;
+	line-height: 185%;
 }
+
+.box-content select,
+.box-content table {
+	width: 100%;
+}
+.box-options input {
+	display: inline;
+	margin-right: 0.5em;
+}
+
+/* ---------------------------------------------- [file.txt ▼] */
+
+#source-file {
+	width: 100%;
+}
+
+/* ---------------------------------------------- [edit] [reload] */
+
+#source-reload,
+#editor-open {
+	display: inline-block;  /* see showHideEditButton() */
+	width: 78px;
+}
+#source-reload {
+	float: right;
+}
+
+/* ---------------------------------------------- [daily] [monthly] [yearly] */
+
 #toolbar #report-nav {
-	margin:1em 0;
+	text-align: center;
 }
 #toolbar #report-nav a {
-	font-size:110%;
-	border:1px solid #444; /* bg2 */
+	display: inline-block;
+	width: 50px;
+	margin: 0 5px 0 0;
 }
-#toolbar #report-nav a:hover {
-	background-color:#444; /* bg2 */
-	color:#f44;            /* fg2a */
-	border:1px dotted #f44; /* fg2a */
-}
-#toolbar #report-nav a.active {
-	border:1px solid #f44; /* fg2a */
-	outline-style:none; /* Firefox, Camino */
-}
-#toolbar a.helplink {
-	float:right;
-}
-#toolbar #filterbox {
-	float:right;
-	text-align:left;
-}
-#toolbar #valuefilterarg {
-	visibility:hidden;
-}
-#toolbar #datafilesbox {
-	clear:right;
-	float:right;
-	text-align:right; /* IE7 fix */
-	padding:20px 0 0 0;
-}
-#toolbar #checkboxes {
-	text-align:left;
-	vertical-align:middle;
-	line-height:185%; /* to fit selects */
+#toolbar #report-nav #y {
+	margin-right: 0;
 }
 
-/* ---------------------------------------------- Content */
+/* ---------------------------------------------- [search      ]  */
 
-#content {
-	z-index:0;
-	margin-top:8em;        /* y1 */
+#search-content {
+	border-top-width: 1px;
+}
+#filter {
+	width: 100%;
+}
+#opt-negate {
+	margin-left: 1em;
 }
 
-/* ---------------------------------------------- Tags */
+/* ---------------------------------------------- [X] Options */
 
-#tagsArea {
-	display:none;
-	position:fixed;
-	bottom:0;
-	left:0;
-	width:100%;
-	padding:0.5em 0; /* see #operabug */
-	line-height:150%;
+#toolbar label:hover,
+#toolbar input:hover + label {
+/*	font-weight: bold;*/
+}
+.checkbox-option {
+	text-align: left;
+}
+.checkbox-option-extra {
+	display: none;  /* appears when clicked */
+	margin-left: 1em;
+}
+#value-filter-arg {
+	display: none;  /* appears when SELECT item is chosen */
+}
 
-	/* Same colors of #toolbar */
-	color:#ddd;            /* fg2 */
-	background-color:#444; /* bg2 */
+/* ---------------------------------------------- [ tag cloud ] */
+
+#tag-cloud-content {
+	display: none;  /* JS will show if there are tags */
+	text-align: center;
 }
-#tagsArea #operabug {
-	/* Wrapper needed by Opera9. Can't pad #tagsArea at left/right */
-	/* Padding-right will be reset by showHideEditButton() */
-	padding:0 0.5em 0 1em;
+#tag-cloud-tags input+span {
+	padding: 2px 2px;
 }
-#tagsArea #tagsLabel {
-	font-weight:bold;
-	color:#f44;            /* fg2a */
-}
-#tagsArea input+span {
-	padding:1px 2px;
-}
-#tagsArea input[checked]+span { /* highlight selected tags */
-	background:#f44;       /* fg2a */
-	color:#000;            /* fg4 */
-	border:1px solid #000; /* fg4 */
-	padding:1px 1px;
+#tag-cloud-tags input[checked]+span { /* highlight selected tags */
 	/* Note: DON'T use input:checked, it fails in Opera9/IE8 */
+	background: silver;  /* _light */
+	color: black;
+/*	text-decoration: underline;*/
 }
-#tagsArea input {
-	display:none; /* hidden, but still used by JavaScript (exception: IE7 - see CC) */
-	margin:0;
-	padding:0;
+#tag-cloud-tags input {
+	display: none; /* hidden, but used by JavaScript (exception: IE7 - see CC) */
+	margin: 0;
+	padding: 0;
 }
-#tagsArea #tagMultiAll {
-	margin-top:-0.5em;
-}
-#tagsArea #tagMultiAll input {
-	display:inline;
-	margin-right:0.25em;
-}
-#tagsArea #tagList {
-	display:inline;
+#tag-cloud-options {
+	display: none;  /* JS will show */
 }
 
-/* ---------------------------------------------- Help */
+/* ---------------------------------------------- [ tag summary ] */
 
-#help {
-	display:none;
-	background-color:#faa; /* bg3 */
-	color:#800;            /* fg3 */
-	padding:2em;
-	line-height:120%;
-
-	/* IE7 bug: gap between #toolbar and #help if no border */
-	border-top:1px solid #faa; /* bg3 */
-}
-#help a {
-	text-decoration:underline;
-}
-#help ul ul {
-	margin-top:0;
-}
-#help div {
-	display:none; /* All langs hidden, js activate the correct */
-}
-
-/* ---------------------------------------------- Data */
-
-#data,
-#dataFrame {
-	display:none;
-}
-
-/* ---------------------------------------------- Editor */
-
-#editoropen {
-	display:none;
-	position:fixed;
-	bottom:0;
-	right:0;
-	z-index:99;
-}
-#editor {
-	display:none;
-	position:fixed;
-	bottom:0;
-	right:0;
-	left:0;
-	background:#444; /* bg2 */
-	padding:0 10px 5px 10px;
-}
-#editor textarea {
-	width:100%;
-}
-#editor button {
-	float:right;
+#tag-summary-content {
+	display: none;  /* JS will show */
 }
 
 /* ---------------------------------------------- Report */
 
-#report {
-	padding:3em 3em 8em 2em;
-	line-height:100%;
+/* labelNoData */
+#report p {
+	text-align: center;
 }
+
+/* Report table */
 #report table {
-	margin:0 auto;
+	margin: 0 auto;  /* do not use width:100% */
 }
+
+/* Table headings are also buttons */
 #report th {
-	text-align:center;
-	cursor:pointer;
+	text-align: center;
+	cursor: pointer;
+	padding: 0.5em;
 }
 #report th:hover {
-	color:#000;            /* fg4 */
-	background-color:#ddd; /* bg4 */
+	background-color: black;  /* _dark */
+	color: white;
 }
+
+/* Generic cell config */
 #report td {
-	border:1px solid #ddd; /* bd1 */
-	padding:3px 10px;
-	vertical-align:middle;
+	border: 1px solid silver;  /* _light */
+	border-width: 1px 0;
+	vertical-align: middle;
 }
-#report td.row-count {
-	text-align:center;
-	font-size:75%;
-	color:#aaa;            /* fg5 */
-	border-style:none;
-	background-color:#fff; /* bg1 */
+
+/* Column config */
+td.row-count {
+	text-align: center;
+	font-size: 75%;
+	border-style: none !important;
+	background-color: white !important;  /* content_bg */
+	color: silver !important;
 }
-#report td.date {
-	white-space:nowrap;
+td.date {
+	white-space: nowrap;
 }
-#report tr.future td.row-count {
-	font-style:normal;
+
+/* Future */
+tr.future {
+	background-color: #f8f8f8; /* future_bg */
+	font-style: italic;
 }
-#report tr:hover td,
-.popup tr:hover td {
-	background-color:#ddd; /* bg4 */
-	color:#000;            /* fg4 */
+tr.future td.row-count {
+	font-style: normal;
 }
-#report tr.future {
-	background-color:#eee; /* bg6 */
-	font-style:italic;
+
+/* Selected row */
+tr.selected,
+tr.selected:hover td,
+tr.selected .neg {
+	background-color: black;  /* _dark */
+	color: white;
 }
-#report tr.selected {  /* not using td to exclude the row number cell */
-	background-color:#FF6 !important; /* bg_yellow_light */
+
+/* Total row */
+tr.total {
+	background-color: silver;  /* _light */
 }
-#report tr.selected:hover td {
-	background-color:#FF0 !important; /* bg_yellow */
+
+/* Rows padding */
+#report td {
+	padding: 7px 10px;
 }
-#report .hl {
-	color:#000;            /* fg4 */
-	background-color:#faa; /* bg3 */
-}
-#report p { /* labelNoData */
-	text-align:center;
+#report tr.total td {
+	padding: 1px 10px; /* top/bottom: td - 6px */
 }
 
 /* ---------------------------------------------- Report - Daily */
 
 /* Column sorting is not working for Balance, so undo formatting */
 #report table.daily th.balance {
-	cursor:auto;
+	cursor: auto;
 }
 #report table.daily th.balance:hover {
-	color:#555;            /* fg1 */
-	background-color:#fff; /* bg1 */
+	color: #333;  /* text_color */
+	background-color: white;  /* content_bg */
 }
+
+/* Total row tweaks */
 #report table.daily tr.total {
-	background-color:#fee; /* bg5 */
-	text-align:right;
-	font-weight:bold;
-}
-#report table.daily tr.total td {
-	border-style:none;
+	font-weight: bold;
 }
 #report table.daily tr.total table.posneg {
-	float:right;
-	font-size:90%;
-	font-weight:normal;
+	float: right;
+	font-size: 90%;
+	font-weight: normal;
 }
 #report table.daily tr.total table.posneg td {
-	padding:0;
-	white-space:nowrap;
+	padding: 0;
+	white-space: nowrap;
+	border-style: none;
 }
 #report table.daily tr.total td.monthtotal {
-	text-align:left;
-	padding-left:0;
+	text-align: left;
+	padding-left: 0;
 }
 #report table.daily tr.total td.monthtotal .arrow {
-	margin-right:8px;
+	margin-right: 8px;
 }
 
 /* ---------------------------------------------- Report - Monthly/Yearly */
 
 #report table.overview tr.total {
-	background-color:#fee; /* bg5 */
-	font-style:italic;
+	font-style: italic;
 }
 #report td.rowlabel {
-	font-weight:bold;
+	font-weight: bold;
 }
 
 /* ---------------------------------------------- Minibars inside report table */
 
 #report table td.minibar {
-	border-style:none !important;
+	border-style: none !important;
 }
 #report table div.minibar {
-	float:left;
+	float: left;
 }
 #report table td.minibar .label {
-	float:left;
-	font-size:75%;
-	color:white !important;
-}
-
-/* ---------------------------------------------- Tag summary */
-
-#tagSummary {
-	display: none;
-	position: fixed;
-	left: 0.5em;
-	bottom: 2.5em;  /* padding 0.5*2 + font-size:150% */
-	max-height: 40%; /* for huge tag lists */
-}
-#tagSummaryButton {
-	font-size: 130%;
-	font-weight: bold;
-	margin-right: .5em;
-}
-
-/* ---------------------------------------------- Rows summary */
-
-#rowsSummary {
-	position: fixed;
-	left: 0;
-	bottom: 50%;
-}
-
-/* ---------------------------------------------- Popup */
-
-.popup {
-	margin: 0;
-	background-color: #eee; /* bg6 */
-	background-color: #ccc; /* bg6 */
-	overflow: auto;
-}
-.popup table {
-	border: 0px solid #444; /* bg2 */
-}
-.popup td {
-	border-width: 0;
-	padding: 3px 8px;
+	float: left;
+	font-size: 75%;
+	color: white !important;
 }
 
 /* ---------------------------------------------- Charts */
 
 #charts {
-	display:none;
-	margin-top:-4em;
-	padding-bottom:10em;
-	text-align:center;
+	display: none;  /* JS will show */
+	text-align: center;
+	margin-top: 4em;
 }
-#charts #chartcol {
-	margin-bottom:5px;
+#chart-data {
+	margin-bottom: 5px;
+}
+.posbar {
+	background-color: #2B97E9; /* bar1_bg */
+}
+.negbar {
+	background-color: #f66;   /* bar2_bg */
 }
 table.chart {
-	border:1px solid #ddd; /* bd1 */
-	margin:0 auto;
-	padding:10px;
+	margin: 0 auto;
+	border: 1px solid #bbb;  /* element_border */
+	border-collapse: separate;
+	border-spacing: 7px;  /* space between bars and also border */
 }
 table.chart td.bar {
-	text-align:center;
-	vertical-align:bottom;
+	text-align: center;
+	vertical-align: bottom;
 }
 table.chart td.bar div.bar {
-	width:35px;
-	margin:0 auto;
+	width: 35px;  /* must fit 4 digits for the year, i.e. 2012 */
+	margin: 0 auto;
 }
 table.chart td.bar .label {
-	font-size:11px;
-	color:#444;            /* fg7 */
-	font-style:italic;
+	font-size: 11px;
+	font-style: italic;
 }
 table.chart tr.label {
-	text-align:center;
-	font-size:10px;
-	line-height:100%;
-	color:#444;            /* fg7 */
+	font-size: 10px;
+	line-height: 100%;
+	text-align: center;
+}
+table.chart tr:hover td {
+	background-color: white;  /* content_bg */
 }
 
+/* ---------------------------------------------- Rows summary */
 
-/* Minimum compatibility for IE5.5, IE6 */
-#content { _margin-top:0; }
+#rows-summary {
+	display: none;  /* JS will show */
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding: 5px;
+	border: 8px solid black;  /* _dark */
+	background-color: silver;  /* _light */
+}
+#rows-summary td {
+	padding: 4px 10px;
+}
 
+/* ---------------------------------------------- Editor */
 
-/* MoneyLog v3 Theme */
-/* Uncomment if you want to use it */
-/*
-body {
-	color:#555; background-color:#fff; }
-#help {
-	color:#515; background-color:#edf; }
-#toolbar {
-	color:#ddd; background-color:#444; }
-#toolbar a, #toolbar #report-nav a:hover, #fullscreen, #tagsArea #tagsLabel, #tagSummaryButton, {
-	color:#c6f; }
-#toolbar a:hover, #fullscreen:hover, #tagSummaryButton:hover, {
-	color:#444; background-color:#c6f; }
-#toolbar #report-nav a:hover, #toolbar #report-nav a.active {
-	border-color:#c6f; }
-#tagsArea input[checked]+span {
-	color:#000; background:#c6f; border-color:#000; }
-#report td.row-count {
-	color:#aaa; background-color:#fff; }
-#report th:hover {
-	color:#000; background-color:#eee; }
-#report td, table.chart {
-	border-color:#ccc; }
-#report tr:hover td {
-	background-color:#edf; }
-#report tr.future {
-	background-color:#eee; }
-#report .neg {
-	color:#e33; }
-#report table.daily tr.total table.posneg {
-	color:#868; }
-#report table.daily tr.total {
-	background-color:#f8e8ff; }
-#report table.overview tr.total {
-	background-color:#f8e8ff; }
-*/
+/* The editor */
+#editor {  /* fill full window, hiding app interface */
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: white;  /* content_bg */
+}
+#editor-data {  /* position:fixed so we can set textarea height:~100% */
+	position: fixed;
+	top: 30px;
+	right: 30px;
+	bottom: 70px;  /* space for the buttons */
+	left: 30px;
+	border: 8px solid black;  /* _dark */
+	padding: 15px;
+	outline-width: 0;  /* disable focus ring */
+}
+#editor-buttons {
+	position: fixed;
+	right: 30px;
+	bottom: 30px;
+}
+#editor-close,
+#editor-save {
+	display: inline-block;
+	width: 100px;
+}
+#editor-close {
+	margin-right: 3px;
+}
 
+/* ---------------------------------------------- Data */
+
+/* Always hidden */
+#data,
+#data-frame {
+	display: none !important;
+}
