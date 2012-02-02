@@ -67,7 +67,7 @@ insert_js='
 }
 '
 insert_txt="
-$ r $txt_path
+/^<pre/ r $txt_path
 "
 
 echo "$insert_css $insert_js $insert_txt" > sed_script
@@ -86,18 +86,12 @@ sed -f sed_script "$html_path" |
 		/^<script .* src="config.js"><\/script>/ d
 
 		# Turn ON Dropbox support
-		/^var useDropboxStorage = false;/ s/false/true/
-
-		# Remove ml v3 theme
-		/^\/\* MoneyLog v3 Theme/, /^\*\/$/ d
+		/^var appMode = .txt.;/ s/txt/dropbox/
 
 		# # Remove all comment blocks (DISABLED)
 		# /^<!--$/, /^-->$/ d
 		# /^\/\*\*\**$/, /^\*\*\*\**\/$/ d
 	'
-
-# Close the opened tags, since user won't edit this file
-echo "</pre></body></html>"
 
 # Clean up
 rm -f sed_script

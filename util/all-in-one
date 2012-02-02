@@ -117,7 +117,7 @@ grepvar txt "$mode" && echo "$insert_warning" >> sed_script
 # Changes from Beta to All-in-one
 change_script='
 # Activate one-file mode
-/^var oneFile = false;/ s/false/true/
+/^var appMode = .txt.;/ s/txt/one/
 
 # Remove config.js call
 /^<script .* src="config.js"><\/script>/ d
