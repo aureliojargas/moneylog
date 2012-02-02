@@ -123,6 +123,7 @@ var i18nDatabase = {
 		labelTagGroup: 'Group selected tags',
 		labelEdit: 'Edit',
 		labelClose: 'Close',
+		labelCancel: 'Cancel',
 		labelSave: 'Save',
 		errorInvalidData: 'Invalid data at line ',
 		errorNoFieldSeparator: 'No separator found:',
@@ -197,6 +198,7 @@ var i18nDatabase = {
 		labelTagGroup: 'Unir as tags escolhidas',
 		labelEdit: 'Editar',
 		labelClose: 'Fechar',
+		labelCancel: 'Cancelar',
 		labelSave: 'Salvar',
 		errorInvalidData: 'Lançamento inválido na linha ',
 		errorNoFieldSeparator: 'Separador não encontrado:',
@@ -2369,7 +2371,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagGroup;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEdit;
-	document.getElementById('editor-close'             ).innerHTML = i18n.labelClose;
+	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
 	document.getElementById('editor-save'              ).innerHTML = i18n.labelSave;
 	document.getElementById('view-options-header'      ).innerHTML = i18n.labelViewOptions;
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
