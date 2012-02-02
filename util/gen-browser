@@ -2,14 +2,14 @@
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
 # Script to join all the MoneyLog pieces in one singe HTML file, generating
-# the MoneyLog Online version, who uses localStorage instead of text files.
+# the MoneyLog Browser version, who uses localStorage instead of text files.
 #
 # Usage:
-#	gen-online [--lang XX]
+#	gen-browser [--lang XX]
 #
 # Examples:
-#	gen-online                   # Portuguese online version
-#	gen-online --lang en         # English online version
+#	gen-browser                   # Portuguese browser version
+#	gen-browser --lang en         # English browser version
 
 
 cd $(dirname "$0")
