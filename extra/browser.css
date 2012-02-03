@@ -1,0 +1,59 @@
+/*
+	MoneyLog Browser theme
+	by Aurelio Jargas
+	http://aurelio.net/moneylog/
+
+	Light red: #FFDDDD
+	 Dark red: #FF0029
+*/
+
+
+#app-flavor {
+	color: #FF0029;
+}
+
+/* Dark background for active/special buttons */
+#fullscreen,
+#report th:hover,
+.button.active,
+a.button:active {
+	background-color: #FF0029;
+}
+
+/* Dark background for selected rows */
+#report tr.selected,
+#report tr.selected:hover td,
+#report tr.selected .neg {
+	background-color: #FF0029;
+}
+
+/* Dark color for borders */
+#editor-data-wrapper,
+#rows-summary,
+.button.active,
+a.button:active {
+	border-color: #FF0029;
+}
+
+/* Light background for selections */
+.hl,
+#tag-cloud-tags input[checked]+span {
+	background-color: #FFDDDD;
+}
+
+/* Light background for totals */
+#report tr.total,
+#rows-summary {
+	background-color: #FFDDDD;
+}
+
+/* Light color for the report borders */
+#report td {
+	border-color: #FFDDDD;
+}
+
+
+/* Special: interface dark red for the negative chart bar */
+.negbar {
+	background-color: #FF0029;
+}
