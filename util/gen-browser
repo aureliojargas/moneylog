@@ -10,6 +10,9 @@
 # Examples:
 #	gen-browser                   # Portuguese browser version
 #	gen-browser --lang en         # English browser version
+#
+# Note:
+#	The results are Windows-style line break: CR+LF
 
 
 cd $(dirname "$0")
@@ -72,8 +75,6 @@ echo "$insert_css $insert_js $insert_txt" > sed_script
 control_m=$(printf '\r');
 
 sed -f sed_script "$html_path" |
-	# dos2unix: remove CR
-	sed "s/$control_m*$//" |
 	# Set language
 	sed "/^var lang = 'pt';/ s/pt/$lang/" |
 	# clean up
@@ -83,11 +84,9 @@ sed -f sed_script "$html_path" |
 
 		# Turn ON localStorage
 		/^var appMode = .txt.;/ s/txt/localStorage/
-
-		# # Remove all comment blocks (DISABLED)
-		# /^<!--$/, /^-->$/ d
-		# /^\/\*\*\**$/, /^\*\*\*\**\/$/ d
-	'
+	' |
+	# unix2dos: Remove any CR, then add one per line, becoming CR+LF
+	sed "s/$control_m*$/$control_m/"
 
 # Clean up
 rm -f sed_script
