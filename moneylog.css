@@ -438,6 +438,9 @@ tr.total {
 	text-align: center;
 	margin-top: 4em;
 }
+#chart-content {
+	overflow: auto;
+}
 #chart-data {
 	margin-bottom: 5px;
 }
