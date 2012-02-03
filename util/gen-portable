@@ -1,24 +1,22 @@
 #!/bin/bash
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Script to join all the MoneyLog pieces in one singe HTML file.
-# Besides joining the files into one, it also changes the necessary settings.
+# Script to join all the MoneyLog pieces in one singe HTML file, making it
+# portable. Settings are configured and instruction messages are added.
 #
 # Usage:
 #	gen-portable [--lang XX] [components-to-embed]
 #
 # Examples:
-#	gen-portable                   # Embed everything
-#	gen-portable css js txt        # Embed everything
-#	gen-portable --lang en         # Embed everything, english version
-#	gen-portable css js            # Don't embed data, use external TXT
-#	gen-portable --lang en css js  # English version, use external TXT
+#	gen-portable                   # Portuguese portable version
+#	gen-portable --lang en         # English portable version
+#
+# Note:
+#	The results are Windows-style line break: CR+LF
 
 
 cd $(dirname "$0")
 
-# Defaults
-mode="css js txt"   # Any combination of css, js, txt
 lang="pt"           # pt, en, es, ca. Use --lang to change it.
 
 # Files
@@ -38,17 +36,6 @@ if test "$lang" != 'pt'
 then
 	txt_path="../moneylog-$lang.txt"
 fi
-
-# Get mode from command line (if any)
-if test $# -gt 0
-then
-	mode="$*"
-fi
-
-# Handy tool to grep a variable contents
-grepvar() {
-	test "${2#*$1}" != "$2"
-}
 
 # This warning and instructions are for the all-in-one version only
 warning='
@@ -107,56 +94,35 @@ insert_js='
 	d
 }
 '
-insert_warning='5 r temp1'
-insert_txt='/^<pre/ r temp2'
-change_lang="/^var lang = 'pt';/ s/pt/$lang/"
+insert_txt="
+/^<pre/ r $txt_path
+"
 
-# Compose sed script
-echo > sed_script
-grepvar css "$mode" && echo "$insert_css" >> sed_script
-grepvar js  "$mode" && echo "$insert_js"  >> sed_script
-grepvar txt "$mode" && echo "$insert_txt" >> sed_script
-grepvar txt "$mode" && echo "$insert_warning" >> sed_script
+echo "$insert_css $insert_js $insert_txt" > sed_script
 
-# Changes from Beta to All-in-one
-change_script='
-# Activate one-file mode
-/^var appMode = .txt.;/ s/txt/one/
-
-# Remove config.js call
-/^<script .* src="config.js"><\/script>/ d
-
-# Remove closing tags at the end
-/^<\/pre>/, $ d
-'
-
-# Language must be changed?
-if test $lang != 'pt'
-then
-	change_script="$change_script$change_lang"
-fi
-
-# Mode settings
-if grepvar txt "$mode"
-then
-	# Warning on top
-	echo "$warning" > temp1
-	cat "$txt_path" > temp2
-
-	# # Replace instructions on top of TXT file
-	# echo "$instructions" > temp2
-	# sed '1,5 { /^#/d; }' "$txt_path" >> temp2
-else
-	change_script='1 s/z/z/' # no changes
-fi
+# Warning on top
+echo "$warning" > temp1
+echo '5 r temp1' >> sed_script
 
 # Do it
 control_m=$(printf '\r');
 
 sed -f sed_script "$html_path" |
- 	sed "$change_script" |
-	sed "s/$control_m*$/$control_m/"
+	# Set language
+	sed "/^var lang = 'pt';/ s/pt/$lang/" |
+	# clean up
+	sed '
+		# Remove config.js call
+		/^<script .* src="config.js"><\/script>/ d
+
+		# Turn ON one-file mode
+		/^var appMode = .txt.;/ s/txt/one/
+
+		# Remove closing tags at the end
+		/^<\/pre>/, $ d
+	' |
 	# unix2dos: Remove any CR, then add one per line, becoming CR+LF
+	sed "s/$control_m*$/$control_m/"
 
 # Clean up
-rm -f temp1 temp2 sed_script
+rm -f sed_script temp1
