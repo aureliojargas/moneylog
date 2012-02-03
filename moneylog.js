@@ -2145,7 +2145,7 @@ function toggleFullScreen() {
 	if (isFullScreen) {
 		toolbar.style.display = 'block';
 		logo.style.display = 'block';
-		content.style.marginLeft = '216px';  // #toolbar width
+		content.style.marginLeft = '217px';  // #toolbar width
 		isFullScreen = false;
 	} else {
 		toolbar.style.display = 'none';

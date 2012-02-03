@@ -31,11 +31,11 @@ body {
 #toolbar {
 	position: fixed;
 	height: 100%;
-	width: 216px;
+	width: 217px;
 	overflow: auto;
 }
 #content {
-	margin-left: 216px;  /* See toggleFullScreen, #toolbar */
+	margin-left: 217px;  /* See toggleFullScreen, #toolbar */
 	padding: 30px;
 }
 
@@ -92,10 +92,10 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 #logo {
 	background-color: #EBEBEB;
 	font-size: 30px;
-	width: 200px;
+	width: 201px;
 	height: 57px;
 	float: left;
-	margin-right: 2px;
+	margin: 0;
 	line-height: 55px;
 }
 #logo a {
@@ -118,7 +118,7 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 	font-size: 11px;
 	background-color: black;  /* _dark */
 	color: white;
-	width: 14px;
+	width: 15px;  /* same as scrollbar width */
 	float: left;
 	text-align: center;
 	height: 57px;
