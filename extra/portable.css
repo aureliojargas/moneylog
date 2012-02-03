@@ -3,13 +3,13 @@
 	by Aurelio Jargas
 	http://aurelio.net/moneylog/
 
-	Light green: #DDFFDD
-	 Dark green: #178D22
+	Light green: #E5EFDE
+	 Dark green: #4D8A68
 */
 
 
 #app-flavor {
-	color: #178D22;
+	color: #4D8A68;
 }
 
 /* Dark background for active/special buttons */
@@ -17,14 +17,14 @@
 #report th:hover,
 .button.active,
 a.button:active {
-	background-color: #178D22;
+	background-color: #4D8A68;
 }
 
 /* Dark background for selected rows */
 #report tr.selected,
 #report tr.selected:hover td,
 #report tr.selected .neg {
-	background-color: #178D22;
+	background-color: #4D8A68;
 }
 
 /* Dark color for borders */
@@ -32,28 +32,28 @@ a.button:active {
 #rows-summary,
 .button.active,
 a.button:active {
-	border-color: #178D22;
+	border-color: #4D8A68;
 }
 
 /* Light background for selections */
 .hl,
 #tag-cloud-tags input[checked]+span {
-	background-color: #DDFFDD;
+	background-color: #E5EFDE;
 }
 
 /* Light background for totals */
 #report tr.total,
 #rows-summary {
-	background-color: #DDFFDD;
+	background-color: #E5EFDE;
 }
 
 /* Light color for the report borders */
 #report td {
-	border-color: #DDFFDD;
+	border-color: #E5EFDE;
 }
 
 
 /* Special: interface dark green for the positive chart bar */
 .posbar {
-	background-color: #178D22;
+	background-color: #4D8A68;
 }
