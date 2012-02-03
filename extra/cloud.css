@@ -8,6 +8,10 @@
 */
 
 
+#app-flavor {
+	color: #2B97E9;
+}
+
 /* Dark background for active/special buttons */
 #fullscreen,
 #report th:hover,

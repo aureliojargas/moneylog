@@ -90,19 +90,26 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 	left: 0;
 }
 #logo {
+	float: left;
 	background-color: #EBEBEB;
-	font-size: 30px;
 	width: 201px;
 	height: 57px;
-	float: left;
 	margin: 0;
-	line-height: 55px;
 }
 #logo a {
 	color: #333;  /* text_color */
 }
 #app-name {
-	padding-left: 20px;
+	font-size: 30px;
+	line-height: 30px;
+	padding: 5px 0 0 20px;
+}
+#app-flavor {
+	font-size: 15px;
+	line-height: 15px;
+	padding: 2px 0 0 130px;
+	text-transform: lowercase;
+	color: black;  /* _dark */
 }
 #app-version {
 	padding-top: 10px;

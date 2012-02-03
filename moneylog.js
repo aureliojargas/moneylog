@@ -375,7 +375,8 @@ var i18nDatabase = {
 
 // Global vars
 var appVersion = '5b';
-var appName = '';
+var appName = 'MoneyLog';
+var appFlavor = '';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
@@ -2269,24 +2270,24 @@ function initAppMode() {
 	switch(appMode) {
 
 		case 'one':
-			appName = 'MoneyLog Experience';
+			appFlavor = 'Portable';
 			i18n.appUrl = 'http://aurelio.net/moneylog/moneylog5.html';
 			break;
 
 		case 'localStorage':
-			appName = 'MoneyLog Browser';
+			appFlavor = 'Browser';
 			i18n.appUrl = i18n.appUrlOnline;
 			break;
 
 		case 'dropbox':
 			// Can't use the word Dropbox in app name
 			// https://www.dropbox.com/developers/reference/branding
-			appName = 'MoneyLog Cloud';
+			appFlavor = 'Cloud';
 			i18n.appUrl = 'http://moneylog-cloud.appspot.com';
 			break;
 
 		case 'txt':
-			appName = 'MoneyLog TXT';
+			appFlavor = 'TXT';
 			appVersion = '∞';
 			i18n.appUrl = 'http://aurelio.net/moneylog/beta.html';
 			break;
@@ -2366,6 +2367,7 @@ function init() {
 	highlightTags = highlightTags.strip().split(/\s+/);
 
 	// Set interface labels
+	document.getElementById('app-flavor'               ).innerHTML = appFlavor;
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
