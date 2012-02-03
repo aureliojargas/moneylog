@@ -715,6 +715,32 @@ function toggleClass(el, klass) {
 	}
 }
 
+// CSS stylesheet add/remove
+//
+// http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
+// http://dev.opera.com/articles/view/dynamic-style-css-javascript/
+//
+function addStyleSheet(element_id, contents) {
+	var head, style, rules;
+
+	head = document.getElementsByTagName('head')[0];
+	style = document.createElement('style');
+	rules = document.createTextNode(contents);
+
+	style.id = element_id;
+	style.type = 'text/css';
+	if (style.styleSheet) {
+		style.styleSheet.cssText = rules.nodeValue;
+	} else {
+		style.appendChild(rules);
+	}
+	head.appendChild(style);
+}
+function removeStyleSheet(element_id) {
+	var el = document.getElementById(element_id);
+	el.parentNode.removeChild(el);
+}
+
 function drawChart(values, labels) {
 	var i, label, height, value, valueShort, roof, chart, chartData, barType;
 
