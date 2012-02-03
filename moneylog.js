@@ -1792,7 +1792,7 @@ function showOverview() {
 			chartLabels = [];
 
 			// Get all values for the selected column
-			chartCol = document.getElementById('chart-data').value || 1;
+			chartCol = parseInt(document.getElementById('chart-data').value, 10) || 1;
 			for (i = 0; i < overviewData.length; i++) {
 				chartValues.push(overviewData[i][chartCol]);
 				chartLabels.push(overviewData[i][0]);  // month or year
@@ -1960,7 +1960,7 @@ function showDetailed() {
 
 			// Get all values for the selected column
 			chartValuesSelected = [];
-			chartCol = document.getElementById('chart-data').value || 1;
+			chartCol = parseInt(document.getElementById('chart-data').value, 10) || 1;
 			for (i = 0; i < chartValues.length; i++) {
 				chartValuesSelected.push(chartValues[i][chartCol]);
 			}
