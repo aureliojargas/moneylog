@@ -2372,6 +2372,9 @@ function init() {
 			break;
 	}
 
+	// Set page title
+	document.title = appName + ' ' + appFlavor;
+
 	// Prepare UI elements
 	setCurrentDate();
 	populateMonthsCombo();
