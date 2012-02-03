@@ -43,15 +43,14 @@ var initChartDaily = 3;           // Initial selected item for the daily chart [
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
 var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
 
-
-// Program structure and files
-// Please be careful when changing anything here.
-//
+// External TXT files (used in flavors TXT and Cloud)
+// Note: The file encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 var dataFiles = ['moneylog.txt']; // The paths for the data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
+
+// MoneyLog Browser config
 var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
-// Note: The dataFile encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
-//
+
 // The appMode sets the Moneylog flavor:
 // txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
 // one          Full app is in a single moneylog.html file, with user data at the end.
