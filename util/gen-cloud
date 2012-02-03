@@ -10,6 +10,7 @@
 # Examples:
 #	gen-cloud                   # Portuguese cloud version
 #	gen-cloud --lang en         # English cloud version
+#
 # Note:
 #	The results are Unix-style line break: LF
 
