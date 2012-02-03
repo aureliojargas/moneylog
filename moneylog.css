@@ -483,8 +483,11 @@ table.chart tr:hover td {
 	border: 8px solid black;  /* _dark */
 	background-color: silver;  /* _light */
 }
-#rows-summary td {
+#rows-summary-content td {
 	padding: 4px 10px;
+}
+#rows-summary-index {
+	width: 100%;
 }
 
 /* ---------------------------------------------- Editor */

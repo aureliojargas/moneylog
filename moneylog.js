@@ -387,7 +387,7 @@ var rawData = '';
 var parsedData = [];
 var overviewData = [];
 var waitingToLoad = [];
-var selectedRowsData = [];
+var selectedRows = [];
 var multiRawData = '';
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
@@ -926,19 +926,6 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	return theRow.join('\n');
 }
 
-function getDetailedReportColumnContents(tr_element, column_index) {
-	// (zero-based) Columns: Row count, Date, Amount, Tags, Description, Balance
-	var td = tr_element.getElementsByTagName('td')[column_index];
-
-	if (column_index === 2) {
-		// Example: <span class="neg">-123,45</span>
-		// Example: <span class="pos">123,45</span>
-		return td.getElementsByTagName('span')[0].firstChild.nodeValue;
-	} else {
-		alert("getDetailedReportColumnContents: Columns other than AMOUNT are not supported yet.");
-	}
-}
-
 
 /////////////////////////////////////////////////////////////////////
 //                        DATA EDITOR
@@ -972,7 +959,7 @@ function editorSave() {
 }
 function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
-	
+
 	editButton.innerHTML = i18n.msgSaving;
 	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
 	// reload report
@@ -1514,14 +1501,53 @@ function applyTags(theData) {
 /////////////////////////////////////////////////////////////////////
 
 function updateSelectedRowsSummary() {
-	var el, i, data, arr, table, label, value;
+	var i, data, arr, table, label, value, col_nr, col_index;
 
-	el = document.getElementById('rows-summary');
-	data = selectedRowsData;
+	data = [];
 	arr = [];
 	table = [];
 
-	if (data.length > 1) {  // Summary for 2 or more rows
+	if (selectedRows.length > 1) {  // Summary for 2 or more rows
+
+		// Ok. We have a selectedRows array filled with all the selected TR elements.
+		// Now we will scan these elements to extract data and calculate everything.
+
+		// First we need to find out which column we will get of each of this rows.
+		// Diary report: when only have the (2) Amount column to query
+		// Monthly/Yearly: we have (2) Incoming, (3) Expense, (4) Partial
+		//
+		if (reportType === 'd') {
+			col_nr = 2;
+		} else {
+			col_nr = parseInt(document.getElementById('rows-summary-index').value, 10);
+		}
+
+		// The column number is affected by the presence of the row count column
+		if (showRowCount) {
+			col_nr += 1;
+		}
+
+		// We will soon query each TR element for a specific child TD.
+		// Our column count is one-based, but the TR children array is ZERO-based.
+		col_index = col_nr - 1;
+
+		for (i = 0; i < selectedRows.length; i++) {
+			tr_element = selectedRows[i];
+			td_element = tr_element.getElementsByTagName('td')[col_index];
+
+			// Inside the TD, the number is inside a SPAN tag, examples:
+			//     <td class="number"><span class="neg">-123,45</span></td>
+            //     <td class="number"><span class="pos">123,45</span></td>
+            //
+			value = td_element.getElementsByTagName('span')[0].firstChild.nodeValue;
+
+			// The value is a formatted string, we need to convert it to float
+			value = prettyFloatUndo(value);
+
+			data.push(value);
+		}
+
+		// Now the 'data' array is filled. We can proceed to the math.
 
 		// Calculate
 		arr.push([i18n.labelTotal,   prettyFloat(data.sum())]);
@@ -1544,11 +1570,16 @@ function updateSelectedRowsSummary() {
 		}
 		table.push('<\/table>');
 
-		el.innerHTML = table.join('\n');
-		el.style.display = 'block';
+		// Show summary
+		document.getElementById('rows-summary-content').innerHTML = table.join('\n');
+		document.getElementById('rows-summary').style.display = 'block';
+
+		// Hide combo in diary report, since there's only one available column
+		document.getElementById('rows-summary-index').style.display = (reportType === 'd') ? 'none' : 'inline';
 
 	} else {
-		el.style.display = 'none';
+		// No data, hide summary
+		document.getElementById('rows-summary').style.display = 'none';
 	}
 }
 
@@ -1751,7 +1782,7 @@ function showOverview() {
 		results = results.join('\n');
 
 		// Always reset Rows Summary when generating reports
-		selectedRowsData = [];
+		selectedRows = [];
 		updateSelectedRowsSummary();
 
 		// Now charts!
@@ -1791,7 +1822,6 @@ function showDetailed() {
 	results = [];
 	chartValues = [];
 	chartLabels = [];
-	selectedRowsData = [];
 
 	monthPartials = document.getElementById('opt-monthly');
 	theData = applyTags(filterData());
@@ -1921,7 +1951,7 @@ function showDetailed() {
 		updateTagSummary(theData);
 
 		// Always reset Rows Summary when generating reports
-		selectedRowsData = [];
+		selectedRows = [];
 		updateSelectedRowsSummary();
 
 		// Now charts!
@@ -1977,6 +2007,13 @@ function populateChartColsCombo() {
 		}
 		el.options[i - 1] = new Option(i18n.labelsOverview[i], i);
 	}
+}
+
+function populateRowsSummaryCombo() {
+	var el = document.getElementById('rows-summary-index');
+	el.options[0] = new Option(i18n.labelsOverview[1], 2);  // Incoming
+	el.options[1] = new Option(i18n.labelsOverview[2], 3);  // Expense
+	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
 }
 
 function populateDataFilesCombo() {
@@ -2114,7 +2151,7 @@ function changeReport(el) {
 	}
 
 	// Always reset Rows Summary when changing reports
-	selectedRowsData = [];
+	selectedRows = [];
 	updateSelectedRowsSummary();
 
 	reportType = newType;
@@ -2240,21 +2277,17 @@ function toggleMonthly() {
 
 function toggleRowHighlight(el) {
 	// This function is called when user clicks a report row.
-	// Besides the visual highlight, it also updates the summary
-	// for all the selected rows. It will appear when the first
-	// row is clicked.
-
-	// Save this row Amount as float
-	var rowAmount = prettyFloatUndo(getDetailedReportColumnContents(el, 2));
+	// The visual highlight is turned ON by the class 'selected'.
+	// The selected clicked rows are saved to the global holder selectedRows.
 
 	if (hasClass(el, 'selected')) {
-		// Unselect row, remove amount from holder
+		// turn OFF
 		removeClass(el, 'selected');
-		selectedRowsData = selectedRowsData.removePattern(rowAmount, 1);
+		selectedRows = selectedRows.removePattern(el, 1);
 	} else {
-		// Select row, add amount to holder
+		// turn ON
 		addClass(el, 'selected');
-		selectedRowsData.push(rowAmount);
+		selectedRows.push(el);
 	}
 
 	// Refresh the summary
@@ -2380,6 +2413,7 @@ function init() {
 	populateMonthsCombo();
 	populateDataFilesCombo();
 	populateChartColsCombo();
+	populateRowsSummaryCombo();
 	populateValueFilterCombo();
 
 	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
@@ -2477,6 +2511,7 @@ function init() {
 	document.getElementById('source-reload'      ).onclick  = loadSelectedFile;
 	document.getElementById('tag-cloud-opt-group').onclick  = showReport;
 	document.getElementById('chart-data'         ).onchange = showReport;
+	document.getElementById('rows-summary-index' ).onchange = updateSelectedRowsSummary;
 	document.getElementById('view-options-header').onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'   ).onclick  = toggleTagCloud;
 	document.getElementById('tag-summary-header' ).onclick  = toggleTagSummary;
