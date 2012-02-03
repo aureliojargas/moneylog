@@ -89,6 +89,10 @@ insert_css='
 <style type="text/css">
 	r ../moneylog.css
 	a \
+</style>\
+<style type="text/css">
+	r ../extra/portable.css
+	a \
 </style>
 	d
 }
