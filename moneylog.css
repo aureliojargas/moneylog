@@ -326,6 +326,17 @@ a.button.active {
 	color: white;
 }
 
+/* Column sorting is not working for some columns, so undo formatting */
+#report table.daily th.balance,
+#report table.overview th.percent {
+	cursor: auto;
+}
+#report table.daily th.balance:hover,
+#report table.overview th.percent:hover {
+	color: #333;  /* text_color */
+	background-color: white;  /* content_bg */
+}
+
 /* Generic cell config */
 #report td {
 	border: 1px solid silver;  /* _light */
@@ -376,15 +387,6 @@ tr.total {
 }
 
 /* ---------------------------------------------- Report - Daily */
-
-/* Column sorting is not working for Balance, so undo formatting */
-#report table.daily th.balance {
-	cursor: auto;
-}
-#report table.daily th.balance:hover {
-	color: #333;  /* text_color */
-	background-color: white;  /* content_bg */
-}
 
 /* Total row tweaks */
 #report table.daily tr.total {

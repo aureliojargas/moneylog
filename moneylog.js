@@ -1666,7 +1666,7 @@ function showOverview() {
 	thead += '<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>';
 	thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
 	if (showMiniBars) {
-		thead += '<th>%<\/th>';
+		thead += '<th class="percent">%<\/th>';
 	}
 	if (showRowCount) {
 		thead = '<th class="row-count"><\/th>' + thead;
