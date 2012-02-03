@@ -1300,7 +1300,7 @@ function filterData() {
 	filteredData = [];
 
 	if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
-		firstDate = getPastMonth(document.getElementById('last-months').value - 1);
+		firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
 	}
 
 	// Show future works for both views
@@ -1314,7 +1314,7 @@ function filterData() {
 
 		if (document.getElementById('opt-value-filter').checked) {
 			valueFilter = document.getElementById('value-filter').value;
-			valueFilterArg = document.getElementById('value-filter-arg').value || 0;
+			valueFilterArg = parseInt(document.getElementById('value-filter-arg').value, 10) || 0;
 		}
 
 		// Hack: Value filtering on the search box!
@@ -1402,7 +1402,7 @@ function applyTags(theData) {
 
 	// Get currently selected tags (from interface)
 	try {
-		tagCount = document.getElementById('tag-cloud-count').value;
+		tagCount = parseInt(document.getElementById('tag-cloud-count').value, 10);
 		for (i = 1; i <= tagCount; i++) {
 			tagElement = document.getElementById('tag_' + i);
 			if (tagElement && tagElement.checked) {
