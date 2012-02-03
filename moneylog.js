@@ -1999,14 +1999,11 @@ function showReport() {
 /////////////////////////////////////////////////////////////////////
 
 function populateChartColsCombo() {
-	var el, i;
-	el = document.getElementById('chart-data');
-	for (i = 0; i < i18n.labelsOverview.length; i++) {
-		if (i === 0) {
-			continue; // ignore date column
-		}
-		el.options[i - 1] = new Option(i18n.labelsOverview[i], i);
-	}
+	var el = document.getElementById('chart-data');
+	el.options[0] = new Option(i18n.labelsOverview[1], 1);  // Incoming
+	el.options[1] = new Option(i18n.labelsOverview[2], 2);  // Expense
+	el.options[2] = new Option(i18n.labelsOverview[3], 3);  // Partial
+	el.options[3] = new Option(i18n.labelsOverview[4], 4);  // Balance
 }
 
 function populateRowsSummaryCombo() {
