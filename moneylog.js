@@ -156,7 +156,8 @@ var i18nDatabase = {
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
-		helpClose: 'Discard changes and close the editor.',
+		helpClose: 'Close the editor (without saving!)',
+		helpCancel: 'Discard changes and close the editor.',
 		helpSave: 'Save your data.'
 
 		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
@@ -230,7 +231,8 @@ var i18nDatabase = {
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
-		helpClose: 'Descarta as alterações e fecha o editor sem salvar nada.',
+		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
+		helpCancel: 'Descarta as alterações e fecha o editor sem salvar nada.',
 		helpSave: 'Salva os lançamentos que você alterou.'
 
 		// helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
@@ -2400,7 +2402,7 @@ function init() {
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
 	document.getElementById('editor-open'              ).title = i18n.helpEdit;
-	document.getElementById('editor-close'             ).title = i18n.helpClose;
+	document.getElementById('editor-close'             ).title = i18n.helpCancel;
 	document.getElementById('editor-save'              ).title = i18n.helpSave;
 
 	// Mark current report as active (CSS)
