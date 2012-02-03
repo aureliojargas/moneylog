@@ -2482,11 +2482,11 @@ function init() {
 
 	// Set initial chart type for the reports (before event handlers)
 	if (reportType === 'd') {
-		document.getElementById('chart-data').value = initChartDaily;
+		document.getElementById('chart-data').selectedIndex = initChartDaily - 1;
 	} else if (reportType === 'm') {
-		document.getElementById('chart-data').value = initChartMonthly;
+		document.getElementById('chart-data').selectedIndex = initChartMonthly - 1;
 	} else {
-		document.getElementById('chart-data').value = initChartYearly;
+		document.getElementById('chart-data').selectedIndex = initChartYearly - 1;
 	}
 
 	// Add event handlers
