@@ -10,6 +10,8 @@
 # Examples:
 #	gen-cloud                   # Portuguese cloud version
 #	gen-cloud --lang en         # English cloud version
+# Note:
+#	The results are Unix-style line break: LF
 
 
 cd $(dirname "$0")
@@ -76,8 +78,6 @@ echo "$insert_css $insert_js $insert_txt" > sed_script
 control_m=$(printf '\r');
 
 sed -f sed_script "$html_path" |
-	# dos2unix: remove CR
-	sed "s/$control_m*$//" |
 	# Set language
 	sed "/^var lang = 'pt';/ s/pt/$lang/" |
 	# clean up
@@ -87,11 +87,9 @@ sed -f sed_script "$html_path" |
 
 		# Turn ON Dropbox support
 		/^var appMode = .txt.;/ s/txt/dropbox/
-
-		# # Remove all comment blocks (DISABLED)
-		# /^<!--$/, /^-->$/ d
-		# /^\/\*\*\**$/, /^\*\*\*\**\/$/ d
-	'
+	' |
+	# dos2unix: remove CR
+	sed "s/$control_m*$//"
 
 # Clean up
 rm -f sed_script
