@@ -488,6 +488,7 @@ table.chart tr:hover td {
 }
 #rows-summary-index {
 	width: 100%;
+	margin-bottom: 5px;
 }
 
 /* ---------------------------------------------- Editor */
