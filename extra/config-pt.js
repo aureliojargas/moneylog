@@ -106,9 +106,6 @@
 //
 // highlightWords = 'XXX TODO'  ;// Destacar estas palavras na Descrição
 // highlightTags = 'luz água'   ;// Destacar estas tags no extrato
-//
-// showLocaleDate = false       ;// Mostrar datas no formato regional d/m/a?
-// i18nDatabase.pt.dateFormat = 'd.m.Y'  ;// Usar meu próprio formato regional
 
 
 ////// GRÁFICO DE BARRAS
@@ -131,6 +128,23 @@
 ////// TAGS
 //
 // showEmptyTagInSummary = true ;// Mostrar o item VAZIO no somatório de tags?
+
+
+////// FORMATO DA DATA
+//
+// showLocaleDate = false       ;// Mostrar datas no formato regional d/m/a?
+//
+// Você também pode personalizar o formato regional, usando outros separadores,
+// mudar a ordem ou até escolher exatamente quais componentes mostrar. Além
+// de símbolos, você pode usar as seguintes letras:
+//     Y = ano com 4 dígitos
+//     y = ano com 2 dígitos
+//     m = mês
+//     d = dia
+// 
+// i18nDatabase.pt.dateFormat = 'd.m.Y'     ;// Personalizar formato dia-mês-ano
+// i18nDatabase.pt.dateFormatMonth = 'm.Y'  ;// Personalizar formato mês-ano
+// i18nDatabase.pt.dateFormatYear = 'Y'     ;// Personalizar formato ano
 
 
 ////// ARQUIVOS TXT
