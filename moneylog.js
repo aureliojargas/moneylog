@@ -622,6 +622,8 @@ function addMonths(yyyymmdd, n) {
 }
 
 function formatDate(date) {
+	// Available tokens (i.e. for 1999-12-31): Y=1999, y=99, m=12, d=31
+
 	var Y, y, m, d, fmt;
 
 	if (!showLocaleDate) {
