@@ -207,7 +207,7 @@ var i18nDatabase = {
 		labelSave: 'Salvar',
 		errorInvalidData: 'Lançamento inválido na linha ',
 		errorNoFieldSeparator: 'Separador não encontrado:',
-		errorTooManySeparators: 'Há mais de 2 sepadarores',
+		errorTooManySeparators: 'Há mais de 2 separadores',
 		errorInvalidDate: 'Data inválida:',
 		errorInvalidAmount: 'Valor inválido:',
 		errorNoLocalStorage: 'Ops, seu navegador não tem localStorage. O %s não vai funcionar.',
