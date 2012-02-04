@@ -89,6 +89,8 @@ var i18nDatabase = {
 	defaultLanguage: 'en',
 	en: {
 		dateFormat: 'm/d/y',
+		dateFormatMonth: 'm/Y',
+		dateFormatYear: 'Y',
 		centsSeparator: '.',
 		thousandSeparator: ',',
 		appUrl: 'http://aurelio.net/soft/moneylog/',
@@ -165,6 +167,8 @@ var i18nDatabase = {
 	},
 	pt: {
 		dateFormat: 'd/m/Y',
+		dateFormatMonth: 'm/Y',
+		dateFormatYear: 'Y',
 		centsSeparator: ',',
 		thousandSeparator: '.',
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
@@ -618,14 +622,38 @@ function addMonths(yyyymmdd, n) {
 }
 
 function formatDate(date) {
-	var m;
-	m = date.match(/(..(..))-(..)-(..)/); // Y-M-D
+	var Y, y, m, d, fmt;
 
-	return i18n.dateFormat.replace(
-		'Y', m[1]).replace(
-		'y', m[2]).replace(
-		'm', m[3]).replace(
-		'd', m[4]);
+	if (!showLocaleDate) {
+		return date;  // nothing to do
+	}
+
+	// Valid input: YYYY-MM-DD, YYYY-MM or YYYY
+	switch (date.length) {
+		case 10:
+			fmt = i18n.dateFormat;
+			break;
+		case 7:
+			fmt = i18n.dateFormatMonth;
+			break;
+		case 4:
+			fmt = i18n.dateFormatYear;
+			break;
+		default:
+			return date;  // unknown format
+	}
+
+	// YYYY-MM-DD
+	Y = date.slice(0,  4) || 'Y';
+	y = date.slice(0,  2) || 'y';
+	m = date.slice(5,  7) || 'm';
+	d = date.slice(8, 10) || 'd';
+
+	return fmt.replace(
+		'Y', Y).replace(
+		'y', y).replace(
+		'm', m).replace(
+		'd', d);
 }
 
 function prettyFloat(num, noHtml) {
@@ -921,7 +949,7 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	if (showRowCount) {
 		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
 	}
-	theRow.push('<td>' + theMonth + '<\/td>');
+	theRow.push('<td>' + formatDate(theMonth) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
@@ -1939,12 +1967,7 @@ function showDetailed() {
 				results.push('<td class="row-count">' + (rowCount) + '<\/td>');
 			}
 
-			// Use local date format?
-			if (showLocaleDate) {
-				rowDate = formatDate(rowDate);
-			}
-
-			results.push('<td class="date">'   + rowDate                + '<\/td>');
+			results.push('<td class="date">'   + formatDate(rowDate)    + '<\/td>');
 			results.push('<td class="number">' + prettyFloat(rowAmount) + '<\/td>');
 			results.push('<td class="tags">'   + rowTags.join(', ')     + '<\/td>');
 			results.push('<td>'                + rowDescription         + '<\/td>');
