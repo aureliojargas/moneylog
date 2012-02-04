@@ -581,6 +581,15 @@ function sortIgnoreCase(a, b) {
 	return 0;
 }
 
+// http://stackoverflow.com/questions/286921/efficiently-replace-all-accented-characters-in-a-string
+// Match 'regex' in 'text', and substitute by 'table' item
+function translateTableForRegex(text, table, regex) {
+	translator = function(match) { 
+		return table[match] || match;
+	}
+	return text.replace(regex, translator);
+}
+
 function setCurrentDate() {
 	var z, m, d;
 	z = new Date();
@@ -626,7 +635,7 @@ function addMonths(yyyymmdd, n) {
 function formatDate(date) {
 	// Available tokens (i.e. for 1999-12-31): Y=1999, y=99, m=12, d=31, b=Dec, B=December
 
-	var Y, y, m, d, b, B, fmt;
+	var fmt, table = {};
 
 	if (!showLocaleDate) {
 		return date;  // nothing to do
@@ -648,22 +657,17 @@ function formatDate(date) {
 	}
 
 	// YYYY-MM-DD
-	Y = date.slice(0,  4) || 'Y';
-	y = date.slice(0,  2) || 'y';
-	m = date.slice(5,  7) || 'm';
-	d = date.slice(8, 10) || 'd';
-	if (m !== 'm') {
-		B = i18n.monthNames[parseInt(m, 10)];
-		b = B.slice(0, 3);
+	table.Y = date.slice(0,  4) || 'Y';
+	table.y = date.slice(0,  2) || 'y';
+	table.m = date.slice(5,  7) || 'm';
+	table.d = date.slice(8, 10) || 'd';
+	if (table.m !== 'm') {
+		table.B = i18n.monthNames[parseInt(table.m, 10)];
+		table.b = table.B.slice(0, 3);
 	}
 
-	return fmt.replace(
-		'Y', Y).replace(
-		'y', y).replace(
-		'm', m).replace(
-		'd', d).replace(
-		'b', b).replace(
-		'B', B);
+	// Atomic replace to avoid concurrence
+	return translateTableForRegex(fmt, table, /[YymdBb]/g);
 }
 
 function prettyFloat(num, noHtml) {
