@@ -272,6 +272,18 @@ a.button.active {
 #value-filter-arg {
 	display: none;  /* appears when SELECT item is chosen */
 }
+.opt-disabled {
+	color: #AAAAAA;
+}
+
+/* ---------------------------------------------- [ month range ] */
+
+#month-range-content {
+	display: none;
+}
+#month-range-content .checkbox-option-extra {
+	display: block;  /* always show combos */
+}
 
 /* ---------------------------------------------- [ tag cloud ] */
 

@@ -115,6 +115,9 @@ var i18nDatabase = {
 		// labelHelp: 'Question mark',
 		labelReload: 'Reload',
 		labelViewOptions: 'View',
+		labelMonthRange: 'Month Range',
+		labelMonthRangeFrom: 'From',
+		labelMonthRangeUntil: 'Until',
 		labelTagCloud: 'Tag Cloud',
 		labelTagSummary: 'Tag Summary',
 		labelNoData: 'No data.',
@@ -157,6 +160,7 @@ var i18nDatabase = {
 		helpTagGroup: 'Show only the entries that have all the selected tags.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
+		helpMonthRange: 'Show/hide the month range controls.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
 		helpCancel: 'Discard changes and close the editor.',
@@ -194,6 +198,9 @@ var i18nDatabase = {
 		// labelHelp: 'Ajuda',
 		labelReload: 'Recarregar',
 		labelViewOptions: 'Visualizar',
+		labelMonthRange: 'Meses',
+		labelMonthRangeFrom: 'De',
+		labelMonthRangeUntil: 'Até',
 		labelTagCloud: 'Tags',
 		labelTagSummary: 'Somatório de tags',
 		labelNoData: 'Nenhum lançamento.',
@@ -235,6 +242,7 @@ var i18nDatabase = {
 		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
+		helpMonthRange: 'Mostra e esconde o seletor de meses.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpCancel: 'Descarta as alterações e fecha o editor sem salvar nada.',
@@ -387,6 +395,10 @@ var sortColRev = false;
 var oldSortColIndex;
 var oldSortColRev;
 var currentDate;
+var dataFirstDate;
+var dataLastDate;
+var monthRangeActive;
+var oldMonthRangeActive;
 var highlightRegex;
 var i18n;
 var rawData = '';
@@ -601,6 +613,7 @@ function setCurrentDate() {
 }
 
 function getPastMonth(months) {
+	// Returns: YYYY-MM-00
 	var z, m, y;
 	z = new Date();
 	m = z.getMonth() + 1 - months; // zero based
@@ -630,6 +643,34 @@ function addMonths(yyyymmdd, n) {
 	}
 	m = (m < 10) ? '0' + m : m;
 	return y + '-' + m + '-' + d;
+}
+
+function getMonthRange(date1, date2) {
+	// Given two dates, returns array with all the months between them, inclusive.
+	// Dates are strings formatted as YYYY-MM-DD.
+	var y, y1, y2, m, m1, m2, ini, end, results = [];
+
+	if (date1 > date2) {  // no deal
+		return results;
+	}
+	
+	y1 = parseInt(date1.slice(0, 4), 10);
+	y2 = parseInt(date2.slice(0, 4), 10);
+	m1 = parseInt(date1.slice(5, 7), 10);
+	m2 = parseInt(date2.slice(5, 7), 10);
+
+	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
+		
+		// First year: start from month1
+		// Last year: end in month2
+		ini = (y === y1) ? m1 : 1;
+		end = (y === y2) ? m2 : 12;
+
+		for (m=ini; m <= end; m++) {  // months loop 
+			results.push(y + '-' + ((m < 10) ? '0' + m : m));  // add leading zero
+		}
+	}
+	return results;
 }
 
 function formatDate(date) {
@@ -1354,10 +1395,21 @@ function parseData() {
 	sortColIndex = 0;
 	parsedData.sort(sortArray);
 	sortColIndex = oldSort;
+	
+	// Save first and last date as globals
+	if (parsedData.length > 0) {
+		dataFirstDate = parsedData[0][0];
+		dataLastDate = parsedData[parsedData.length-1][0];
+	} else {
+		dataFirstDate = dataLastDate = undefined;
+	}
+
+	// Update the month range combo
+	populateMonthRangeCombo();
 }
 
 function filterData() {
-	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
+	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
 	isRegex = false;
 	isNegated = false;
@@ -1365,8 +1417,17 @@ function filterData() {
 	firstDate = 0;
 	filteredData = [];
 
-	if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
+	// [X] Recent Only
+	if (!monthRangeActive && document.getElementById('opt-last-months').checked && reportType !== 'y') {
 		firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
+	}
+
+	// Month Range
+	if (monthRangeActive && document.getElementById('month-range-1-check').checked) {
+		firstDate = document.getElementById('month-range-1-combo').value + '-00';
+	}
+	if (monthRangeActive && document.getElementById('month-range-2-check').checked) {
+		lastDate = document.getElementById('month-range-2-combo').value + '-99';
 	}
 
 	// Show future works for both views
@@ -1414,12 +1475,22 @@ function filterData() {
 		///////////////////////////////////////////////////////////// Filters
 
 		// Ignore dates older than "last N months" option (if checked)
-		if (thisDate < firstDate) {
+		if (!monthRangeActive && thisDate < firstDate) {
 			continue;
 		}
 
 		// Ignore future dates
-		if (!showFuture && thisDate > currentDate) {
+		if (!monthRangeActive && !showFuture && thisDate > currentDate) {
+			break;
+		}
+
+		// Ignore dates older than firstDate
+		if (monthRangeActive && firstDate && thisDate < firstDate) {
+			continue;
+		}
+
+		// Ignore dates later than lastDate
+		if (monthRangeActive && lastDate && thisDate > lastDate) {
 			break;
 		}
 
@@ -2097,6 +2168,23 @@ function populateMonthsCombo() {
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
 }
 
+function populateMonthRangeCombo() {
+	var el1, el2, range, i, y, m;
+	el1 = document.getElementById('month-range-1-combo');
+	el2 = document.getElementById('month-range-2-combo');
+	range = getMonthRange(dataFirstDate, dataLastDate);
+
+	// Both combos will have the same months
+	for (i = 0; i < range.length; i++) {
+		y = range[i].slice(0, 4);
+		m = range[i].slice(5, 7);
+		m = i18n.monthNames[m.replace(/^0/, '')];  // use month name
+		el1.options[i] = new Option(m + ' ' + y, range[i]);
+		el2.options[i] = new Option(m + ' ' + y, range[i]);
+	}
+	el2.selectedIndex = range.length - 1;  // last month
+}
+
 function populateValueFilterCombo() {
 	var el;
 	el = document.getElementById('value-filter');
@@ -2127,6 +2215,7 @@ function updateToolbar() {
 			'opt-monthly', 'opt-monthly-label',
 			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
 			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'month-range-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2141,6 +2230,7 @@ function updateToolbar() {
 		];
 		unhide = [
 			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'month-range-box',
 		];
 	// Yearly
 	} else if (reportType === 'y') {
@@ -2150,6 +2240,7 @@ function updateToolbar() {
 			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
 			// Recent *months* doesn't make sense in yearly report
 			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'month-range-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2207,6 +2298,15 @@ function changeReport(el) {
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
 	}
+	// From Daily/Monthly to Yearly
+	if (newType === 'y' && oldType !== 'y') {
+		oldMonthRangeActive = monthRangeActive;
+		monthRangeActive = false;
+	//
+	// From Yearly to Daily/Monthly
+	} else if (oldType === 'y' && newType !== 'y') {
+		monthRangeActive = oldMonthRangeActive;
+	}
 
 	// Always reset Rows Summary when changing reports
 	selectedRows = [];
@@ -2256,6 +2356,36 @@ function lastMonthsChanged() {
 	showReport();
 }
 
+function monthRangeComboChanged() {
+	document.getElementById(this.id.replace('combo', 'check')).checked = true;
+	monthRangeCheckChanged();
+	overviewData = [];
+	showReport();
+}
+
+function monthRangeCheckChanged() {
+	var el1, el2;
+	el1 = document.getElementById('month-range-1-check');
+	el2 = document.getElementById('month-range-2-check');
+
+	monthRangeActive = (el1.checked || el2.checked);
+
+	if (monthRangeActive) {
+		// Disable other controls
+		document.getElementById('opt-future').disabled = true;
+		document.getElementById('opt-last-months').disabled = true;
+		document.getElementById('last-months').disabled = true;
+		addClass(document.getElementById('opt-future-label'), 'opt-disabled');
+		addClass(document.getElementById('opt-last-months-label'), 'opt-disabled');
+	} else {
+		document.getElementById('opt-future').disabled = false;
+		document.getElementById('opt-last-months').disabled = false;
+		document.getElementById('last-months').disabled = false;
+		removeClass(document.getElementById('opt-future-label'), 'opt-disabled');
+		removeClass(document.getElementById('opt-last-months-label'), 'opt-disabled');		
+	}
+}
+
 function toggleFullScreen() {
 	var toolbar, logo, content;
 
@@ -2296,6 +2426,9 @@ function toggleToolbarBox(header_id, content_id) {
 }
 function toggleViewOptions() {
 	return toggleToolbarBox('view-options-header', 'view-options-content');
+}
+function toggleMonthRange() {
+	return toggleToolbarBox('month-range-header', 'month-range-content');
 }
 function toggleTagCloud() {
 	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
@@ -2503,6 +2636,9 @@ function init() {
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
 	document.getElementById('editor-save'              ).innerHTML = i18n.labelSave;
 	document.getElementById('view-options-header'      ).innerHTML = i18n.labelViewOptions;
+	document.getElementById('month-range-header'       ).innerHTML = i18n.labelMonthRange;
+	document.getElementById('month-range-1-label'      ).innerHTML = i18n.labelMonthRangeFrom + ':';
+	document.getElementById('month-range-2-label'      ).innerHTML = i18n.labelMonthRangeUntil + ':';
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
 	document.getElementById('tag-summary-header'       ).innerHTML = i18n.labelTagSummary;
 
@@ -2521,6 +2657,7 @@ function init() {
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
+	document.getElementById('month-range-header'       ).title = i18n.helpMonthRange;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
 	document.getElementById('editor-open'              ).title = i18n.helpEdit;
@@ -2567,10 +2704,17 @@ function init() {
 	document.getElementById('opt-negate'         ).onclick  = showReport;
 	document.getElementById('source-file'        ).onchange = loadSelectedFile;
 	document.getElementById('source-reload'      ).onclick  = loadSelectedFile;
+	document.getElementById('month-range-1-check').onclick  = showReport;
+	document.getElementById('month-range-2-check').onclick  = showReport;
+	document.getElementById('month-range-1-check').onchange = monthRangeCheckChanged;
+	document.getElementById('month-range-2-check').onchange = monthRangeCheckChanged;
+	document.getElementById('month-range-1-combo').onchange = monthRangeComboChanged;
+	document.getElementById('month-range-2-combo').onchange = monthRangeComboChanged;
 	document.getElementById('tag-cloud-opt-group').onclick  = showReport;
 	document.getElementById('chart-data'         ).onchange = showReport;
 	document.getElementById('rows-summary-index' ).onchange = updateSelectedRowsSummary;
 	document.getElementById('view-options-header').onclick  = toggleViewOptions;
+	document.getElementById('month-range-header' ).onclick  = toggleMonthRange;
 	document.getElementById('tag-cloud-header'   ).onclick  = toggleTagCloud;
 	document.getElementById('tag-summary-header' ).onclick  = toggleTagSummary;
 	document.getElementById('editor-open'        ).onclick  = editorOn;
@@ -2593,6 +2737,7 @@ function init() {
 	// Always show these toolbar boxes opened at init
 	toggleTagCloud();
 	toggleViewOptions();
+	toggleMonthRange();
 
 	// User choose other default report, let's update the toolbar accordingly
 	if (reportType !== 'd') {
