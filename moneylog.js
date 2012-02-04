@@ -648,21 +648,45 @@ function prettyFloatUndo(str) {
 
 function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 	var negative;
+
+	// Remove the signal for easier calculation
 	negative = (n < 0);
 	if (negative) {
 		n = Math.abs(n);
 	}
+
+	// Less than 1,000: discard the cents and make the value integer
 	if (n < 1000) {
-		n = n.toString().replace(/\.(\d).*/, ''); // 123,45 > 123
+		n = n.toString().replace(/\.(\d).*/, ''); // 123.45 > 123
+
+	// From 1,000 to 999,999: discard the cents, then round the last 3 digits to 1 digit
 	} else if (n >= 1000 && n < 1000000) {
-		n = (n / 1000).toString().replace(/\.(\d).*/, 'k$1'); // 1.234,45 > 1k2
+		n = (n / 1000).toString();
+		if (n.indexOf('.') !== -1) {
+			n = n.replace(/\.(\d).*/, 'k$1');     // 1234.45 > 1k2	
+		} else {
+			n = n + 'k';                          // 1000 > 1k
+		}
+
+	// From 1,000,000: discard the cents, then round the last 6 digits to 1 digit
 	} else if (n >= 1000000) {
-		n = (n / 1000).toString().replace(/\.(\d).*/, 'm$1'); // 1.234.567,89 > 1m2
+		n = (n / 1000000).toString();
+		if (n.indexOf('.') !== -1) {
+			n = n.replace(/\.(\d).*/, 'm$1');     // 1234567.89 > 1m2
+		} else {
+			n = n + 'm';                          // 1000000 > 1m			
+		}
 	}
+
+	// Maybe we have a (undesired) trailing zero?
+	n = n.replace(/([km])0/, '$1'); // 2k0 > 2k
+
+	// Restore signal (if needed)
 	if (negative) {
 		n = '-' + n;
 	}
-	return n.replace(/([km])0/, '$1'); // 2k0 > 2k
+
+	return n;
 }
 
 function array2ul(a) {
