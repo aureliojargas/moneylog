@@ -70,6 +70,11 @@
 // reportType = 'd'             ;// d, m, y (diário, mensal, anual)
 
 
+////// TELA CHEIA
+//
+// initFullScreen = false       ;// Iniciar o app já no modo Tela Cheia?
+
+
 ////// SOMENTE RECENTES
 //
 // maxLastMonths = 12           ;// Quantos meses mostrar no seletor?
