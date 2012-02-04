@@ -88,11 +88,12 @@ var dataPatterns = {
 var i18nDatabase = {
 	defaultLanguage: 'en',
 	en: {
+		centsSeparator: '.',
+		thousandSeparator: ',',
 		dateFormat: 'm/d/y',
 		dateFormatMonth: 'm/Y',
 		dateFormatYear: 'Y',
-		centsSeparator: '.',
-		thousandSeparator: ',',
+		monthNames: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 		appUrl: 'http://aurelio.net/soft/moneylog/',
 		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
@@ -166,11 +167,12 @@ var i18nDatabase = {
 		// helpTranslator: ''
 	},
 	pt: {
+		centsSeparator: ',',
+		thousandSeparator: '.',
 		dateFormat: 'd/m/Y',
 		dateFormatMonth: 'm/Y',
 		dateFormatYear: 'Y',
-		centsSeparator: ',',
-		thousandSeparator: '.',
+		monthNames: ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],		
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appUrlOnline: 'http://aurelio.net/moneylog/online/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
@@ -622,9 +624,9 @@ function addMonths(yyyymmdd, n) {
 }
 
 function formatDate(date) {
-	// Available tokens (i.e. for 1999-12-31): Y=1999, y=99, m=12, d=31
+	// Available tokens (i.e. for 1999-12-31): Y=1999, y=99, m=12, d=31, b=Dec, B=December
 
-	var Y, y, m, d, fmt;
+	var Y, y, m, d, b, B, fmt;
 
 	if (!showLocaleDate) {
 		return date;  // nothing to do
@@ -650,12 +652,18 @@ function formatDate(date) {
 	y = date.slice(0,  2) || 'y';
 	m = date.slice(5,  7) || 'm';
 	d = date.slice(8, 10) || 'd';
+	if (m !== 'm') {
+		B = i18n.monthNames[parseInt(m, 10)];
+		b = B.slice(0, 3);
+	}
 
 	return fmt.replace(
 		'Y', Y).replace(
 		'y', y).replace(
 		'm', m).replace(
-		'd', d);
+		'd', d).replace(
+		'b', b).replace(
+		'B', B);
 }
 
 function prettyFloat(num, noHtml) {

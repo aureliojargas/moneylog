@@ -142,8 +142,8 @@
 // Você também pode personalizar o formato regional, usando outros separadores,
 // mudar a ordem ou até escolher exatamente quais componentes mostrar. Além
 // de símbolos, você pode usar as seguintes letras:
-//     Y = ano com 4 dígitos
-//     y = ano com 2 dígitos
+//     Y = ano com 4 dígitos           b = nome do mês com 3 letras
+//     y = ano com 2 dígitos           B = nome completo do mês
 //     m = mês
 //     d = dia
 // 
