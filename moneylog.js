@@ -1434,7 +1434,7 @@ function filterData() {
 	// Old style date options
 	} else {
 		// [X] Recent Only, works for daily/monthly
-		if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
+		if (document.getElementById('opt-last-months').checked) {
 			firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
 		}
 		// [X] Future Data, works for all reports
@@ -1442,7 +1442,13 @@ function filterData() {
 		if (!showFuture) {
 			lastDate = currentDate;
 		}
-	}	
+	}
+
+	// Yealy reports always show all data, no date limit
+	if (reportType === 'y') {
+		firstDate = 0;
+		lastDate = '9999-99-99';		
+	}
 
 	// Get filters data for the detailed report
 	if (reportType === 'd') {
