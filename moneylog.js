@@ -2231,7 +2231,7 @@ function updateToolbar() {
 	// Monthly/Yearly report hides some controls from the toolbar.
 	//
 	// Some fields are just hidden to preserve the page layout.
-	// Others must be removed to free some space for the report.
+	// Others must be removed to free vertical space.
 
 	add = [];
 	remove = [];
@@ -2247,6 +2247,7 @@ function updateToolbar() {
 			'opt-monthly-box',
 			'opt-value-filter-box',
 			'opt-last-months-box',
+			'view-options-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2263,6 +2264,7 @@ function updateToolbar() {
 			'month-range-1-box',
 			'month-range-2-box',
 			'opt-last-months-box',
+			'view-options-box'
 		];
 	// Yearly
 	} else if (reportType === 'y') {
@@ -2274,6 +2276,7 @@ function updateToolbar() {
 			'opt-value-filter-box',
 			// Recent *months* doesn't make sense in yearly report
 			'opt-last-months-box',
+			'view-options-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
