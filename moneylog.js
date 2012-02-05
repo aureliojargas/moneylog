@@ -23,6 +23,7 @@ var defaultMonthPartials = true;  // Monthly checkbox inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
 var defaultRegex = false;         // Search regex checkbox inits checked?
 var defaultNegate = false;        // Search negate checkbox inits checked?
+var defaultMonthRange = true;     // Month Range checkboxes init checked?
 var defaultSearch = '';           // Search for this text on init
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
@@ -2751,6 +2752,11 @@ function init() {
 	if (defaultLastMonths) {
 		document.getElementById('opt-last-months').checked = true;
 		document.getElementById('opt-last-months-extra').style.display = 'block';
+	}
+	if (defaultMonthRange) {
+		document.getElementById('month-range-1-check').checked = true;
+		document.getElementById('month-range-2-check').checked = true;
+		monthRangeCheckChanged();
 	}
 	document.getElementById('filter').value = defaultSearch;
 
