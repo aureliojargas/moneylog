@@ -33,6 +33,7 @@ var reportType = 'd';             // Initial report type: d m y (daily, monthly,
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 var initFullScreen = false;       // Start app in Full Screen mode?
+var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -2405,21 +2406,6 @@ function monthRangeCheckChanged() {
 	el2 = document.getElementById('month-range-2-check');
 
 	monthRangeActive = (el1.checked || el2.checked);
-
-	if (monthRangeActive) {
-		// Disable other controls
-		document.getElementById('opt-future').disabled = true;
-		document.getElementById('opt-last-months').disabled = true;
-		document.getElementById('last-months').disabled = true;
-		addClass(document.getElementById('opt-future-label'), 'opt-disabled');
-		addClass(document.getElementById('opt-last-months-label'), 'opt-disabled');
-	} else {
-		document.getElementById('opt-future').disabled = false;
-		document.getElementById('opt-last-months').disabled = false;
-		document.getElementById('last-months').disabled = false;
-		removeClass(document.getElementById('opt-future-label'), 'opt-disabled');
-		removeClass(document.getElementById('opt-last-months-label'), 'opt-disabled');		
-	}
 }
 
 function toggleFullScreen() {
@@ -2768,6 +2754,23 @@ function init() {
 		monthRangeCheckChanged();
 	}
 	document.getElementById('filter').value = defaultSearch;
+
+	// User wants old style date filters?
+	if (useLegacyDateFilter) {
+		// restore old
+		document.getElementById('opt-future-box').style.display = 'block';
+		document.getElementById('opt-last-months-box').style.display = 'block';
+		// disable new
+		document.getElementById('month-range-1-box').style.display = 'none';
+		document.getElementById('month-range-2-box').style.display = 'none';
+		document.getElementById('month-range-1-check').checked = false;
+		document.getElementById('month-range-2-check').checked = false;
+		monthRangeCheckChanged();
+	} else {
+		// disable old
+		document.getElementById('opt-last-months').checked = false;
+		document.getElementById('opt-future' ).checked = false;
+	}
 
 	// Always show these toolbar boxes opened at init
 	toggleTagCloud();

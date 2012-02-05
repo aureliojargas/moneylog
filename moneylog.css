@@ -275,10 +275,14 @@ a.button.active {
 	float: right;
 	width: auto;
 }
+#opt-future-box,
+#opt-last-months-box {
+	display: none;  /* legacy, JS will show */
+}
 #value-filter-arg {
 	display: none;  /* appears when SELECT item is chosen */
 }
-.opt-disabled {
+.option-disabled {
 	color: #AAAAAA;
 }
 
