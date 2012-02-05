@@ -2184,7 +2184,7 @@ function populateDataFilesCombo() {
 	}
 }
 
-function populateMonthsCombo() {
+function populateLastMonthsCombo() {
 	var el, label, i;
 	el = document.getElementById('opt-last-months-combo');
 	label = i18n.labelMonths[0];
@@ -2690,7 +2690,7 @@ function init() {
 	document.title = appName + ' ' + appFlavor;
 
 	// Prepare UI elements
-	populateMonthsCombo();
+	populateLastMonthsCombo();
 	populateDataFilesCombo();
 	populateChartColsCombo();
 	populateRowsSummaryCombo();
