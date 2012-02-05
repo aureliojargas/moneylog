@@ -2690,7 +2690,6 @@ function init() {
 	document.title = appName + ' ' + appFlavor;
 
 	// Prepare UI elements
-	setCurrentDate();
 	populateMonthsCombo();
 	populateDataFilesCombo();
 	populateChartColsCombo();
