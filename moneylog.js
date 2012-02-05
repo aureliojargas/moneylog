@@ -2169,10 +2169,18 @@ function populateMonthsCombo() {
 }
 
 function populateMonthRangeCombo() {
-	var el1, el2, range, i, y, m;
+	var el1, el2, range, i, y, m, thisMonth, pastMonth;
+
 	el1 = document.getElementById('month-range-1-combo');
 	el2 = document.getElementById('month-range-2-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
+	pastMonth = getPastMonth(initLastMonths).slice(0, 7);
+	thisMonth = currentDate.slice(0, 7);
+
+	// Oops, past month does not exist
+	if (!range.hasItem(pastMonth)) {
+		pastMonth = undefined;
+	}
 
 	// Both combos will have the same months
 	for (i = 0; i < range.length; i++) {
@@ -2181,8 +2189,20 @@ function populateMonthRangeCombo() {
 		m = i18n.monthNames[m.replace(/^0/, '')];  // use month name
 		el1.options[i] = new Option(m + ' ' + y, range[i]);
 		el2.options[i] = new Option(m + ' ' + y, range[i]);
+
+		// First combo: defaults to recent past month
+		if (pastMonth && range[i] === pastMonth) {
+			el1.selectedIndex = i;			
+		}
+		// Second combo: defaults to this month
+		if (range[i] === thisMonth) {
+			el2.selectedIndex = i;
+		}
 	}
-	el2.selectedIndex = range.length - 1;  // last month
+	// User forced future display, second combo defaults to last month
+	if (defaultFuture) {
+		el2.selectedIndex = range.length - 1;
+	}
 }
 
 function populateValueFilterCombo() {
