@@ -118,8 +118,8 @@ var i18nDatabase = {
 		labelReload: 'Reload',
 		labelViewOptions: 'View',
 		// labelMonthRange: 'Month Range',
-		labelMonthRangeFrom: 'From',
-		labelMonthRangeUntil: 'Until',
+		labelDateFrom: 'From',
+		labelDateUntil: 'Until',
 		labelTagCloud: 'Tag Cloud',
 		labelTagSummary: 'Tag Summary',
 		labelNoData: 'No data.',
@@ -201,8 +201,8 @@ var i18nDatabase = {
 		labelReload: 'Recarregar',
 		labelViewOptions: 'Visualizar',
 		// labelMonthRange: 'Meses',
-		labelMonthRangeFrom: 'De',
-		labelMonthRangeUntil: 'Até',
+		labelDateFrom: 'De',
+		labelDateUntil: 'Até',
 		labelTagCloud: 'Tags',
 		labelTagSummary: 'Somatório de tags',
 		labelNoData: 'Nenhum lançamento.',
@@ -643,6 +643,24 @@ function addMonths(yyyymmdd, n) {
 	}
 	m = (m < 10) ? '0' + m : m;
 	return y + '-' + m + '-' + d;
+}
+
+function getYearRange(date1, date2) {
+	// Given two dates, returns array with all the years between them, inclusive.
+	// Dates are strings formatted as YYYY-MM-DD.
+	var y, y1, y2, results = [];
+
+	if (date1 > date2) {  // no deal
+		return results;
+	}
+
+	y1 = parseInt(date1.slice(0, 4), 10);
+	y2 = parseInt(date2.slice(0, 4), 10);
+
+	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
+		results.push(y);
+	}
+	return results;
 }
 
 function getMonthRange(date1, date2) {
@@ -1404,8 +1422,12 @@ function parseData() {
 		dataFirstDate = dataLastDate = undefined;
 	}
 
-	// Update the month range combo
-	populateMonthRangeCombo();
+	// Update the date range combo
+	if (reportType === 'y') {
+		populateYearRangeCombo();		
+	} else {
+		populateMonthRangeCombo();
+	}
 }
 
 function filterData() {
@@ -1420,19 +1442,27 @@ function filterData() {
 
 	// New style date options
 	if (!useLegacyDateFilter) {
-		// Month Range
-		// Note: remember to NOT use month range in Yearly report
-		if (document.getElementById('month-range-1-check').checked) {
-			firstDate = document.getElementById('month-range-1-combo').value + '-00';
+
+		if (document.getElementById('opt-date-1-check').checked) {
+			if (reportType === 'y') {
+				firstDate = document.getElementById('opt-date-1-year-combo').value + '-00-00';
+			} else {
+				firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
+			}
 		}
-		if (document.getElementById('month-range-2-check').checked) {
-			lastDate = document.getElementById('month-range-2-combo').value + '-99';
+		if (document.getElementById('opt-date-2-check').checked) {
+			if (reportType === 'y') {
+				lastDate = document.getElementById('opt-date-2-year-combo').value + '-99-99';
+			} else {
+				lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
+			}
 		}
 
 	// Old style date options
 	} else {
+
 		// [X] Recent Only, works for daily/monthly
-		if (document.getElementById('opt-last-months').checked) {
+		if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
 			firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
 		}
 		// [X] Future Data, works for all reports
@@ -1442,11 +1472,6 @@ function filterData() {
 		}
 	}
 
-	// Yealy reports always show all data, no date limit
-	if (reportType === 'y') {
-		firstDate = 0;
-		lastDate = '9999-99-99';		
-	}
 
 	// Get filters data for the detailed report
 	if (reportType === 'd') {
@@ -2171,11 +2196,37 @@ function populateMonthsCombo() {
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
 }
 
+function populateYearRangeCombo() {
+	var el1, el2, range, i, y, m, thisMonth, pastMonth, index1, index2;
+
+	el1 = document.getElementById('opt-date-1-year-combo');
+	el2 = document.getElementById('opt-date-2-year-combo');
+	range = getYearRange(dataFirstDate, dataLastDate);
+
+	// Save currently selected items, or apply defaults
+	index1 = (el1.selectedIndex !== -1) ? el1.selectedIndex : 0;
+	index2 = (el2.selectedIndex !== -1) ? el2.selectedIndex : range.length - 1;
+
+	// First, make sure the combo is empty
+	el1.options.length = 0;
+	el2.options.length = 0;
+
+	// Both combos will have the same years
+	for (i = 0; i < range.length; i++) {
+		el1.options[i] = new Option(range[i]);
+		el2.options[i] = new Option(range[i]);
+	}
+
+	// Set selected items
+	el1.selectedIndex = index1;
+	el2.selectedIndex = index2;
+}
+
 function populateMonthRangeCombo() {
 	var el1, el2, range, i, y, m, thisMonth, pastMonth, index1, index2;
 
-	el1 = document.getElementById('month-range-1-combo');
-	el2 = document.getElementById('month-range-2-combo');
+	el1 = document.getElementById('opt-date-1-month-combo');
+	el2 = document.getElementById('opt-date-2-month-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
 	thisMonth = currentDate.slice(0, 7);
 	pastMonth = getPastMonth(initLastMonths - 1).slice(0, 7);
@@ -2205,6 +2256,10 @@ function populateMonthRangeCombo() {
 			index2 = range.length - 1;
 		}
 	}
+
+	// First, make sure the combo is empty
+	el1.options.length = 0;
+	el2.options.length = 0;
 
 	// Both combos will have the same months
 	for (i = 0; i < range.length; i++) {
@@ -2247,14 +2302,19 @@ function updateToolbar() {
 	if (reportType === 'd') {
 		unhide = [
 			'search-box',
-			'month-range-1-box',
-			'month-range-2-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
 			'opt-last-months-box',
-			'view-options-box',
 			'tag-cloud-box',
 			'tag-summary-box'
+		];
+		add = [
+			'opt-date-1-month-combo',
+			'opt-date-2-month-combo'
+		];		
+		remove = [
+			'opt-date-1-year-combo',
+			'opt-date-2-year-combo'
 		];
 	// Monthly
 	} else if (reportType === 'm') {
@@ -2266,24 +2326,34 @@ function updateToolbar() {
 			'tag-summary-box'
 		];
 		unhide = [
-			'month-range-1-box',
-			'month-range-2-box',
 			'opt-last-months-box',
-			'view-options-box'
+		];
+		add = [
+			'opt-date-1-month-combo',
+			'opt-date-2-month-combo'
+		];		
+		remove = [
+			'opt-date-1-year-combo',
+			'opt-date-2-year-combo'
 		];
 	// Yearly
 	} else if (reportType === 'y') {
 		hide = [
 			'search-box',
-			'month-range-1-box',
-			'month-range-2-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
 			// Recent *months* doesn't make sense in yearly report
 			'opt-last-months-box',
-			'view-options-box',
 			'tag-cloud-box',
 			'tag-summary-box'
+		];
+		add = [
+			'opt-date-1-year-combo',
+			'opt-date-2-year-combo'
+		];
+		remove = [
+			'opt-date-1-month-combo',
+			'opt-date-2-month-combo'
 		];
 	}
 
@@ -2326,7 +2396,7 @@ function changeReport(el) {
 	addClass(el, 'active');
 
 	//// Save / restore information
-	//
+
 	// From Daily to Monthly/Yearly
 	if (oldType === 'd' && newType !== 'd') {
 		oldSortColIndex = sortColIndex;
@@ -2338,6 +2408,15 @@ function changeReport(el) {
 	} else if (newType === 'd' && oldType !== 'd') {
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
+	}
+
+	// From Daily/Monthly to Yearly
+	if (newType === 'y' && oldType !== 'y') {
+		populateYearRangeCombo();
+	//
+	// From Yearly to Daily/Monthly
+	} else if (oldType === 'y' && newType !== 'y') {
+		populateMonthRangeCombo();
 	}
 
 	// Always reset Rows Summary when changing reports
@@ -2388,10 +2467,9 @@ function lastMonthsChanged() {
 	showReport();
 }
 
-function monthRangeComboChanged() {
-	document.getElementById(this.id.replace('combo', 'check')).checked = true;
-	overviewData = [];
-	showReport();
+function dateRangeComboChanged() {
+	document.getElementById(this.id.replace(/(month|year)-combo/, 'check')).checked = true;
+	toggleDateRange();
 }
 
 function toggleFullScreen() {
@@ -2413,8 +2491,14 @@ function toggleFullScreen() {
 		isFullScreen = true;
 	}
 }
+
 function toggleFuture() {
-	overviewData = [];
+	overviewData = [];  // clear cache
+	showReport();
+}
+
+function toggleDateRange() {
+	overviewData = [];  // clear cache
 	showReport();
 }
 
@@ -2449,7 +2533,7 @@ function toggleLastMonths() {
 	extra.style.display = (this.checked) ? 'block' : 'none';
 
 	// reload report
-	overviewData = [];
+	overviewData = [];  // clear cache
 	showReport();
 }
 
@@ -2641,8 +2725,8 @@ function init() {
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
 	document.getElementById('editor-save'              ).innerHTML = i18n.labelSave;
 	document.getElementById('view-options-header'      ).innerHTML = i18n.labelViewOptions;
-	document.getElementById('month-range-1-label'      ).innerHTML = i18n.labelMonthRangeFrom + ':';
-	document.getElementById('month-range-2-label'      ).innerHTML = i18n.labelMonthRangeUntil + ':';
+	document.getElementById('opt-date-1-label'         ).innerHTML = i18n.labelDateFrom + ':';
+	document.getElementById('opt-date-2-label'         ).innerHTML = i18n.labelDateUntil + ':';
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
 	document.getElementById('tag-summary-header'       ).innerHTML = i18n.labelTagSummary;
 
@@ -2707,10 +2791,12 @@ function init() {
 	document.getElementById('opt-negate'         ).onclick  = showReport;
 	document.getElementById('source-file'        ).onchange = loadSelectedFile;
 	document.getElementById('source-reload'      ).onclick  = loadSelectedFile;
-	document.getElementById('month-range-1-check').onclick  = showReport;
-	document.getElementById('month-range-2-check').onclick  = showReport;
-	document.getElementById('month-range-1-combo').onchange = monthRangeComboChanged;
-	document.getElementById('month-range-2-combo').onchange = monthRangeComboChanged;
+	document.getElementById('opt-date-1-check'   ).onclick  = toggleDateRange;
+	document.getElementById('opt-date-2-check'   ).onclick  = toggleDateRange;
+	document.getElementById('opt-date-1-month-combo').onchange = dateRangeComboChanged;
+	document.getElementById('opt-date-2-month-combo').onchange = dateRangeComboChanged;
+	document.getElementById('opt-date-1-year-combo' ).onchange = dateRangeComboChanged;
+	document.getElementById('opt-date-2-year-combo' ).onchange = dateRangeComboChanged;
 	document.getElementById('tag-cloud-opt-group').onclick  = showReport;
 	document.getElementById('chart-data'         ).onchange = showReport;
 	document.getElementById('rows-summary-index' ).onchange = updateSelectedRowsSummary;
@@ -2733,8 +2819,8 @@ function init() {
 		document.getElementById('opt-last-months-extra').style.display = 'block';
 	}
 	if (defaultMonthRange) {
-		document.getElementById('month-range-1-check').checked = true;
-		document.getElementById('month-range-2-check').checked = true;
+		document.getElementById('opt-date-1-check').checked = true;
+		document.getElementById('opt-date-2-check').checked = true;
 	}
 	document.getElementById('filter').value = defaultSearch;
 
@@ -2744,10 +2830,10 @@ function init() {
 		document.getElementById('opt-future-box').style.display = 'block';
 		document.getElementById('opt-last-months-box').style.display = 'block';
 		// disable new
-		document.getElementById('month-range-1-box').style.display = 'none';
-		document.getElementById('month-range-2-box').style.display = 'none';
-		document.getElementById('month-range-1-check').checked = false;
-		document.getElementById('month-range-2-check').checked = false;
+		document.getElementById('opt-date-1-box').style.display = 'none';
+		document.getElementById('opt-date-2-box').style.display = 'none';
+		document.getElementById('opt-date-1-check').checked = false;
+		document.getElementById('opt-date-2-check').checked = false;
 	} else {
 		// disable old
 		document.getElementById('opt-last-months').checked = false;

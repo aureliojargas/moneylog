@@ -270,10 +270,16 @@ a.button.active {
 	display: none;  /* appears when clicked */
 	margin-left: 1em;
 }
-#month-range-1-combo,
-#month-range-2-combo {
+#opt-date-1-month-combo,
+#opt-date-2-month-combo,
+#opt-date-1-year-combo,
+#opt-date-2-year-combo {
 	float: right;
 	width: auto;
+}
+#opt-date-1-year-combo,
+#opt-date-2-year-combo {
+	display: none;
 }
 #opt-future-box,
 #opt-last-months-box {
