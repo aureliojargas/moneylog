@@ -264,6 +264,7 @@ a.button.active {
 }
 .checkbox-option {
 	text-align: left;
+	clear: both;
 }
 .checkbox-option-extra {
 	display: none;  /* appears when clicked */
@@ -281,8 +282,9 @@ a.button.active {
 #month-range-content {
 	display: none;
 }
-#month-range-content .checkbox-option-extra {
-	display: block;  /* always show combos */
+#month-range-content select {
+	float: right;
+	width: auto;
 }
 
 /* ---------------------------------------------- [ tag cloud ] */

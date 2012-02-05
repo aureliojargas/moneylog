@@ -2205,7 +2205,7 @@ function populateMonthRangeCombo() {
 	for (i = 0; i < range.length; i++) {
 		y = range[i].slice(0, 4);
 		m = range[i].slice(5, 7);
-		m = i18n.monthNames[m.replace(/^0/, '')];  // use month name
+		m = i18n.monthNames[m.replace(/^0/, '')].slice(0, 3);  // month short name
 		el1.options[i] = new Option(m + ' ' + y, range[i]);
 		el2.options[i] = new Option(m + ' ' + y, range[i]);
 	}
