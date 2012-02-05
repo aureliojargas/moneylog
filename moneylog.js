@@ -396,7 +396,6 @@ var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
 var oldSortColRev;
-var currentDate;
 var dataFirstDate;
 var dataLastDate;
 var highlightRegex;
@@ -602,14 +601,14 @@ function translateTableForRegex(text, table, regex) {
 	return text.replace(regex, translator);
 }
 
-function setCurrentDate() {
+function getCurrentDate() {
 	var z, m, d;
 	z = new Date();
 	m = z.getMonth() + 1;
 	d = z.getDate();
 	m = (m < 10) ? '0' + m : m;
 	d = (d < 10) ? '0' + d : d;
-	currentDate = z.getFullYear() + '-' + m + '-' + d;
+	return z.getFullYear() + '-' + m + '-' + d;
 }
 
 function getPastMonth(months) {
@@ -1016,7 +1015,7 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
 	var theRow = [];
 
-	theRow.push((theMonth <= currentDate.slice(0, 7)) ?
+	theRow.push((theMonth <= getCurrentDate().slice(0, 7)) ?
 			'<tr onClick="toggleRowHighlight(this)">' :
 			'<tr onClick="toggleRowHighlight(this)" class="future">');
 	if (showRowCount) {
@@ -1468,7 +1467,7 @@ function filterData() {
 		// [X] Future Data, works for all reports
 		showFuture = document.getElementById('opt-future').checked;
 		if (!showFuture) {
-			lastDate = currentDate;
+			lastDate = getCurrentDate();
 		}
 	}
 
@@ -1981,7 +1980,7 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected;
+	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
@@ -1992,6 +1991,8 @@ function showDetailed() {
 	theData = applyTags(filterData());
 
 	if (theData.length > 0) {
+
+		currentDate = getCurrentDate();
 
 		// Data sorting procedures
 		if (sortColIndex !== 0 || sortColRev) {
@@ -2228,7 +2229,7 @@ function populateMonthRangeCombo() {
 	el1 = document.getElementById('opt-date-1-month-combo');
 	el2 = document.getElementById('opt-date-2-month-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
-	thisMonth = currentDate.slice(0, 7);
+	thisMonth = getCurrentDate().slice(0, 7);
 	pastMonth = getPastMonth(initLastMonths - 1).slice(0, 7);
 
 	// Save currently selected items
