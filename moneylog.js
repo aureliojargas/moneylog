@@ -2173,7 +2173,7 @@ function populateMonthRangeCombo() {
 	el2 = document.getElementById('month-range-2-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
 	thisMonth = currentDate.slice(0, 7);
-	pastMonth = getPastMonth(initLastMonths).slice(0, 7);
+	pastMonth = getPastMonth(initLastMonths - 1).slice(0, 7);
 
 	// Save currently selected items
 	index1 = el1.selectedIndex;
