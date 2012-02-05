@@ -2244,9 +2244,9 @@ function updateToolbar() {
 			'search-box',
 			'month-range-1-box',
 			'month-range-2-box',
-			'opt-monthly', 'opt-monthly-label',
-			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
-			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'opt-monthly-box',
+			'opt-value-filter-box',
+			'opt-last-months-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2254,15 +2254,15 @@ function updateToolbar() {
 	} else if (reportType === 'm') {
 		hide = [
 			'search-box',
-			'opt-monthly', 'opt-monthly-label',
-			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
+			'opt-monthly-box',
+			'opt-value-filter-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
 		unhide = [
 			'month-range-1-box',
 			'month-range-2-box',
-			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'opt-last-months-box',
 		];
 	// Yearly
 	} else if (reportType === 'y') {
@@ -2270,10 +2270,10 @@ function updateToolbar() {
 			'search-box',
 			'month-range-1-box',
 			'month-range-2-box',
-			'opt-monthly', 'opt-monthly-label',
-			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
+			'opt-monthly-box',
+			'opt-value-filter-box',
 			// Recent *months* doesn't make sense in yearly report
-			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
+			'opt-last-months-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
