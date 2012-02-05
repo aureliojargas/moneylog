@@ -700,7 +700,7 @@ function formatDate(date) {
 
 	// YYYY-MM-DD
 	table.Y = date.slice(0,  4) || 'Y';
-	table.y = date.slice(0,  2) || 'y';
+	table.y = date.slice(2,  4) || 'y';
 	table.m = date.slice(5,  7) || 'm';
 	table.d = date.slice(8, 10) || 'd';
 	if (table.m !== 'm') {
