@@ -146,7 +146,7 @@
 //     y = ano com 2 dígitos           B = nome completo do mês
 //     m = mês
 //     d = dia
-// 
+//
 // i18nDatabase.pt.dateFormat = 'd.m.Y'     ;// Personalizar formato dia-mês-ano
 // i18nDatabase.pt.dateFormatMonth = 'm.Y'  ;// Personalizar formato mês-ano
 // i18nDatabase.pt.dateFormatYear = 'Y'     ;// Personalizar formato ano

@@ -178,7 +178,7 @@ var i18nDatabase = {
 		dateFormat: 'd/m/Y',
 		dateFormatMonth: 'm/Y',
 		dateFormatYear: 'Y',
-		monthNames: ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],		
+		monthNames: ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
 		appUrlOnline: 'http://aurelio.net/moneylog/online/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
@@ -595,7 +595,7 @@ function sortIgnoreCase(a, b) {
 // http://stackoverflow.com/questions/286921/efficiently-replace-all-accented-characters-in-a-string
 // Match 'regex' in 'text', and substitute by 'table' item
 function translateTableForRegex(text, table, regex) {
-	translator = function(match) { 
+	translator = function(match) {
 		return table[match] || match;
 	}
 	return text.replace(regex, translator);
@@ -670,20 +670,20 @@ function getMonthRange(date1, date2) {
 	if (date1 > date2) {  // no deal
 		return results;
 	}
-	
+
 	y1 = parseInt(date1.slice(0, 4), 10);
 	y2 = parseInt(date2.slice(0, 4), 10);
 	m1 = parseInt(date1.slice(5, 7), 10);
 	m2 = parseInt(date2.slice(5, 7), 10);
 
 	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
-		
+
 		// First year: start from month1
 		// Last year: end in month2
 		ini = (y === y1) ? m1 : 1;
 		end = (y === y2) ? m2 : 12;
 
-		for (m=ini; m <= end; m++) {  // months loop 
+		for (m=ini; m <= end; m++) {  // months loop
 			results.push(y + '-' + ((m < 10) ? '0' + m : m));  // add leading zero
 		}
 	}
@@ -763,7 +763,7 @@ function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 	} else if (n >= 1000 && n < 1000000) {
 		n = (n / 1000).toString();
 		if (n.indexOf('.') !== -1) {
-			n = n.replace(/\.(\d).*/, 'k$1');     // 1234.45 > 1k2	
+			n = n.replace(/\.(\d).*/, 'k$1');     // 1234.45 > 1k2
 		} else {
 			n = n + 'k';                          // 1000 > 1k
 		}
@@ -774,7 +774,7 @@ function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 		if (n.indexOf('.') !== -1) {
 			n = n.replace(/\.(\d).*/, 'm$1');     // 1234567.89 > 1m2
 		} else {
-			n = n + 'm';                          // 1000000 > 1m			
+			n = n + 'm';                          // 1000000 > 1m
 		}
 	}
 
@@ -1412,7 +1412,7 @@ function parseData() {
 	sortColIndex = 0;
 	parsedData.sort(sortArray);
 	sortColIndex = oldSort;
-	
+
 	// Save first and last date as globals
 	if (parsedData.length > 0) {
 		dataFirstDate = parsedData[0][0];
@@ -1423,7 +1423,7 @@ function parseData() {
 
 	// Update the date range combo
 	if (reportType === 'y') {
-		populateYearRangeCombo();		
+		populateYearRangeCombo();
 	} else {
 		populateMonthRangeCombo();
 	}
@@ -2312,7 +2312,7 @@ function updateToolbar() {
 		add = [
 			'opt-date-1-month-combo',
 			'opt-date-2-month-combo'
-		];		
+		];
 		remove = [
 			'opt-date-1-year-combo',
 			'opt-date-2-year-combo'
@@ -2332,7 +2332,7 @@ function updateToolbar() {
 		add = [
 			'opt-date-1-month-combo',
 			'opt-date-2-month-combo'
-		];		
+		];
 		remove = [
 			'opt-date-1-year-combo',
 			'opt-date-2-year-combo'
