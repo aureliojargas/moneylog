@@ -399,8 +399,6 @@ var oldSortColRev;
 var currentDate;
 var dataFirstDate;
 var dataLastDate;
-var monthRangeActive;
-var oldMonthRangeActive;
 var highlightRegex;
 var i18n;
 var rawData = '';
@@ -1421,7 +1419,7 @@ function filterData() {
 	filteredData = [];
 
 	// New style date options
-	if (monthRangeActive) {
+	if (!useLegacyDateFilter) {
 		// Month Range
 		// Note: remember to NOT use month range in Yearly report
 		if (document.getElementById('month-range-1-check').checked) {
@@ -2341,15 +2339,6 @@ function changeReport(el) {
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
 	}
-	// From Daily/Monthly to Yearly
-	if (newType === 'y' && oldType !== 'y') {
-		oldMonthRangeActive = monthRangeActive;
-		monthRangeActive = false;
-	//
-	// From Yearly to Daily/Monthly
-	} else if (oldType === 'y' && newType !== 'y') {
-		monthRangeActive = oldMonthRangeActive;
-	}
 
 	// Always reset Rows Summary when changing reports
 	selectedRows = [];
@@ -2401,17 +2390,8 @@ function lastMonthsChanged() {
 
 function monthRangeComboChanged() {
 	document.getElementById(this.id.replace('combo', 'check')).checked = true;
-	monthRangeCheckChanged();
 	overviewData = [];
 	showReport();
-}
-
-function monthRangeCheckChanged() {
-	var el1, el2;
-	el1 = document.getElementById('month-range-1-check');
-	el2 = document.getElementById('month-range-2-check');
-
-	monthRangeActive = (el1.checked || el2.checked);
 }
 
 function toggleFullScreen() {
@@ -2729,8 +2709,6 @@ function init() {
 	document.getElementById('source-reload'      ).onclick  = loadSelectedFile;
 	document.getElementById('month-range-1-check').onclick  = showReport;
 	document.getElementById('month-range-2-check').onclick  = showReport;
-	document.getElementById('month-range-1-check').onchange = monthRangeCheckChanged;
-	document.getElementById('month-range-2-check').onchange = monthRangeCheckChanged;
 	document.getElementById('month-range-1-combo').onchange = monthRangeComboChanged;
 	document.getElementById('month-range-2-combo').onchange = monthRangeComboChanged;
 	document.getElementById('tag-cloud-opt-group').onclick  = showReport;
@@ -2757,7 +2735,6 @@ function init() {
 	if (defaultMonthRange) {
 		document.getElementById('month-range-1-check').checked = true;
 		document.getElementById('month-range-2-check').checked = true;
-		monthRangeCheckChanged();
 	}
 	document.getElementById('filter').value = defaultSearch;
 
@@ -2771,7 +2748,6 @@ function init() {
 		document.getElementById('month-range-2-box').style.display = 'none';
 		document.getElementById('month-range-1-check').checked = false;
 		document.getElementById('month-range-2-check').checked = false;
-		monthRangeCheckChanged();
 	} else {
 		// disable old
 		document.getElementById('opt-last-months').checked = false;
