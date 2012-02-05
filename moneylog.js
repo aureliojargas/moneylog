@@ -1416,23 +1416,32 @@ function filterData() {
 	isNegated = false;
 	filter = '';
 	firstDate = 0;
+	lastDate = '9999-99-99';
 	filteredData = [];
 
-	// [X] Recent Only
-	if (!monthRangeActive && document.getElementById('opt-last-months').checked && reportType !== 'y') {
-		firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
-	}
+	// New style date options
+	if (monthRangeActive) {
+		// Month Range
+		// Note: remember to NOT use month range in Yearly report
+		if (document.getElementById('month-range-1-check').checked) {
+			firstDate = document.getElementById('month-range-1-combo').value + '-00';
+		}
+		if (document.getElementById('month-range-2-check').checked) {
+			lastDate = document.getElementById('month-range-2-combo').value + '-99';
+		}
 
-	// Month Range
-	if (monthRangeActive && document.getElementById('month-range-1-check').checked) {
-		firstDate = document.getElementById('month-range-1-combo').value + '-00';
-	}
-	if (monthRangeActive && document.getElementById('month-range-2-check').checked) {
-		lastDate = document.getElementById('month-range-2-combo').value + '-99';
-	}
-
-	// Show future works for both views
-	showFuture = document.getElementById('opt-future').checked;
+	// Old style date options
+	} else {
+		// [X] Recent Only, works for daily/monthly
+		if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
+			firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
+		}
+		// [X] Future Data, works for all reports
+		showFuture = document.getElementById('opt-future').checked;
+		if (!showFuture) {
+			lastDate = currentDate;
+		}
+	}	
 
 	// Get filters data for the detailed report
 	if (reportType === 'd') {
@@ -1475,24 +1484,12 @@ function filterData() {
 
 		///////////////////////////////////////////////////////////// Filters
 
-		// Ignore dates older than "last N months" option (if checked)
-		if (!monthRangeActive && thisDate < firstDate) {
+		// Apply date filter
+		if (thisDate < firstDate) {
 			continue;
 		}
-
-		// Ignore future dates
-		if (!monthRangeActive && !showFuture && thisDate > currentDate) {
-			break;
-		}
-
-		// Ignore dates older than firstDate
-		if (monthRangeActive && firstDate && thisDate < firstDate) {
-			continue;
-		}
-
-		// Ignore dates later than lastDate
-		if (monthRangeActive && lastDate && thisDate > lastDate) {
-			break;
+		if (thisDate > lastDate) {
+			break;  // parsedData is ordered by date, we can safely break here
 		}
 
 		// Apply value filter
