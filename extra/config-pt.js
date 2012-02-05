@@ -75,21 +75,18 @@
 // initFullScreen = false       ;// Iniciar o app já no modo Tela Cheia?
 
 
-////// SOMENTE RECENTES
+////// BUSCA
 //
-// maxLastMonths = 12           ;// Quantos meses mostrar no seletor?
-// initLastMonths = 3           ;// Qual será o item selecionado por padrão?
-// defaultLastMonths = false    ;// Iniciar com esta opção já ativada?
+// defaultSearch = ''           ;// Iniciar já pesquisando por este texto
+// checkRegex = false           ;// Marcar a opção [X] regex?
+// checkNegate = false          ;// Marcar a opção [X] excluir?
 
 
-////// SOMENTE VALORES
+////// PERÍODO - DATA INICIAL E FINAL
 //
-// Nada ainda.
-
-
-////// LANÇAMENTOS FUTUROS
-//
-// defaultFuture = false        ;// Iniciar mostrando lançamentos futuros?
+// checkDateFrom = true         ;// Iniciar marcando a opção [X] De:?
+// checkDateUntil = true        ;// Iniciar marcando a opção [X] Até:?
+// initLastMonths = 3           ;// Quantos meses recentes serão mostrados?
 
 
 ////// PARCIAIS MENSAIS
@@ -97,11 +94,9 @@
 // checkMonthPartials = true    ;// Iniciar mostrando as parciais mensais?
 
 
-////// BUSCA
+////// SOMENTE VALORES
 //
-// defaultSearch = ''           ;// Iniciar já pesquisando por este texto
-// checkRegex = false           ;// Marcar a opção [X] regex?
-// checkNegate = false          ;// Marcar a opção [X] excluir?
+// Nada ainda.
 
 
 ////// TABELA DO EXTRATO
@@ -148,7 +143,7 @@
 //     d = dia
 //
 // i18nDatabase.pt.dateFormat = 'd.m.Y'     ;// Personalizar formato dia-mês-ano
-// i18nDatabase.pt.dateFormatMonth = 'm.Y'  ;// Personalizar formato mês-ano
+// i18nDatabase.pt.dateFormatMonth = 'B Y'  ;// Personalizar formato mês-ano
 // i18nDatabase.pt.dateFormatYear = 'Y'     ;// Personalizar formato ano
 
 
