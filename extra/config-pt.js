@@ -94,14 +94,14 @@
 
 ////// PARCIAIS MENSAIS
 //
-// defaultMonthPartials = true  ;// Iniciar mostrando as parciais mensais?
+// checkMonthPartials = true    ;// Iniciar mostrando as parciais mensais?
 
 
 ////// BUSCA
 //
 // defaultSearch = ''           ;// Iniciar já pesquisando por este texto
-// defaultRegex = false         ;// Marcar a opção [X] regex?
-// defaultNegate = false        ;// Marcar a opção [X] excluir?
+// checkRegex = false           ;// Marcar a opção [X] regex?
+// checkNegate = false          ;// Marcar a opção [X] excluir?
 
 
 ////// TABELA DO EXTRATO

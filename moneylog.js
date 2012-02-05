@@ -19,9 +19,9 @@ var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:S
 var initLastMonths = 3;           // Initial value for last months combo
 var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
-var defaultMonthPartials = true;  // Monthly checkbox inits checked?
-var defaultRegex = false;         // Search regex checkbox inits checked?
-var defaultNegate = false;        // Search negate checkbox inits checked?
+var checkMonthPartials = true;    // Monthly checkbox inits checked?
+var checkRegex = false;           // Search regex checkbox inits checked?
+var checkNegate = false;          // Search negate checkbox inits checked?
 var defaultSearch = '';           // Search for this text on init
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
@@ -2813,18 +2813,22 @@ function init() {
 	document.getElementById('editor-data')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 
 	// Apply user defaults (this code must be after event handlers adding)
-	if (initFullScreen)       { toggleFullScreen(); }
-	if (defaultRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
-	if (defaultNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
-	if (checkDateFrom)        { document.getElementById('opt-date-1-check' ).checked = true; }
-	if (checkDateUntil)       { document.getElementById('opt-date-2-check' ).checked = true; }
-	if (defaultMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (defaultFuture)        { document.getElementById('opt-future-check' ).checked = true; }
+	if (initFullScreen)     { toggleFullScreen(); }
+	if (checkRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
+	if (checkNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
+	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
+	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
+	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
+	document.getElementById('filter').value = defaultSearch;
+
+	// Apply user defaults - Legacy
+	if (defaultFuture) {
+		document.getElementById('opt-future-check' ).checked = true;
+	}
 	if (defaultLastMonths) {
 		document.getElementById('opt-last-months-check').checked = true;
 		document.getElementById('opt-last-months-extra').style.display = 'block';
 	}
-	document.getElementById('filter').value = defaultSearch;
 
 	// User wants old style date filters?
 	if (useLegacyDateFilter) {
