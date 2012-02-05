@@ -19,11 +19,12 @@ var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:S
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
+var checkDateFrom = true;         // Date filter From: checkbox inits checked?
+var checkDateUntil = true;        // Date filter To: checkbox inits checked?
 var defaultMonthPartials = true;  // Monthly checkbox inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
 var defaultRegex = false;         // Search regex checkbox inits checked?
 var defaultNegate = false;        // Search negate checkbox inits checked?
-var defaultMonthRange = true;     // Month Range checkboxes init checked?
 var defaultSearch = '';           // Search for this text on init
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
@@ -2810,17 +2811,15 @@ function init() {
 
 	// Apply user defaults (this code must be after event handlers adding)
 	if (initFullScreen)       { toggleFullScreen(); }
-	if (defaultMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (defaultFuture)        { document.getElementById('opt-future-check' ).checked = true; }
 	if (defaultRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
 	if (defaultNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
+	if (checkDateFrom)        { document.getElementById('opt-date-1-check' ).checked = true; }
+	if (checkDateUntil)       { document.getElementById('opt-date-2-check' ).checked = true; }
+	if (defaultMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
+	if (defaultFuture)        { document.getElementById('opt-future-check' ).checked = true; }
 	if (defaultLastMonths) {
 		document.getElementById('opt-last-months-check').checked = true;
 		document.getElementById('opt-last-months-extra').style.display = 'block';
-	}
-	if (defaultMonthRange) {
-		document.getElementById('opt-date-1-check').checked = true;
-		document.getElementById('opt-date-2-check').checked = true;
 	}
 	document.getElementById('filter').value = defaultSearch;
 
