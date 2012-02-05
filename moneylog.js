@@ -1461,11 +1461,11 @@ function filterData() {
 	} else {
 
 		// [X] Recent Only, works for daily/monthly
-		if (document.getElementById('opt-last-months').checked && reportType !== 'y') {
-			firstDate = getPastMonth(parseInt(document.getElementById('last-months').value, 10) - 1);
+		if (document.getElementById('opt-last-months-check').checked && reportType !== 'y') {
+			firstDate = getPastMonth(parseInt(document.getElementById('opt-last-months-combo').value, 10) - 1);
 		}
 		// [X] Future Data, works for all reports
-		showFuture = document.getElementById('opt-future').checked;
+		showFuture = document.getElementById('opt-future-check').checked;
 		if (!showFuture) {
 			lastDate = getCurrentDate();
 		}
@@ -1475,12 +1475,12 @@ function filterData() {
 	// Get filters data for the detailed report
 	if (reportType === 'd') {
 		filter = document.getElementById('filter').value;
-		isRegex = document.getElementById('opt-regex').checked;
-		isNegated = document.getElementById('opt-negate').checked;
+		isRegex = document.getElementById('opt-regex-check').checked;
+		isNegated = document.getElementById('opt-negate-check').checked;
 
-		if (document.getElementById('opt-value-filter').checked) {
-			valueFilter = document.getElementById('value-filter').value;
-			valueFilterArg = parseInt(document.getElementById('value-filter-arg').value, 10) || 0;
+		if (document.getElementById('opt-value-filter-check').checked) {
+			valueFilter = document.getElementById('opt-value-filter-combo').value;
+			valueFilterArg = parseInt(document.getElementById('opt-value-filter-number').value, 10) || 0;
 		}
 
 		// Hack: Value filtering on the search box!
@@ -1987,7 +1987,7 @@ function showDetailed() {
 	chartValues = [];
 	chartLabels = [];
 
-	monthPartials = document.getElementById('opt-monthly');
+	monthPartials = document.getElementById('opt-monthly-check');
 	theData = applyTags(filterData());
 
 	if (theData.length > 0) {
@@ -2186,7 +2186,7 @@ function populateDataFilesCombo() {
 
 function populateMonthsCombo() {
 	var el, label, i;
-	el = document.getElementById('last-months');
+	el = document.getElementById('opt-last-months-combo');
 	label = i18n.labelMonths[0];
 	for (i = 1; i <= maxLastMonths; i++) {
 		if (i > 1) {
@@ -2278,7 +2278,7 @@ function populateMonthRangeCombo() {
 
 function populateValueFilterCombo() {
 	var el;
-	el = document.getElementById('value-filter');
+	el = document.getElementById('opt-value-filter-combo');
 	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
 	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
 	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
@@ -2463,7 +2463,7 @@ function iframeLoaded(el) {
 }
 
 function lastMonthsChanged() {
-	document.getElementById('opt-last-months').checked = true;
+	document.getElementById('opt-last-months-check').checked = true;
 	overviewData = [];
 	showReport();
 }
@@ -2549,7 +2549,7 @@ function toggleValueFilter() {
 }
 
 function toggleMonthly() {
-	if (document.getElementById('opt-monthly').checked === true) {
+	if (document.getElementById('opt-monthly-check').checked === true) {
 		sortColIndex = 0;
 		sortColRev = false;
 	}
@@ -2579,13 +2579,13 @@ function valueFilterChanged() {
 	overviewData = [];
 
 	// autocheck checkbox
-	document.getElementById('opt-value-filter').checked = true;
+	document.getElementById('opt-value-filter-check').checked = true;
 
 	// show/hide the filter argument textbox
-	if (document.getElementById('value-filter').value.match(/[+\-]/)) {
-		document.getElementById('value-filter-arg').style.display = 'none';
+	if (document.getElementById('opt-value-filter-combo').value.match(/[+\-]/)) {
+		document.getElementById('opt-value-filter-number').style.display = 'none';
 	} else {
-		document.getElementById('value-filter-arg').style.display = 'inline';
+		document.getElementById('opt-value-filter-number').style.display = 'inline';
 	}
 
 	showReport();
@@ -2775,47 +2775,47 @@ function init() {
 	}
 
 	// Add event handlers
-	document.getElementById('fullscreen'         ).onclick  = toggleFullScreen;
-	document.getElementById('d'                  ).onclick  = changeReport;
-	document.getElementById('m'                  ).onclick  = changeReport;
-	document.getElementById('y'                  ).onclick  = changeReport;
-	document.getElementById('opt-last-months'    ).onclick  = toggleLastMonths;
-	document.getElementById('last-months'        ).onchange = lastMonthsChanged;
-	document.getElementById('opt-value-filter'   ).onclick  = toggleValueFilter;
-	document.getElementById('value-filter'       ).onchange = valueFilterChanged;
-	document.getElementById('value-filter-arg'   ).onkeyup  = showReport;
-	document.getElementById('opt-future'         ).onclick  = toggleFuture;
-	document.getElementById('opt-monthly'        ).onclick  = toggleMonthly;
-	document.getElementById('filter'             ).onkeyup  = showReport;
-	document.getElementById('opt-regex'          ).onclick  = showReport;
-	document.getElementById('opt-negate'         ).onclick  = showReport;
-	document.getElementById('source-file'        ).onchange = loadSelectedFile;
-	document.getElementById('source-reload'      ).onclick  = loadSelectedFile;
-	document.getElementById('opt-date-1-check'   ).onclick  = toggleDateRange;
-	document.getElementById('opt-date-2-check'   ).onclick  = toggleDateRange;
-	document.getElementById('opt-date-1-month-combo').onchange = dateRangeComboChanged;
-	document.getElementById('opt-date-2-month-combo').onchange = dateRangeComboChanged;
-	document.getElementById('opt-date-1-year-combo' ).onchange = dateRangeComboChanged;
-	document.getElementById('opt-date-2-year-combo' ).onchange = dateRangeComboChanged;
-	document.getElementById('tag-cloud-opt-group').onclick  = showReport;
-	document.getElementById('chart-data'         ).onchange = showReport;
-	document.getElementById('rows-summary-index' ).onchange = updateSelectedRowsSummary;
-	document.getElementById('view-options-header').onclick  = toggleViewOptions;
-	document.getElementById('tag-cloud-header'   ).onclick  = toggleTagCloud;
-	document.getElementById('tag-summary-header' ).onclick  = toggleTagSummary;
-	document.getElementById('editor-open'        ).onclick  = editorOn;
-	document.getElementById('editor-close'       ).onclick  = editorOff;
-	document.getElementById('editor-save'        ).onclick  = editorSave;
+	document.getElementById('fullscreen'             ).onclick  = toggleFullScreen;
+	document.getElementById('d'                      ).onclick  = changeReport;
+	document.getElementById('m'                      ).onclick  = changeReport;
+	document.getElementById('y'                      ).onclick  = changeReport;
+	document.getElementById('opt-last-months-check'  ).onclick  = toggleLastMonths;
+	document.getElementById('opt-last-months-combo'  ).onchange = lastMonthsChanged;
+	document.getElementById('opt-value-filter-check' ).onclick  = toggleValueFilter;
+	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
+	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
+	document.getElementById('opt-future-check'       ).onclick  = toggleFuture;
+	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
+	document.getElementById('filter'                 ).onkeyup  = showReport;
+	document.getElementById('opt-regex-check'        ).onclick  = showReport;
+	document.getElementById('opt-negate-check'       ).onclick  = showReport;
+	document.getElementById('source-file'            ).onchange = loadSelectedFile;
+	document.getElementById('source-reload'          ).onclick  = loadSelectedFile;
+	document.getElementById('opt-date-1-check'       ).onclick  = toggleDateRange;
+	document.getElementById('opt-date-2-check'       ).onclick  = toggleDateRange;
+	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;
+	document.getElementById('opt-date-2-month-combo' ).onchange = dateRangeComboChanged;
+	document.getElementById('opt-date-1-year-combo'  ).onchange = dateRangeComboChanged;
+	document.getElementById('opt-date-2-year-combo'  ).onchange = dateRangeComboChanged;
+	document.getElementById('tag-cloud-opt-group'    ).onclick  = showReport;
+	document.getElementById('chart-data'             ).onchange = showReport;
+	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
+	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
+	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
+	document.getElementById('tag-summary-header'     ).onclick  = toggleTagSummary;
+	document.getElementById('editor-open'            ).onclick  = editorOn;
+	document.getElementById('editor-close'           ).onclick  = editorOff;
+	document.getElementById('editor-save'            ).onclick  = editorSave;
 	document.getElementById('editor-data')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 
 	// Apply user defaults (this code must be after event handlers adding)
 	if (initFullScreen)       { toggleFullScreen(); }
-	if (defaultMonthPartials) { document.getElementById('opt-monthly').checked = true; }
-	if (defaultFuture)        { document.getElementById('opt-future' ).checked = true; }
-	if (defaultRegex)         { document.getElementById('opt-regex'  ).checked = true; }
-	if (defaultNegate)        { document.getElementById('opt-negate' ).checked = true; }
+	if (defaultMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
+	if (defaultFuture)        { document.getElementById('opt-future-check' ).checked = true; }
+	if (defaultRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
+	if (defaultNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
 	if (defaultLastMonths) {
-		document.getElementById('opt-last-months').checked = true;
+		document.getElementById('opt-last-months-check').checked = true;
 		document.getElementById('opt-last-months-extra').style.display = 'block';
 	}
 	if (defaultMonthRange) {
@@ -2836,8 +2836,8 @@ function init() {
 		document.getElementById('opt-date-2-check').checked = false;
 	} else {
 		// disable old
-		document.getElementById('opt-last-months').checked = false;
-		document.getElementById('opt-future' ).checked = false;
+		document.getElementById('opt-last-months-check').checked = false;
+		document.getElementById('opt-future-check').checked = false;
 	}
 
 	// Always show these toolbar boxes opened at init

@@ -252,7 +252,7 @@ a.button.active {
 	padding: 3px 0;
 	margin-bottom: 5px;
 }
-#opt-negate {
+#opt-negate-check {
 	margin-left: 1em;
 }
 
@@ -279,13 +279,13 @@ a.button.active {
 }
 #opt-date-1-year-combo,
 #opt-date-2-year-combo {
-	display: none;
+	display: none;  /* appears in Yearly report */
 }
 #opt-future-box,
 #opt-last-months-box {
 	display: none;  /* legacy, JS will show */
 }
-#value-filter-arg {
+#opt-value-filter-number {
 	display: none;  /* appears when SELECT item is chosen */
 }
 .option-disabled {
