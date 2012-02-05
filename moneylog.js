@@ -16,13 +16,10 @@
 *********************************************************************/
 // Program interface
 var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
-var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
-var defaultLastMonths = false;    // Last months combo inits checked?
 var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
 var defaultMonthPartials = true;  // Monthly checkbox inits checked?
-var defaultFuture = false;        // Show future checkbox inits checked?
 var defaultRegex = false;         // Search regex checkbox inits checked?
 var defaultNegate = false;        // Search negate checkbox inits checked?
 var defaultSearch = '';           // Search for this text on init
@@ -54,13 +51,19 @@ var dataFilesDefault = '';        // Default selected file at init when using mu
 // MoneyLog Browser config
 var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
+
+// Legacy options
+var maxLastMonths = 12;           // Number of months on the last months combo
+var defaultLastMonths = false;    // Last months combo inits checked?
+var defaultFuture = false;        // Show future checkbox inits checked?
+
+
 // The appMode sets the Moneylog flavor:
 // txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
 // one          Full app is in a single moneylog.html file, with user data at the end.
 // dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
 // localStorage Read/edit/save user data to the browser. Must always use the same browser.
 var appMode = 'txt';
-
 
 // Data format
 var useBlankFieldSeparator = false; // Use blanks (TABs and spaces) as field separator?
