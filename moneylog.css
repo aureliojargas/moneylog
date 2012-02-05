@@ -270,21 +270,16 @@ a.button.active {
 	display: none;  /* appears when clicked */
 	margin-left: 1em;
 }
+#month-range-1-combo,
+#month-range-2-combo {
+	float: right;
+	width: auto;
+}
 #value-filter-arg {
 	display: none;  /* appears when SELECT item is chosen */
 }
 .opt-disabled {
 	color: #AAAAAA;
-}
-
-/* ---------------------------------------------- [ month range ] */
-
-#month-range-content {
-	display: none;
-}
-#month-range-content select {
-	float: right;
-	width: auto;
 }
 
 /* ---------------------------------------------- [ tag cloud ] */

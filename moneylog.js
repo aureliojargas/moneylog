@@ -116,7 +116,7 @@ var i18nDatabase = {
 		// labelHelp: 'Question mark',
 		labelReload: 'Reload',
 		labelViewOptions: 'View',
-		labelMonthRange: 'Month Range',
+		// labelMonthRange: 'Month Range',
 		labelMonthRangeFrom: 'From',
 		labelMonthRangeUntil: 'Until',
 		labelTagCloud: 'Tag Cloud',
@@ -161,7 +161,7 @@ var i18nDatabase = {
 		helpTagGroup: 'Show only the entries that have all the selected tags.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
-		helpMonthRange: 'Show/hide the month range controls.',
+		// helpMonthRange: 'Show/hide the month range controls.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
 		helpCancel: 'Discard changes and close the editor.',
@@ -199,7 +199,7 @@ var i18nDatabase = {
 		// labelHelp: 'Ajuda',
 		labelReload: 'Recarregar',
 		labelViewOptions: 'Visualizar',
-		labelMonthRange: 'Meses',
+		// labelMonthRange: 'Meses',
 		labelMonthRangeFrom: 'De',
 		labelMonthRangeUntil: 'Até',
 		labelTagCloud: 'Tags',
@@ -243,7 +243,7 @@ var i18nDatabase = {
 		helpTagGroup: 'Mostra lançamentos que possuem todas as tags selecionadas (deve haver 2+ selecionadas).',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
-		helpMonthRange: 'Mostra e esconde o seletor de meses.',
+		// helpMonthRange: 'Mostra e esconde o seletor de meses.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpCancel: 'Descarta as alterações e fecha o editor sem salvar nada.',
@@ -2242,10 +2242,11 @@ function updateToolbar() {
 	if (reportType === 'd') {
 		unhide = [
 			'search-box',
+			'month-range-1-box',
+			'month-range-2-box',
 			'opt-monthly', 'opt-monthly-label',
 			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
 			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
-			'month-range-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2259,18 +2260,20 @@ function updateToolbar() {
 			'tag-summary-box'
 		];
 		unhide = [
+			'month-range-1-box',
+			'month-range-2-box',
 			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
-			'month-range-box',
 		];
 	// Yearly
 	} else if (reportType === 'y') {
 		hide = [
 			'search-box',
+			'month-range-1-box',
+			'month-range-2-box',
 			'opt-monthly', 'opt-monthly-label',
 			'opt-value-filter', 'opt-value-filter-label', 'opt-value-filter-extra',
 			// Recent *months* doesn't make sense in yearly report
 			'opt-last-months', 'opt-last-months-label', 'opt-last-months-extra',
-			'month-range-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2456,9 +2459,6 @@ function toggleToolbarBox(header_id, content_id) {
 }
 function toggleViewOptions() {
 	return toggleToolbarBox('view-options-header', 'view-options-content');
-}
-function toggleMonthRange() {
-	return toggleToolbarBox('month-range-header', 'month-range-content');
 }
 function toggleTagCloud() {
 	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
@@ -2666,7 +2666,6 @@ function init() {
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
 	document.getElementById('editor-save'              ).innerHTML = i18n.labelSave;
 	document.getElementById('view-options-header'      ).innerHTML = i18n.labelViewOptions;
-	document.getElementById('month-range-header'       ).innerHTML = i18n.labelMonthRange;
 	document.getElementById('month-range-1-label'      ).innerHTML = i18n.labelMonthRangeFrom + ':';
 	document.getElementById('month-range-2-label'      ).innerHTML = i18n.labelMonthRangeUntil + ':';
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
@@ -2687,7 +2686,6 @@ function init() {
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
-	document.getElementById('month-range-header'       ).title = i18n.helpMonthRange;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
 	document.getElementById('editor-open'              ).title = i18n.helpEdit;
@@ -2744,7 +2742,6 @@ function init() {
 	document.getElementById('chart-data'         ).onchange = showReport;
 	document.getElementById('rows-summary-index' ).onchange = updateSelectedRowsSummary;
 	document.getElementById('view-options-header').onclick  = toggleViewOptions;
-	document.getElementById('month-range-header' ).onclick  = toggleMonthRange;
 	document.getElementById('tag-cloud-header'   ).onclick  = toggleTagCloud;
 	document.getElementById('tag-summary-header' ).onclick  = toggleTagSummary;
 	document.getElementById('editor-open'        ).onclick  = editorOn;
@@ -2772,7 +2769,6 @@ function init() {
 	// Always show these toolbar boxes opened at init
 	toggleTagCloud();
 	toggleViewOptions();
-	toggleMonthRange();
 
 	// User choose other default report, let's update the toolbar accordingly
 	if (reportType !== 'd') {
