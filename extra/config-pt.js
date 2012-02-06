@@ -99,6 +99,15 @@
 // Nada ainda.
 
 
+////// WIDGETS
+//
+// initViewWidgetOpen = true    ;// Iniciar com a caixa Visualizar aberta?
+// initTagCloudOpen = true      ;// Iniciar com a nuvem de Tags aberta?
+// initTagSummaryOpen = false   ;// Iniciar com Somatório de tags aberto?
+// showTagCloud = true          ;// Usar o widget Nuvem de tags?
+// showTagSummary = true        ;// Usar o widget Somatório de tags?
+
+
 ////// TABELA DO EXTRATO
 //
 // showRowCount = true          ;// Mostrar o número da linha à esquerda?
