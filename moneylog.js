@@ -74,7 +74,7 @@ var defaultFuture = false;        // Show future checkbox inits checked?
 var appMode = 'txt';
 
 // Data format
-var useBlankFieldSeparator = false; // Use blanks (TABs and spaces) as field separator?
+var useBlankFieldSeparator = true; // Use blanks (TABs and spaces) as field separator?
 var dataFieldSeparator = '\t';
 var dataRecordSeparator = /\r?\n/;  // \r\n Windows, \n Linux/Mac
 var dataTagTerminator = '|';
