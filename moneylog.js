@@ -138,6 +138,7 @@ var i18nDatabase = {
 		labelTagEmpty: 'EMPTY',
 		labelTagNegate: 'Ignore selected tags',
 		labelTagGroup: 'Group selected tags',
+		labelTagReset: 'Reset selection',
 		labelEdit: 'Edit',
 		labelClose: 'Close',
 		labelCancel: 'Cancel',
@@ -166,6 +167,7 @@ var i18nDatabase = {
 		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
 		helpTagNegate: 'Remove from the report all the rows that match the selected tags.',
 		helpTagGroup: 'Only match if the entry has ALL the selected tags.',
+		helpTagReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
 		// helpMonthRange: 'Show/hide the month range controls.',
@@ -223,6 +225,7 @@ var i18nDatabase = {
 		labelTagEmpty: 'VAZIO',
 		labelTagNegate: 'Ignorar estas tags',
 		labelTagGroup: 'Simultaneamente',
+		labelTagReset: 'Desmarcar todas',
 		labelEdit: 'Editar',
 		labelClose: 'Fechar',
 		labelCancel: 'Cancelar',
@@ -250,6 +253,7 @@ var i18nDatabase = {
 		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
 		helpTagNegate: 'Remove do extrato os lançamentos que possuem as tags selecionadas.',
 		helpTagGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
+		helpTagReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		// helpMonthRange: 'Mostra e esconde o seletor de meses.',
@@ -1657,11 +1661,14 @@ function applyTags(theData) {
 	// Save the tags menu (or make it empty)
 	document.getElementById('tag-cloud-tags').innerHTML = tagsMenu;
 
-	// The options box is only shown if we have at least one selected tag
+	// The options box is only shown if we have at least 1 selected tag
 	document.getElementById('tag-cloud-options').style.display = (selectedTags.length > 0) ? 'block' : 'none';
 
-	// The group checkbox is only shown if we have multiple selected tags
+	// The group option is only shown if we have at least 2 selected tags
 	document.getElementById('tag-cloud-opt-group-box').style.display = (selectedTags.length > 1) ? 'block' : 'none';
+
+	// The reset option is only shown if we have at least 3 selected tags
+	document.getElementById('tag-cloud-opt-reset-box').style.display = (selectedTags.length > 2) ? 'block' : 'none';
 
 	// Tag filter was active?
 	if (selectedTags.length > 0) {
@@ -2603,6 +2610,23 @@ function valueFilterChanged() {
 	showReport();
 }
 
+function resetTagCloud() {
+	var i, tagcloud, checkboxes;
+
+	tagcloud = document.getElementById('tag-cloud-tags');
+	checkboxes = tagcloud.getElementsByTagName('input');
+
+	for (i = 0; i < checkboxes.length; i++) {
+		checkboxes[i].checked = false;
+		checkboxes[i].removeAttribute('checked');
+		// Note: Since I'm using CSS rule "input[checked]+span", checked=false is not enough.
+	}
+
+	// The calling checkbox acts like a button, with temporary ON state
+	this.checked = false;
+
+	showReport();
+}
 function showHideEditButton() {
 	var el;
 	if (appMode === 'dropbox') {
@@ -2733,6 +2757,7 @@ function init() {
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelNegate;
 	document.getElementById('tag-cloud-opt-negate-label').innerHTML = i18n.labelTagNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagGroup;
+	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagReset;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEdit;
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
@@ -2758,6 +2783,7 @@ function init() {
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-negate-label').title = i18n.helpTagNegate;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
+	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagReset;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
@@ -2811,8 +2837,9 @@ function init() {
 	document.getElementById('opt-date-2-month-combo' ).onchange = dateRangeComboChanged;
 	document.getElementById('opt-date-1-year-combo'  ).onchange = dateRangeComboChanged;
 	document.getElementById('opt-date-2-year-combo'  ).onchange = dateRangeComboChanged;
-	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-negate-check').onclick  = showReport;
+	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
+	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
 	document.getElementById('chart-data'             ).onchange = showReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
