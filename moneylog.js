@@ -2562,23 +2562,13 @@ function toggleTagSummary() {
 }
 
 function toggleLastMonths() {
-
-	// show/hide extra options
-	var extra = document.getElementById('opt-last-months-extra');
-	extra.style.display = (this.checked) ? 'block' : 'none';
-
-	// reload report
+	toggleCheckboxOptionExtra(this);
 	overviewData = [];  // clear cache
 	showReport();
 }
 
 function toggleValueFilter() {
-
-	// show/hide extra options
-	var extra = document.getElementById('opt-value-filter-extra');
-	extra.style.display = (this.checked) ? 'block' : 'none';
-
-	// reload report
+	toggleCheckboxOptionExtra(this);
 	showReport();
 }
 
@@ -2588,6 +2578,14 @@ function toggleMonthly() {
 		sortColRev = false;
 	}
 	showReport();
+}
+
+function toggleCheckboxOptionExtra(checkbox) {
+	// Show/hide the "*-extra" DIV with aditional options
+	var extra = document.getElementById(checkbox.id.replace('-check', '-extra'));
+	if (hasClass(extra, 'auto-hide')) {
+		extra.style.display = (checkbox.checked) ? 'block' : 'none';
+	}
 }
 
 function toggleRowHighlight(el) {
@@ -2897,6 +2895,8 @@ function init() {
 		// disable old
 		document.getElementById('opt-last-months-check').checked = false;
 		document.getElementById('opt-future-check').checked = false;
+		// disable auto-hide since now we have only one option who uses it
+		removeClass(document.getElementById('opt-value-filter-extra'), 'auto-hide');
 	}
 
 	// Always show these toolbar boxes opened at init

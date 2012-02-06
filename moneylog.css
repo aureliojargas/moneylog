@@ -267,8 +267,10 @@ a.button.active {
 	clear: both;
 }
 .checkbox-option-extra {
-	display: none;  /* appears when clicked */
 	margin-left: 1em;
+}
+.auto-hide {
+	display: none;  /* appears when clicked, see toggleCheckboxOptionExtra() */
 }
 .option-disabled {
 	color: #AAAAAA;
