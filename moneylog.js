@@ -612,15 +612,6 @@ function sortIgnoreCase(a, b) {
 	return 0;
 }
 
-// http://stackoverflow.com/questions/286921/efficiently-replace-all-accented-characters-in-a-string
-// Match 'regex' in 'text', and substitute by 'table' item
-function translateTableForRegex(text, table, regex) {
-	translator = function(match) {
-		return table[match] || match;
-	}
-	return text.replace(regex, translator);
-}
-
 function getCurrentDate() {
 	var z, m, d;
 	z = new Date();
@@ -713,7 +704,7 @@ function getMonthRange(date1, date2) {
 function formatDate(date) {
 	// Available tokens (i.e. for 1999-12-31): Y=1999, y=99, m=12, d=31, b=Dec, B=December
 
-	var fmt, table = {};
+	var fmt;
 
 	if (!showLocaleDate) {
 		return date;  // nothing to do
@@ -734,18 +725,34 @@ function formatDate(date) {
 			return date;  // unknown format
 	}
 
-	// YYYY-MM-DD
-	table.Y = date.slice(0,  4) || 'Y';
-	table.y = date.slice(2,  4) || 'y';
-	table.m = date.slice(5,  7) || 'm';
-	table.d = date.slice(8, 10) || 'd';
-	if (table.m !== 'm') {
-		table.B = i18n.monthNames[parseInt(table.m, 10)];
-		table.b = table.B.slice(0, 3);
-	}
-
 	// Atomic replace to avoid concurrence
-	return translateTableForRegex(fmt, table, /[YymdBb]/g);
+	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
+	return fmt.replace(
+			/(\\)?[YymdBb]/g,
+			function (m) {
+				// Ignore escaped chars as \Y, \b, ...
+				if (m.charAt(0) === '\\') {
+					return m.replace('\\', '');
+				}
+				// Valid input: YYYY-MM-DD, YYYY-MM or YYYY
+				switch (m) {
+					case 'Y':
+						return date.slice(0,  4) || 'Y';
+					case 'y':
+						return date.slice(2,  4) || 'y';
+					case 'm':
+						return date.slice(5,  7) || 'm';
+					case 'd':
+						return date.slice(8, 10) || 'd';
+					case 'B':
+						return i18n.monthNames[parseInt(date.slice(5, 7), 10)] || 'B';
+					case 'b':
+						return i18n.monthNames[parseInt(date.slice(5, 7), 10)].slice(0, 3) || 'b';
+					default:
+						return m;
+				}
+			}
+		);
 }
 
 function prettyFloat(num, noHtml) {
