@@ -77,8 +77,16 @@ insert_meta='
 <link rel="apple-touch-icon" href="images/ios_icon.png" />\
 <link rel="apple-touch-startup-image" href="images/ios_splash.png" />
 '
+insert_analytics='
+/^<\/head>/ {
+	r gen-cloud-analytics.html
+	a \
+</head>
+	d
+}
+'
 
-echo "$insert_css $insert_js $insert_txt $insert_meta" > sed_script
+echo "$insert_css $insert_js $insert_txt $insert_meta $insert_analytics" > sed_script
 
 # Do it
 control_m=$(printf '\r');
