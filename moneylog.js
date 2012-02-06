@@ -564,6 +564,47 @@ RegExp.escape = function (str) {
 	return str.replace(specials, '\\$&');
 };
 
+// Date helpers
+Date.prototype.getYearML = function () {  // Returns as string
+	return this.getFullYear().toString();
+}
+Date.prototype.getMonthML = function () {  // Returns as string and zero padded 
+	var m = this.getMonth() + 1;  // zero based
+	return (m < 10) ? '0' + m : m.toString();
+}
+Date.prototype.getDateML = function () {  // Returns as string and zero padded 
+	var d = this.getDate();
+	return (d < 10) ? '0' + d : d.toString();
+}
+Date.prototype.getFullMonthML = function () {  // Returns "YYYY-MM"
+	return this.getYearML() + '-' + this.getMonthML();
+}
+Date.prototype.getMonthName = function () {
+	return i18n.monthNames[this.getMonth() + 1];  // zero based
+}
+Date.prototype.getMonthShortName = function () {
+	return this.getMonthName.slice(0, 3);
+}
+Date.prototype.fromML = function (str) {  // str: YYYY-MM-DD
+	this.setFullYear(
+		parseInt(str.slice(0,  4), 10),
+		parseInt(str.slice(5,  7), 10) - 1,  // month is zero-based
+		parseInt(str.slice(8, 10), 10) || 1);
+}
+Date.prototype.toML = function () {  // Returns "YYYY-MM-DD"
+	return this.getYearML() + '-' + this.getMonthML() + '-' + this.getDateML();
+}
+Date.prototype.setMonthOffset = function (n) {  // negative n is ok
+	// Beware: 2010-01-31 + 1 = 2010-03-03
+	// Set day to 1 to make month-related operations
+	this.setMonth(this.getMonth() + (n || 0));
+}
+String.prototype.toDate = function () {
+	var z = new Date();
+	z.fromML(this);
+	return z;
+}
+
 
 /////////////////////////////////////////////////////////////////////
 //                              TOOLS
@@ -613,46 +654,24 @@ function sortIgnoreCase(a, b) {
 }
 
 function getCurrentDate() {
-	var z, m, d;
-	z = new Date();
-	m = z.getMonth() + 1;
-	d = z.getDate();
-	m = (m < 10) ? '0' + m : m;
-	d = (d < 10) ? '0' + d : d;
-	return z.getFullYear() + '-' + m + '-' + d;
+	return new Date().toML();
 }
 
 function getPastMonth(months) {
+	// months=0 means current month
 	// Returns: YYYY-MM-00
-	var z, m, y;
-	z = new Date();
-	m = z.getMonth() + 1 - months; // zero based
-	y = z.getFullYear();
-	if (m < 1) { // past year
-		m = 12 + m;
-		y = y - 1;
-	}
-	m = (m < 10) ? '0' + m : m;
-	return y + '-' + m + '-' + '00';
+	return addMonths(getCurrentDate(), -months).slice(0, 8) + '00';
 }
 
 function addMonths(yyyymmdd, n) {
-	var y, m, d;
-	yyyymmdd = yyyymmdd.replace(/-/g, '');
-	y = parseInt(yyyymmdd.slice(0, 4), 10);
-	m = parseInt(yyyymmdd.slice(4, 6), 10);
-	d = yyyymmdd.slice(6, 8);
-	m = m + n;
-	if (m > 12) {
-		y = y + Math.floor(m / 12);
-		m = m % 12;
-		if (m === 0) { // Exception for n=24, n=36, ...
-			m = 12;
-			y = y - 1;
-		}
-	}
-	m = (m < 10) ? '0' + m : m;
-	return y + '-' + m + '-' + d;
+	// It's all about months, not taking days into account.
+	// addMonths("2010-01-31", 1)  -> "2010-02-31"
+	// addMonths("2010-01-31", -2) -> "2009-11-31"
+
+	var z = yyyymmdd.toDate();
+	z.setDate(1);  // set day 1st
+	z.setMonthOffset(n);  // add
+	return z.toML().slice(0, 8) + yyyymmdd.slice(8, 10);  // restore original day
 }
 
 function getYearRange(date1, date2) {
@@ -1489,7 +1508,7 @@ function filterData() {
 
 		// [X] Recent Only, works for daily/monthly
 		if (document.getElementById('opt-last-months-check').checked && reportType !== 'y') {
-			firstDate = getPastMonth(parseInt(document.getElementById('opt-last-months-combo').value, 10) - 1);
+			firstDate = getPastMonth(parseInt(document.getElementById('opt-last-months-combo').value, 10) - 1);  // 1 = current
 		}
 		// [X] Future Data, works for all reports
 		showFuture = document.getElementById('opt-future-check').checked;
