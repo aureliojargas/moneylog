@@ -33,6 +33,11 @@ var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summ
 var initFullScreen = false;       // Start app in Full Screen mode?
 var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
 
+// Widgets
+var initViewWidgetOpen = true;    // Start app with the View widget opened?
+var initTagCloudOpen = true;      // Start app with the Tag Cloud widget opened?
+var initTagSummaryOpen = false;   // Start app with the Tag Summary widget opened?
+
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
 var showMiniBarsLabels = true;    // Show the labels inside the bars?
@@ -2885,8 +2890,9 @@ function init() {
 	}
 
 	// Always show these toolbar boxes opened at init
-	toggleTagCloud();
-	toggleViewOptions();
+	if (initViewWidgetOpen)  { toggleViewOptions(); }
+	if (initTagCloudOpen)    {    toggleTagCloud(); }
+	if (initTagSummaryOpen)  {  toggleTagSummary(); }
 
 	// User choose other default report, let's update the toolbar accordingly
 	if (reportType !== 'd') {
