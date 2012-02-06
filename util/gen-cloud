@@ -72,8 +72,13 @@ insert_js='
 insert_txt="
 /^<pre/ r $txt_path
 "
+insert_meta='
+/^<link rel="shortcut icon"/ a \
+<link rel="apple-touch-icon" href="images/ios_icon.png" />\
+<link rel="apple-touch-startup-image" href="images/ios_splash.png" />
+'
 
-echo "$insert_css $insert_js $insert_txt" > sed_script
+echo "$insert_css $insert_js $insert_txt $insert_meta" > sed_script
 
 # Do it
 control_m=$(printf '\r');
