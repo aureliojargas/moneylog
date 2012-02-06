@@ -37,6 +37,9 @@ var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent On
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
 var initTagCloudOpen = true;      // Start app with the Tag Cloud widget opened?
 var initTagSummaryOpen = false;   // Start app with the Tag Summary widget opened?
+var showViewWidget = true;        // Show View widget in the sidebar?
+var showTagCloud = true;          // Show Tag Cloud widget in the sidebar?
+var showTagSummary = true;        // Show Tag Summary widget in the sidebar?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -2322,6 +2325,11 @@ function updateToolbar() {
 	remove = [];
 	hide = [];
 	unhide = [];
+	add_exceptions = [];
+
+	if (!showViewWidget) { add_exceptions.push('view-options-box'); }
+	if (!showTagCloud)   { add_exceptions.push('tag-cloud-box'   ); }
+	if (!showTagSummary) { add_exceptions.push('tag-summary-box' ); }	
 
 	// Daily
 	if (reportType === 'd') {
@@ -2384,7 +2392,9 @@ function updateToolbar() {
 
 	// Show/hide toolbar elements
 	for (i = 0; i < add.length; i++) {
-		document.getElementById(add[i]).style.display = 'block';
+		if (!add_exceptions.hasItem(add[i])) {
+			document.getElementById(add[i]).style.display = 'block';
+		}
 	}
 	for (i = 0; i < remove.length; i++) {
 		document.getElementById(remove[i]).style.display = 'none';
@@ -2893,6 +2903,17 @@ function init() {
 	if (initViewWidgetOpen)  { toggleViewOptions(); }
 	if (initTagCloudOpen)    {    toggleTagCloud(); }
 	if (initTagSummaryOpen)  {  toggleTagSummary(); }
+
+	// Maybe hide some widgets?
+	if (!showViewWidget) {
+		document.getElementById('view-options-box').style.display = 'none';
+	}
+	if (!showTagCloud) {
+		document.getElementById('tag-cloud-box').style.display = 'none';
+	}
+	if (!showTagSummary) {
+		document.getElementById('tag-summary-box').style.display = 'none';
+	}
 
 	// User choose other default report, let's update the toolbar accordingly
 	if (reportType !== 'd') {

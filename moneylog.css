@@ -270,6 +270,15 @@ a.button.active {
 	display: none;  /* appears when clicked */
 	margin-left: 1em;
 }
+.option-disabled {
+	color: #AAAAAA;
+}
+
+/* ---------------------------------------------- [ view ] */
+
+#view-options-content {
+	display: none;  /* JS will show */
+}
 #opt-date-1-month-combo,
 #opt-date-2-month-combo,
 #opt-date-1-year-combo,
@@ -287,9 +296,6 @@ a.button.active {
 }
 #opt-value-filter-number {
 	display: none;  /* appears when SELECT item is chosen */
-}
-.option-disabled {
-	color: #AAAAAA;
 }
 
 /* ---------------------------------------------- [ tag cloud ] */
