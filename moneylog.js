@@ -594,6 +594,38 @@ Date.prototype.fromML = function (str) {  // str: YYYY-MM-DD
 Date.prototype.toML = function () {  // Returns "YYYY-MM-DD"
 	return this.getYearML() + '-' + this.getMonthML() + '-' + this.getDateML();
 }
+Date.prototype.format = function (fmt) {
+	// Available tokens (i.e. for 1999-12-31):
+	// Y=1999, y=99, m=12, d=31, b=Dec, B=December
+
+	var d = this;
+	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
+	return fmt.replace(
+			/(\\)?[YymdBb]/g,
+			function (m) {
+				// Ignore escaped chars as \Y, \b, ...
+				if (m.charAt(0) === '\\') {
+					return m.replace('\\', '');
+				}
+				switch (m) {
+					case 'Y':
+						return d.getYearML() || 'Y';
+					case 'y':
+						return d.getYearML().slice(2, 4) || 'y';
+					case 'm':
+						return d.getMonthML() || 'm';
+					case 'd':
+						return d.getdML() || 'd';
+					case 'B':
+						return d.getMonthName() || 'B';
+					case 'b':
+						return d.getMonthShortName() || 'b';
+					default:
+						return m;
+				}
+			}
+		);
+}
 Date.prototype.setMonthOffset = function (n) {  // negative n is ok
 	// Beware: 2010-01-31 + 1 = 2010-03-03
 	// Set day to 1 to make month-related operations
@@ -722,40 +754,10 @@ function getMonthRange(date1, date2) {
 }
 
 function formatDate(date, fmt) {
-	// date: YYYY-MM-DD
-	// fmt : Available tokens (i.e. for 1999-12-31):
-	//       Y=1999, y=99, m=12, d=31, b=Dec, B=December
-
+	// date: YYYY-MM-DD, fmt: see Date.prototype.format()
 	var d = new Date();
 	d.fromML(date);
-
-	// Using atomic replace to avoid concurrence
-	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
-	return fmt.replace(
-			/(\\)?[YymdBb]/g,
-			function (m) {
-				// Ignore escaped chars as \Y, \b, ...
-				if (m.charAt(0) === '\\') {
-					return m.replace('\\', '');
-				}
-				switch (m) {
-					case 'Y':
-						return d.getYearML() || 'Y';
-					case 'y':
-						return d.getYearML().slice(2, 4) || 'y';
-					case 'm':
-						return d.getMonthML() || 'm';
-					case 'd':
-						return d.getDateML() || 'd';
-					case 'B':
-						return d.getMonthName() || 'B';
-					case 'b':
-						return d.getMonthShortName() || 'b';
-					default:
-						return m;
-				}
-			}
-		);
+	return d.format(fmt);
 }
 
 function formatReportDate(date) {
