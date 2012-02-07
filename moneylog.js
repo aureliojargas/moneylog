@@ -2287,8 +2287,8 @@ function populateMonthRangeCombo() {
 	el1 = document.getElementById('opt-date-1-month-combo');
 	el2 = document.getElementById('opt-date-2-month-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
-	thisMonth = getCurrentDate().slice(0, 7);
-	pastMonth = getPastMonth(initLastMonths - 1).slice(0, 7);
+	thisMonth = getCurrentDate().toDate().format('Y-m');
+	pastMonth = getPastMonth(initLastMonths - 1).toDate().format('Y-m');
 
 	// Save currently selected items
 	index1 = el1.selectedIndex;
