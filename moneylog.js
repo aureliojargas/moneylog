@@ -31,6 +31,7 @@ var reportType = 'd';             // Initial report type: d m y (daily, monthly,
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 var initFullScreen = false;       // Start app in Full Screen mode?
+var initMonthsOffsetFrom = -2;    // From: month will be N months from now
 
 // Widgets
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
@@ -2256,7 +2257,7 @@ function populateLastMonthsCombo() {
 }
 
 function populateYearRangeCombo() {
-	var el1, el2, range, i, y, m, thisMonth, pastMonth, index1, index2;
+	var el1, el2, range, i, index1, index2;
 
 	el1 = document.getElementById('opt-date-1-year-combo');
 	el2 = document.getElementById('opt-date-2-year-combo');
@@ -2282,13 +2283,12 @@ function populateYearRangeCombo() {
 }
 
 function populateMonthRangeCombo() {
-	var el1, el2, range, i, y, m, thisMonth, pastMonth, index1, index2;
+	var el1, el2, range, i, y, m, thisMonth, firstMonth, index1, index2;
 
 	el1 = document.getElementById('opt-date-1-month-combo');
 	el2 = document.getElementById('opt-date-2-month-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
 	thisMonth = getCurrentDate().toDate().format('Y-m');
-	pastMonth = getPastMonth(initLastMonths - 1).toDate().format('Y-m');
 
 	// Save currently selected items
 	index1 = el1.selectedIndex;
@@ -2297,8 +2297,18 @@ function populateMonthRangeCombo() {
 	// None selected? So we're at app start up.
 	// Let's choose which items to select by default.
 	if (index1 === -1) {
-		// First combo will respect initLastMonths setting
-		index1 = range.indexOf(pastMonth);
+
+		// Get user defaults
+		if (useLegacyDateFilter) {
+			firstMonth = getPastMonth(initLastMonths - 1);
+			firstMonth = firstMonth.toDate().format('Y-m');
+		} else {
+			if (typeof initMonthsOffsetFrom === 'number') {
+				firstMonth = addMonths(getCurrentDate(), initMonthsOffsetFrom);
+				firstMonth = firstMonth.toDate().format('Y-m');
+			}
+		}
+		index1 = range.indexOf(firstMonth);
 
 		// If that month is out of range, we'll select the oldest
 		if (index1 === -1) {
