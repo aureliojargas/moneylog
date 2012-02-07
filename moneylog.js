@@ -14,23 +14,26 @@
 * needs, here is the place to customize this script.
 *
 *********************************************************************/
-// Program interface
+
 var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
-var initLastMonths = 3;           // Initial value for last months combo
-var checkDateFrom = true;         // Date filter From: checkbox inits checked?
-var checkDateUntil = true;        // Date filter To: checkbox inits checked?
+var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
+var initFullScreen = false;       // Start app in Full Screen mode?
 var checkMonthPartials = true;    // Monthly checkbox inits checked?
-var checkRegex = false;           // Search regex checkbox inits checked?
-var checkNegate = false;          // Search negate checkbox inits checked?
-var defaultSearch = '';           // Search for this text on init
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
-var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
-var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
-var initFullScreen = false;       // Start app in Full Screen mode?
+
+// Search
+var defaultSearch = '';           // Search for this text on init
+var checkRegex = false;           // Search regex checkbox inits checked?
+var checkNegate = false;          // Search negate checkbox inits checked?
+
+// Date
+var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
+var checkDateFrom = true;         // Date filter From: checkbox inits checked?
+var checkDateUntil = true;        // Date filter To: checkbox inits checked?
 var initMonthsOffsetFrom = -2;    // From: month will be N months from now
 var initMonthsOffsetUntil = 0;    // To:   month will be N months from now
 
@@ -64,6 +67,7 @@ var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 // Legacy options
 var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
 var maxLastMonths = 12;           // Number of months on the last months combo
+var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
 
