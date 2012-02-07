@@ -1476,13 +1476,14 @@ function parseData() {
 	if (parsedData.length > 0) {
 		dataFirstDate = parsedData[0][0];
 		dataLastDate = parsedData[parsedData.length-1][0];
+
+		// Update the date range combos
+		populateDateRangeCombos('m');
+		populateDateRangeCombos('y');
 	} else {
 		dataFirstDate = dataLastDate = undefined;
 	}
 
-	// Update the date range combos
-	populateDateRangeCombos('m');
-	populateDateRangeCombos('y');
 }
 
 function filterData() {
