@@ -31,7 +31,6 @@ var reportType = 'd';             // Initial report type: d m y (daily, monthly,
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 var initFullScreen = false;       // Start app in Full Screen mode?
-var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
 
 // Widgets
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
@@ -61,6 +60,7 @@ var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
 
 // Legacy options
+var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
 var maxLastMonths = 12;           // Number of months on the last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
