@@ -716,8 +716,8 @@ function getYearRange(date1, date2) {
 		return results;
 	}
 
-	y1 = parseInt(date1.slice(0, 4), 10);
-	y2 = parseInt(date2.slice(0, 4), 10);
+	y1 = date1.toDate().getFullYear();
+	y2 = date2.toDate().getFullYear();
 
 	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
 		results.push(y);
@@ -734,10 +734,14 @@ function getMonthRange(date1, date2) {
 		return results;
 	}
 
-	y1 = parseInt(date1.slice(0, 4), 10);
-	y2 = parseInt(date2.slice(0, 4), 10);
-	m1 = parseInt(date1.slice(5, 7), 10);
-	m2 = parseInt(date2.slice(5, 7), 10);
+	// str to Date
+	date1 = date1.toDate();
+	date2 = date2.toDate();
+
+	y1 = date1.getFullYear();
+	y2 = date2.getFullYear();
+	m1 = date1.getMonth() + 1;  // zero based
+	m2 = date2.getMonth() + 1;
 
 	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
 
