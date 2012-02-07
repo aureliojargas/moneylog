@@ -31,7 +31,7 @@ var checkRegex = false;           // Search regex checkbox inits checked?
 var checkNegate = false;          // Search negate checkbox inits checked?
 
 // Date
-var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
+var showLocaleDate = true;        // Show dates in the regional format? (ie: 12/31/2009)
 var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
 var initMonthOffsetFrom = -2;     // From: month will be N months from now
