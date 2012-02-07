@@ -34,8 +34,10 @@ var checkNegate = false;          // Search negate checkbox inits checked?
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
-var initMonthOffsetFrom = -2;    // From: month will be N months from now
-var initMonthOffsetUntil = 0;    // To:   month will be N months from now
+var initMonthOffsetFrom = -2;     // From: month will be N months from now
+var initMonthOffsetUntil = 0;     // To:   month will be N months from now
+var initYearOffsetFrom;           // From: year will be N years from now (default OFF)
+var initYearOffsetUntil;          // To:   year will be N years from now (default OFF)
 
 // Widgets
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
@@ -725,7 +727,7 @@ function getYearRange(date1, date2) {
 	y2 = date2.toDate().getFullYear();
 
 	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
-		results.push(y);
+		results.push(y.toString());
 	}
 	return results;
 }
@@ -2262,15 +2264,47 @@ function populateLastMonthsCombo() {
 }
 
 function populateYearRangeCombo() {
-	var el1, el2, range, i, index1, index2;
+	var el1, el2, range, i, index1, index2, first, last;
 
 	el1 = document.getElementById('opt-date-1-year-combo');
 	el2 = document.getElementById('opt-date-2-year-combo');
 	range = getYearRange(dataFirstDate, dataLastDate);
 
-	// Save currently selected items, or apply defaults
-	index1 = (el1.selectedIndex !== -1) ? el1.selectedIndex : 0;
-	index2 = (el2.selectedIndex !== -1) ? el2.selectedIndex : range.length - 1;
+	// Save currently selected items
+	index1 = el1.selectedIndex;
+	index2 = el2.selectedIndex;
+
+	// None selected? So we're at app start up.
+	// Let's choose which items to select by default.
+	if (index1 === -1) {
+
+		// Get user defaults
+		if (typeof initYearOffsetFrom === 'number') {
+			first = addMonths(getCurrentDate(), initYearOffsetFrom * 12);
+			first = first.toDate().format('Y');
+			index1 = range.indexOf(first);
+			console.log(index1);
+		}
+
+		// If unset or the month is out of range, we'll select the oldest
+		if (index1 === -1) {
+			index1 = 0;
+		}
+	}
+	if (index2 === -1) {
+
+		// Get user defaults
+		if (typeof initYearOffsetUntil === 'number') {
+			last = addMonths(getCurrentDate(), initYearOffsetUntil * 12);
+			last = last.toDate().format('Y');
+			index2 = range.indexOf(last);
+		}
+
+		// If unset or the month is out of range, we'll select the newer
+		if (index2 === -1) {
+			index2 = range.length - 1;
+		}
+	}
 
 	// First, make sure the combo is empty
 	el1.options.length = 0;
