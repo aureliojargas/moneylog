@@ -34,8 +34,8 @@ var checkNegate = false;          // Search negate checkbox inits checked?
 var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/31/2009)
 var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
-var initMonthsOffsetFrom = -2;    // From: month will be N months from now
-var initMonthsOffsetUntil = 0;    // To:   month will be N months from now
+var initMonthOffsetFrom = -2;    // From: month will be N months from now
+var initMonthOffsetUntil = 0;    // To:   month will be N months from now
 
 // Widgets
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
@@ -2303,8 +2303,8 @@ function populateMonthRangeCombo() {
 	if (index1 === -1) {
 
 		// Get user defaults
-		if (typeof initMonthsOffsetFrom === 'number') {
-			firstMonth = addMonths(getCurrentDate(), initMonthsOffsetFrom);
+		if (typeof initMonthOffsetFrom === 'number') {
+			firstMonth = addMonths(getCurrentDate(), initMonthOffsetFrom);
 			firstMonth = firstMonth.toDate().format('Y-m');
 			index1 = range.indexOf(firstMonth);
 		}
@@ -2317,8 +2317,8 @@ function populateMonthRangeCombo() {
 	if (index2 === -1) {
 
 		// Get user defaults
-		if (typeof initMonthsOffsetUntil === 'number') {
-			lastMonth = addMonths(getCurrentDate(), initMonthsOffsetUntil);
+		if (typeof initMonthOffsetUntil === 'number') {
+			lastMonth = addMonths(getCurrentDate(), initMonthOffsetUntil);
 			lastMonth = lastMonth.toDate().format('Y-m');
 			index2 = range.indexOf(lastMonth);
 		}
