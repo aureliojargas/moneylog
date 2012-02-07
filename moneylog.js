@@ -1469,7 +1469,7 @@ function parseData() {
 		// Note: This code *must* be here at the end of the loop,
 		//       specially after the recurring data code. If not,
 		//       recurring data could be lost.
-		if (ignoreDataOlderThan && rowDate <= ignoreDataOlderThan) {
+		if (ignoreDataOlderThan && rowDate < ignoreDataOlderThan) {
 			continue;
 		}
 
