@@ -720,31 +720,12 @@ function getMonthRange(date1, date2) {
 	return results;
 }
 
-function formatDate(date) {
-	// Available tokens (i.e. for 1999-12-31): Y=1999, y=99, m=12, d=31, b=Dec, B=December
+function formatDate(date, fmt) {
+	// date: YYYY-MM-DD, YYYY-MM or YYYY
+	// fmt : Available tokens (i.e. for 1999-12-31):
+	//       Y=1999, y=99, m=12, d=31, b=Dec, B=December
 
-	var fmt;
-
-	if (!showLocaleDate) {
-		return date;  // nothing to do
-	}
-
-	// Valid input: YYYY-MM-DD, YYYY-MM or YYYY
-	switch (date.length) {
-		case 10:
-			fmt = i18n.dateFormat;
-			break;
-		case 7:
-			fmt = i18n.dateFormatMonth;
-			break;
-		case 4:
-			fmt = i18n.dateFormatYear;
-			break;
-		default:
-			return date;  // unknown format
-	}
-
-	// Atomic replace to avoid concurrence
+	// Using atomic replace to avoid concurrence
 	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
 	return fmt.replace(
 			/(\\)?[YymdBb]/g,
@@ -753,7 +734,6 @@ function formatDate(date) {
 				if (m.charAt(0) === '\\') {
 					return m.replace('\\', '');
 				}
-				// Valid input: YYYY-MM-DD, YYYY-MM or YYYY
 				switch (m) {
 					case 'Y':
 						return date.slice(0,  4) || 'Y';
@@ -772,6 +752,25 @@ function formatDate(date) {
 				}
 			}
 		);
+}
+
+function formatReportDate(date) {
+	// This key controls if the report date should be formatted
+	if (!showLocaleDate) {
+		return date;  // nothing to do
+	}
+
+	// Valid input: YYYY-MM-DD, YYYY-MM or YYYY
+	switch (date.length) {
+		case 10:
+			return formatDate(date, i18n.dateFormat);
+		case 7:
+			return formatDate(date, i18n.dateFormatMonth);
+		case 4:
+			return formatDate(date, i18n.dateFormatYear);
+		default:
+			return date;  // unknown format
+	}
 }
 
 function prettyFloat(num, noHtml) {
@@ -1067,7 +1066,7 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	if (showRowCount) {
 		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
 	}
-	theRow.push('<td>' + formatDate(theMonth) + '<\/td>');
+	theRow.push('<td>' + formatReportDate(theMonth) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
@@ -2134,11 +2133,11 @@ function showDetailed() {
 				results.push('<td class="row-count">' + (rowCount) + '<\/td>');
 			}
 
-			results.push('<td class="date">'   + formatDate(rowDate)    + '<\/td>');
-			results.push('<td class="number">' + prettyFloat(rowAmount) + '<\/td>');
-			results.push('<td class="tags">'   + rowTags.join(', ')     + '<\/td>');
-			results.push('<td>'                + rowDescription         + '<\/td>');
-			results.push('<td class="number">' + prettyFloat(sumTotal)  + '<\/td>');
+			results.push('<td class="date">'   + formatReportDate(rowDate) + '<\/td>');
+			results.push('<td class="number">' + prettyFloat(rowAmount)    + '<\/td>');
+			results.push('<td class="tags">'   + rowTags.join(', ')        + '<\/td>');
+			results.push('<td>'                + rowDescription            + '<\/td>');
+			results.push('<td class="number">' + prettyFloat(sumTotal)     + '<\/td>');
 			results.push('<\/tr>');
 
 		}
