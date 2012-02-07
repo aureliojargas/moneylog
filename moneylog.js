@@ -755,9 +755,7 @@ function getMonthRange(date1, date2) {
 
 function formatDate(date, fmt) {
 	// date: YYYY-MM-DD, fmt: see Date.prototype.format()
-	var d = new Date();
-	d.fromML(date);
-	return d.format(fmt);
+	return date.toDate().format(fmt);
 }
 
 function formatReportDate(date) {
