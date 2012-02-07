@@ -65,6 +65,8 @@ var dataFilesDefault = '';        // Default selected file at init when using mu
 // MoneyLog Browser config
 var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
+// Ignore old data
+var ignoreDataOlderThan = '';     // Ignore entries older than this date (ie: 2010-01-01)
 
 // Legacy options
 var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
@@ -1461,6 +1463,16 @@ function parseData() {
 			rowDescription = rowText || '&nbsp;';
 		}
 
+		/////////////////////////////////////////////////////////////
+
+		// Ignore old data?
+		// Note: This code *must* be here at the end of the loop,
+		//       specially after the recurring data code. If not,
+		//       recurring data could be lost.
+		if (ignoreDataOlderThan && rowDate <= ignoreDataOlderThan) {
+			continue;
+		}
+
 		// Save the validated data
 		parsedData.push([rowDate, rowAmount, rowTags, rowDescription]);
 	}
@@ -1483,7 +1495,6 @@ function parseData() {
 	} else {
 		dataFirstDate = dataLastDate = undefined;
 	}
-
 }
 
 function filterData() {
@@ -2834,6 +2845,11 @@ function init() {
 
 	// Mark current report as active (CSS)
 	addClass(document.getElementById(reportType), 'active');
+
+	// Notice the user that we're ignoring some old data
+	if (ignoreDataOlderThan) {
+		document.getElementById('footer-message').innerHTML = 'ignoreDataOlderThan = ' + ignoreDataOlderThan;
+	}
 
 	// localStorage browser support check
 	if (appMode === 'localStorage' && !window.localStorage) {

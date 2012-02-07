@@ -523,6 +523,14 @@ table.chart tr:hover td {
 	margin-bottom: 5px;
 }
 
+/* ---------------------------------------------- Footer */
+
+#footer-message {
+	color: #CCCCCC;
+	text-align: center;
+	margin-top: 4em;
+}
+
 /* ---------------------------------------------- Editor */
 
 /* The editor */
