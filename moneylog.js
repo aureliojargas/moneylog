@@ -116,8 +116,8 @@ var i18nDatabase = {
 	en: {
 		centsSeparator: '.',
 		thousandSeparator: ',',
-		dateFormat: 'm/d/y',
-		dateFormatMonth: 'm/Y',
+		dateFormat: 'b d, Y',
+		dateFormatMonth: 'B Y',
 		dateFormatYear: 'Y',
 		monthNames: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 		appUrl: 'http://aurelio.net/soft/moneylog/',
@@ -203,8 +203,8 @@ var i18nDatabase = {
 	pt: {
 		centsSeparator: ',',
 		thousandSeparator: '.',
-		dateFormat: 'd/m/Y',
-		dateFormatMonth: 'm/Y',
+		dateFormat: 'd b Y',
+		dateFormatMonth: 'B Y',
 		dateFormatYear: 'Y',
 		monthNames: ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
 		appUrl: 'http://aurelio.net/moneylog/beta.html',
