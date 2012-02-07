@@ -615,7 +615,7 @@ Date.prototype.format = function (fmt) {
 					case 'm':
 						return d.getMonthML() || 'm';
 					case 'd':
-						return d.getdML() || 'd';
+						return d.getDateML() || 'd';
 					case 'B':
 						return d.getMonthName() || 'B';
 					case 'b':
