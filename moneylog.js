@@ -1480,12 +1480,9 @@ function parseData() {
 		dataFirstDate = dataLastDate = undefined;
 	}
 
-	// Update the date range combo
-	if (reportType === 'y') {
-		populateYearRangeCombo();
-	} else {
-		populateMonthRangeCombo();
-	}
+	// Update the date range combos
+	populateDateRangeCombos('m');
+	populateDateRangeCombos('y');
 }
 
 function filterData() {
@@ -2263,12 +2260,24 @@ function populateLastMonthsCombo() {
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
 }
 
-function populateYearRangeCombo() {
-	var el1, el2, range, i, index1, index2, first, last;
+function populateDateRangeCombos(comboType) {  // comboType: m, y
+	var el1, el2, i, my, range, fmt, offset1, offset2, index1, index2;
 
-	el1 = document.getElementById('opt-date-1-year-combo');
-	el2 = document.getElementById('opt-date-2-year-combo');
-	range = getYearRange(dataFirstDate, dataLastDate);
+	if (comboType === 'y') {
+		el1 = document.getElementById('opt-date-1-year-combo');
+		el2 = document.getElementById('opt-date-2-year-combo');
+		offset1 = initYearOffsetFrom;
+		offset2 = initYearOffsetUntil;
+		fmt = 'Y';
+		range = getYearRange(dataFirstDate, dataLastDate);
+	} else {
+		el1 = document.getElementById('opt-date-1-month-combo');
+		el2 = document.getElementById('opt-date-2-month-combo');
+		offset1 = initMonthOffsetFrom;
+		offset2 = initMonthOffsetUntil;
+		fmt = 'Y-m';
+		range = getMonthRange(dataFirstDate, dataLastDate);
+	}
 
 	// Save currently selected items
 	index1 = el1.selectedIndex;
@@ -2279,14 +2288,15 @@ function populateYearRangeCombo() {
 	if (index1 === -1) {
 
 		// Get user defaults
-		if (typeof initYearOffsetFrom === 'number') {
-			first = addMonths(getCurrentDate(), initYearOffsetFrom * 12);
-			first = first.toDate().format('Y');
-			index1 = range.indexOf(first);
-			console.log(index1);
+		if (typeof offset1 === 'number') {
+			offset1 = (comboType === 'y') ? offset1 * 12 : offset1;
+			index1 = range.indexOf(
+				formatDate(
+					addMonths(getCurrentDate(), offset1),  // apply offset
+					fmt));
 		}
 
-		// If unset or the month is out of range, we'll select the oldest
+		// If unset or out of range, we'll select the oldest
 		if (index1 === -1) {
 			index1 = 0;
 		}
@@ -2294,13 +2304,15 @@ function populateYearRangeCombo() {
 	if (index2 === -1) {
 
 		// Get user defaults
-		if (typeof initYearOffsetUntil === 'number') {
-			last = addMonths(getCurrentDate(), initYearOffsetUntil * 12);
-			last = last.toDate().format('Y');
-			index2 = range.indexOf(last);
+		if (typeof offset2 === 'number') {
+			offset2 = (comboType === 'y') ? offset2 * 12 : offset2;
+			index2 = range.indexOf(
+				formatDate(
+					addMonths(getCurrentDate(), offset2),  // apply offset
+					fmt));
 		}
 
-		// If unset or the month is out of range, we'll select the newer
+		// If unset or out of range, we'll select the newer
 		if (index2 === -1) {
 			index2 = range.length - 1;
 		}
@@ -2310,70 +2322,16 @@ function populateYearRangeCombo() {
 	el1.options.length = 0;
 	el2.options.length = 0;
 
-	// Both combos will have the same years
+	// Both combos 1 and 2 will have the same items
 	for (i = 0; i < range.length; i++) {
-		el1.options[i] = new Option(range[i]);
-		el2.options[i] = new Option(range[i]);
-	}
-
-	// Set selected items
-	el1.selectedIndex = index1;
-	el2.selectedIndex = index2;
-}
-
-function populateMonthRangeCombo() {
-	var el1, el2, range, i, y, m, firstMonth, lastMonth, index1, index2;
-
-	el1 = document.getElementById('opt-date-1-month-combo');
-	el2 = document.getElementById('opt-date-2-month-combo');
-	range = getMonthRange(dataFirstDate, dataLastDate);
-
-	// Save currently selected items
-	index1 = el1.selectedIndex;
-	index2 = el2.selectedIndex;
-
-	// None selected? So we're at app start up.
-	// Let's choose which items to select by default.
-	if (index1 === -1) {
-
-		// Get user defaults
-		if (typeof initMonthOffsetFrom === 'number') {
-			firstMonth = addMonths(getCurrentDate(), initMonthOffsetFrom);
-			firstMonth = firstMonth.toDate().format('Y-m');
-			index1 = range.indexOf(firstMonth);
+		if (comboType === 'y') {
+			el1.options[i] = new Option(range[i]);
+			el2.options[i] = new Option(range[i]);			
+		} else {
+			my = (range[i] + '-01').toDate().format('b Y');  // short month name
+			el1.options[i] = new Option(my, range[i]);
+			el2.options[i] = new Option(my, range[i]);
 		}
-
-		// If unset or the month is out of range, we'll select the oldest
-		if (index1 === -1) {
-			index1 = 0;
-		}
-	}
-	if (index2 === -1) {
-
-		// Get user defaults
-		if (typeof initMonthOffsetUntil === 'number') {
-			lastMonth = addMonths(getCurrentDate(), initMonthOffsetUntil);
-			lastMonth = lastMonth.toDate().format('Y-m');
-			index2 = range.indexOf(lastMonth);
-		}
-
-		// If unset or the month is out of range, we'll select the newer
-		if (index2 === -1) {
-			index2 = range.length - 1;
-		}
-	}
-
-	// First, make sure the combo is empty
-	el1.options.length = 0;
-	el2.options.length = 0;
-
-	// Both combos will have the same months
-	for (i = 0; i < range.length; i++) {
-		y = range[i].slice(0, 4);
-		m = range[i].slice(5, 7);
-		m = i18n.monthNames[m.replace(/^0/, '')].slice(0, 3);  // month short name
-		el1.options[i] = new Option(m + ' ' + y, range[i]);
-		el2.options[i] = new Option(m + ' ' + y, range[i]);
 	}
 
 	// Set selected items
@@ -2521,15 +2479,6 @@ function changeReport(el) {
 	} else if (newType === 'd' && oldType !== 'd') {
 		sortColIndex = oldSortColIndex || 0;
 		sortColRev = oldSortColRev || false;
-	}
-
-	// From Daily/Monthly to Yearly
-	if (newType === 'y' && oldType !== 'y') {
-		populateYearRangeCombo();
-	//
-	// From Yearly to Daily/Monthly
-	} else if (oldType === 'y' && newType !== 'y') {
-		populateMonthRangeCombo();
 	}
 
 	// Always reset Rows Summary when changing reports
