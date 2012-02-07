@@ -583,7 +583,7 @@ Date.prototype.getMonthName = function () {
 	return i18n.monthNames[this.getMonth() + 1];  // zero based
 }
 Date.prototype.getMonthShortName = function () {
-	return this.getMonthName.slice(0, 3);
+	return this.getMonthName().slice(0, 3);
 }
 Date.prototype.fromML = function (str) {  // str: YYYY-MM-DD
 	this.setFullYear(
@@ -721,9 +721,12 @@ function getMonthRange(date1, date2) {
 }
 
 function formatDate(date, fmt) {
-	// date: YYYY-MM-DD, YYYY-MM or YYYY
+	// date: YYYY-MM-DD
 	// fmt : Available tokens (i.e. for 1999-12-31):
 	//       Y=1999, y=99, m=12, d=31, b=Dec, B=December
+
+	var d = new Date();
+	d.fromML(date);
 
 	// Using atomic replace to avoid concurrence
 	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
@@ -736,17 +739,17 @@ function formatDate(date, fmt) {
 				}
 				switch (m) {
 					case 'Y':
-						return date.slice(0,  4) || 'Y';
+						return d.getYearML() || 'Y';
 					case 'y':
-						return date.slice(2,  4) || 'y';
+						return d.getYearML().slice(2, 4) || 'y';
 					case 'm':
-						return date.slice(5,  7) || 'm';
+						return d.getMonthML() || 'm';
 					case 'd':
-						return date.slice(8, 10) || 'd';
+						return d.getDateML() || 'd';
 					case 'B':
-						return i18n.monthNames[parseInt(date.slice(5, 7), 10)] || 'B';
+						return d.getMonthName() || 'B';
 					case 'b':
-						return i18n.monthNames[parseInt(date.slice(5, 7), 10)].slice(0, 3) || 'b';
+						return d.getMonthShortName() || 'b';
 					default:
 						return m;
 				}
@@ -760,16 +763,15 @@ function formatReportDate(date) {
 		return date;  // nothing to do
 	}
 
-	// Valid input: YYYY-MM-DD, YYYY-MM or YYYY
 	switch (date.length) {
-		case 10:
+		case 10:  // YYYY-MM-DD
 			return formatDate(date, i18n.dateFormat);
-		case 7:
-			return formatDate(date, i18n.dateFormatMonth);
-		case 4:
-			return formatDate(date, i18n.dateFormatYear);
-		default:
-			return date;  // unknown format
+		case 7:  // YYYY-MM
+			return formatDate(date + '-01', i18n.dateFormatMonth);
+		case 4:  // YYYY
+			return formatDate(date + '-01-01', i18n.dateFormatYear);
+		default:  // unknown format
+			return date;
 	}
 }
 
