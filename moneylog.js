@@ -2299,18 +2299,13 @@ function populateMonthRangeCombo() {
 	if (index1 === -1) {
 
 		// Get user defaults
-		if (useLegacyDateFilter) {
-			firstMonth = getPastMonth(initLastMonths - 1);
+		if (typeof initMonthsOffsetFrom === 'number') {
+			firstMonth = addMonths(getCurrentDate(), initMonthsOffsetFrom);
 			firstMonth = firstMonth.toDate().format('Y-m');
-		} else {
-			if (typeof initMonthsOffsetFrom === 'number') {
-				firstMonth = addMonths(getCurrentDate(), initMonthsOffsetFrom);
-				firstMonth = firstMonth.toDate().format('Y-m');
-			}
+			index1 = range.indexOf(firstMonth);
 		}
-		index1 = range.indexOf(firstMonth);
 
-		// If that month is out of range, we'll select the oldest
+		// If unset or the month is out of range, we'll select the oldest
 		if (index1 === -1) {
 			index1 = 0;
 		}
