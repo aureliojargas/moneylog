@@ -660,7 +660,8 @@ function getCurrentDate() {
 function getPastMonth(months) {
 	// months=0 means current month
 	// Returns: YYYY-MM-00
-	return addMonths(getCurrentDate(), -months).slice(0, 8) + '00';
+	return formatDate(addMonths(getCurrentDate(), -months), 'Y-m-00')
+	
 }
 
 function addMonths(yyyymmdd, n) {
