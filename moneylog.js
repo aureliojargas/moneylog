@@ -32,6 +32,7 @@ var showLocaleDate = false;       // Show dates in the regional format? (ie: 12/
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 var initFullScreen = false;       // Start app in Full Screen mode?
 var initMonthsOffsetFrom = -2;    // From: month will be N months from now
+var initMonthsOffsetUntil = 0;    // To:   month will be N months from now
 
 // Widgets
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
@@ -2283,12 +2284,11 @@ function populateYearRangeCombo() {
 }
 
 function populateMonthRangeCombo() {
-	var el1, el2, range, i, y, m, thisMonth, firstMonth, index1, index2;
+	var el1, el2, range, i, y, m, firstMonth, lastMonth, index1, index2;
 
 	el1 = document.getElementById('opt-date-1-month-combo');
 	el2 = document.getElementById('opt-date-2-month-combo');
 	range = getMonthRange(dataFirstDate, dataLastDate);
-	thisMonth = getCurrentDate().toDate().format('Y-m');
 
 	// Save currently selected items
 	index1 = el1.selectedIndex;
@@ -2311,12 +2311,16 @@ function populateMonthRangeCombo() {
 		}
 	}
 	if (index2 === -1) {
-		// Second combo is set to current month
-		index2 = range.indexOf(thisMonth);
 
-		// If that month is out of range, or user wants future data,
-		// we'll select the newer
-		if (index2 === -1 || defaultFuture) {
+		// Get user defaults
+		if (typeof initMonthsOffsetUntil === 'number') {
+			lastMonth = addMonths(getCurrentDate(), initMonthsOffsetUntil);
+			lastMonth = lastMonth.toDate().format('Y-m');
+			index2 = range.indexOf(lastMonth);
+		}
+
+		// If unset or the month is out of range, we'll select the newer
+		if (index2 === -1) {
 			index2 = range.length - 1;
 		}
 	}
