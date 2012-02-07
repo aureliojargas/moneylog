@@ -19,6 +19,7 @@ var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:S
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 var initFullScreen = false;       // Start app in Full Screen mode?
 var checkMonthPartials = true;    // Monthly checkbox inits checked?
+var checkTagNegate = false;       // Ignore tags checkbox inits checked?
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
@@ -2921,6 +2922,7 @@ function init() {
 	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
 	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
 	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
+	if (checkTagNegate)     { document.getElementById('tag-cloud-opt-negate-check').checked = true; }
 	document.getElementById('filter').value = defaultSearch;
 
 	// Apply user defaults - Legacy
