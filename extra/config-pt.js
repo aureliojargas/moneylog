@@ -149,6 +149,7 @@
 
 ////// TAGS
 //
+// checkTagNegate = false       ;// Iniciar marcando a opção [X] Ignorar?
 // showEmptyTagInSummary = true ;// Mostrar o item VAZIO no somatório de tags?
 
 
@@ -156,7 +157,7 @@
 //
 // showLocaleDate = false       ;// Mostrar datas no formato regional d/m/a?
 //
-// Você também pode personalizar o formato regional, usando outros separadores,
+// Você também pode personalizar o formato regional: usar outros separadores,
 // mudar a ordem ou até escolher exatamente quais componentes mostrar. Além
 // de símbolos, você pode usar as seguintes letras:
 //     Y = ano com 4 dígitos           b = nome do mês com 3 letras
@@ -167,6 +168,19 @@
 // i18nDatabase.pt.dateFormat = 'd.m.Y'     ;// Personalizar formato dia-mês-ano
 // i18nDatabase.pt.dateFormatMonth = 'B Y'  ;// Personalizar formato mês-ano
 // i18nDatabase.pt.dateFormatYear = 'Y'     ;// Personalizar formato ano
+
+
+////// IGNORAR LANÇAMENTOS ANTIGOS E FUTUROS
+//
+// Se você já usa o MoneyLog há bastante tempo, pode querer simplesmente
+// ignorar os lançamentos antigos, dos anos anteriores. Ou ainda, limitar a
+// visão de anos futuros para poucos anos, sumindo de sua vista com aquelas
+// dezenas de parcelas do financiamento que vai demorar para acabar. Basta
+// colocar nas opções seguintes as datas limite, no passado e/ou no futuro,
+// e o MoneyLog vai fingir que não viu nada :)
+//
+// ignoreDataOlderThan = '2010-01-01'   ;// Ignorar lançamentos de 2009, 2008...
+// ignoreDataNewerThan = '2020-12-31'   ;// Ignorar lançamentos após 2020
 
 
 ////// ARQUIVOS TXT
