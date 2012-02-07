@@ -65,8 +65,9 @@ var dataFilesDefault = '';        // Default selected file at init when using mu
 // MoneyLog Browser config
 var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
-// Ignore old data
+// Ignore old or future data - Use with care!
 var ignoreDataOlderThan = '';     // Ignore entries older than this date (ie: 2010-01-01)
+var ignoreDataNewerThan = '';     // Ignore entries newer than this date (ie: 2020-12-31)
 
 // Legacy options
 var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
@@ -1465,11 +1466,14 @@ function parseData() {
 
 		/////////////////////////////////////////////////////////////
 
-		// Ignore old data?
+		// Ignore old or future data?
 		// Note: This code *must* be here at the end of the loop,
 		//       specially after the recurring data code. If not,
 		//       recurring data could be lost.
 		if (ignoreDataOlderThan && rowDate < ignoreDataOlderThan) {
+			continue;
+		}
+		if (ignoreDataNewerThan && rowDate > ignoreDataNewerThan) {
 			continue;
 		}
 
@@ -2846,9 +2850,12 @@ function init() {
 	// Mark current report as active (CSS)
 	addClass(document.getElementById(reportType), 'active');
 
-	// Notice the user that we're ignoring some old data
+	// Notice the user that we're ignoring some data
 	if (ignoreDataOlderThan) {
-		document.getElementById('footer-message').innerHTML = 'ignoreDataOlderThan = ' + ignoreDataOlderThan;
+		document.getElementById('footer-message').innerHTML += 'ignoreDataOlderThan = ' + ignoreDataOlderThan + '<br>';
+	}
+	if (ignoreDataNewerThan) {
+		document.getElementById('footer-message').innerHTML += 'ignoreDataNewerThan = ' + ignoreDataNewerThan + '<br>';
 	}
 
 	// localStorage browser support check
