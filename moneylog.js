@@ -2839,7 +2839,9 @@ function init() {
 	}
 
 	// Split highlight string into words
-	highlightTags = highlightTags.strip().split(/\s+/);
+	if (typeof highlightTags === "string") {
+		highlightTags = highlightTags.strip().split(/\s+/);
+	}
 
 	// Set interface labels
 	document.getElementById('app-flavor'               ).innerHTML = appFlavor;
