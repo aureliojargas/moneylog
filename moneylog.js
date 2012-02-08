@@ -513,8 +513,8 @@ String.prototype.unacccent = function () {
 };
 
 Array.prototype.hasItem = function (item) {
-	var i;
-	for (i = 0; i < this.length; i++) {
+	var i, leni;
+	for (i = 0, leni = this.length; i < leni; i++) {
 		if (item == this[i]) {
 			return true;
 		}
@@ -523,13 +523,13 @@ Array.prototype.hasItem = function (item) {
 };
 
 Array.prototype.removePattern = function (patt, n) { // n = number of removes
-	var i, count = 0, cleaned = [];
+	var i, leni, count = 0, cleaned = [];
 
 	if (!n) {
 		n = Infinity;
 	}
 
-	for (i = 0; i < this.length; i++) {
+	for (i = 0, leni = this.length; i < leni; i++) {
 		if (this[i] == patt && count < n) { // must remove
 			count += 1;
 		} else {
@@ -723,11 +723,10 @@ function addMonths(yyyymmdd, n) {
 function getDataUniqueDates(periodType) {  // periodType: d, m, y
 	// Returns array with unique (dates|months|years) in parsedData.
 	// Note: parsedData is already sorted ASC by date.
-	var i, z, item, last, slices, results = [];
+	var i, leni, item, last, slices, results = [];
 
 	slices = { 'y': 4, 'm': 7, 'd': 10 };
-	z = parsedData.length;
-	for (i = 0; i < z; i++) {
+	for (i = 0, leni = parsedData.length; i < leni; i++) {
 		item = parsedData[i][0].slice(0, slices[periodType]);  // get date
 		if (item !== last) {
 			results.push(item);
@@ -947,7 +946,7 @@ function removeStyleSheet(element_id) {
 }
 
 function drawChart(values, labels) {
-	var i, label, height, value, valueShort, roof, chart, chartData, barType;
+	var i, leni, label, height, value, valueShort, roof, chart, chartData, barType;
 
 	chart = [];
 	chartData = [];
@@ -961,7 +960,7 @@ function drawChart(values, labels) {
 	);
 
 	// Calculate and format chart data
-	for (i = 0; i < values.length; i++) {
+	for (i = 0, leni = values.length; i < leni; i++) {
 
 		// This bar height = percentage of roof (but in pixels)
 		height = parseInt(Math.abs(values[i]) * 100 / roof, 10);
@@ -983,7 +982,7 @@ function drawChart(values, labels) {
 	chart.push('<tr>');
 
 	// Compose each table column (== chart bar)
-	for (i = 0; i < chartData.length; i++) {
+	for (i = 0, leni = chartData.length; i < leni; i++) {
 
 		chart.push('<td class="bar">');
 
@@ -1007,7 +1006,7 @@ function drawChart(values, labels) {
 
 	// Second line: the labels
 	chart.push('<tr class="label">');
-	for (i = 0; i < chartData.length; i++) {
+	for (i = 0, leni = chartData.length; i < leni; i++) {
 		chart.push('<td>' + chartData[i][0] + '<\/td>');
 	}
 	chart.push('<\/tr>');
@@ -1313,7 +1312,7 @@ function readData() {
 }
 
 function parseData() {
-	var i, j, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash;
+	var i, leni, j, lenj, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash;
 
 	// Reset the data holder
 	parsedData = [];
@@ -1322,7 +1321,7 @@ function parseData() {
 	rows = rawData.split(dataRecordSeparator);
 
 	// Scan data rows
-	for (i = 0; i < rows.length; i++) {
+	for (i = 0, leni = rows.length; i < leni; i++) {
 		lineno = i + 1;
 		rowDate = rowAmount = rowText = '';
 
@@ -1483,7 +1482,7 @@ function parseData() {
 			rowDescription = rowTagsDescription.join(dataTagTerminator).strip();
 
 			// Strip all tags
-			for (j = 0; j < rowTags.length; j++) {
+			for (j = 0, lenj = rowTags.length; j < lenj; j++) {
 				rowTags[j] = rowTags[j].strip();
 			}
 			// Remove empty tags
@@ -1533,7 +1532,7 @@ function parseData() {
 }
 
 function filterData() {
-	var i, temp, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
+	var i, leni, temp, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
 	isRegex = false;
 	isNegated = false;
@@ -1606,7 +1605,7 @@ function filterData() {
 	}
 
 	// Scan data rows
-	for (i = 0; i < parsedData.length; i++) {
+	for (i = 0, leni = parsedData.length; i < leni; i++) {
 
 		// date value [tags] description
 		thisDate = parsedData[i][0];
@@ -1658,7 +1657,7 @@ function applyTags(theData) {
 	// This function composes the full tag menu and
 	// also filters theData if some tag is selected
 
-	var i, j, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagsMenu, selectedTags, filteredData, tagMustGroup, tagNegate;
+	var i, leni, j, lenj, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagsMenu, selectedTags, filteredData, tagMustGroup, tagNegate;
 
 	tagsMenu = [];
 	selectedTags = [];
@@ -1680,13 +1679,13 @@ function applyTags(theData) {
 	} catch (e) { }
 
 	// Filter data to match current tags
-	for (i = 0; i < theData.length; i++) {
+	for (i = 0, leni = theData.length; i < leni; i++) {
 
 		// Array order: date, amount, tags, desc
 		rowTags = theData[i][2];
 
 		// Populate tags array with UNIQUE row tags
-		for (j = 0; j < rowTags.length; j++) {
+		for (j = 0, lenj = rowTags.length; j < lenj; j++) {
 			if (!tagsMenu.hasItem(rowTags[j])) {
 				tagsMenu.push(rowTags[j]);
 			}
@@ -1695,7 +1694,7 @@ function applyTags(theData) {
 		// Tag Filter is active. This line matches it?
 		if (selectedTags.length > 0) {
 
-			for (j = 0; j < selectedTags.length; j++) {
+			for (j = 0, lenj = selectedTags.length; j < lenj; j++) {
 
 				thisTag = selectedTags[j];
 				tagMatched = (rowTags.hasItem(thisTag) ||
@@ -1712,7 +1711,7 @@ function applyTags(theData) {
 	}
 
 	// Make sure the menu has all the selected tags
-	for (i = 0; i < selectedTags.length; i++) {
+	for (i = 0, leni = selectedTags.length; i < leni; i++) {
 		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] !== i18n.labelTagEmpty) {
 			tagsMenu.push(selectedTags[i]);
 		}
@@ -1731,7 +1730,7 @@ function applyTags(theData) {
 		document.getElementById('tag-cloud-count').value = tagsMenu.length;
 
 		// Add one checkbox for each tag
-		for (i = 0; i < tagsMenu.length; i++) {
+		for (i = 0, leni = tagsMenu.length; i < leni; i++) {
 			tagName = tagsMenu[i];
 			tagId = 'tag_' + (i + 1);
 
@@ -1775,7 +1774,7 @@ function applyTags(theData) {
 /////////////////////////////////////////////////////////////////////
 
 function updateSelectedRowsSummary() {
-	var i, data, arr, table, label, value, col_nr, col_index;
+	var i, leni, data, arr, table, label, value, col_nr, col_index;
 
 	data = [];
 	arr = [];
@@ -1805,14 +1804,14 @@ function updateSelectedRowsSummary() {
 		// Our column count is one-based, but the TR children array is ZERO-based.
 		col_index = col_nr - 1;
 
-		for (i = 0; i < selectedRows.length; i++) {
+		for (i = 0, leni = selectedRows.length; i < leni; i++) {
 			tr_element = selectedRows[i];
 			td_element = tr_element.getElementsByTagName('td')[col_index];
 
 			// Inside the TD, the number is inside a SPAN tag, examples:
 			//     <td class="number"><span class="neg">-123,45</span></td>
-            //     <td class="number"><span class="pos">123,45</span></td>
-            //
+			//     <td class="number"><span class="pos">123,45</span></td>
+			//
 			value = td_element.getElementsByTagName('span')[0].firstChild.nodeValue;
 
 			// The value is a formatted string, we need to convert it to float
@@ -1832,7 +1831,7 @@ function updateSelectedRowsSummary() {
 
 		// Compose the HTML table
 		table.push('<table>');
-		for (i = 0; i < arr.length; i++) {
+		for (i = 0, leni = arr.length; i < leni; i++) {
 			label = arr[i][0];
 			value = arr[i][1];
 			table.push(
@@ -1858,7 +1857,7 @@ function updateSelectedRowsSummary() {
 }
 
 function updateTagSummary(theData) {
-	var i, j, tag, value, results, tagNames, tagData, rowAmount, rowTags, noTagSum;
+	var i, leni, j, lenj, tag, value, results, tagNames, tagData, rowAmount, rowTags, noTagSum;
 
 	results = [];
 	tagNames = [];
@@ -1866,7 +1865,7 @@ function updateTagSummary(theData) {
 	noTagSum = undefined;  // Do not use 0. The final result may be zero.
 
 	// Scan report rows
-	for (i = 0; i < theData.length; i++) {
+	for (i = 0, leni = theData.length; i < leni; i++) {
 		// rowDate        = theData[i][0];
 		rowAmount      = theData[i][1];
 		rowTags        = theData[i][2];  // array
@@ -1881,7 +1880,7 @@ function updateTagSummary(theData) {
 
 		} else {
 			// Sum all values for the same tag
-			for (j = 0; j < rowTags.length; j++) {
+			for (j = 0, lenj = rowTags.length; j < lenj; j++) {
 				tag = rowTags[j];
 
 				// New tag?
@@ -1906,7 +1905,7 @@ function updateTagSummary(theData) {
 
 		// Compose the HTML table
 		results.push('<table>');
-		for (i = 0; i < tagNames.length; i++) {
+		for (i = 0, leni = tagNames.length; i < leni; i++) {
 			tag = tagNames[i];
 			value = prettyFloat(tagData[tag]);
 			results.push(
@@ -1925,7 +1924,7 @@ function updateTagSummary(theData) {
 }
 
 function showOverview() {
-	var i, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels;
+	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels;
 
 
 	results = [];
@@ -1957,7 +1956,7 @@ function showOverview() {
 		// The cache is empty. Scan and calculate everything.
 		if (!overviewData.length) {
 
-			for (i = 0; i < theData.length; i++) {
+			for (i = 0, leni = theData.length; i < leni; i++) {
 				rowDate        = theData[i][0];
 				rowAmount      = theData[i][1];
 				// rowTags        = theData[i][2];
@@ -2009,7 +2008,7 @@ function showOverview() {
 		}
 
 		// Array2Html
-		for (i = 0; i < overviewData.length; i++) {
+		for (i = 0, leni = overviewData.length; i < leni; i++) {
 
 			// Calculate overall totals
 			z = overviewData[i];
@@ -2067,7 +2066,7 @@ function showOverview() {
 
 			// Get all values for the selected column
 			chartCol = parseInt(document.getElementById('chart-data').value, 10) || 1;
-			for (i = 0; i < overviewData.length; i++) {
+			for (i = 0, leni = overviewData.length; i < leni; i++) {
 				chartValues.push(overviewData[i][chartCol]);
 				chartLabels.push(overviewData[i][0]);  // month or year
 			}
@@ -2090,7 +2089,7 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, j, k, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate;
+	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
@@ -2126,7 +2125,7 @@ function showDetailed() {
 		results.push('<tr>' + thead + '<\/tr>');
 
 		// Compose table rows
-		for (i = 0; i < theData.length; i++) {
+		for (i = 0, leni = theData.length; i < leni; i++) {
 
 			rowDate        = theData[i][0];
 			rowAmount      = theData[i][1];
@@ -2171,8 +2170,8 @@ function showDetailed() {
 			}
 
 			// There are some tags to highlight?
-			for (j = 0; j < highlightTags.length; j++) {
-				for (k = 0; k < rowTags.length; k++) {
+			for (j = 0, lenj = highlightTags.length; j < lenj; j++) {
+				for (k = 0, lenk = rowTags.length; k < lenk; k++) {
 					if (rowTags[k] === highlightTags[j]) {
 						rowTags[k] = '<span class="hl">' + rowTags[k] + '<\/span>';
 						break;
@@ -2232,7 +2231,7 @@ function showDetailed() {
 			// Get all values for the selected column
 			chartValuesSelected = [];
 			chartCol = parseInt(document.getElementById('chart-data').value, 10) || 1;
-			for (i = 0; i < chartValues.length; i++) {
+			for (i = 0, leni = chartValues.length; i < leni; i++) {
 				chartValuesSelected.push(chartValues[i][chartCol]);
 			}
 
@@ -2285,10 +2284,10 @@ function populateRowsSummaryCombo() {
 }
 
 function populateDataFilesCombo() {
-	var el, i;
+	var el, i, leni;
 	if (appMode === 'txt' || appMode === 'dropbox') {
 		el = document.getElementById('source-file');
-		for (i = 0; i < dataFiles.length; i++) {
+		for (i = 0, leni = dataFiles.length; i < leni; i++) {
 			el.options[i] = new Option(dataFiles[i]);
 		}
 	}
@@ -2308,7 +2307,7 @@ function populateLastMonthsCombo() {
 }
 
 function populateDateRangeCombos(comboType) {  // comboType: m, y
-	var el1, el2, i, my, range, fmt, offset1, offset2, index1, index2;
+	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
 
 	if (comboType === 'y') {
 		el1 = document.getElementById('opt-date-1-year-combo');
@@ -2357,7 +2356,7 @@ function populateDateRangeCombos(comboType) {  // comboType: m, y
 	el2.options.length = 0;
 
 	// Both combos 1 and 2 will have the same items
-	for (i = 0; i < range.length; i++) {
+	for (i = 0, leni = range.length; i < leni; i++) {
 		if (comboType === 'y') {
 			el1.options[i] = new Option(range[i]);
 			el2.options[i] = new Option(range[i]);
@@ -2383,7 +2382,7 @@ function populateValueFilterCombo() {
 }
 
 function updateToolbar() {
-	var i, add, remove, hide, unhide;
+	var i, leni, add, remove, hide, unhide;
 
 	// Visibility On/Off
 	// Monthly/Yearly report hides some controls from the toolbar.
@@ -2461,18 +2460,18 @@ function updateToolbar() {
 	}
 
 	// Show/hide toolbar elements
-	for (i = 0; i < add.length; i++) {
+	for (i = 0, leni = add.length; i < leni; i++) {
 		if (!add_exceptions.hasItem(add[i])) {
 			document.getElementById(add[i]).style.display = 'block';
 		}
 	}
-	for (i = 0; i < remove.length; i++) {
+	for (i = 0, leni = remove.length; i < leni; i++) {
 		document.getElementById(remove[i]).style.display = 'none';
 	}
-	for (i = 0; i < hide.length; i++) {
+	for (i = 0, leni = hide.length; i < leni; i++) {
 		document.getElementById(hide[i]).style.visibility = 'hidden';
 	}
-	for (i = 0; i < unhide.length; i++) {
+	for (i = 0, leni = unhide.length; i < leni; i++) {
 		document.getElementById(unhide[i]).style.visibility = 'visible';
 	}
 }
@@ -2685,12 +2684,12 @@ function valueFilterChanged() {
 }
 
 function resetTagCloud() {
-	var i, tagcloud, checkboxes;
+	var i, leni, tagcloud, checkboxes;
 
 	tagcloud = document.getElementById('tag-cloud-tags');
 	checkboxes = tagcloud.getElementsByTagName('input');
 
-	for (i = 0; i < checkboxes.length; i++) {
+	for (i = 0, leni = checkboxes.length; i < leni; i++) {
 		checkboxes[i].checked = false;
 		checkboxes[i].removeAttribute('checked');
 		// Note: Since I'm using CSS rule "input[checked]+span", checked=false is not enough.
