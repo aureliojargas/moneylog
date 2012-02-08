@@ -469,12 +469,12 @@ if (!Number.prototype.toFixed) { // IE5...
 // http://ejohn.org/blog/fast-javascript-maxmin/
 if (!Array.prototype.max) {
 	Array.prototype.max = function () {
-	    return Math.max.apply(null, this);
+		return Math.max.apply(null, this);
 	};
 }
 if (!Array.prototype.min) {
 	Array.prototype.min = function () {
-	    return Math.min.apply(null, this);
+		return Math.min.apply(null, this);
 	};
 }
 // http://snippets.dzone.com/posts/show/769
@@ -582,11 +582,11 @@ RegExp.escape = function (str) {
 Date.prototype.getYearML = function () {  // Returns as string
 	return this.getFullYear().toString();
 }
-Date.prototype.getMonthML = function () {  // Returns as string and zero padded 
+Date.prototype.getMonthML = function () {  // Returns as string and zero padded
 	var m = this.getMonth() + 1;  // zero based
 	return (m < 10) ? '0' + m : m.toString();
 }
-Date.prototype.getDateML = function () {  // Returns as string and zero padded 
+Date.prototype.getDateML = function () {  // Returns as string and zero padded
 	var d = this.getDate();
 	return (d < 10) ? '0' + d : d.toString();
 }
@@ -2356,7 +2356,7 @@ function populateDateRangeCombos(comboType) {  // comboType: m, y
 	for (i = 0; i < range.length; i++) {
 		if (comboType === 'y') {
 			el1.options[i] = new Option(range[i]);
-			el2.options[i] = new Option(range[i]);			
+			el2.options[i] = new Option(range[i]);
 		} else {
 			my = (range[i] + '-01').toDate().format('b Y');  // short month name
 			el1.options[i] = new Option(my, range[i]);
@@ -2395,7 +2395,7 @@ function updateToolbar() {
 
 	if (!showViewWidget) { add_exceptions.push('view-options-box'); }
 	if (!showTagCloud)   { add_exceptions.push('tag-cloud-box'   ); }
-	if (!showTagSummary) { add_exceptions.push('tag-summary-box' ); }	
+	if (!showTagSummary) { add_exceptions.push('tag-summary-box' ); }
 
 	// Daily
 	if (reportType === 'd') {
