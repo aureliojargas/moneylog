@@ -159,6 +159,7 @@ var i18nDatabase = {
 		labelTagNegate: 'Ignore selected tags',
 		labelTagGroup: 'Group selected tags',
 		labelTagReset: 'Reset selection',
+		labelTagSummarySort: 'Sort by value',
 		labelEdit: 'Edit',
 		labelClose: 'Close',
 		labelCancel: 'Cancel',
@@ -188,6 +189,7 @@ var i18nDatabase = {
 		helpTagNegate: 'Remove from the report all the rows that match the selected tags.',
 		helpTagGroup: 'Only match if the entry has ALL the selected tags.',
 		helpTagReset: 'Undo all the selections you have made in the Tag Cloud.',
+		helpTagSummarySort: 'Order the Tag Summary by values instead tag names.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
 		// helpMonthRange: 'Show/hide the month range controls.',
@@ -246,6 +248,7 @@ var i18nDatabase = {
 		labelTagNegate: 'Ignorar',
 		labelTagGroup: 'Combinar',
 		labelTagReset: 'Desmarcar todas',
+		labelTagSummarySort: 'Ordenar por valor',
 		labelEdit: 'Editar',
 		labelClose: 'Fechar',
 		labelCancel: 'Cancelar',
@@ -274,6 +277,7 @@ var i18nDatabase = {
 		helpTagNegate: 'Remove do extrato os lançamentos que possuem as tags selecionadas.',
 		helpTagGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
 		helpTagReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
+		helpTagSummarySort: 'Ordena o sumário de tags pelos valores, não pelos nomes.',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		// helpMonthRange: 'Mostra e esconde o seletor de meses.',
@@ -1859,11 +1863,13 @@ function updateSelectedRowsSummary() {
 }
 
 function updateTagSummary(theData) {
-	var i, leni, j, lenj, tag, value, results, tagNames, tagData, rowAmount, rowTags, noTagSum;
+	var i, leni, j, lenj, tag, value, results, tagNames, tagData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
 
 	results = [];
 	tagNames = [];
-	tagData = [];
+	tagData = {};
+	tableData = [];
+	valueSort = document.getElementById('tag-summary-opt-nsort-check').checked;
 	noTagSum = undefined;  // Do not use 0. The final result may be zero.
 
 	// Scan report rows
@@ -1897,6 +1903,8 @@ function updateTagSummary(theData) {
 
 	// We have tags?
 	if (tagNames.length || noTagSum !== undefined) {
+
+		// Sort tag names
 		tagNames.sort(sortIgnoreCase);
 
 		// Append no-tag data to the end of the table
@@ -1905,15 +1913,28 @@ function updateTagSummary(theData) {
 			tagData[i18n.labelTagEmpty] = noTagSum;
 		}
 
-		// Compose the HTML table
-		results.push('<table>');
+		// Save table data, sorted by tag name
 		for (i = 0, leni = tagNames.length; i < leni; i++) {
 			tag = tagNames[i];
-			value = prettyFloat(tagData[tag]);
+			tableData.push([tag, tagData[tag]]);
+		}
+
+		// Sort by value?
+		if (valueSort) {
+			// Note: save/restore the global var contents
+			oldSort = sortColIndex;
+			sortColIndex = 1;
+			tableData.sort(sortArray);
+			sortColIndex = oldSort;
+		}
+
+		// Compose the HTML table
+		results.push('<table>');
+		for (i = 0, leni = tableData.length; i < leni; i++) {
 			results.push(
 				'<tr>' +
-				'<td>' + tag +  '<\/td>' +
-				'<td class="number"> ' + value + '<\/td>' +
+				'<td>' + tableData[i][0] +  '<\/td>' +
+				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '<\/td>' +
 				'<\/tr>'
 			);
 		}
@@ -1922,7 +1943,7 @@ function updateTagSummary(theData) {
 
 	// Save results to the respective DIV
 	results = results.join('\n');
-	document.getElementById('tag-summary-content').innerHTML = results;
+	document.getElementById('tag-summary-data').innerHTML = results;
 }
 
 function showOverview() {
@@ -2833,6 +2854,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-negate-label').innerHTML = i18n.labelTagNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagGroup;
 	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagReset;
+	document.getElementById('tag-summary-opt-nsort-label').innerHTML = i18n.labelTagSummarySort;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEdit;
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
@@ -2859,6 +2881,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-negate-label').title = i18n.helpTagNegate;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagReset;
+	document.getElementById('tag-summary-opt-nsort-label').title = i18n.helpTagSummarySort;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
@@ -2923,6 +2946,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-negate-check').onclick  = showReport;
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
+	document.getElementById('tag-summary-opt-nsort-check').onclick  = showReport;
 	document.getElementById('chart-data'             ).onchange = showReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
