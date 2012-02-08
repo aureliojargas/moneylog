@@ -720,6 +720,23 @@ function addMonths(yyyymmdd, n) {
 	return z.toML().slice(0, 8) + yyyymmdd.slice(8, 10);  // restore original day
 }
 
+function getDataUniqueDates(periodType) {  // periodType: d, m, y
+	// Returns array with unique (dates|months|years) in parsedData.
+	// Note: parsedData is already sorted ASC by date.
+	var i, z, item, last, slices, results = [];
+
+	slices = { 'y': 4, 'm': 7, 'd': 10 };
+	z = parsedData.length;
+	for (i = 0; i < z; i++) {
+		item = parsedData[i][0].slice(0, slices[periodType]);  // get date
+		if (item !== last) {
+			results.push(item);
+			last = item;
+		}
+	}
+	return results;
+}
+
 function getYearRange(date1, date2) {
 	// Given two dates, returns array with all the years between them, inclusive.
 	// Dates are strings formatted as YYYY-MM-DD.
@@ -2299,14 +2316,14 @@ function populateDateRangeCombos(comboType) {  // comboType: m, y
 		offset1 = initYearOffsetFrom;
 		offset2 = initYearOffsetUntil;
 		fmt = 'Y';
-		range = getYearRange(dataFirstDate, dataLastDate);
+		range = getDataUniqueDates('y');
 	} else {
 		el1 = document.getElementById('opt-date-1-month-combo');
 		el2 = document.getElementById('opt-date-2-month-combo');
 		offset1 = initMonthOffsetFrom;
 		offset2 = initMonthOffsetUntil;
 		fmt = 'Y-m';
-		range = getMonthRange(dataFirstDate, dataLastDate);
+		range = getDataUniqueDates('m');
 	}
 
 	//// Let's choose which items to select by default.
