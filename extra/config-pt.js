@@ -150,6 +150,7 @@
 ////// TAGS
 //
 // checkTagNegate = false       ;// Iniciar marcando a opção [X] Ignorar?
+// checkTagSummarySort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 // showEmptyTagInSummary = true ;// Mostrar o item VAZIO no somatório de tags?
 
 

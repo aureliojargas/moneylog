@@ -25,6 +25,7 @@ var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
+var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
 // Search
 var defaultSearch = '';           // Search for this text on init
@@ -2965,6 +2966,7 @@ function init() {
 	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
 	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
 	if (checkTagNegate)     { document.getElementById('tag-cloud-opt-negate-check').checked = true; }
+	if (checkTagSummarySort){ document.getElementById('tag-summary-opt-nsort-check').checked = true; }
 	document.getElementById('filter').value = defaultSearch;
 
 	// Apply user defaults - Legacy
