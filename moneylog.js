@@ -482,7 +482,7 @@ if (!Array.prototype.min) {
 if (!Array.prototype.sum) {
 	Array.prototype.sum = function () {
 		var i, sum;
-		// for (i=0, sum=0 ; i<this.length ; sum += this[i++]);
+		// for (i = 0, sum = 0; i < this.length ; sum += this[i++]);
 		for (sum = 0, i = this.length; i; sum += this[--i]);
 		return sum;
 	};
@@ -732,7 +732,7 @@ function getYearRange(date1, date2) {
 	y1 = date1.toDate().getFullYear();
 	y2 = date2.toDate().getFullYear();
 
-	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
+	for (y = y1; y <= y2; y++) {  // from year1 to year2, inclusive
 		results.push(y.toString());
 	}
 	return results;
@@ -756,14 +756,14 @@ function getMonthRange(date1, date2) {
 	m1 = date1.getMonth() + 1;  // zero based
 	m2 = date2.getMonth() + 1;
 
-	for (y=y1; y <= y2; y++) {  // from year1 to year2, inclusive
+	for (y = y1; y <= y2; y++) {  // from year1 to year2, inclusive
 
 		// First year: start from month1
 		// Last year: end in month2
 		ini = (y === y1) ? m1 : 1;
 		end = (y === y2) ? m2 : 12;
 
-		for (m=ini; m <= end; m++) {  // months loop
+		for (m = ini; m <= end; m++) {  // months loop
 			results.push(y + '-' + ((m < 10) ? '0' + m : m));  // add leading zero
 		}
 	}
