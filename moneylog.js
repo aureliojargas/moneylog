@@ -424,6 +424,8 @@ var i18nDatabase = {
 var appVersion = '5b';
 var appName = 'MoneyLog';
 var appFlavor = '';
+var dropboxAppFolder = '/Apps/MoneyLog Cloud';
+var dropboxTxtFolder = '/txt';
 var sortColIndex = 0;
 var sortColRev = false;
 var oldSortColIndex;
@@ -1119,6 +1121,7 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 /////////////////////////////////////////////////////////////////////
 
 function editorOn() {
+	var filepath;
 
 	// Load the current data to the editor
 	// Note: already loaded when localStorage
@@ -1128,6 +1131,16 @@ function editorOn() {
 
 	// Hide content to avoid scroll bars
 	document.getElementById('content').style.display = 'none';
+
+	// Set file name
+	if (appMode === 'localStorage') {
+		filepath = 'Browser localStorage: ' + localStorageKey;
+	} else if (appMode === 'dropbox') {
+		filepath = 'Dropbox: ' + dropboxAppFolder + dropboxTxtFolder + '/' + getSelectedFile();
+	} else {
+		filepath = getSelectedFile();
+	}
+	document.getElementById('editor-file-name').innerHTML = filepath;
 
 	// Show editor
 	document.getElementById('editor').style.display = 'block';

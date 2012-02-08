@@ -543,9 +543,20 @@ table.chart tr:hover td {
 	left: 0;
 	background: white;  /* content_bg */
 }
+#editor-file-name {
+	position: fixed;
+	left: 41px;
+	top: 21px;
+	line-height: 29px;  /* 50px (wrapper-top) - 21px (top) */
+	margin: 0;
+	padding: 0 11px;
+	letter-spacing: 1px;
+	color: white;  /* content_bg */
+	background-color: black;  /* _dark */
+}
 #editor-data-wrapper {  /* position:fixed so we can set textarea height:~100% */
 	position: fixed;
-	top: 30px;
+	top: 50px;  /* space for file name */
 	right: 30px;
 	bottom: 70px;  /* space for the buttons */
 	left: 30px;

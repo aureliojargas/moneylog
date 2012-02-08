@@ -15,6 +15,7 @@
 /* Dark background for active/special buttons */
 #fullscreen,
 #report th:hover,
+#editor-file-name,
 .button.active,
 a.button:active {
 	background-color: #4D8A68;
