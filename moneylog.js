@@ -723,11 +723,12 @@ function addMonths(yyyymmdd, n) {
 function getDataUniqueDates(periodType) {  // periodType: d, m, y
 	// Returns array with unique (dates|months|years) in parsedData.
 	// Note: parsedData is already sorted ASC by date.
-	var i, leni, item, last, slices, results = [];
+	var i, leni, theData, item, last, slices, results = [];
 
+	theData = parsedData;
 	slices = { 'y': 4, 'm': 7, 'd': 10 };
-	for (i = 0, leni = parsedData.length; i < leni; i++) {
-		item = parsedData[i][0].slice(0, slices[periodType]);  // get date
+	for (i = 0, leni = theData.length; i < leni; i++) {
+		item = theData[i][0].slice(0, slices[periodType]);  // get date
 		if (item !== last) {
 			results.push(item);
 			last = item;
@@ -1532,8 +1533,9 @@ function parseData() {
 }
 
 function filterData() {
-	var i, leni, temp, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
+	var i, leni, temp, theData, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
+	theData = parsedData;
 	isRegex = false;
 	isNegated = false;
 	filter = '';
@@ -1605,13 +1607,13 @@ function filterData() {
 	}
 
 	// Scan data rows
-	for (i = 0, leni = parsedData.length; i < leni; i++) {
+	for (i = 0, leni = theData.length; i < leni; i++) {
 
 		// date value [tags] description
-		thisDate = parsedData[i][0];
-		thisValue = parsedData[i][1];
-		thisTags = parsedData[i][2];
-		thisDescription = parsedData[i][3];
+		thisDate = theData[i][0];
+		thisValue = theData[i][1];
+		thisTags = theData[i][2];
+		thisDescription = theData[i][3];
 
 		///////////////////////////////////////////////////////////// Filters
 
@@ -1620,7 +1622,7 @@ function filterData() {
 			continue;
 		}
 		if (thisDate > lastDate) {
-			break;  // parsedData is ordered by date, we can safely break here
+			break;  // theData is ordered by date, we can safely break here
 		}
 
 		// Apply value filter
@@ -1637,9 +1639,9 @@ function filterData() {
 		// Search filter firewall - Will this line pass it?
 		if (filter) {
 			if (isRegex) {
-				filterPassed = filter.test(parsedData[i].join('\t'));
+				filterPassed = filter.test(theData[i].join('\t'));
 			} else {
-				filterPassed = (parsedData[i].join('\t').toLowerCase().indexOf(filter) !== -1);
+				filterPassed = (theData[i].join('\t').toLowerCase().indexOf(filter) !== -1);
 			}
 			if ((!filterPassed && !isNegated) || (filterPassed && isNegated)) {
 				continue;
