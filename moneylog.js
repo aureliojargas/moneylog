@@ -2309,43 +2309,30 @@ function populateDateRangeCombos(comboType) {  // comboType: m, y
 		range = getMonthRange(dataFirstDate, dataLastDate);
 	}
 
-	// Save currently selected items
-	index1 = el1.selectedIndex;
-	index2 = el2.selectedIndex;
-
-	// None selected? So we're at app start up.
-	// Let's choose which items to select by default.
+	//// Let's choose which items to select by default.
+	//
+	// Get user defaults
+	if (typeof offset1 === 'number') {
+		offset1 = (comboType === 'y') ? offset1 * 12 : offset1;
+		index1 = range.indexOf(
+			formatDate(
+				addMonths(getCurrentDate(), offset1),  // apply offset
+				fmt));
+	}
+	if (typeof offset2 === 'number') {
+		offset2 = (comboType === 'y') ? offset2 * 12 : offset2;
+		index2 = range.indexOf(
+			formatDate(
+				addMonths(getCurrentDate(), offset2),  // apply offset
+				fmt));
+	}
+	//
+	// If unset or out of range, we'll select the oldest and newer
 	if (index1 === -1) {
-
-		// Get user defaults
-		if (typeof offset1 === 'number') {
-			offset1 = (comboType === 'y') ? offset1 * 12 : offset1;
-			index1 = range.indexOf(
-				formatDate(
-					addMonths(getCurrentDate(), offset1),  // apply offset
-					fmt));
-		}
-
-		// If unset or out of range, we'll select the oldest
-		if (index1 === -1) {
-			index1 = 0;
-		}
+		index1 = 0;
 	}
 	if (index2 === -1) {
-
-		// Get user defaults
-		if (typeof offset2 === 'number') {
-			offset2 = (comboType === 'y') ? offset2 * 12 : offset2;
-			index2 = range.indexOf(
-				formatDate(
-					addMonths(getCurrentDate(), offset2),  // apply offset
-					fmt));
-		}
-
-		// If unset or out of range, we'll select the newer
-		if (index2 === -1) {
-			index2 = range.length - 1;
-		}
+		index2 = range.length - 1;
 	}
 
 	// First, make sure the combo is empty
