@@ -60,6 +60,16 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
+////// SENHA DE ACESSO
+//
+// Você pode definir uma senha de acesso, para impedir que outras pessoas
+// vejam seus dados. Porém, saiba que esta é uma proteção bem simples, que
+// pode ser facilmente quebrada por quem entende de tecnologias web. Use
+// apenas para impedir o acesso casual de familiares ou colegas não-nerds.
+//
+// myPassword = 'abc123'        ;// Pedir esta senha ao iniciar o app
+
+
 ////// IDIOMA
 //
 // lang = 'pt'                  ;// pt, en, es (Português, Inglês, Espanhol)

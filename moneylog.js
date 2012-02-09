@@ -15,6 +15,7 @@
 *
 *********************************************************************/
 
+var myPassword = '';              // Set up an access password
 var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 var initFullScreen = false;       // Start app in Full Screen mode?
@@ -175,6 +176,8 @@ var i18nDatabase = {
 		errorRequirements: 'Minimum requirements:',
 		msgLoading: 'Loading %s...',
 		msgSaving: 'Saving...',
+		msgTypePassword: 'Type your password:',
+		msgWrongPassword: 'Wrong password.',
 		helpFullScreen: 'Turns ON/OFF the Full Screen mode: only the report is shown, with no toolbar.',
 		helpReports: 'Daily, monthly and yearly reports, with charts, balance and totals.',
 		helpLastMonths: 'See only the latest data, ignoring oldies.',
@@ -263,6 +266,8 @@ var i18nDatabase = {
 		errorRequirements: 'Os requisitos mínimos são:',
 		msgLoading: 'Carregando %s...',
 		msgSaving: 'Salvando...',
+		msgTypePassword: 'Digite a sua senha:',
+		msgWrongPassword: 'Senha errada.',
 		helpFullScreen: 'Liga/desliga o modo tela cheia: aparece somente o extrato, sem a barra de ferramentas.',
 		helpReports: 'Extratos diário, mensal e anual, com gráficos, somatório, médias, mínimo, máximo e acumulado.',
 		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
@@ -2794,6 +2799,16 @@ function init() {
 
 	// Check app mode
 	initAppMode();
+
+	// Password protected?
+	if (myPassword) {
+		// Prompt user and check
+		if (myPassword != prompt(appName + ' ' + appFlavor + ' — ' + i18n.msgTypePassword)) {
+			// Destroy full interface and show error
+			document.getElementById('container').innerHTML = '<h2 style="padding:30px;">' + i18n.msgWrongPassword + '</h2>';
+			return;  // abort
+		}
+	}
 
 	// UI surgery for each mode
 	switch(appMode) {
