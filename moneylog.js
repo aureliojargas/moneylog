@@ -25,6 +25,7 @@ var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
+var ignoreTags = '';              // Ignore all entries that have one of these tags
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
@@ -526,6 +527,17 @@ Array.prototype.hasItem = function (item) {
 	var i, leni;
 	for (i = 0, leni = this.length; i < leni; i++) {
 		if (item == this[i]) {
+			return true;
+		}
+	}
+	return false;
+};
+
+Array.prototype.hasArrayItem = function (arr) {
+	var i, leni, items;
+	items = arr.slice();  // copy to local
+	for (i = 0, leni = items.length; i < leni; i++) {
+		if (this.hasItem(items[i])) {
 			return true;
 		}
 	}
@@ -1515,6 +1527,11 @@ function parseData() {
 			continue;
 		}
 		if (ignoreDataNewerThan && rowDate > ignoreDataNewerThan) {
+			continue;
+		}
+
+		// Ignore tags?
+		if (ignoreTags && rowTags.hasArrayItem(ignoreTags)) {
 			continue;
 		}
 
@@ -2858,9 +2875,13 @@ function init() {
 		);
 	}
 
-	// Split highlight string into words
+	// Some configs may be set as strings or arrays.
+	// If user choose string, let's convert it to an array now.
 	if (typeof highlightTags === 'string') {
 		highlightTags = highlightTags.strip().split(/\s+/);
+	}
+	if (typeof ignoreTags === 'string') {
+		ignoreTags = ignoreTags.strip().split(/\s+/);
 	}
 
 	// Set interface labels
