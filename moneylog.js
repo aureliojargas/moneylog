@@ -1947,6 +1947,9 @@ function updateTagSummary(theData) {
 	// Save results to the respective DIV
 	results = results.join('\n');
 	document.getElementById('tag-summary-data').innerHTML = results;
+
+	// The options box is only shown if we have at least 2 tags
+	document.getElementById('tag-summary-options').style.display = (tableData.length > 1) ? 'block' : 'none';
 }
 
 function showOverview() {
