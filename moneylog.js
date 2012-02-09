@@ -1683,12 +1683,12 @@ function filterData() {
 }
 
 function applyTags(theData) {
-	// This function composes the full tag menu and
+	// This function composes the full tag cloud and
 	// also filters theData if some tag is selected
 
-	var i, leni, j, lenj, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagsMenu, selectedTags, filteredData, tagMustGroup, tagNegate;
+	var i, leni, j, lenj, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagCloud, selectedTags, filteredData, tagMustGroup, tagNegate;
 
-	tagsMenu = [];
+	tagCloud = [];
 	selectedTags = [];
 	filteredData = [];
 	theData = theData.slice();  // array copy
@@ -1716,8 +1716,8 @@ function applyTags(theData) {
 
 		// Populate tags array with UNIQUE row tags
 		for (j = 0, lenj = rowTags.length; j < lenj; j++) {
-			if (!tagsMenu.hasItem(rowTags[j])) {
-				tagsMenu.push(rowTags[j]);
+			if (!tagCloud.hasItem(rowTags[j])) {
+				tagCloud.push(rowTags[j]);
 			}
 		}
 
@@ -1740,46 +1740,46 @@ function applyTags(theData) {
 		}
 	}
 
-	// Make sure the menu has all the selected tags
+	// Make sure the tag cloud has all the selected tags
 	for (i = 0, leni = selectedTags.length; i < leni; i++) {
-		if (!tagsMenu.hasItem(selectedTags[i]) && selectedTags[i] !== i18n.labelTagEmpty) {
-			tagsMenu.push(selectedTags[i]);
+		if (!tagCloud.hasItem(selectedTags[i]) && selectedTags[i] !== i18n.labelTagEmpty) {
+			tagCloud.push(selectedTags[i]);
 		}
 	}
 
-	// Compose the tags menu HTML code (if we have at least one tag)
-	if (tagsMenu.length > 0) {
+	// Compose the tag cloud HTML code (if we have at least one tag)
+	if (tagCloud.length > 0) {
 
 		// Sorted tags are nice
-		tagsMenu.sort(sortIgnoreCase);
+		tagCloud.sort(sortIgnoreCase);
 
 		// Add a last empty item to match the rows with no tag
-		tagsMenu.push(i18n.labelTagEmpty);
+		tagCloud.push(i18n.labelTagEmpty);
 
 		// Save the total tag count
-		document.getElementById('tag-cloud-count').value = tagsMenu.length;
+		document.getElementById('tag-cloud-count').value = tagCloud.length;
 
 		// Add one checkbox for each tag
-		for (i = 0, leni = tagsMenu.length; i < leni; i++) {
-			tagName = tagsMenu[i];
+		for (i = 0, leni = tagCloud.length; i < leni; i++) {
+			tagName = tagCloud[i];
 			tagId = 'tag_' + (i + 1);
 
 			// Selected tags remain selected
 			checked = selectedTags.hasItem(tagName) ? 'checked="checked"' : '';
 
 			// The ugly code (but better than DOM-walking nightmares)
-			tagsMenu[i] = '<input type="checkbox" class="trigger" onClick="showReport()" ' +
+			tagCloud[i] = '<input type="checkbox" class="trigger" onClick="showReport()" ' +
 				checked + ' id="' + tagId + '" value="' + tagName + '">' +
 				'<span class="trigger" onClick="document.getElementById(\'' + tagId + '\').click()">' + tagName + '<\/span>';
 			// Note: Tried to use <label> instead <span>, but IE8 failed at CSS input:checked+label
 		}
 
 		// All tags in one single line
-		tagsMenu = tagsMenu.join('\n');
+		tagCloud = tagCloud.join('\n');
 	}
 
-	// Save the tags menu (or make it empty)
-	document.getElementById('tag-cloud-tags').innerHTML = tagsMenu;
+	// Save the tag cloud (or make it empty)
+	document.getElementById('tag-cloud-tags').innerHTML = tagCloud;
 
 	// The options box is only shown if we have at least 1 selected tag
 	document.getElementById('tag-cloud-options').style.display = (selectedTags.length > 0) ? 'block' : 'none';
