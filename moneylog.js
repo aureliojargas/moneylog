@@ -1682,6 +1682,21 @@ function filterData() {
 	return filteredData;
 }
 
+function getSelectedTags() {
+	// Get currently selected tags (from interface)
+	var i, tagCount, tagElement, results = [];
+	try {
+		tagCount = parseInt(document.getElementById('tag-cloud-count').value, 10);
+		for (i = 1; i <= tagCount; i++) {
+			tagElement = document.getElementById('tag_' + i);
+			if (tagElement && tagElement.checked) {
+				results.push(tagElement.value);
+			}
+		}
+	} catch (e) { }
+	return results;
+}
+
 function applyTags(theData) {
 	// This function composes the full tag cloud and
 	// also filters theData if some tag is selected
@@ -1693,20 +1708,12 @@ function applyTags(theData) {
 	filteredData = [];
 	theData = theData.slice();  // array copy
 
-	// Get multiple selection mode (true=AND, false=OR)
+	// Get multiple selection mode (true=AND, false=OR) and negate (NOT)
 	tagMustGroup = document.getElementById('tag-cloud-opt-group-check').checked;
 	tagNegate = document.getElementById('tag-cloud-opt-negate-check').checked;
 
 	// Get currently selected tags (from interface)
-	try {
-		tagCount = parseInt(document.getElementById('tag-cloud-count').value, 10);
-		for (i = 1; i <= tagCount; i++) {
-			tagElement = document.getElementById('tag_' + i);
-			if (tagElement && tagElement.checked) {
-				selectedTags.push(tagElement.value);
-			}
-		}
-	} catch (e) { }
+	selectedTags = getSelectedTags();
 
 	// Filter data to match current tags
 	for (i = 0, leni = theData.length; i < leni; i++) {
