@@ -1531,7 +1531,7 @@ function parseData() {
 		}
 
 		// Ignore tags?
-		if (ignoreTags && rowTags.hasArrayItem(ignoreTags)) {
+		if (ignoreTags.length > 0 && rowTags.hasArrayItem(ignoreTags)) {
 			continue;
 		}
 
