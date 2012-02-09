@@ -730,7 +730,7 @@ function getDataUniqueDates(periodType) {  // periodType: d, m, y
 	// Note: parsedData is already sorted ASC by date.
 	var i, leni, theData, item, last, slices, results = [];
 
-	theData = parsedData;
+	theData = parsedData.slice();  // array copy
 	slices = { 'y': 4, 'm': 7, 'd': 10 };
 	for (i = 0, leni = theData.length; i < leni; i++) {
 		item = theData[i][0].slice(0, slices[periodType]);  // get date
@@ -1540,7 +1540,7 @@ function parseData() {
 function filterData() {
 	var i, leni, temp, theData, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
-	theData = parsedData;
+	theData = parsedData.slice();  // array copy
 	isRegex = false;
 	isNegated = false;
 	filter = '';
@@ -1617,7 +1617,7 @@ function filterData() {
 		// date value [tags] description
 		thisDate = theData[i][0];
 		thisValue = theData[i][1];
-		thisTags = theData[i][2];
+		thisTags = theData[i][2].slice();  // array copy
 		thisDescription = theData[i][3];
 
 		///////////////////////////////////////////////////////////// Filters
@@ -1669,6 +1669,7 @@ function applyTags(theData) {
 	tagsMenu = [];
 	selectedTags = [];
 	filteredData = [];
+	theData = theData.slice();  // array copy
 
 	// Get multiple selection mode (true=AND, false=OR)
 	tagMustGroup = document.getElementById('tag-cloud-opt-group-check').checked;
@@ -1689,7 +1690,7 @@ function applyTags(theData) {
 	for (i = 0, leni = theData.length; i < leni; i++) {
 
 		// Array order: date, amount, tags, desc
-		rowTags = theData[i][2];
+		rowTags = theData[i][2].slice();  // array copy
 
 		// Populate tags array with UNIQUE row tags
 		for (j = 0, lenj = rowTags.length; j < lenj; j++) {
@@ -1872,12 +1873,13 @@ function updateTagSummary(theData) {
 	tableData = [];
 	valueSort = document.getElementById('tag-summary-opt-nsort-check').checked;
 	noTagSum = undefined;  // Do not use 0. The final result may be zero.
+	theData = theData.slice();  // array copy
 
 	// Scan report rows
 	for (i = 0, leni = theData.length; i < leni; i++) {
 		// rowDate        = theData[i][0];
 		rowAmount      = theData[i][1];
-		rowTags        = theData[i][2];  // array
+		rowTags        = theData[i][2].slice();  // array copy
 		// rowDescription = theData[i][3];
 
 		if (rowTags.length === 0) {
@@ -1983,7 +1985,7 @@ function showOverview() {
 			for (i = 0, leni = theData.length; i < leni; i++) {
 				rowDate        = theData[i][0];
 				rowAmount      = theData[i][1];
-				// rowTags        = theData[i][2];
+				// rowTags        = theData[i][2].slice();  // array copy
 				// rowDescription = theData[i][3];
 
 				// rowDate.slice() size, to extract 2000 or 2000-01
@@ -2035,7 +2037,7 @@ function showOverview() {
 		for (i = 0, leni = overviewData.length; i < leni; i++) {
 
 			// Calculate overall totals
-			z = overviewData[i];
+			z = overviewData[i].slice();  // array copy
 			sumPos   += z[1];
 			sumNeg   += z[2];
 			sumTotal += z[3];
@@ -2153,7 +2155,7 @@ function showDetailed() {
 
 			rowDate        = theData[i][0];
 			rowAmount      = theData[i][1];
-			rowTags        = theData[i][2];
+			rowTags        = theData[i][2].slice();  // array copy
 			rowDescription = theData[i][3];
 			rowCount      += 1;
 
@@ -2839,7 +2841,7 @@ function init() {
 	}
 
 	// Split highlight string into words
-	if (typeof highlightTags === "string") {
+	if (typeof highlightTags === 'string') {
 		highlightTags = highlightTags.strip().split(/\s+/);
 	}
 
