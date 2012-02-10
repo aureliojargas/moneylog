@@ -2889,10 +2889,10 @@ function init() {
 	// Some configs may be set as strings or arrays.
 	// If user choose string, let's convert it to an array now.
 	if (typeof highlightTags === 'string') {
-		highlightTags = highlightTags.strip().split(/\s+/);
+		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/): [];
 	}
 	if (typeof ignoreTags === 'string') {
-		ignoreTags = ignoreTags.strip().split(/\s+/);
+		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
 	}
 
 	// Set interface labels
