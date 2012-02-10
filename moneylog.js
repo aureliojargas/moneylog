@@ -20,7 +20,6 @@ var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:S
 var reportType = 'd';             // Initial report type: d m y (daily, monthly, yearly)
 var initFullScreen = false;       // Start app in Full Screen mode?
 var checkMonthPartials = true;    // Monthly checkbox inits checked?
-var checkTagNegate = false;       // Ignore tags checkbox inits checked?
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
@@ -160,9 +159,9 @@ var i18nDatabase = {
 		labelCount: 'Count',
 		labelMonths: ['month', 'months'],
 		labelTagEmpty: '(no tag)',
-		labelTagNegate: 'Ignore selected tags',
+		// labelTagNegate: 'Ignore selected tags',
 		labelTagGroup: 'Group selected tags',
-		labelTagReset: 'Reset selection',
+		labelTagReset: 'Reset',
 		labelTagSummarySort: 'Sort by value',
 		labelEdit: 'Edit',
 		labelClose: 'Close',
@@ -192,7 +191,7 @@ var i18nDatabase = {
 		// helpHelp: 'Show/hide the help text.',
 		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
-		helpTagNegate: 'Remove from the report all the rows that match the selected tags.',
+		// helpTagNegate: 'Remove from the report all the rows that match the selected tags.',
 		helpTagGroup: 'Only match if the entry has ALL the selected tags.',
 		helpTagReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagSummarySort: 'Order the Tag Summary by values instead tag names.',
@@ -251,7 +250,7 @@ var i18nDatabase = {
 		labelCount: 'Linhas',
 		labelMonths: ['mês', 'meses'],
 		labelTagEmpty: '(sem tag)',
-		labelTagNegate: 'Ignorar',
+		// labelTagNegate: 'Ignorar',
 		labelTagGroup: 'Combinar',
 		labelTagReset: 'Desmarcar todas',
 		labelTagSummarySort: 'Ordenar por valor',
@@ -282,7 +281,7 @@ var i18nDatabase = {
 		// helpHelp: 'Mostra e esconde o texto de ajuda.',
 		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
-		helpTagNegate: 'Remove do extrato os lançamentos que possuem as tags selecionadas.',
+		// helpTagNegate: 'Remove do extrato os lançamentos que possuem as tags selecionadas.',
 		helpTagGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
 		helpTagReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagSummarySort: 'Ordena o sumário de tags pelos valores, não pelos nomes.',
@@ -531,7 +530,7 @@ Array.prototype.clone = function() {
 Array.prototype.hasItem = function (item) {
 	var i, leni;
 	for (i = 0, leni = this.length; i < leni; i++) {
-		if (item == this[i]) {
+		if (item == this[i]) {  // using ==
 			return true;
 		}
 	}
@@ -1737,24 +1736,28 @@ function filterData() {
 }
 
 function applyTags(theData) {
-	// This function updates the tag cloud and
-	// also filters theData if some tag is selected
+	// Filter theData for the selected and excluded tags in Tag Cloud.
+	// Also updates the Tag Cloud widget: tags and options.
 
-	var i, leni, j, lenj, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagCloud, dataTags, selectedTags, filteredData, tagMustGroup, tagNegate, hasEmptyTag;
+	var i, leni, rowTags, tagCloud, dataTags, selectedTags, excludedTags, activeTags, filteredData, matchSelected, matchExcluded, groupSelected, groupExcluded;
 
 	dataTags = [];
 	tagCloud = [];
 	selectedTags = [];
+	excludedTags = [];
 	filteredData = [];
 	theData = theData.clone();
-	hasEmptyTag = false;
 
-	// Get multiple selection mode (true=AND, false=OR) and negate (NOT)
-	tagMustGroup = document.getElementById('tag-cloud-opt-group-check').checked;
-	tagNegate = document.getElementById('tag-cloud-opt-negate-check').checked;
-
-	// Get currently selected tags (from interface)
+	// Get currently active tags (from interface)
 	selectedTags = getSelectedTags();
+	excludedTags = getExcludedTags();
+	activeTags = selectedTags.concat(excludedTags);
+
+	// These are the match conditions
+	matchSelected = (selectedTags.length > 0);
+	matchExcluded = (excludedTags.length > 0);
+	groupSelected = document.getElementById('tag-cloud-opt-group-check').checked;
+	groupExcluded = false;  // more intuitive and simple this way
 
 	// Filter data to match current tags
 	for (i = 0, leni = theData.length; i < leni; i++) {
@@ -1762,58 +1765,57 @@ function applyTags(theData) {
 		// Array order: date, amount, tags, desc
 		rowTags = theData[i][2].clone();
 
+		// No tag, set the "empty" tag so we can match it and add it to dataTags
 		if (!rowTags.length) {
-			hasEmptyTag = true;
+			rowTags = [i18n.labelTagEmpty];
 		}
 
-		// Save all the rows tags
+		// Save all the rows tags for later
 		dataTags = dataTags.concat(rowTags);
 
-		// Tag Filter is active. This line matches it?
-		if (selectedTags.length > 0) {
-
-			for (j = 0, lenj = selectedTags.length; j < lenj; j++) {
-
-				thisTag = selectedTags[j];
-				tagMatched = (rowTags.hasItem(thisTag) ||
-					(thisTag === i18n.labelTagEmpty && rowTags.length === 0));
-					// Tip: space means no tag
-
-				if (tagMatched && (!tagMustGroup)) { break; } // OR
-				if (!tagMatched && (tagMustGroup)) { break; } // AND
-			}
-			if ((tagMatched && !tagNegate) || (!tagMatched && tagNegate)) {
-				filteredData.push(theData[i]);
-			}
+		// Ignore this row if it matches the excluded tags
+		if (matchExcluded && (
+				//  !group && matchedOne  ||  group && matchedAll
+				(!groupExcluded && rowTags.hasArrayItem(excludedTags)) ||
+				( groupExcluded && rowTags.hasAllArrayItems(excludedTags))
+			)) {
+			continue;
 		}
-	}
 
-	// Any row with no tags?
-	if (hasEmptyTag) {
-		dataTags.push(i18n.labelTagEmpty);
+		// Ignore this row if it does not match the selected tags
+		if (matchSelected && (
+				//  !group && !matchedOne  ||  group && !matchedAll
+				(!groupSelected && !rowTags.hasArrayItem(selectedTags)) ||
+				( groupSelected && !rowTags.hasAllArrayItems(selectedTags))
+			)) {
+			continue;
+		}
+
+		// Not ignored? Great, you rule.
+		filteredData.push(theData[i]);
 	}
 
 	// The Tag Cloud is composed by all the tags in the current report
 	// view AND the user selected tags.
 	tagCloud = tagCloud.concat(dataTags, selectedTags);
 
-	// Any tag? So let's sort them and update the cloud
+	// Any tag? So let's unique them and update the cloud
 	if (tagCloud.length > 0) {
 		tagCloud = tagCloud.sort(sortIgnoreCase).unique();
 		updateTagCloud(tagCloud);
 	}
 
-	// The options box is only shown if we have at least 1 selected tag
-	document.getElementById('tag-cloud-options').style.display = (selectedTags.length > 0) ? 'block' : 'none';
+	// The options box is only shown if we have at least 1 active tag
+	document.getElementById('tag-cloud-options').style.display = (activeTags.length > 0) ? 'block' : 'none';
+
+	// The reset option is only shown if we have at least 1 active tag
+	document.getElementById('tag-cloud-opt-reset-box').style.display = (activeTags.length > 0) ? 'block' : 'none';
 
 	// The group option is only shown if we have at least 2 selected tags
 	document.getElementById('tag-cloud-opt-group-box').style.display = (selectedTags.length > 1) ? 'block' : 'none';
 
-	// The reset option is only shown if we have at least 3 selected tags
-	document.getElementById('tag-cloud-opt-reset-box').style.display = (selectedTags.length > 2) ? 'block' : 'none';
-
 	// Tag filter was active?
-	if (selectedTags.length > 0) {
+	if (matchSelected || matchExcluded) {
 		return filteredData;
 	} else {
 		return theData;
@@ -1849,6 +1851,7 @@ function updateTagCloud(visibleTags) {
 				// hide element and reset classes
 				el.style.display = 'none';
 				removeClass(el, 'selected');
+				removeClass(el, 'excluded');
 				addClass(el, 'unselected');
 			}
 		}
@@ -1866,6 +1869,7 @@ function selectTheseTags(tags) {
 		if (tags.hasItem(el.innerHTML)) {
 			// select
 			removeClass(el, 'unselected');
+			removeClass(el, 'excluded');
 			addClass(el, 'selected');
 			// force show
 			el.style.display = '';
@@ -1881,6 +1885,7 @@ function resetTagCloud() {
 		el = els[i];
 
 		removeClass(el, 'selected');
+		removeClass(el, 'excluded');
 		addClass(el, 'unselected');
 	}
 
@@ -1905,13 +1910,33 @@ function getSelectedTags() {
 	return results;
 }
 
+function getExcludedTags() {
+	// Get currently excluded tags (from interface)
+	var i, leni, el, els, results = [];
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		if (hasClass(el, 'excluded')) {
+			results.push(el.innerHTML);
+		}
+	}
+	return results;
+}
+
 function tagClicked(el) {
-	// Swap class: unselected -> selected -> unselected
+	// Swap class: unselected -> selected -> excluded -> unselected
 	if (hasClass(el, 'unselected')) {
 		removeClass(el, 'unselected');
 		addClass(el, 'selected');
+
 	} else if (hasClass(el, 'selected')) {
 		removeClass(el, 'selected');
+		addClass(el, 'excluded');
+
+	} else if (hasClass(el, 'excluded')) {
+		removeClass(el, 'excluded');
 		addClass(el, 'unselected');
 	}
 	// Update report
@@ -3002,7 +3027,6 @@ function init() {
 	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelRegex;
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelNegate;
-	document.getElementById('tag-cloud-opt-negate-label').innerHTML = i18n.labelTagNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagGroup;
 	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagReset;
 	document.getElementById('tag-summary-opt-nsort-label').innerHTML = i18n.labelTagSummarySort;
@@ -3029,7 +3053,6 @@ function init() {
 	document.getElementById('opt-regex-label'          ).title = i18n.helpRegex;
 	document.getElementById('opt-negate-label'         ).title = i18n.helpNegate;
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
-	document.getElementById('tag-cloud-opt-negate-label').title = i18n.helpTagNegate;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagReset;
 	document.getElementById('tag-summary-opt-nsort-label').title = i18n.helpTagSummarySort;
@@ -3097,7 +3120,6 @@ function init() {
 	document.getElementById('opt-date-2-month-combo' ).onchange = dateRangeComboChanged;
 	document.getElementById('opt-date-1-year-combo'  ).onchange = dateRangeComboChanged;
 	document.getElementById('opt-date-2-year-combo'  ).onchange = dateRangeComboChanged;
-	document.getElementById('tag-cloud-opt-negate-check').onclick  = showReport;
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
 	document.getElementById('tag-summary-opt-nsort-check').onclick  = showReport;
@@ -3118,7 +3140,6 @@ function init() {
 	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
 	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
 	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (checkTagNegate)     { document.getElementById('tag-cloud-opt-negate-check').checked = true; }
 	if (checkTagSummarySort){ document.getElementById('tag-summary-opt-nsort-check').checked = true; }
 	document.getElementById('filter').value = defaultSearch;
 

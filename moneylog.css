@@ -315,6 +315,9 @@ a.button.active {
 	background: silver;  /* _light */
 	color: black;
 }
+#tag-cloud-tags a.excluded  {
+	text-decoration: line-through;
+}
 #tag-cloud-options {
 	display: none;  /* JS will show */
 }

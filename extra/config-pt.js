@@ -159,11 +159,10 @@
 
 ////// TAGS
 //
-// checkTagNegate = false       ;// Iniciar marcando a opção [X] Ignorar?
-// checkTagSummarySort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 // ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
 // showEmptyTagInSummary = true ;// Mostrar o item (sem tag) no somatório de tags?
+// checkTagSummarySort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 
 
 ////// FORMATO DA DATA
