@@ -163,7 +163,7 @@
 // checkTagSummarySort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 // ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
-// showEmptyTagInSummary = true ;// Mostrar o item VAZIO no somatório de tags?
+// showEmptyTagInSummary = true ;// Mostrar o item (sem tag) no somatório de tags?
 
 
 ////// FORMATO DA DATA

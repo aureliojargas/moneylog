@@ -27,7 +27,7 @@ var highlightWords = '';          // The words you may want to highlight (ie: 'X
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var ignoreTags = '';              // Ignore all entries that have one of these tags
 var initSelectedTags = '';        // Start app with these tags already selected
-var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
+var showEmptyTagInSummary = true; // The (no tag) sum should appear in Tag Summary?
 var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
 // Search
@@ -159,7 +159,7 @@ var i18nDatabase = {
 		labelMaximum: 'Max',
 		labelCount: 'Count',
 		labelMonths: ['month', 'months'],
-		labelTagEmpty: 'EMPTY',
+		labelTagEmpty: '(no&nbsp;tag)',  // &nbsp; = unbreakable space
 		labelTagNegate: 'Ignore selected tags',
 		labelTagGroup: 'Group selected tags',
 		labelTagReset: 'Reset selection',
@@ -250,7 +250,7 @@ var i18nDatabase = {
 		labelMaximum: 'Máximo',
 		labelCount: 'Linhas',
 		labelMonths: ['mês', 'meses'],
-		labelTagEmpty: 'VAZIO',
+		labelTagEmpty: '(sem&nbsp;tag)',  // &nbsp; = unbreakable space
 		labelTagNegate: 'Ignorar',
 		labelTagGroup: 'Combinar',
 		labelTagReset: 'Desmarcar todas',
@@ -1587,7 +1587,7 @@ function parseData() {
 		dataFirstDate = dataLastDate = undefined;
 	}
 
-	// Compose the tag cloud: sorted, append EMPTY item
+	// Compose the tag cloud: sorted, append (no tag) item
 	tagNames = tagNames.sort(sortIgnoreCase).unique();
 	tagNames.push(i18n.labelTagEmpty);
 	createTagCloud(tagNames);
