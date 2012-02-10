@@ -548,6 +548,18 @@ Array.prototype.hasArrayItem = function (arr) {
 	return false;
 };
 
+// http://www.shamasis.net/2009/09/fast-algorithm-to-find-unique-items-in-javascript-array/
+// I choose the "classic" version, it's more reliable.
+Array.prototype.unique = function() {
+	var i, j, a = [], l = this.length;
+	for (i = 0; i < l; i++) {
+		for (j = i+1; j < l; j++)
+			if (this[i] === this[j]) j = ++i;
+		a.push(this[i]);
+	}
+	return a;
+};
+
 Array.prototype.removePattern = function (patt, n) { // n = number of removes
 	var i, leni, count = 0, cleaned = [];
 
