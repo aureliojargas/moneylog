@@ -2972,6 +2972,9 @@ function init() {
 	if (typeof ignoreTags === 'string') {
 		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
 	}
+	if (typeof initSelectedTags === 'string') {
+		initSelectedTags = (initSelectedTags) ? initSelectedTags.strip().split(/\s+/) : [];
+	}
 
 	// Set interface labels
 	document.getElementById('app-flavor'               ).innerHTML = appFlavor;
