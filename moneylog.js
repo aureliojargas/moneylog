@@ -1221,6 +1221,8 @@ function editorOn() {
 
 	// Show editor
 	document.getElementById('editor').style.display = 'block';
+
+	return false;  // cancel link action
 }
 function editorOff() {
 
@@ -1229,10 +1231,13 @@ function editorOff() {
 
 	// Restore content
 	document.getElementById('content').style.display = 'block';
+
+	return false;  // cancel link action
 }
 function editorSave() {
 	editorOff();
 	saveLocalData();
+	return false;  // cancel link action
 }
 function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
@@ -1339,8 +1344,7 @@ function reloadSelectedFile() {
 	initExcludedTags = getExcludedTags();
 	// Reload
 	loadSelectedFile();
-	// Cancel link action
-	return false;
+	return false;  // cancel link action
 }
 function loadSelectedFile() {
 	var filePath;
@@ -1362,7 +1366,7 @@ function loadSelectedFile() {
 	} else {
 		loadDataFile(filePath);
 	}
-	return false; // cancel default link action
+	return false;  // cancel link action
 }
 
 function readData() {
@@ -2751,7 +2755,7 @@ function changeReport(el) {
 	updateToolbar();
 	showReport();
 
-	return false; // cancel default link action
+	return false;  // cancel link action
 }
 
 function iframeLoaded(el) {
@@ -2813,6 +2817,7 @@ function toggleFullScreen() {
 		content.style.marginLeft = 0;
 		isFullScreen = true;
 	}
+	return false;  // cancel link action
 }
 
 function toggleFuture() {
@@ -2837,7 +2842,7 @@ function toggleToolbarBox(header_id, content_id) {
 		content.style.display = 'block';
 		addClass(header, 'active');
 	}
-	return false; // cancel default link action
+	return false;  // cancel link action
 }
 function toggleViewOptions() {
 	return toggleToolbarBox('view-options-header', 'view-options-content');
