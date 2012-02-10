@@ -552,7 +552,11 @@ Array.prototype.hasArrayItem = function (arr) {
 Array.prototype.hasAllArrayItems = function (arr) {
 	var i, leni, items;
 	items = arr.clone();
-	for (i = 0, leni = items.length; i < leni; i++) {
+	leni = items.length;
+	if (leni === 0) {  // empty arr
+		return false;
+	}
+	for (i = 0; i < leni; i++) {
 		if (!this.hasItem(items[i])) {
 			return false;
 		}
