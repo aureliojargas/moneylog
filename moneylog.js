@@ -2966,6 +2966,9 @@ function init() {
 	if (ignoreDataNewerThan) {
 		document.getElementById('footer-message').innerHTML += 'ignoreDataNewerThan = ' + ignoreDataNewerThan + '<br>';
 	}
+	if (ignoreTags.length > 0) {
+		document.getElementById('footer-message').innerHTML += 'ignoreTags = ' + ignoreTags.join(', ') + '<br>';
+	}
 
 	// localStorage browser support check
 	if (appMode === 'localStorage' && !window.localStorage) {
