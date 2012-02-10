@@ -309,6 +309,7 @@ a.button.active {
 #tag-cloud-tags a {
 	padding: 2px 2px;
 	color: #333;  /* text_color */
+	white-space: nowrap;
 }
 #tag-cloud-tags a.selected {
 	background: silver;  /* _light */

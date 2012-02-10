@@ -159,7 +159,7 @@ var i18nDatabase = {
 		labelMaximum: 'Max',
 		labelCount: 'Count',
 		labelMonths: ['month', 'months'],
-		labelTagEmpty: '(no&nbsp;tag)',  // &nbsp; = unbreakable space
+		labelTagEmpty: '(no tag)',
 		labelTagNegate: 'Ignore selected tags',
 		labelTagGroup: 'Group selected tags',
 		labelTagReset: 'Reset selection',
@@ -250,7 +250,7 @@ var i18nDatabase = {
 		labelMaximum: 'Máximo',
 		labelCount: 'Linhas',
 		labelMonths: ['mês', 'meses'],
-		labelTagEmpty: '(sem&nbsp;tag)',  // &nbsp; = unbreakable space
+		labelTagEmpty: '(sem tag)',
 		labelTagNegate: 'Ignorar',
 		labelTagGroup: 'Combinar',
 		labelTagReset: 'Desmarcar todas',
