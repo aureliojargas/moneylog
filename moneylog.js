@@ -1360,7 +1360,7 @@ function parseData() {
 	rows = rawData.split(dataRecordSeparator);
 
 	// Scan data rows
-	for (i = 0, leni = rows.length; i < leni; i++) {
+	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
 		rowDate = rowAmount = rowText = '';
 
