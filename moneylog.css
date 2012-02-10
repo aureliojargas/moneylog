@@ -306,19 +306,13 @@ a.button.active {
 	display: none;  /* JS will show if there are tags */
 	text-align: center;
 }
-#tag-cloud-tags input+span {
+#tag-cloud-tags a {
 	padding: 2px 2px;
+	color: #333;  /* text_color */
 }
-#tag-cloud-tags input[checked]+span { /* highlight selected tags */
-	/* Note: DON'T use input:checked, it fails in Opera9/IE8 */
+#tag-cloud-tags a.selected {
 	background: silver;  /* _light */
 	color: black;
-/*	text-decoration: underline;*/
-}
-#tag-cloud-tags input {
-	display: none; /* hidden, but used by JavaScript (exception: IE7 - see CC) */
-	margin: 0;
-	padding: 0;
 }
 #tag-cloud-options {
 	display: none;  /* JS will show */

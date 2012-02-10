@@ -26,6 +26,7 @@ var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var ignoreTags = '';              // Ignore all entries that have one of these tags
+var initSelectedTags = '';        // Start app with these tags already selected
 var showEmptyTagInSummary = true; // The EMPTY tag sum should appear in Tag Summary?
 var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
@@ -1311,6 +1312,14 @@ function getSelectedFile() {
 	return dataFiles[document.getElementById('source-file').selectedIndex];
 	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
 }
+function reloadSelectedFile() {
+	// Save currently selected tags
+	initSelectedTags = getSelectedTags();
+	// Reload
+	loadSelectedFile();
+	// Cancel link action
+	return false;
+}
 function loadSelectedFile() {
 	var filePath;
 
@@ -1351,10 +1360,11 @@ function readData() {
 }
 
 function parseData() {
-	var i, leni, j, lenj, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash;
+	var i, j, lenj, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash, tagNames;
 
-	// Reset the data holder
+	// Reset the data holders
 	parsedData = [];
+	tagNames = [];
 
 	// Split lines
 	rows = rawData.split(dataRecordSeparator);
@@ -1527,6 +1537,9 @@ function parseData() {
 			// Remove empty tags
 			rowTags = rowTags.removePattern('');
 
+			// Save to tag holder
+			tagNames = tagNames.concat(rowTags);
+
 		// No tags
 		} else {
 			rowTags = [];
@@ -1572,6 +1585,16 @@ function parseData() {
 		populateDateRangeCombos('y');
 	} else {
 		dataFirstDate = dataLastDate = undefined;
+	}
+
+	// Compose the tag cloud: sorted, append EMPTY item
+	tagNames = tagNames.sort(sortIgnoreCase).unique();
+	tagNames.push(i18n.labelTagEmpty);
+	createTagCloud(tagNames);
+
+	// Already select some tags now?
+	if (initSelectedTags.length > 0) {
+		selectTheseTags(initSelectedTags);
 	}
 }
 
@@ -1700,29 +1723,29 @@ function filterData() {
 
 function getSelectedTags() {
 	// Get currently selected tags (from interface)
-	var i, tagCount, tagElement, results = [];
-	try {
-		tagCount = parseInt(document.getElementById('tag-cloud-count').value, 10);
-		for (i = 1; i <= tagCount; i++) {
-			tagElement = document.getElementById('tag_' + i);
-			if (tagElement && tagElement.checked) {
-				results.push(tagElement.value);
-			}
+	var i, leni, el, els, results = [];
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+		if (hasClass(el, 'selected')) {
+			results.push(el.innerHTML);
 		}
-	} catch (e) { }
+	}
 	return results;
 }
 
 function applyTags(theData) {
-	// This function composes the full tag cloud and
+	// This function updates the tag cloud and
 	// also filters theData if some tag is selected
 
-	var i, leni, j, lenj, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagCloud, selectedTags, filteredData, tagMustGroup, tagNegate;
+	var i, leni, j, lenj, rowTags, thisTag, tagMatched, tagName, tagId, checked, tagCount, tagElement, tagCloud, dataTags, selectedTags, filteredData, tagMustGroup, tagNegate, hasEmptyTag;
 
+	dataTags = [];
 	tagCloud = [];
 	selectedTags = [];
 	filteredData = [];
 	theData = theData.clone();
+	hasEmptyTag = false;
 
 	// Get multiple selection mode (true=AND, false=OR) and negate (NOT)
 	tagMustGroup = document.getElementById('tag-cloud-opt-group-check').checked;
@@ -1737,12 +1760,12 @@ function applyTags(theData) {
 		// Array order: date, amount, tags, desc
 		rowTags = theData[i][2].clone();
 
-		// Populate tags array with UNIQUE row tags
-		for (j = 0, lenj = rowTags.length; j < lenj; j++) {
-			if (!tagCloud.hasItem(rowTags[j])) {
-				tagCloud.push(rowTags[j]);
-			}
+		if (!rowTags.length) {
+			hasEmptyTag = true;
 		}
+
+		// Save all the rows tags
+		dataTags = dataTags.concat(rowTags);
 
 		// Tag Filter is active. This line matches it?
 		if (selectedTags.length > 0) {
@@ -1763,46 +1786,20 @@ function applyTags(theData) {
 		}
 	}
 
-	// Make sure the tag cloud has all the selected tags
-	for (i = 0, leni = selectedTags.length; i < leni; i++) {
-		if (!tagCloud.hasItem(selectedTags[i]) && selectedTags[i] !== i18n.labelTagEmpty) {
-			tagCloud.push(selectedTags[i]);
-		}
+	// Any row with no tags?
+	if (hasEmptyTag) {
+		dataTags.push(i18n.labelTagEmpty);
 	}
 
-	// Compose the tag cloud HTML code (if we have at least one tag)
+	// The Tag Cloud is composed by all the tags in the current report
+	// view AND the user selected tags.
+	tagCloud = tagCloud.concat(dataTags, selectedTags);
+
+	// Any tag? So let's sort them and update the cloud
 	if (tagCloud.length > 0) {
-
-		// Sorted tags are nice
-		tagCloud.sort(sortIgnoreCase);
-
-		// Add a last empty item to match the rows with no tag
-		tagCloud.push(i18n.labelTagEmpty);
-
-		// Save the total tag count
-		document.getElementById('tag-cloud-count').value = tagCloud.length;
-
-		// Add one checkbox for each tag
-		for (i = 0, leni = tagCloud.length; i < leni; i++) {
-			tagName = tagCloud[i];
-			tagId = 'tag_' + (i + 1);
-
-			// Selected tags remain selected
-			checked = selectedTags.hasItem(tagName) ? 'checked="checked"' : '';
-
-			// The ugly code (but better than DOM-walking nightmares)
-			tagCloud[i] = '<input type="checkbox" class="trigger" onClick="showReport()" ' +
-				checked + ' id="' + tagId + '" value="' + tagName + '">' +
-				'<span class="trigger" onClick="document.getElementById(\'' + tagId + '\').click()">' + tagName + '<\/span>';
-			// Note: Tried to use <label> instead <span>, but IE8 failed at CSS input:checked+label
-		}
-
-		// All tags in one single line
-		tagCloud = tagCloud.join('\n');
+		tagCloud = tagCloud.sort(sortIgnoreCase).unique();
+		updateTagCloud(tagCloud);
 	}
-
-	// Save the tag cloud (or make it empty)
-	document.getElementById('tag-cloud-tags').innerHTML = tagCloud;
 
 	// The options box is only shown if we have at least 1 selected tag
 	document.getElementById('tag-cloud-options').style.display = (selectedTags.length > 0) ? 'block' : 'none';
@@ -1819,6 +1816,67 @@ function applyTags(theData) {
 	} else {
 		return theData;
 	}
+}
+
+function createTagCloud(names) {
+	// Create all the <a> elements for the Tag Cloud
+	var i, leni, results = [];
+	for (i = 0, leni = names.length; i < leni; i++) {
+		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>')
+	}
+	document.getElementById('tag-cloud-tags').innerHTML = results.join('\n');
+}
+
+function updateTagCloud(visibleTags) {
+	// Show/hide the Tag Cloud elements, and set classes
+	var i, leni, el, els;
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+		if (visibleTags.hasItem(el.innerHTML)) {
+			if (el.style.display === 'none') {
+				// unhide element
+				el.style.display = '';
+			}
+		} else {
+			if (el.style.display !== 'none') {
+				// hide element and reset classes
+				el.style.display = 'none';
+				removeClass(el, 'selected');
+				addClass(el, 'unselected');
+			}
+		}
+	}
+}
+
+function selectTheseTags(tags) {
+	// Force select some tags, used at start up or reload
+	var i, leni, el, els;
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+		if (tags.hasItem(el.innerHTML)) {
+			// select
+			removeClass(el, 'unselected');
+			addClass(el, 'selected');
+			// force show
+			el.style.display = '';
+		}
+	}
+}
+
+function tagClicked(el) {
+	// Swap class: unselected -> selected -> unselected
+	if (hasClass(el, 'unselected')) {
+		removeClass(el, 'unselected');
+		addClass(el, 'selected');
+	} else if (hasClass(el, 'selected')) {
+		removeClass(el, 'selected');
+		addClass(el, 'unselected');
+	}
+	// Update report
+	showReport();
+	return false;  // cancel link action
 }
 
 
@@ -2758,15 +2816,13 @@ function valueFilterChanged() {
 }
 
 function resetTagCloud() {
-	var i, leni, tagcloud, checkboxes;
+	var i, leni, els, el;
 
-	tagcloud = document.getElementById('tag-cloud-tags');
-	checkboxes = tagcloud.getElementsByTagName('input');
-
-	for (i = 0, leni = checkboxes.length; i < leni; i++) {
-		checkboxes[i].checked = false;
-		checkboxes[i].removeAttribute('checked');
-		// Note: Since I'm using CSS rule "input[checked]+span", checked=false is not enough.
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+		removeClass(el, 'selected');
+		addClass(el, 'unselected');
 	}
 
 	// The calling checkbox acts like a button, with temporary ON state
@@ -3006,7 +3062,7 @@ function init() {
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
 	document.getElementById('source-file'            ).onchange = loadSelectedFile;
-	document.getElementById('source-reload'          ).onclick  = loadSelectedFile;
+	document.getElementById('source-reload'          ).onclick  = reloadSelectedFile;
 	document.getElementById('opt-date-1-check'       ).onclick  = toggleDateRange;
 	document.getElementById('opt-date-2-check'       ).onclick  = toggleDateRange;
 	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;

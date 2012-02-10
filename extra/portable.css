@@ -38,7 +38,7 @@ a.button:active {
 
 /* Light background for selections */
 .hl,
-#tag-cloud-tags input[checked]+span {
+#tag-cloud-tags a.selected {
 	background-color: #E5EFDE;
 }
 
