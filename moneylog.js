@@ -23,12 +23,6 @@ var checkMonthPartials = true;    // Monthly checkbox inits checked?
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
-var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
-var ignoreTags = '';              // Ignore all entries that have one of these tags
-var initSelectedTags = '';        // Tag Cloud: start app with these tags already selected
-var initExcludedTags = '';        // Tag Cloud: start app with these tags already excluded
-var showEmptyTagInSummary = true; // The (no tag) sum should appear in Tag Summary?
-var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
 // Search
 var defaultSearch = '';           // Search for this text on init
@@ -51,6 +45,14 @@ var initTagSummaryOpen = false;   // Start app with the Tag Summary widget opene
 var showViewWidget = true;        // Show View widget in the sidebar?
 var showTagCloud = true;          // Show Tag Cloud widget in the sidebar?
 var showTagSummary = true;        // Show Tag Summary widget in the sidebar?
+
+// Tags
+var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
+var ignoreTags = '';              // Ignore all entries that have one of these tags
+var initSelectedTags = '';        // Tag Cloud: start app with these tags already selected
+var initExcludedTags = '';        // Tag Cloud: start app with these tags already excluded
+var showEmptyTagInSummary = true; // The (no tag) sum should appear in Tag Summary?
+var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
