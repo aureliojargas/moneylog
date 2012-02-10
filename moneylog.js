@@ -1721,19 +1721,6 @@ function filterData() {
 	return filteredData;
 }
 
-function getSelectedTags() {
-	// Get currently selected tags (from interface)
-	var i, leni, el, els, results = [];
-	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
-	for (i = 0, leni = els.length; i < leni; i++) {
-		el = els[i];
-		if (hasClass(el, 'selected')) {
-			results.push(el.innerHTML);
-		}
-	}
-	return results;
-}
-
 function applyTags(theData) {
 	// This function updates the tag cloud and
 	// also filters theData if some tag is selected
@@ -1821,18 +1808,22 @@ function applyTags(theData) {
 function createTagCloud(names) {
 	// Create all the <a> elements for the Tag Cloud
 	var i, leni, results = [];
+
 	for (i = 0, leni = names.length; i < leni; i++) {
 		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>')
 	}
+
 	document.getElementById('tag-cloud-tags').innerHTML = results.join('\n');
 }
 
 function updateTagCloud(visibleTags) {
 	// Show/hide the Tag Cloud elements, and set classes
 	var i, leni, el, els;
+
 	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
 	for (i = 0, leni = els.length; i < leni; i++) {
 		el = els[i];
+
 		if (visibleTags.hasItem(el.innerHTML)) {
 			if (el.style.display === 'none') {
 				// unhide element
@@ -1852,9 +1843,11 @@ function updateTagCloud(visibleTags) {
 function selectTheseTags(tags) {
 	// Force select some tags, used at start up or reload
 	var i, leni, el, els;
+
 	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
 	for (i = 0, leni = els.length; i < leni; i++) {
 		el = els[i];
+
 		if (tags.hasItem(el.innerHTML)) {
 			// select
 			removeClass(el, 'unselected');
@@ -1863,6 +1856,38 @@ function selectTheseTags(tags) {
 			el.style.display = '';
 		}
 	}
+}
+
+function resetTagCloud() {
+	var i, leni, els, el;
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		removeClass(el, 'selected');
+		addClass(el, 'unselected');
+	}
+
+	// The calling checkbox acts like a button, with temporary ON state
+	this.checked = false;
+
+	showReport();
+}
+
+function getSelectedTags() {
+	// Get currently selected tags (from interface)
+	var i, leni, el, els, results = [];
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		if (hasClass(el, 'selected')) {
+			results.push(el.innerHTML);
+		}
+	}
+	return results;
 }
 
 function tagClicked(el) {
@@ -2815,21 +2840,6 @@ function valueFilterChanged() {
 	showReport();
 }
 
-function resetTagCloud() {
-	var i, leni, els, el;
-
-	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
-	for (i = 0, leni = els.length; i < leni; i++) {
-		el = els[i];
-		removeClass(el, 'selected');
-		addClass(el, 'unselected');
-	}
-
-	// The calling checkbox acts like a button, with temporary ON state
-	this.checked = false;
-
-	showReport();
-}
 function showHideEditButton() {
 	var el;
 	if (appMode === 'dropbox') {
