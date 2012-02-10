@@ -2297,7 +2297,7 @@ function showOverview() {
 			chartLabels = [];
 
 			// Get all values for the selected column
-			chartCol = parseInt(document.getElementById('chart-data').value, 10) || 1;
+			chartCol = parseInt(document.getElementById('chart-selector').value, 10) || 1;
 			for (i = 0, leni = overviewData.length; i < leni; i++) {
 				chartValues.push(overviewData[i][chartCol]);
 				chartLabels.push(overviewData[i][0]);  // month or year
@@ -2462,7 +2462,7 @@ function showDetailed() {
 
 			// Get all values for the selected column
 			chartValuesSelected = [];
-			chartCol = parseInt(document.getElementById('chart-data').value, 10) || 1;
+			chartCol = parseInt(document.getElementById('chart-selector').value, 10) || 1;
 			for (i = 0, leni = chartValues.length; i < leni; i++) {
 				chartValuesSelected.push(chartValues[i][chartCol]);
 			}
@@ -2501,7 +2501,7 @@ function showReport() {
 /////////////////////////////////////////////////////////////////////
 
 function populateChartColsCombo() {
-	var el = document.getElementById('chart-data');
+	var el = document.getElementById('chart-selector');
 	el.options[0] = new Option(i18n.labelsOverview[1], 1);  // Incoming
 	el.options[1] = new Option(i18n.labelsOverview[2], 2);  // Expense
 	el.options[2] = new Option(i18n.labelsOverview[3], 3);  // Partial
@@ -3129,11 +3129,11 @@ function init() {
 
 	// Set initial chart type for the reports (before event handlers)
 	if (reportType === 'd') {
-		document.getElementById('chart-data').selectedIndex = initChartDaily - 1;
+		document.getElementById('chart-selector').selectedIndex = initChartDaily - 1;
 	} else if (reportType === 'm') {
-		document.getElementById('chart-data').selectedIndex = initChartMonthly - 1;
+		document.getElementById('chart-selector').selectedIndex = initChartMonthly - 1;
 	} else {
-		document.getElementById('chart-data').selectedIndex = initChartYearly - 1;
+		document.getElementById('chart-selector').selectedIndex = initChartYearly - 1;
 	}
 
 	// Add event handlers
@@ -3162,7 +3162,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
 	document.getElementById('tag-summary-opt-nsort-check').onclick  = showReport;
-	document.getElementById('chart-data'             ).onchange = showReport;
+	document.getElementById('chart-selector'         ).onchange = showReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
