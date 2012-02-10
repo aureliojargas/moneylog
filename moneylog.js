@@ -80,6 +80,9 @@ var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
+var oneFile;
+var useLocalStorage;
+var useDropboxStorage;
 
 
 // The appMode sets the Moneylog flavor:
@@ -526,7 +529,7 @@ String.prototype.unacccent = function () {
 
 Array.prototype.clone = function() {
 	return [].concat(this);
-}
+};
 
 Array.prototype.hasItem = function (item) {
 	var i, leni;
@@ -569,8 +572,9 @@ Array.prototype.hasAllArrayItems = function (arr) {
 Array.prototype.unique = function() {
 	var i, j, a = [], l = this.length;
 	for (i = 0; i < l; i++) {
-		for (j = i+1; j < l; j++)
-			if (this[i] === this[j]) j = ++i;
+		for (j = i+1; j < l; j++) {
+			if (this[i] === this[j]) { j = ++i; }
+		}
 		a.push(this[i]);
 	}
 	return a;
@@ -635,33 +639,33 @@ RegExp.escape = function (str) {
 // Date helpers
 Date.prototype.getYearML = function () {  // Returns as string
 	return this.getFullYear().toString();
-}
+};
 Date.prototype.getMonthML = function () {  // Returns as string and zero padded
 	var m = this.getMonth() + 1;  // zero based
 	return (m < 10) ? '0' + m : m.toString();
-}
+};
 Date.prototype.getDateML = function () {  // Returns as string and zero padded
 	var d = this.getDate();
 	return (d < 10) ? '0' + d : d.toString();
-}
+};
 Date.prototype.getFullMonthML = function () {  // Returns "YYYY-MM"
 	return this.getYearML() + '-' + this.getMonthML();
-}
+};
 Date.prototype.getMonthName = function () {
 	return i18n.monthNames[this.getMonth() + 1];  // zero based
-}
+};
 Date.prototype.getMonthShortName = function () {
 	return this.getMonthName().slice(0, 3);
-}
+};
 Date.prototype.fromML = function (str) {  // str: YYYY-MM-DD
 	this.setFullYear(
 		parseInt(str.slice(0,  4), 10),
 		parseInt(str.slice(5,  7), 10) - 1,  // month is zero-based
 		parseInt(str.slice(8, 10), 10) || 1);
-}
+};
 Date.prototype.toML = function () {  // Returns "YYYY-MM-DD"
 	return this.getYearML() + '-' + this.getMonthML() + '-' + this.getDateML();
-}
+};
 Date.prototype.format = function (fmt) {
 	// Available tokens (i.e. for 1999-12-31):
 	// Y=1999, y=99, m=12, d=31, b=Dec, B=December
@@ -693,17 +697,17 @@ Date.prototype.format = function (fmt) {
 				}
 			}
 		);
-}
+};
 Date.prototype.setMonthOffset = function (n) {  // negative n is ok
 	// Beware: 2010-01-31 + 1 = 2010-03-03
 	// Set day to 1 to make month-related operations
 	this.setMonth(this.getMonth() + (n || 0));
-}
+};
 String.prototype.toDate = function () {
 	var z = new Date();
 	z.fromML(this);
 	return z;
-}
+};
 
 
 /////////////////////////////////////////////////////////////////////
@@ -1833,7 +1837,7 @@ function createTagCloud(names) {
 	var i, leni, results = [];
 
 	for (i = 0, leni = names.length; i < leni; i++) {
-		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>')
+		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>');
 	}
 
 	document.getElementById('tag-cloud-tags').innerHTML = results.join('\n');
@@ -1975,7 +1979,7 @@ function tagClicked(el) {
 /////////////////////////////////////////////////////////////////////
 
 function updateSelectedRowsSummary() {
-	var i, leni, data, arr, table, label, value, col_nr, col_index;
+	var i, leni, data, arr, table, label, value, col_nr, col_index, tr_element, td_element;
 
 	data = [];
 	arr = [];
@@ -2058,7 +2062,7 @@ function updateSelectedRowsSummary() {
 }
 
 function updateTagSummary(theData) {
-	var i, leni, j, lenj, tag, value, results, tagNames, tagData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
+	var i, leni, j, lenj, tag, results, tagNames, tagData, tableData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
 
 	results = [];
 	tagNames = [];
@@ -2604,7 +2608,7 @@ function populateValueFilterCombo() {
 }
 
 function updateToolbar() {
-	var i, leni, add, remove, hide, unhide;
+	var i, leni, add, remove, hide, unhide, add_exceptions;
 
 	// Visibility On/Off
 	// Monthly/Yearly report hides some controls from the toolbar.
@@ -2650,7 +2654,7 @@ function updateToolbar() {
 			'tag-summary-box'
 		];
 		unhide = [
-			'opt-last-months-box',
+			'opt-last-months-box'
 		];
 		add = [
 			'opt-date-1-month-combo',
@@ -3111,7 +3115,7 @@ function init() {
 		showError(
 			i18n.errorNoLocalStorage.replace('%s', appName),
 			'<p>' + i18n.errorRequirements +
-				array2ul('Internet Explorer 8, Firefox 3, Google Chrome 3, Safari 4, Opera 10.50'.split(', '))
+				array2ul(['Internet Explorer 8', 'Firefox 3', 'Google Chrome 3', 'Safari 4', 'Opera 10.50'])
 		);
 		return; // abort
 	}
