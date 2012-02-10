@@ -25,7 +25,8 @@ var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var ignoreTags = '';              // Ignore all entries that have one of these tags
-var initSelectedTags = '';        // Start app with these tags already selected
+var initSelectedTags = '';        // Tag Cloud: start app with these tags already selected
+var initExcludedTags = '';        // Tag Cloud: start app with these tags already excluded
 var showEmptyTagInSummary = true; // The (no tag) sum should appear in Tag Summary?
 var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
@@ -1329,6 +1330,7 @@ function getSelectedFile() {
 function reloadSelectedFile() {
 	// Save currently selected tags
 	initSelectedTags = getSelectedTags();
+	initExcludedTags = getExcludedTags();
 	// Reload
 	loadSelectedFile();
 	// Cancel link action
@@ -1610,6 +1612,10 @@ function parseData() {
 	if (initSelectedTags.length > 0) {
 		selectTheseTags(initSelectedTags);
 	}
+	// Already exclude some tags now?
+	if (initExcludedTags.length > 0) {
+		excludeTheseTags(initExcludedTags);
+	}
 }
 
 function filterData() {
@@ -1871,6 +1877,25 @@ function selectTheseTags(tags) {
 			removeClass(el, 'unselected');
 			removeClass(el, 'excluded');
 			addClass(el, 'selected');
+			// force show
+			el.style.display = '';
+		}
+	}
+}
+
+function excludeTheseTags(tags) {
+	// Force select some tags, used at start up or reload
+	var i, leni, el, els;
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		if (tags.hasItem(el.innerHTML)) {
+			// select
+			removeClass(el, 'unselected');
+			removeClass(el, 'selected');
+			addClass(el, 'excluded');
 			// force show
 			el.style.display = '';
 		}
@@ -3014,6 +3039,9 @@ function init() {
 	}
 	if (typeof initSelectedTags === 'string') {
 		initSelectedTags = (initSelectedTags) ? initSelectedTags.strip().split(/\s+/) : [];
+	}
+	if (typeof initExcludedTags === 'string') {
+		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
 	}
 
 	// Set interface labels

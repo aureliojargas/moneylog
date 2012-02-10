@@ -161,6 +161,7 @@
 //
 // ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
+// initExcludedTags = 'luz'     ;// Iniciar já com estas tags riscadas
 // showEmptyTagInSummary = true ;// Mostrar o item (sem tag) no somatório de tags?
 // checkTagSummarySort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 
