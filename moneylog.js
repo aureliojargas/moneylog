@@ -549,6 +549,17 @@ Array.prototype.hasArrayItem = function (arr) {
 	return false;
 };
 
+Array.prototype.hasAllArrayItems = function (arr) {
+	var i, leni, items;
+	items = arr.clone();
+	for (i = 0, leni = items.length; i < leni; i++) {
+		if (!this.hasItem(items[i])) {
+			return false;
+		}
+	}
+	return true;
+};
+
 // http://www.shamasis.net/2009/09/fast-algorithm-to-find-unique-items-in-javascript-array/
 // I choose the "classic" version, it's more reliable.
 Array.prototype.unique = function() {
