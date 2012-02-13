@@ -1244,7 +1244,12 @@ function saveLocalData() {
 
 	editButton.innerHTML = i18n.msgSaving;
 	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
-	// reload report
+
+	// Save currently selected tags
+	initSelectedTags = getSelectedTags();
+	initExcludedTags = getExcludedTags();
+
+	// Reload report
 	resetData();
 	readData();
 	parseData();
