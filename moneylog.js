@@ -2643,7 +2643,6 @@ function updateToolbar() {
 			'search-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
-			'opt-last-months-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2655,6 +2654,10 @@ function updateToolbar() {
 			'opt-date-1-year-combo',
 			'opt-date-2-year-combo'
 		];
+		if (useLegacyDateFilter) {
+			unhide.push('opt-last-months-box');
+		}
+
 	// Monthly
 	} else if (reportType === 'm') {
 		hide = [
@@ -2664,9 +2667,6 @@ function updateToolbar() {
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
-		unhide = [
-			'opt-last-months-box'
-		];
 		add = [
 			'opt-date-1-month-combo',
 			'opt-date-2-month-combo'
@@ -2675,14 +2675,16 @@ function updateToolbar() {
 			'opt-date-1-year-combo',
 			'opt-date-2-year-combo'
 		];
+		if (useLegacyDateFilter) {
+			unhide.push('opt-last-months-box');
+		}
+
 	// Yearly
 	} else if (reportType === 'y') {
 		hide = [
 			'search-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
-			// Recent *months* doesn't make sense in yearly report
-			'opt-last-months-box',
 			'tag-cloud-box',
 			'tag-summary-box'
 		];
@@ -2694,6 +2696,10 @@ function updateToolbar() {
 			'opt-date-1-month-combo',
 			'opt-date-2-month-combo'
 		];
+		if (useLegacyDateFilter) {
+			// Recent *months* doesn't make sense in yearly report
+			hide.push('opt-last-months-box');
+		}
 	}
 
 	// Show/hide toolbar elements
