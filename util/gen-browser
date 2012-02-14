@@ -54,6 +54,15 @@ insert_css='
 </style>
 	d
 }
+
+/^<link .*href="extra\/mobile.css"/ {
+	a \
+<style type="text/css">
+	r ../extra/mobile.css
+	a \
+</style>
+	d
+}
 '
 insert_js='
 /^<script .*src="moneylog.js"/ {
