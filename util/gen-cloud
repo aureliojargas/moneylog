@@ -92,7 +92,6 @@ insert_txt="
 "
 insert_meta='
 /^<link rel="shortcut icon"/ a \
-<link rel="apple-touch-icon" href="images/ios_icon.png" />\
 <link rel="apple-touch-startup-image" href="images/ios_splash.png" />
 '
 insert_analytics='
