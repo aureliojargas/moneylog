@@ -66,7 +66,7 @@ var initChartYearly = 1;          // Initial selected item for the yearly chart 
 
 // External TXT files (used in flavors TXT and Cloud)
 // Note: The file encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
-var dataFiles = ['moneylog.txt']; // The paths for the data files
+var dataFiles = [];               // The paths for the TXT data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
 
 // MoneyLog Browser config
@@ -3064,6 +3064,11 @@ function init() {
 
 	// Set page title
 	document.title = appName + ' ' + appFlavor;
+
+	// Set default dataFile
+	if (dataFiles.length === 0 && (appMode === 'txt' || appMode === 'dropbox')) {
+		dataFiles = ['moneylog-' + lang + '.txt'];
+	}
 
 	// Prepare UI elements
 	populateLastMonthsCombo();
