@@ -1,0 +1,59 @@
+/*
+	MoneyLog print theme
+	by Aurelio Jargas
+	http://aurelio.net/moneylog/
+*/
+
+/* No toolbar */
+#toolbar {
+	display: none;
+}
+
+/* No margin/padding */
+#content {
+	margin: 0;
+	padding: 0;
+}
+
+/* Remove row backgrounds */
+tr.future,
+tr.total {
+	background-color: white !important;
+}
+
+/* Remove minibars from monthly/yearly reports */
+th.percent,
+td.minibar {
+	display: none;
+}
+
+/* Remove chart bars background and use outlines instead */
+.posbar {
+	background-color: white;
+	border: 1px solid silver;  /* solid */
+}
+.negbar {
+	background-color: white;
+	border: 1px dashed silver;  /* dashed */
+}
+
+/* Make the SELECT button appear as plain text */
+#chart-selector {
+	-webkit-appearance: none;
+	background: white;
+	border-width: 0;
+}
+
+/* Remove (or lighten, or force B&W) colors */
+#report td {
+	border-color: #DDDDDD;
+}
+#report tr.selected,
+#report tr.selected .neg {
+	background-color: #EEEEEE;
+	color: black ;
+}
+#rows-summary {
+	border: 1px solid silver;
+	background-color: white;
+}
