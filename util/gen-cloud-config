@@ -23,7 +23,7 @@ then
 	shift
 fi
 
-file_path="../extra/config-$lang.js"
+file_path="../sample/config-$lang.js"
 
 if test -f "$file_path"
 then

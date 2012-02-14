@@ -78,25 +78,25 @@ insert_css='
 	a \
 </style>\
 <style type="text/css">
-	r ../extra/portable.css
+	r ../css/portable.css
 	a \
 </style>
 	d
 }
 
-/^<link .*href="extra\/mobile.css"/ {
+/^<link .*href="css\/mobile.css"/ {
 	a \
 <style type="text/css">
-	r ../extra/mobile.css
+	r ../css/mobile.css
 	a \
 </style>
 	d
 }
 
-/^<link .*href="extra\/print.css"/ {
+/^<link .*href="css\/print.css"/ {
 	a \
 <style type="text/css" media="print">
-	r ../extra/print.css
+	r ../css/print.css
 	a \
 </style>
 	d
