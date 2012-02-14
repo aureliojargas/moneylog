@@ -2298,11 +2298,13 @@ function showOverview() {
 
 		// Compose the final rows: total, avg, min, max
 		len = overviewData.length;
-		results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
-		results.push(getOverviewTotalsRow(i18n.labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
-		results.push(getOverviewTotalsRow(i18n.labelMinimum, minPos, maxNeg, minPartial));
-		results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial, maxBalance));
-		// Note: Yes, maxNeg and minNeg are swapped for better reading
+		if (len > 1) {
+			results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
+			results.push(getOverviewTotalsRow(i18n.labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
+			results.push(getOverviewTotalsRow(i18n.labelMinimum, minPos, maxNeg, minPartial));
+			results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial, maxBalance));
+			// Note: Yes, maxNeg and minNeg are swapped for better reading
+		}
 
 		// And we're done on the report table
 		results.push('<\/table>');
