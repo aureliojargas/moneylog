@@ -207,7 +207,8 @@ var i18nDatabase = {
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
 		helpCancel: 'Discard changes and close the editor.',
-		helpSave: 'Save your data.'
+		helpSave: 'Save your data.',
+		helpWebsite: 'Go to the MoneyLog website.'
 
 		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
 		// helpInstall: 'Instructions: Save this page, use a plain text editor to add your own transactions and open it on the browser.',
@@ -297,7 +298,8 @@ var i18nDatabase = {
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
 		helpCancel: 'Descarta as alterações e fecha o editor sem salvar nada.',
-		helpSave: 'Salva os lançamentos que você alterou.'
+		helpSave: 'Salva os lançamentos que você alterou.',
+		helpWebsite: 'Visite o website do MoneyLog.'
 
 		// helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
 		// helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
@@ -3120,8 +3122,7 @@ function init() {
 
 	// Set interface tooltips
 	document.getElementById('fullscreen'               ).title = i18n.helpFullScreen;
-	document.getElementById('sitelink'                 ).href  = i18n.appUrl;
-	document.getElementById('sitelink'                 ).title = i18n.appDescription;
+	document.getElementById('website'                  ).title = i18n.helpWebsite;
 	document.getElementById('report-nav'               ).title = i18n.helpReports;
 	document.getElementById('opt-last-months-label'    ).title = i18n.helpLastMonths;
 	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;

@@ -104,6 +104,9 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 	line-height: 30px;
 	padding: 5px 0 0 20px;
 }
+#website:hover {
+	text-decoration: underline;
+}
 #app-flavor {
 	font-size: 15px;
 	line-height: 15px;
