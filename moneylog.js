@@ -3067,7 +3067,7 @@ function init() {
 
 	// Set default dataFile
 	if (dataFiles.length === 0 && (appMode === 'txt' || appMode === 'dropbox')) {
-		dataFiles = ['moneylog-' + lang + '.txt'];
+		dataFiles = ['data-' + lang + '.txt'];
 	}
 
 	// Prepare UI elements
