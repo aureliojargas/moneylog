@@ -460,9 +460,26 @@ var multiRawData = '';
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
 
+// We have special rules for tiny screens (480px or less)
+var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
+
 // The iframe loading occurs in parallel with the main execution, we need to know when it's done
 var iframeIsLoaded = true;
 
+// Change some defaults for the mobile version.
+// User can still overwrite those.
+if (isMobile) {
+	// Init with all widgets closed
+	initViewWidgetOpen = false;
+	initTagCloudOpen = false;
+	initTagSummaryOpen = false;
+	// Save horizontal space in report table
+	showRowCount = false;
+	showMiniBars = false;
+	// Use short month names in monthly report
+	i18nDatabase.pt.dateFormatMonth = i18nDatabase.pt.dateFormatMonth.replace('B', 'b');
+	i18nDatabase.en.dateFormatMonth = i18nDatabase.en.dateFormatMonth.replace('B', 'b');
+}
 
 /////////////////////////////////////////////////////////////////////
 //                              PROTOTYPES
@@ -2702,6 +2719,15 @@ function updateToolbar() {
 		}
 	}
 
+	// In Mobile toolbar we always add/remove, there's no hide.
+	// We save vertical space, and the report jump is not an issue.
+	if (isMobile) {
+		add = add.concat(unhide);
+		remove = remove.concat(hide);
+		hide = [];
+		unhide = [];
+	}
+
 	// Show/hide toolbar elements
 	for (i = 0, leni = add.length; i < leni; i++) {
 		if (!add_exceptions.hasItem(add[i])) {
@@ -2820,7 +2846,7 @@ function toggleFullScreen() {
 	if (isFullScreen) {
 		toolbar.style.display = 'block';
 		logo.style.display = 'block';
-		content.style.marginLeft = '217px';  // #toolbar width
+		content.style.marginLeft = (isMobile) ? 0 : '217px';  // #toolbar width
 		isFullScreen = false;
 	} else {
 		toolbar.style.display = 'none';
