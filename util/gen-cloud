@@ -19,10 +19,6 @@ cd $(dirname "$0")
 
 lang="pt"           # pt, en, es, ca. Use --lang to change it.
 
-# Files
-html_path="../moneylog.html"
-txt_path="../moneylog.txt"
-
 # Option --lang
 if test "$1" = '--lang'
 then
@@ -31,11 +27,9 @@ then
 	shift
 fi
 
-# Language adjustments
-if test "$lang" != 'pt'
-then
-	txt_path="../moneylog-$lang.txt"
-fi
+# Files
+html_path="../moneylog.html"
+txt_path="../moneylog-$lang.txt"
 
 # Patterns:
 # <link rel="stylesheet" type="text/css" href="moneylog.css">
