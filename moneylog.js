@@ -3067,7 +3067,7 @@ function init() {
 
 	// Set default dataFile
 	if (dataFiles.length === 0 && (appMode === 'txt' || appMode === 'dropbox')) {
-		dataFiles = ['data-' + lang + '.txt'];
+		dataFiles = ['sample/data-' + lang + '.txt'];
 	}
 
 	// Prepare UI elements

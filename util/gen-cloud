@@ -29,7 +29,7 @@ fi
 
 # Files
 html_path="../moneylog.html"
-txt_path="../moneylog-$lang.txt"
+txt_path="../sample/data-$lang.txt"
 
 # Patterns:
 # <link rel="stylesheet" type="text/css" href="moneylog.css">
