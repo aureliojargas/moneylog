@@ -114,9 +114,6 @@
 	#report {
 		margin-top: 2em;
 	}
-	# report td {
-		border-width: 1px;  /* show vertical border */
-	}
 	td.date,
 	td.tags {
 		text-align: center;
