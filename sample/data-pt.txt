@@ -1,5 +1,4 @@
-# Troque estes dados pelos seus, separados por TAB
-# Repito: separados por TAB, e não espaços em branco
+# Troque estes dados pelos seus, separados por TABs ou espaços
 # A data é no formato ANO-MES-DIA
 
 2011-09-01	-100	Saldo inicial da conta :(

@@ -1,6 +1,4 @@
-# Cambie estos datos por los suyos, separando las columnas usando la tecla TAB
-# Repito: use la tecla TAB para separar las columnas, NO USE ESPACIOS EN BLANCO!
-# Consejo: verifique que su editor de textos no esté configurado para reemplazar tabulaciones por espacios en blanco!
+# Cambie estos datos por los suyos, separando las columnas usando la tecla TAB o espacios en blanco
 # La fecha debe ser ingresada en el formato AÑO-MES-DÍA
 
 2011-09-01	-100	Saldo inicial :(

@@ -1,5 +1,4 @@
-# Change this data by yours, separated by TABs
-# Again: Separated by TABs, not spaces
+# Change this data by yours, separated by TABs or spaces
 # The date is on the YEAR-MONTH-DAY format
 
 2011-09-01	-100	My initial balance :(
