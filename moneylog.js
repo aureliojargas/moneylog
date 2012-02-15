@@ -104,7 +104,7 @@ var commentChar = '#';   // Must be at line start (column 1)
 var dataPatterns = {
 	rowBlankSeparated:
 		// Uses multiple TAB and spaces as field separators
-		/^[ \t]*(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]*(.*)$/,
+		/^(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]*(.*)$/,
 	date:
 		// YYYY-MM-DD
 		/^ *(\d{4}-\d\d-\d\d) *$/,
@@ -1452,7 +1452,7 @@ function parseData() {
 	// Scan data rows
 	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
-		thisRow = rows[i];
+		thisRow = rows[i].lstrip();  // Ignore left spacing
 		rowDate = rowAmount = rowText = '';
 
 		///////////////////////////////////////////////////////////// Firewall
@@ -1462,7 +1462,7 @@ function parseData() {
 			continue;
 		}
 		// Skip blank lines
-		if (!thisRow.strip()) {
+		if (!thisRow) {
 			continue;
 		}
 
