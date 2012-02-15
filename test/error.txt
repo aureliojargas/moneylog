@@ -1,0 +1,36 @@
+# http://aurelio.net/moneylog/
+# MoneyLog ERROR test file.
+# Uncomment one by one to see the error.
+#
+# Use these settings to test this file:
+#   reportType = 'd';
+#   checkDateFrom = false;
+#   useLegacyDataFormat = false;
+#   dataFiles = ['test/error.txt'];
+
+
+### No value
+# 2000-01-01
+
+### Invalid value: spaces are not allowed between signal and number
+# 2000-01-01    - 10
+
+### Invalid value: unrecognized number format.
+# 2000-01-01    ++2
+# 2000-01-01    -+2
+# 2000-01-01    .50
+# 2000-01-01    1,2
+
+### Invalid value: cents are ok, but other punctuation is wrong
+# 2000-01-01    1.23,45
+# 2000-01-01    12.34.234,56
+
+### Invalid recurrent period: zero or negative
+# 2000-01-01    100/0
+# 2000-01-01    100/-2
+# 2000-01-01    100*-2
+
+
+### useLegacyDataFormat: two or more Tabs in description
+# 2000-01-01	10	foo	bar
+# 2000-01-01	10	foo	bar	baz
