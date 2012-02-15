@@ -155,6 +155,7 @@ var i18nDatabase = {
 		labelDateUntil: 'Until',
 		labelTagCloud: 'Tag Cloud',
 		labelTagSummary: 'Tag Summary',
+		labelRowsSummaryReset: 'Reset',
 		labelNoData: 'No data.',
 		labelsDetailed: ['Date', 'Amount', 'Tags', 'Description', 'Balance'],
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
@@ -203,6 +204,7 @@ var i18nDatabase = {
 		helpTagSummarySort: 'Order the Tag Summary by values instead tag names.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
+		helpRowsSummaryReset: 'Undo all the selections you have made in the report.',
 		// helpMonthRange: 'Show/hide the month range controls.',
 		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
 		helpClose: 'Close the editor (without saving!)',
@@ -247,6 +249,7 @@ var i18nDatabase = {
 		labelDateUntil: 'Até',
 		labelTagCloud: 'Tags',
 		labelTagSummary: 'Somatório de tags',
+		labelRowsSummaryReset: 'Limpar',
 		labelNoData: 'Nenhum lançamento.',
 		labelsDetailed: ['Data', 'Valor', 'Tags', 'Descrição', 'Acumulado'],
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
@@ -294,6 +297,7 @@ var i18nDatabase = {
 		helpTagSummarySort: 'Ordena o sumário de tags pelos valores, não pelos nomes.',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
+		helpRowsSummaryReset: 'Desmarca todas as linhas que você selecionou no extrato.',
 		// helpMonthRange: 'Mostra e esconde o seletor de meses.',
 		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
 		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
@@ -3124,6 +3128,7 @@ function init() {
 	document.getElementById('opt-date-2-label'         ).innerHTML = i18n.labelDateUntil + ':';
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
 	document.getElementById('tag-summary-header'       ).innerHTML = i18n.labelTagSummary;
+	document.getElementById('rows-summary-reset'       ).innerHTML = i18n.labelRowsSummaryReset;
 
 	// Set interface tooltips
 	document.getElementById('fullscreen'               ).title = i18n.helpFullScreen;
@@ -3143,6 +3148,7 @@ function init() {
 	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
+	document.getElementById('rows-summary-reset'       ).title = i18n.helpRowsSummaryReset;
 	document.getElementById('editor-open'              ).title = i18n.helpEdit;
 	document.getElementById('editor-close'             ).title = i18n.helpCancel;
 	document.getElementById('editor-save'              ).title = i18n.helpSave;
@@ -3209,6 +3215,7 @@ function init() {
 	document.getElementById('tag-summary-opt-nsort-check').onclick  = showReport;
 	document.getElementById('chart-selector'         ).onchange = showReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
+	document.getElementById('rows-summary-reset'     ).onclick  = showReport;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
 	document.getElementById('tag-summary-header'     ).onclick  = toggleTagSummary;

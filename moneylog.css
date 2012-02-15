@@ -523,6 +523,9 @@ table.chart tr:hover td {
 	width: 100%;
 	margin-bottom: 5px;
 }
+#rows-summary-reset {
+	margin-top: 0.5em;
+}
 
 /* ---------------------------------------------- Footer */
 
