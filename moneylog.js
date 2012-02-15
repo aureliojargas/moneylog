@@ -77,6 +77,7 @@ var ignoreDataOlderThan = '';     // Ignore entries older than this date (ie: 20
 var ignoreDataNewerThan = '';     // Ignore entries newer than this date (ie: 2020-12-31)
 
 // Legacy options
+var useLegacyDataFormat = false;  // Use v4-style TAB-only as separator?
 var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
 var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
@@ -95,8 +96,7 @@ var useDropboxStorage;
 var appMode = 'txt';
 
 // Data format
-var useBlankFieldSeparator = true; // Use blanks (TABs and spaces) as field separator?
-var dataFieldSeparator = '\t';
+var dataFieldSeparator = '\t';  // Only used if useLegacyDataFormat=true
 var dataRecordSeparator = /\r?\n/;  // \r\n Windows, \n Linux/Mac
 var dataTagTerminator = '|';
 var dataTagSeparator = ',';
@@ -1467,7 +1467,7 @@ function parseData() {
 		}
 
 		// New style matching method: regex
-		if (useBlankFieldSeparator) {
+		if (!useLegacyDataFormat) {
 
 			fields = thisRow.match(dataPatterns.rowBlankSeparated);
 
