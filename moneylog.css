@@ -574,6 +574,7 @@ table.chart tr:hover td {
 	outline-width: 0;  /* disable focus ring */
 	border-style: none;
 	margin: 0;
+	font-family: monospace;
 }
 #editor-buttons {
 	position: fixed;
