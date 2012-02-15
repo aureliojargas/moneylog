@@ -1440,7 +1440,7 @@ function readData() {
 }
 
 function parseData() {
-	var i, j, lenj, rows, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash, tagNames;
+	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash, tagNames;
 
 	// Reset the data holders
 	parsedData = [];
@@ -1452,26 +1452,27 @@ function parseData() {
 	// Scan data rows
 	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
+		thisRow = rows[i];
 		rowDate = rowAmount = rowText = '';
 
 		///////////////////////////////////////////////////////////// Firewall
 
 		// Skip commented rows
-		if (rows[i].indexOf(commentChar) === 0) {
+		if (thisRow.indexOf(commentChar) === 0) {
 			continue;
 		}
 		// Skip blank lines
-		if (!rows[i].strip()) {
+		if (!thisRow.strip()) {
 			continue;
 		}
 
 		// New style matching method: regex
 		if (useBlankFieldSeparator) {
 
-			fields = rows[i].match(dataPatterns.rowBlankSeparated);
+			fields = thisRow.match(dataPatterns.rowBlankSeparated);
 
 			if (!fields) {
-				invalidData(lineno, rows[i]);
+				invalidData(lineno, thisRow);
 				return;  // abort at first error
 			}
 
@@ -1481,13 +1482,13 @@ function parseData() {
 		} else {
 
 			// Separate fields
-			fields = rows[i].split(dataFieldSeparator);
+			fields = thisRow.split(dataFieldSeparator);
 
 			// Error: rows with no separator
 			if (fields.length === 1) {
 				invalidData(
 					lineno,
-					i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
+					i18n.errorNoFieldSeparator + ' "' + dataFieldSeparator + '"\n\n' + thisRow
 				);
 				return;  // abort at first error
 
@@ -1495,7 +1496,7 @@ function parseData() {
 			} else if (fields.length - 1 > 2) {
 				invalidData(
 					lineno,
-					i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + rows[i]
+					i18n.errorTooManySeparators + ' "' + dataFieldSeparator + '"\n\n' + thisRow
 				);
 				return;  // abort at first error
 			}
@@ -1518,12 +1519,12 @@ function parseData() {
 		if (rowDate) {
 			rowDate = rowDate[1]; // group 1
 		} else {
-			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + rows[i]);
+			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + thisRow);
 		}
 
 		///////////////////////////////////////////////////////////// Amount
 
-		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + rows[i];
+		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + thisRow;
 
 		// Extract (and remove) recurrent information from the amount (if any)
 		recurrentAmount = fields[1].match(dataPatterns.amountRecurrent);
