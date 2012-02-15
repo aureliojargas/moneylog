@@ -1,4 +1,5 @@
-# MoneyLog test file.
+# MoneyLog legacy test file.
+# To be used with useLegacyDataFormat = true.
 # The month balance should always be zero.
 
 # + - spaces
