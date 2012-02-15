@@ -1,5 +1,5 @@
 MoneyLog - http://aurelio.net/moneylog/
-/util/multi
+/test/multi
 ---------------------------------------------------------------------
 
 Arquivos de teste para a função de usar vários arquivos TXT, de
@@ -8,11 +8,11 @@ maneira isolada ou simultânea.
 Coloque as seguintes linhas no config.js:
 
 dataFiles = [
-	'util/multi/1.txt',
-	'util/multi/2.txt',
-	'util/multi/3.txt',
-	'util/multi/4.txt',
-	'util/multi/5.txt',
+	'test/multi/1.txt',
+	'test/multi/2.txt',
+	'test/multi/3.txt',
+	'test/multi/4.txt',
+	'test/multi/5.txt',
 	'*'
 ];
 
