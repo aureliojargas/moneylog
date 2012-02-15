@@ -104,7 +104,7 @@
 2000-05-12	-10	 foo	bar	baz 
 2000-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2000-06-01	-10	tag|foo
 2000-06-02	-10	tag| foo
 2000-06-03	-10	tag|foo 
@@ -282,7 +282,7 @@
 2001-05-12	-10.00	 foo	bar	baz 
 2001-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2001-06-01	-10.00	tag|foo
 2001-06-02	-10.00	tag| foo
 2001-06-03	-10.00	tag|foo 
@@ -461,7 +461,7 @@
 2002-05-12	-10,00	 foo	bar	baz 
 2002-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2002-06-01	-10,00	tag|foo
 2002-06-02	-10,00	tag| foo
 2002-06-03	-10,00	tag|foo 
@@ -640,7 +640,7 @@
 2003-05-12	-1.000	 foo	bar	baz 
 2003-05-99	12.000	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2003-06-01	-1.000	tag|foo
 2003-06-02	-1.000	tag| foo
 2003-06-03	-1.000	tag|foo 
@@ -819,7 +819,7 @@
 2004-05-12	-1.000,00	 foo	bar	baz 
 2004-05-99	12.000	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2004-06-01	-1.000,00	tag|foo
 2004-06-02	-1.000,00	tag| foo
 2004-06-03	-1.000,00	tag|foo 
@@ -998,7 +998,7 @@
 2005-05-12	-1,000.00	 foo	bar	baz 
 2005-05-99	12.000	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2005-06-01	-1,000.00	tag|foo
 2005-06-02	-1,000.00	tag| foo
 2005-06-03	-1,000.00	tag|foo 
@@ -1177,7 +1177,7 @@
 2006-05-12	-1000,00	 foo	bar	baz 
 2006-05-99	12.000	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2006-06-01	-1000,00	tag|foo
 2006-06-02	-1000,00	tag| foo
 2006-06-03	-1000,00	tag|foo 
@@ -1356,7 +1356,7 @@
 2007-05-12	-1000.00	 foo	bar	baz 
 2007-05-99	12.000	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2007-06-01	-1000.00	tag|foo
 2007-06-02	-1000.00	tag| foo
 2007-06-03	-1000.00	tag|foo 
@@ -1535,7 +1535,7 @@
 2013-05-12	-10/1	 foo	bar	baz 
 2013-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2013-06-01	-10/1	tag|foo
 2013-06-02	-10/1	tag| foo
 2013-06-03	-10/1	tag|foo 
@@ -1714,7 +1714,7 @@
 2014-05-12	-10.00/1	 foo	bar	baz 
 2014-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2014-06-01	-10.00/1	tag|foo
 2014-06-02	-10.00/1	tag| foo
 2014-06-03	-10.00/1	tag|foo 
@@ -1893,7 +1893,7 @@
 2015-05-12	-10,00/1	 foo	bar	baz 
 2015-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2015-06-01	-10,00/1	tag|foo
 2015-06-02	-10,00/1	tag| foo
 2015-06-03	-10,00/1	tag|foo 
@@ -2072,7 +2072,7 @@
 2016-05-12	-10*1	 foo	bar	baz 
 2016-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2016-06-01	-10*1	tag|foo
 2016-06-02	-10*1	tag| foo
 2016-06-03	-10*1	tag|foo 
@@ -2251,7 +2251,7 @@
 2017-05-12	-10.00*1	 foo	bar	baz 
 2017-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2017-06-01	-10.00*1	tag|foo
 2017-06-02	-10.00*1	tag| foo
 2017-06-03	-10.00*1	tag|foo 
@@ -2430,7 +2430,7 @@
 2018-05-12	-10,00*1	 foo	bar	baz 
 2018-05-99	120	foo
 
-# description (with spaces and TABs)
+# tag and description (with spaces and TABs)
 2018-06-01	-10,00*1	tag|foo
 2018-06-02	-10,00*1	tag| foo
 2018-06-03	-10,00*1	tag|foo 
