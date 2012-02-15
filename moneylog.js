@@ -142,15 +142,14 @@ var i18nDatabase = {
 		labelNegative: 'negative',
 		labelGreaterThan: 'greater than',
 		labelLessThan: 'less than',
-		labelFuture: 'Future Data',
+		labelShowFuture: 'Future Data',
 		labelMonthPartials: 'Monthly Partials',
-		// labelFilter: 'Search field',
-		labelRegex: 'regex',
-		labelNegate: 'negate',
+		// labelSearch: 'Search field',
+		labelSearchRegex: 'regex',
+		labelSearchNegate: 'negate',
 		// labelHelp: 'Question mark',
 		labelReload: 'Reload',
 		labelViewOptions: 'View',
-		// labelMonthRange: 'Month Range',
 		labelDateFrom: 'From',
 		labelDateUntil: 'Until',
 		labelTagCloud: 'Tag Cloud',
@@ -165,15 +164,14 @@ var i18nDatabase = {
 		labelMaximum: 'Max',
 		labelCount: 'Count',
 		labelMonths: ['month', 'months'],
-		labelTagEmpty: '(no tag)',
-		// labelTagNegate: 'Ignore selected tags',
-		labelTagGroup: 'Group selected tags',
-		labelTagReset: 'Reset',
+		labelTagCloudEmpty: '(no tag)',
+		labelTagCloudGroup: 'Group selected tags',
+		labelTagCloudReset: 'Reset',
 		labelTagSummarySort: 'Sort by value',
-		labelEdit: 'Edit',
-		labelClose: 'Close',
-		labelCancel: 'Cancel',
-		labelSave: 'Save',
+		labelEditorOpen: 'Edit',
+		labelEditorClose: 'Close',
+		labelEditorCancel: 'Cancel',
+		labelEditorSave: 'Save',
 		errorInvalidData: 'Invalid data at line ',
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Too many separators',
@@ -190,26 +188,24 @@ var i18nDatabase = {
 		helpReports: 'Daily, monthly and yearly reports, with charts, balance and totals.',
 		helpLastMonths: 'See only the latest data, ignoring oldies.',
 		helpValueFilter: 'See only positive or negative values, or greater/lesser than some value.',
-		helpFuture: 'Shows future incoming and expenses.',
+		helpShowFuture: 'Shows future incoming and expenses.',
 		helpMonthPartials: 'Shows the monthly balance, with sums of your incoming and expenses on the period.',
-		helpFilter: 'Filter the reports in real time, as you type.',
-		helpRegex: 'Use regular expressions on the search field.',
-		helpNegate: 'Remove the search results from the report.',
+		helpSearch: 'Filter the reports in real time, as you type.',
+		helpSearchRegex: 'Use regular expressions on the search field.',
+		helpSearchNegate: 'Remove the search results from the report.',
 		// helpHelp: 'Show/hide the help text.',
 		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
-		// helpTagNegate: 'Remove from the report all the rows that match the selected tags.',
-		helpTagGroup: 'Only match if the entry has ALL the selected tags.',
-		helpTagReset: 'Undo all the selections you have made in the Tag Cloud.',
+		helpTagCloudGroup: 'Only match if the entry has ALL the selected tags.',
+		helpTagCloudReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagSummarySort: 'Order the Tag Summary by values instead tag names.',
 		helpTagSummary: 'Show/hide the tag summary.',
 		helpTagCloud: 'Show/hide the tag cloud.',
 		helpRowsSummaryReset: 'Undo all the selections you have made in the report.',
-		// helpMonthRange: 'Show/hide the month range controls.',
-		helpEdit: 'Open the editor, for you to add/remove/edit your data.',
-		helpClose: 'Close the editor (without saving!)',
-		helpCancel: 'Discard changes and close the editor.',
-		helpSave: 'Save your data.',
+		helpEditorOpen: 'Open the editor, for you to add/remove/edit your data.',
+		helpEditorClose: 'Close the editor (without saving!)',
+		helpEditorCancel: 'Discard changes and close the editor.',
+		helpEditorSave: 'Save your data.',
 		helpWebsite: 'Go to the MoneyLog website.'
 
 		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
@@ -236,15 +232,14 @@ var i18nDatabase = {
 		labelNegative: 'negativos',
 		labelGreaterThan: 'maiores que',
 		labelLessThan: 'menores que',
-		labelFuture: 'Lançamentos Futuros',
+		labelShowFuture: 'Lançamentos Futuros',
 		labelMonthPartials: 'Parciais Mensais',
-		// labelFilter: 'Caixa de pesquisa',
-		labelRegex: 'regex',
-		labelNegate: 'excluir',
+		// labelSearch: 'Caixa de pesquisa',
+		labelSearchRegex: 'regex',
+		labelSearchNegate: 'excluir',
 		// labelHelp: 'Ajuda',
 		labelReload: 'Recarregar',
 		labelViewOptions: 'Visualizar',
-		// labelMonthRange: 'Meses',
 		labelDateFrom: 'De',
 		labelDateUntil: 'Até',
 		labelTagCloud: 'Tags',
@@ -259,15 +254,14 @@ var i18nDatabase = {
 		labelMaximum: 'Máximo',
 		labelCount: 'Linhas',
 		labelMonths: ['mês', 'meses'],
-		labelTagEmpty: '(sem tag)',
-		// labelTagNegate: 'Ignorar',
-		labelTagGroup: 'Combinar',
-		labelTagReset: 'Desmarcar todas',
+		labelTagCloudEmpty: '(sem tag)',
+		labelTagCloudGroup: 'Combinar',
+		labelTagCloudReset: 'Desmarcar todas',
 		labelTagSummarySort: 'Ordenar por valor',
-		labelEdit: 'Editar',
-		labelClose: 'Fechar',
-		labelCancel: 'Cancelar',
-		labelSave: 'Salvar',
+		labelEditorOpen: 'Editar',
+		labelEditorClose: 'Fechar',
+		labelEditorCancel: 'Cancelar',
+		labelEditorSave: 'Salvar',
 		errorInvalidData: 'Lançamento inválido na linha ',
 		errorNoFieldSeparator: 'Separador não encontrado:',
 		errorTooManySeparators: 'Há mais de 2 separadores',
@@ -283,26 +277,24 @@ var i18nDatabase = {
 		helpReports: 'Extratos diário, mensal e anual, com gráficos, somatório, médias, mínimo, máximo e acumulado.',
 		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
 		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
-		helpFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
+		helpShowFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
 		helpMonthPartials: 'Resumo do mês, com saldo mensal e acumulado, e totais de ganhos e gastos.',
-		helpFilter: 'Filtra os relatórios em tempo real, de acordo com o que você digita.',
-		helpRegex: 'Usa expressões regulares na caixa de pesquisa.',
-		helpNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
+		helpSearch: 'Filtra os relatórios em tempo real, de acordo com o que você digita.',
+		helpSearchRegex: 'Usa expressões regulares na caixa de pesquisa.',
+		helpSearchNegate: 'Inverte o filtro, escondendo as transações pesquisadas.',
 		// helpHelp: 'Mostra e esconde o texto de ajuda.',
 		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
-		// helpTagNegate: 'Remove do extrato os lançamentos que possuem as tags selecionadas.',
-		helpTagGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
-		helpTagReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
+		helpTagCloudGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
+		helpTagCloudReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagSummarySort: 'Ordena o sumário de tags pelos valores, não pelos nomes.',
 		helpTagSummary: 'Mostra e esconde o somatório das tags.',
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpRowsSummaryReset: 'Desmarca todas as linhas que você selecionou no extrato.',
-		// helpMonthRange: 'Mostra e esconde o seletor de meses.',
-		helpEdit: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
-		helpClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
-		helpCancel: 'Descarta as alterações e fecha o editor sem salvar nada.',
-		helpSave: 'Salva os lançamentos que você alterou.',
+		helpEditorOpen: 'Abre o editor de lançamentos, para você incluir/remover/alterar os dados do extrato.',
+		helpEditorClose: 'Fecha o editor de lançamentos (apenas fecha, não salva o texto!).',
+		helpEditorCancel: 'Descarta as alterações e fecha o editor sem salvar nada.',
+		helpEditorSave: 'Salva os lançamentos que você alterou.',
 		helpWebsite: 'Visite o website do MoneyLog.'
 
 		// helpTip: 'Dica:	Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
@@ -323,11 +315,11 @@ var i18nDatabase = {
 		labelNegative: 'negatiu',
 		labelGreaterThan: 'més gran que',
 		labelLessThan: 'més petit que',
-		labelFuture: 'Mostra les dades futures',
+		labelShowFuture: 'Mostra les dades futures',
 		labelMonthPartials: 'Mostra els Parcials Mensuals',
-		// labelFilter: 'Camp de cerca',
-		labelRegex: 'regex',
-		labelNegate: 'nega-ho',
+		// labelSearch: 'Camp de cerca',
+		labelSearchRegex: 'regex',
+		labelSearchNegate: 'nega-ho',
 		labelReload: 'Carrega',
 		labelNoData: 'No hi ha dades.',
 		labelsDetailed: ['Data', 'Import', 'Etiquetes', 'Descripció', 'Balanç'],
@@ -337,8 +329,8 @@ var i18nDatabase = {
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
 		labelMonths: ['mes', 'mesos'],
-		labelTagEmpty: 'BUIT',
-		labelTagGroup: 'Etiquetes de grup triades',
+		labelTagCloudEmpty: 'BUIT',
+		labelTagCloudGroup: 'Etiquetes de grup triades',
 		errorInvalidData: 'Hi ha un adada no vàlida a la línia ',
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Hi ha masses separadors',
@@ -348,15 +340,15 @@ var i18nDatabase = {
 		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
 		helpLastMonths: 'Mostra només les dades més recents, omet les antigues.',
 		helpValueFilter: 'Mostra només els valors positius o negatius, o major / menor que un cert valor.',
-		helpFuture: 'Mostra els ingressos i despeses futures.',
+		helpShowFuture: 'Mostra els ingressos i despeses futures.',
 		helpMonthPartials: 'Mostra el saldo mensual, amb sumes dels vostres ingressos i despeses del període.',
-		helpFilter: 'Filtre dels informes en temps real, a mesura que escriu.',
-		helpRegex: 'Utilitza expressions regulars en el camp de cerca.',
-		helpNegate: "Eliminar els resultats de cerca de l'informe.",
+		helpSearch: 'Filtre dels informes en temps real, a mesura que escriu.',
+		helpSearchRegex: 'Utilitza expressions regulars en el camp de cerca.',
+		helpSearchNegate: "Eliminar els resultats de cerca de l'informe.",
 		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
 		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
 		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
-		helpTagGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
+		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
 
 		// helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
 		// helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
@@ -378,11 +370,11 @@ var i18nDatabase = {
 		labelNegative: 'negativos',
 		labelGreaterThan: 'mayores a',
 		labelLessThan: 'menores a',
-		labelFuture: 'Mostrar movimientos futuros',
+		labelShowFuture: 'Mostrar movimientos futuros',
 		labelMonthPartials: 'Mostrar parcial mensual',
-		// labelFilter: 'Caja de búsqueda',
-		labelRegex: 'regex',
-		labelNegate: 'negar',
+		// labelSearch: 'Caja de búsqueda',
+		labelSearchRegex: 'regex',
+		labelSearchNegate: 'negar',
 		labelReload: 'Recargar',
 		labelNoData: 'Sin movimientos.',
 		labelsDetailed: ['Fecha', 'Monto', 'Concepto', 'Descripción', 'Balance'],
@@ -392,8 +384,8 @@ var i18nDatabase = {
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
 		labelMonths: ['mes', 'meses'],
-		labelTagEmpty: 'VACÍOS',
-		labelTagGroup: 'Unir conceptos seleccionados',
+		labelTagCloudEmpty: 'VACÍOS',
+		labelTagCloudGroup: 'Unir conceptos seleccionados',
 		errorInvalidData: 'Información invalida en la línea ',
 		errorNoFieldSeparator: 'No se encontraron separadores:',
 		errorTooManySeparators: 'Demasiados separadores',
@@ -403,18 +395,18 @@ var i18nDatabase = {
 		helpReports: 'Reporte diario, mensual o anual, con gráficas, promedios, balances y totales.',
 		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
 		helpValueFilter: 'Vea solo los montos positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
-		helpFuture: 'Vea movimientos agendados a futuro.',
+		helpShowFuture: 'Vea movimientos agendados a futuro.',
 		helpMonthPartials: 'Vea el balance mensual, con el saldo mensual, el acumulado y totales de ingresos y egresos.',
-		helpFilter: 'Evalue los reportes en tiempo real a medida que los va tipeando.',
-		helpRegex: 'Use expresiones regulares en la caja de búsqueda.',
-		helpNegate: 'Invierte el criterio de búsqueda.',
+		helpSearch: 'Evalue los reportes en tiempo real a medida que los va tipeando.',
+		helpSearchRegex: 'Use expresiones regulares en la caja de búsqueda.',
+		helpSearchNegate: 'Invierte el criterio de búsqueda.',
 		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
 		helpReload: 'Recargar solo la información y no la página entera.',
 		// helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
-		helpTagGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
-		helpEdit: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
-		helpClose: 'Cierra el editor de movimientos (solo cierra, no guarda los cambios!).',
-		helpSave: 'Guarda las movimientos editados.'
+		helpTagCloudGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados (debe seleccionar al menos 2 conceptos).',
+		helpEditorOpen: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
+		helpEditorClose: 'Cierra el editor de movimientos (solo cierra, no guarda los cambios!).',
+		helpEditorSave: 'Guarda las movimientos editados.'
 
 		// helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
 		// helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
@@ -1277,7 +1269,7 @@ function saveLocalData() {
 	readData();
 	parseData();
 	showReport();
-	editButton.innerHTML = i18n.labelEdit;
+	editButton.innerHTML = i18n.labelEditorOpen;
 }
 function loadLocalData() {
 	// first time using localStorage (or empty), load default data from #data (PRE)
@@ -1643,7 +1635,7 @@ function parseData() {
 
 	// Compose the tag cloud: sorted, append (no tag) item
 	tagNames = tagNames.sort(sortIgnoreCase).unique();
-	tagNames.push(i18n.labelTagEmpty);
+	tagNames.push(i18n.labelTagCloudEmpty);
 	createTagCloud(tagNames);
 
 	// Already select some tags now?
@@ -1811,7 +1803,7 @@ function applyTags(theData) {
 
 		// No tag, set the "empty" tag so we can match it and add it to dataTags
 		if (!rowTags.length) {
-			rowTags = [i18n.labelTagEmpty];
+			rowTags = [i18n.labelTagCloudEmpty];
 		}
 
 		// Save all the rows tags for later
@@ -2143,8 +2135,8 @@ function updateTagSummary(theData) {
 
 		// Append no-tag data to the end of the table
 		if (noTagSum !== undefined && showEmptyTagInSummary) {
-			tagNames.push(i18n.labelTagEmpty);
-			tagData[i18n.labelTagEmpty] = noTagSum;
+			tagNames.push(i18n.labelTagCloudEmpty);
+			tagData[i18n.labelTagCloudEmpty] = noTagSum;
 		}
 
 		// Save table data, sorted by tag name
@@ -3112,17 +3104,17 @@ function init() {
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
 	document.getElementById('opt-last-months-label'    ).innerHTML = i18n.labelLastMonths + ':';
 	document.getElementById('opt-value-filter-label'   ).innerHTML = i18n.labelValueFilter + ':';
-	document.getElementById('opt-future-label'         ).innerHTML = i18n.labelFuture;
+	document.getElementById('opt-future-label'         ).innerHTML = i18n.labelShowFuture;
 	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
-	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelRegex;
-	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelNegate;
-	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagGroup;
-	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagReset;
+	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelSearchRegex;
+	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
+	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagCloudGroup;
+	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagCloudReset;
 	document.getElementById('tag-summary-opt-nsort-label').innerHTML = i18n.labelTagSummarySort;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
-	document.getElementById('editor-open'              ).innerHTML = i18n.labelEdit;
-	document.getElementById('editor-close'             ).innerHTML = i18n.labelCancel;
-	document.getElementById('editor-save'              ).innerHTML = i18n.labelSave;
+	document.getElementById('editor-open'              ).innerHTML = i18n.labelEditorOpen;
+	document.getElementById('editor-close'             ).innerHTML = i18n.labelEditorCancel;
+	document.getElementById('editor-save'              ).innerHTML = i18n.labelEditorSave;
 	document.getElementById('view-options-header'      ).innerHTML = i18n.labelViewOptions;
 	document.getElementById('opt-date-1-label'         ).innerHTML = i18n.labelDateFrom + ':';
 	document.getElementById('opt-date-2-label'         ).innerHTML = i18n.labelDateUntil + ':';
@@ -3136,22 +3128,22 @@ function init() {
 	document.getElementById('report-nav'               ).title = i18n.helpReports;
 	document.getElementById('opt-last-months-label'    ).title = i18n.helpLastMonths;
 	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;
-	document.getElementById('opt-future-label'         ).title = i18n.helpFuture;
+	document.getElementById('opt-future-label'         ).title = i18n.helpShowFuture;
 	document.getElementById('opt-monthly-label'        ).title = i18n.helpMonthPartials;
-	document.getElementById('filter'                   ).title = i18n.helpFilter;
-	document.getElementById('opt-regex-label'          ).title = i18n.helpRegex;
-	document.getElementById('opt-negate-label'         ).title = i18n.helpNegate;
+	document.getElementById('filter'                   ).title = i18n.helpSearch;
+	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
+	document.getElementById('opt-negate-label'         ).title = i18n.helpSearchNegate;
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
-	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagGroup;
-	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagReset;
+	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagCloudGroup;
+	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagCloudReset;
 	document.getElementById('tag-summary-opt-nsort-label').title = i18n.helpTagSummarySort;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewoptions;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
 	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
 	document.getElementById('rows-summary-reset'       ).title = i18n.helpRowsSummaryReset;
-	document.getElementById('editor-open'              ).title = i18n.helpEdit;
-	document.getElementById('editor-close'             ).title = i18n.helpCancel;
-	document.getElementById('editor-save'              ).title = i18n.helpSave;
+	document.getElementById('editor-open'              ).title = i18n.helpEditorOpen;
+	document.getElementById('editor-close'             ).title = i18n.helpEditorCancel;
+	document.getElementById('editor-save'              ).title = i18n.helpEditorSave;
 
 	// Mark current report as active (CSS)
 	addClass(document.getElementById(reportType), 'active');
