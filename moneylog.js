@@ -708,16 +708,23 @@ Date.prototype.getMonthName = function () {
 Date.prototype.getMonthShortName = function () {
 	return this.getMonthName().slice(0, 3);
 };
-Date.prototype.getMonthDays = function () {
+Date.prototype.getMonthDays = function () {  // How many days in this month?
 	// http://stackoverflow.com/a/1185804
 	var d = new Date(this.getFullYear(), this.getMonth() + 1, 0);
 	return d.getDate();
 };
 Date.prototype.fromML = function (str) {  // str: YYYY-MM-DD
-	this.setFullYear(
-		parseInt(str.slice(0,  4), 10),
-		parseInt(str.slice(5,  7), 10) - 1,  // month is zero-based
-		parseInt(str.slice(8, 10), 10) || 1);
+	// In MoneyLog we can have special dates with days like: 00 and 99.
+	//   2000-01-00 turns to 2000-01-01 (first day)
+	//   2000-01-99 turns to 2000-01-31 (last day)
+	// So we always create the date with day=1, then set the day.
+	var y, m, d, max;
+	y = parseInt(str.slice(0,  4), 10);
+	m = parseInt(str.slice(5,  7), 10) - 1;   // month is zero-based
+	d = parseInt(str.slice(8, 10), 10) || 1;  // day zero -> day 1
+	this.setFullYear(y, m, 1);                // create date
+	max = this.getMonthDays();
+	this.setDate((d > max) ? max : d);        // huge day -> last day
 };
 Date.prototype.toML = function () {  // Returns "YYYY-MM-DD"
 	return this.getYearML() + '-' + this.getMonthML() + '-' + this.getDateML();
