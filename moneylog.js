@@ -104,7 +104,7 @@ var commentChar = '#';   // Must be at line start (column 1)
 var dataPatterns = {
 	rowBlankSeparated:
 		// Uses multiple TAB and spaces as field separators
-		/^[ \t]*(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]+(.*)$/,
+		/^[ \t]*(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]*(.*)$/,
 	date:
 		// YYYY-MM-DD
 		/^ *(\d{4}-\d\d-\d\d) *$/,
