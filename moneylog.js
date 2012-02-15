@@ -553,8 +553,14 @@ if (!Array.prototype.avg) {
 	};
 }
 
+String.prototype.lstrip = function () {
+	return this.replace(/^\s+/, '');
+};
+String.prototype.rstrip = function () {
+	return this.replace(/\s+$/, '');
+};
 String.prototype.strip = function () {
-	return this.replace(/^\s+/, '').replace(/\s+$/, '');
+	return this.lstrip().rstrip();
 };
 
 String.prototype.unacccent = function () {
