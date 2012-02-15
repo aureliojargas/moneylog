@@ -708,6 +708,11 @@ Date.prototype.getMonthName = function () {
 Date.prototype.getMonthShortName = function () {
 	return this.getMonthName().slice(0, 3);
 };
+Date.prototype.getMonthDays = function () {
+	// http://stackoverflow.com/a/1185804
+	var d = new Date(this.getFullYear(), this.getMonth() + 1, 0);
+	return d.getDate();
+};
 Date.prototype.fromML = function (str) {  // str: YYYY-MM-DD
 	this.setFullYear(
 		parseInt(str.slice(0,  4), 10),
@@ -1031,7 +1036,7 @@ function toggleClass(el, klass) {
 
 // CSS stylesheet add/remove
 //
-// http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
+// http://stackoverflow.com/q/524696
 // http://dev.opera.com/articles/view/dynamic-style-css-javascript/
 //
 function addStyleSheet(element_id, contents) {
