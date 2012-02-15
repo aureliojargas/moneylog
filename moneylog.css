@@ -37,6 +37,7 @@ body {
 #content {
 	margin-left: 217px;  /* See toggleFullScreen, #toolbar */
 	padding: 30px;
+	overflow: auto;
 }
 
 /* ---------------------------------------------- Misc */
