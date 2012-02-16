@@ -507,6 +507,7 @@ if (isMobile) {
 	i18nDatabase.en.dateFormatMonth = i18nDatabase.en.dateFormatMonth.replace('B', 'b');
 }
 
+
 /////////////////////////////////////////////////////////////////////
 //                              PROTOTYPES
 /////////////////////////////////////////////////////////////////////
@@ -563,6 +564,10 @@ String.prototype.strip = function () {
 	return this.lstrip().rstrip();
 };
 
+String.prototype.replaceAll = function (from, to) {
+	return this.split(from).join(to);
+	// http://stackoverflow.com/a/542305
+};
 String.prototype.unacccent = function () {
 	if (!this.match(/[^a-z0-9 ]/)) { // no accented char
 		return this;
@@ -2565,6 +2570,7 @@ function showReport() {
 	}
 }
 
+
 /////////////////////////////////////////////////////////////////////
 //                       INTERFACE UPDATE
 /////////////////////////////////////////////////////////////////////
@@ -3011,6 +3017,150 @@ function showHideEditButton() {
 
 
 /////////////////////////////////////////////////////////////////////
+//                            Widgets
+/////////////////////////////////////////////////////////////////////
+
+// Widget object, all widgets must use this type.
+// The init() method of your instance will be called automatically at start up.
+// Ex.:
+//     var HelloWorld = new Widget('hello-world', 'Hello World!', 'HelloWorld');
+//     HelloWorld.init = function () { this.create(); alert('Hello World'); };
+//     console.log(HelloWorld);
+//
+function Widget(widgetId, widgetName, instanceName) {
+	this.id = widgetId;
+	this.widgetName = widgetName;
+	this.instanceName = instanceName;
+	this.created = false;
+
+	// Save the instance into a global holder
+	this.constructor.instances.push(this);
+	this.instanceIndex = this.constructor.instances.length - 1;
+
+	// Holders for the widget's DOM elements
+	this.box = undefined;     // #widgetId-box
+	this.header = undefined;  // #widgetId-header
+	this.content = undefined; // #widgetId-content
+
+	// Widget Config
+	this.config = {};
+	this.config.active = true;
+	this.config.opened = true;
+	// Active and opened by default, so the user notices it
+
+	// Note: using inline onclick="" in templates to avoid 'this' scope problems
+	this.boxTemplate = [
+		'<div id="{widgetId}-box" class="widget-box">',
+		'	<a id="{widgetId}-header" class="button" href="#"',
+		'		onclick="return Widget.toggle(\'{widgetId}\')">{widgetName}</a>',
+		'	<div id="{widgetId}-content" class="widget-content" style="display:none;">',
+		'	</div>',
+		'</div>'
+	].join('\n');
+	this.checkboxTemplate = [
+		'	<div class="checkbox-option">',
+		'		<input id="{widgetId}-{optionId}" class="trigger" type="checkbox"',
+		'			onclick="{instanceName}.checkboxClicked(this)">',
+		'		<label for="{widgetId}-{optionId}">{label}</label>',
+		'	</div>'
+	].join('\n');
+}
+
+// Global holder that automatically save all instances
+Widget.instances = [];
+
+Widget.toggle = function (widgetId) {
+	// Show/hide Widget contents
+	// Static, not available in instances
+
+	var header, content;
+
+	header = document.getElementById(widgetId + '-header');
+	content = document.getElementById(widgetId + '-content');
+
+	if (content.style.display === 'block') {
+		content.style.display = 'none';
+		removeClass(header, 'active');
+	} else {
+		content.style.display = 'block';
+		addClass(header, 'active');
+	}
+	return false;  // cancel link action
+};
+
+Widget.prototype.toggle = function () {
+	// Show/hide Widget contents
+	//
+	// this = Widget instance when called directly: InstanceName.toggle();
+	// this = DOM element <a> when used in onclick: element.onclick = InstanceName.toggle;
+	//
+	// Do not use the second form. If you must, you can use this instead:
+	// element.onclick = (function () { return InstanceName.toggle(); });
+
+	return Widget.toggle(this.id);
+};
+
+Widget.prototype.init = function () {
+	// Called automatically at start up. Redefine it in your widget!
+
+	this.initPre();
+	// put your init code here //
+	this.initPost();
+};
+
+Widget.prototype.initPre = function () {
+	// Default init preparation: create widget DIV if config allows
+	this.create();
+};
+
+Widget.prototype.initPost = function () {
+	// Default init pos-flight: open the widget, if necessary
+	if (this.config.active && this.config.opened && this.created) {
+		this.toggle();
+	}
+};
+
+Widget.prototype.create = function () {
+	// Append a new widget-box to the #widgets area
+
+	if (!this.config.active) { return; }
+
+	document.getElementById('widgets').innerHTML += this.boxTemplate
+		.replace(/\{widgetId\}/g, this.id)
+		.replace(/\{widgetName\}/g, this.widgetName);
+	this.box = document.getElementById(this.id + '-box');
+	this.header = document.getElementById(this.id + '-header');
+	this.content = document.getElementById(this.id + '-content');
+	this.created = (this.box && this.header && this.content);
+};
+
+Widget.prototype.addCheckbox = function (id, label, checked) {
+	// Append a new checkbox to the widget-box contents
+
+	var template = this.checkboxTemplate;
+	if (checked) {
+		template = template.replace('<input', '<input checked="checked"');
+	}
+
+	this.content.innerHTML += template
+		.replace(/\{widgetId\}/g, this.id)
+		.replace(/\{optionId\}/g, id)
+		.replace(/\{label\}/g, label)
+		.replace(/\{instanceName\}/g, this.instanceName);
+
+	return document.getElementById(this.id + '-' + id);  // return the element
+};
+
+Widget.prototype.checkboxClicked = function (element) {  // Event handler
+	// Called when a checkbox made with addCheckbox() is clicked.
+	//   element = clicked checkbox
+	//   this = Widget instance
+	// You must implement this function in your widget.
+	return element;
+};
+
+
+/////////////////////////////////////////////////////////////////////
 //                             INIT
 /////////////////////////////////////////////////////////////////////
 
@@ -3046,6 +3196,7 @@ function initAppMode() {
 }
 
 function init() {
+	var i;
 
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
@@ -3314,6 +3465,11 @@ function init() {
 	}
 	if (!showTagSummary) {
 		document.getElementById('tag-summary-box').style.display = 'none';
+	}
+
+	// Init all available Widgets one by one
+	for (i = 0; i < Widget.instances.length; i++) {
+		Widget.instances[i].init();
 	}
 
 	// User choose other default report, let's update the toolbar accordingly

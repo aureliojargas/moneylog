@@ -195,7 +195,7 @@ a.button.active {
 
 /* ---------------------------------------------- [ boxes ] */
 
-.box-content {
+.widget-content {
 	background-color: white;
 	border: 1px solid #bbb;  /* element_border */
 	border-top-width: 0;
@@ -204,11 +204,11 @@ a.button.active {
 	line-height: 185%;
 }
 
-.box-content select,
-.box-content table {
+.widget-content select,
+.widget-content table {
 	width: 100%;
 }
-.box-options input {
+.widget-options input {
 	display: inline;
 	margin-right: 0.5em;
 }
