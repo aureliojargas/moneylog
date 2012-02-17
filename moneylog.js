@@ -2568,6 +2568,11 @@ function showReport() {
 	} else {
 		showOverview();
 	}
+
+	// Widget hook: showReportPost
+	for (i = 0; i < Widget.instances.length; i++) {
+		Widget.instances[i].showReportPost();
+	}
 }
 
 
@@ -3175,6 +3180,9 @@ Widget.prototype.checkboxClicked = function (element) {  // Event handler
 	// You must implement this function in your widget.
 	return element;
 };
+
+// Hooks
+Widget.prototype.showReportPost = function () {};
 
 
 /////////////////////////////////////////////////////////////////////
