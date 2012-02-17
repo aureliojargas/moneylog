@@ -3021,10 +3021,9 @@ function showHideEditButton() {
 /////////////////////////////////////////////////////////////////////
 
 // Widget object, all widgets must use this type.
-// The init() method of your instance will be called automatically at start up.
 // Ex.:
-//     var HelloWorld = new Widget('hello-world', 'Hello World!', 'HelloWorld');
-//     HelloWorld.init = function () { this.create(); alert('Hello World'); };
+//     var HelloWorld = new Widget('hello-world', 'Hello World', 'HelloWorld');
+//     HelloWorld.populate = function () { this.content.innerHTML = 'Hellooo!'; };
 //     console.log(HelloWorld);
 //
 function Widget(widgetId, widgetName, instanceName) {
@@ -3035,7 +3034,7 @@ function Widget(widgetId, widgetName, instanceName) {
 
 	// Save the instance into a global holder
 	this.constructor.instances.push(this);
-	this.instanceIndex = this.constructor.instances.length - 1;
+	// this.instanceIndex = this.constructor.instances.length - 1;
 
 	// Holders for the widget's DOM elements
 	this.box = undefined;     // #widgetId-box
@@ -3069,6 +3068,19 @@ function Widget(widgetId, widgetName, instanceName) {
 // Global holder that automatically save all instances
 Widget.instances = [];
 
+Widget.tidyInstances = function () {
+	// Remove inactive widgets from global namespace and Widget.instances array
+	var i;
+	for (i = 0; i < Widget.instances.length;) {
+		if (!Widget.instances[i].config.active) {
+			window[Widget.instances[i].instanceName] = undefined;
+			Widget.instances.splice(i, 1);
+		} else {
+			i++;
+		}
+	}
+};
+
 Widget.toggle = function (widgetId) {
 	// Show/hide Widget contents
 	// Static, not available in instances
@@ -3101,21 +3113,19 @@ Widget.prototype.toggle = function () {
 };
 
 Widget.prototype.init = function () {
-	// Called automatically at start up. Redefine it in your widget!
+	// Called automatically at the end of MoneyLog start up. At his point,
+	// user config is applied and app UI is ready. But user data was not
+	// read/parsed yet.
 
-	this.initPre();
-	// put your init code here //
-	this.initPost();
-};
-
-Widget.prototype.initPre = function () {
-	// Default init preparation: create widget DIV if config allows
+	// Create widget DIV if config allows
 	this.create();
-};
+	if (!this.created) { return; }
 
-Widget.prototype.initPost = function () {
-	// Default init pos-flight: open the widget, if necessary
-	if (this.config.active && this.config.opened && this.created) {
+	// Populate widget contents
+	this.populate();
+
+	// Open the widget, if necessary
+	if (this.config.opened && this.config.active) {
 		this.toggle();
 	}
 };
@@ -3127,11 +3137,18 @@ Widget.prototype.create = function () {
 
 	document.getElementById('widgets').innerHTML += this.boxTemplate
 		.replace(/\{widgetId\}/g, this.id)
-		.replace(/\{widgetName\}/g, this.widgetName);
+		.replace(/\{widgetName\}/g, i18n[this.instanceName + 'HeaderLabel'] || this.widgetName);
+
 	this.box = document.getElementById(this.id + '-box');
 	this.header = document.getElementById(this.id + '-header');
 	this.content = document.getElementById(this.id + '-content');
-	this.created = (this.box && this.header && this.content);
+	this.created = (this.box && this.header && this.content) ? true : false;
+};
+
+Widget.prototype.populate = function () {
+	// Called right after create(), here you create the widget contents.
+	// You must implement this function in your widget.
+	return;
 };
 
 Widget.prototype.addCheckbox = function (id, label, checked) {
@@ -3468,6 +3485,7 @@ function init() {
 	}
 
 	// Init all available Widgets one by one
+	Widget.tidyInstances();
 	for (i = 0; i < Widget.instances.length; i++) {
 		Widget.instances[i].init();
 	}
