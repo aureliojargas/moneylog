@@ -480,6 +480,7 @@ var i18n;
 var rawData = '';
 var parsedData = [];
 var overviewData = [];
+var dailyData = [];  // daily report data (filtered, sorted) - not a cache (yet)
 var waitingToLoad = [];
 var selectedRows = [];
 var multiRawData = '';
@@ -1371,6 +1372,7 @@ function insertTab(e) {
 
 function resetData() {
 	overviewData = [];
+	dailyData = [];
 	parsedData = [];
 	rawData = '';
 }
@@ -2560,6 +2562,9 @@ function showDetailed() {
 
 	}
 	document.getElementById('report').innerHTML = results;
+
+	// Save report data
+	dailyData = theData;
 }
 
 function showReport() {
