@@ -5,28 +5,18 @@
 // A sample widget that shows some MoneyLog options
 // for you to turn ON or OFF with handy checkboxes.
 //
-// The widget config is at the end.
-//
-// To use this widget, copy/paste all this code
-// to the end of your config.js file.
-
+// Copy/paste all this code to the end of your config.js file.
 
 
 // Create a new widget instance
 var NerdToy = new Widget('nerd-toy', 'Nerd Toy', 'NerdToy');
 
-// init() is called automatically in MoneyLog start up,
-// after all user config is read and before the report is shown.
-//
-NerdToy.init = function () {
-	this.initPre();
-	if (this.created) {
-		this.populate();
-	}
-	this.initPost();
-};
+// Widget config
+NerdToy.config.active = true;  // Is this widget active?
+NerdToy.config.opened = true;  // Start app with this widget opened?
 
 // This function fills the widget contents, creating all the checkboxes.
+// populate() is called automatically in the default this.init().
 NerdToy.populate = function () {
 	var i, opts, opt;
 	opts = [
@@ -51,10 +41,3 @@ NerdToy.checkboxClicked = function (checkbox) {
 	window[optionName] = checkbox.checked;  // set config
 	showReport();  // reload the report
 };
-// console.log(NerdToy);
-
-
-// Widget Config
-NerdToy.config.active = true;  // Is this widget active?
-NerdToy.config.opened = true;  // Start app with this widget opened?
-
