@@ -2900,7 +2900,7 @@ function Widget(widgetId, widgetName, instanceName) {
 		'	<div class="checkbox-option">',
 		'		<input id="{widgetId}-{idSuffix}" class="trigger" type="checkbox"',
 		'			onclick="{instanceName}.checkboxClicked(this)">',
-		'		<label for="{widgetId}-{idSuffix}">{label}</label>',
+		'		<label id="{widgetId}-{idSuffix}-label" for="{widgetId}-{idSuffix}">{label}</label>',
 		'	</div>'
 	].join('\n');
 }
