@@ -1668,7 +1668,7 @@ function parseData() {
 		dataLastDate = parsedData[parsedData.length-1][0];
 
 		// Update the date range combos
-		populateDateRangeCombos('m');
+		populateDateRangeCombos();
 	} else {
 		dataFirstDate = dataLastDate = undefined;
 	}
@@ -2507,7 +2507,7 @@ function populateLastMonthsCombo() {
 	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
 }
 
-function populateDateRangeCombos(comboType) {  // comboType: m, y
+function populateDateRangeCombos() {
 	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
 
 	el1 = document.getElementById('opt-date-1-month-combo');
