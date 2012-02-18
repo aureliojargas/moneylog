@@ -465,8 +465,8 @@ var highlightRegex;
 var i18n;
 var rawData = '';
 var parsedData = [];
+var reportData = [];  // filtered by applyTags(filterData())
 var overviewData = [];
-var dailyData = [];  // daily report data (filtered, sorted) - not a cache (yet)
 var waitingToLoad = [];
 var selectedRows = [];
 var multiRawData = '';
@@ -1359,7 +1359,7 @@ function insertTab(e) {
 
 function resetData() {
 	overviewData = [];
-	dailyData = [];
+	reportData = [];
 	parsedData = [];
 	rawData = '';
 }
@@ -1669,7 +1669,6 @@ function parseData() {
 
 		// Update the date range combos
 		populateDateRangeCombos('m');
-		populateDateRangeCombos('y');
 	} else {
 		dataFirstDate = dataLastDate = undefined;
 	}
@@ -1704,25 +1703,17 @@ function filterData() {
 	if (!useLegacyDateFilter) {
 
 		if (document.getElementById('opt-date-1-check').checked) {
-			if (reportType === 'y') {
-				firstDate = document.getElementById('opt-date-1-year-combo').value + '-00-00';
-			} else {
-				firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
-			}
+			firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
 		}
 		if (document.getElementById('opt-date-2-check').checked) {
-			if (reportType === 'y') {
-				lastDate = document.getElementById('opt-date-2-year-combo').value + '-99-99';
-			} else {
-				lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
-			}
+			lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
 		}
 
 	// Old style date options
 	} else {
 
 		// [X] Recent Only, works for daily/monthly
-		if (document.getElementById('opt-last-months-check').checked && reportType !== 'y') {
+		if (document.getElementById('opt-last-months-check').checked) {
 			firstDate = getPastMonth(parseInt(document.getElementById('opt-last-months-combo').value, 10) - 1);  // 1 = current
 		}
 		// [X] Future Data, works for all reports
@@ -1733,25 +1724,23 @@ function filterData() {
 	}
 
 
-	// Get filters data for the detailed report
-	if (reportType === 'd') {
-		filter = document.getElementById('filter').value;
-		isRegex = document.getElementById('opt-regex-check').checked;
-		isNegated = document.getElementById('opt-negate-check').checked;
+	// Get filters data for the report
+	filter = document.getElementById('filter').value;
+	isRegex = document.getElementById('opt-regex-check').checked;
+	isNegated = document.getElementById('opt-negate-check').checked;
 
-		if (document.getElementById('opt-value-filter-check').checked) {
-			valueFilter = document.getElementById('opt-value-filter-combo').value;
-			valueFilterArg = parseInt(document.getElementById('opt-value-filter-number').value, 10) || 0;
-		}
+	if (document.getElementById('opt-value-filter-check').checked) {
+		valueFilter = document.getElementById('opt-value-filter-combo').value;
+		valueFilterArg = parseInt(document.getElementById('opt-value-filter-number').value, 10) || 0;
+	}
 
-		// Hack: Value filtering on the search box!
-		// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
-		temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
-		if (temp) {
-			valueFilter = temp[1];
-			valueFilterArg = temp[2] || 0;
-			filter = ''; // The filter was (ab)used, now we can discard it
-		}
+	// Hack: Value filtering on the search box!
+	// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
+	temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
+	if (temp) {
+		valueFilter = temp[1];
+		valueFilterArg = temp[2] || 0;
+		filter = ''; // The filter was (ab)used, now we can discard it
 	}
 
 	// Prepare filter contents as /regex/ or string, always ignore case
@@ -2150,8 +2139,12 @@ function showOverview() {
 		thead = '<th class="row-count"><\/th>' + thead;
 	}
 
+	// XXX Disabling cache for now
+	overviewData = [];
+
 	if (!overviewData.length) { // Data not cached
-		theData = filterData();
+		theData = applyTags(filterData());
+		reportData = theData.clone();
 	}
 
 	if (overviewData.length || theData.length) {
@@ -2304,7 +2297,9 @@ function showDetailed() {
 	chartLabels = [];
 
 	monthPartials = document.getElementById('opt-monthly-check');
+
 	theData = applyTags(filterData());
+	reportData = theData.clone();
 
 	if (theData.length > 0) {
 
@@ -2454,9 +2449,6 @@ function showDetailed() {
 
 	}
 	document.getElementById('report').innerHTML = results;
-
-	// Save report data
-	dailyData = theData;
 }
 
 function showReport() {
@@ -2517,6 +2509,8 @@ function populateLastMonthsCombo() {
 
 function populateDateRangeCombos(comboType) {  // comboType: m, y
 	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
+
+	// XXX remove year combo code, since it's not used anymore?
 
 	if (comboType === 'y') {
 		el1 = document.getElementById('opt-date-1-year-combo');
@@ -2591,7 +2585,7 @@ function populateValueFilterCombo() {
 }
 
 function updateToolbar() {
-	var i, leni, add, remove, hide, unhide, add_exceptions, tagSummaryOn;
+	var i, leni, add, remove, hide, unhide;
 
 	// Visibility On/Off
 	// Monthly/Yearly report hides some controls from the toolbar.
@@ -2603,82 +2597,24 @@ function updateToolbar() {
 	remove = [];
 	hide = [];
 	unhide = [];
-	add_exceptions = [];
-
-	tagSummaryOn = (TagSummary && TagSummary.config.active) ? true : false;
-
-	if (!showViewWidget) { add_exceptions.push('view-options-box'); }
-	if (!showTagCloud)   { add_exceptions.push('tag-cloud-box'   ); }
 
 	// Daily
 	if (reportType === 'd') {
 		unhide = [
-			'search-box',
-			'opt-monthly-box',
-			'opt-value-filter-box',
-			'tag-cloud-box'
+			'opt-monthly-box'
 		];
-		add = [
-			'opt-date-1-month-combo',
-			'opt-date-2-month-combo'
-		];
-		remove = [
-			'opt-date-1-year-combo',
-			'opt-date-2-year-combo'
-		];
-		if (useLegacyDateFilter) {
-			unhide.push('opt-last-months-box');
-		}
-		if (tagSummaryOn) {
-			unhide.push('tag-summary-box');
-		}
 
 	// Monthly
 	} else if (reportType === 'm') {
 		hide = [
-			'search-box',
-			'opt-monthly-box',
-			'opt-value-filter-box',
-			'tag-cloud-box'
+			'opt-monthly-box'
 		];
-		add = [
-			'opt-date-1-month-combo',
-			'opt-date-2-month-combo'
-		];
-		remove = [
-			'opt-date-1-year-combo',
-			'opt-date-2-year-combo'
-		];
-		if (useLegacyDateFilter) {
-			unhide.push('opt-last-months-box');
-		}
-		if (tagSummaryOn) {
-			hide.push('tag-summary-box');
-		}
 
 	// Yearly
 	} else if (reportType === 'y') {
 		hide = [
-			'search-box',
-			'opt-monthly-box',
-			'opt-value-filter-box',
-			'tag-cloud-box'
+			'opt-monthly-box'
 		];
-		add = [
-			'opt-date-1-year-combo',
-			'opt-date-2-year-combo'
-		];
-		remove = [
-			'opt-date-1-month-combo',
-			'opt-date-2-month-combo'
-		];
-		if (useLegacyDateFilter) {
-			// Recent *months* doesn't make sense in yearly report
-			hide.push('opt-last-months-box');
-		}
-		if (tagSummaryOn) {
-			hide.push('tag-summary-box');
-		}
 	}
 
 	// In Mobile toolbar we always add/remove, there's no hide.
@@ -2692,9 +2628,7 @@ function updateToolbar() {
 
 	// Show/hide toolbar elements
 	for (i = 0, leni = add.length; i < leni; i++) {
-		if (!add_exceptions.hasItem(add[i])) {
-			document.getElementById(add[i]).style.display = 'block';
-		}
+		document.getElementById(add[i]).style.display = 'block';
 	}
 	for (i = 0, leni = remove.length; i < leni; i++) {
 		document.getElementById(remove[i]).style.display = 'none';
@@ -3145,14 +3079,12 @@ TagSummary.populate = function () {
 
 // hook
 TagSummary.showReportPost = function () {
-	if (reportType === 'd') {
-		this.update();
-	}
+	this.update();
 };
 
 // Updates the summary with the current report information
 TagSummary.update = function () {
-	var i, leni, j, lenj, tag, results, tagNames, tagData, reportData, tableData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
+	var i, leni, j, lenj, tag, results, tagNames, tagData, theData, tableData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
 
 	results = [];
 	tagNames = [];
@@ -3160,14 +3092,14 @@ TagSummary.update = function () {
 	tableData = [];
 	valueSort = this.sortCheckbox.checked;
 	noTagSum = undefined;  // Do not use 0. The final result may be zero.
-	reportData = dailyData.clone();
+	theData = reportData.clone();
 
 	// Scan report rows
-	for (i = 0, leni = reportData.length; i < leni; i++) {
-		// rowDate        = reportData[i][0];
-		rowAmount      = reportData[i][1];
-		rowTags        = reportData[i][2].clone();
-		// rowDescription = reportData[i][3];
+	for (i = 0, leni = theData.length; i < leni; i++) {
+		// rowDate        = theData[i][0];
+		rowAmount      = theData[i][1];
+		rowTags        = theData[i][2].clone();
+		// rowDescription = theData[i][3];
 
 		if (rowTags.length === 0) {
 			// No tag in this row

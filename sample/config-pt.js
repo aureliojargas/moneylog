@@ -97,19 +97,15 @@
 // checkDateFrom = true         ;// Iniciar marcando a opção [X] De:?
 // checkDateUntil = true        ;// Iniciar marcando a opção [X] Até:?
 //
-// As quatro opções seguintes servem para escolher qual será o valor padrão
-// que já virá escolhido nos seletores de data De: e Até:, sendo as duas
-// primeiras para os extratos Diário e Mensal, e as outras para o Anual.
-// Coloque um número, positivo ou negativo, que indicará o número de meses
-// (ou anos) à partir da data atual. Números positivos para meses/anos
-// futuros e negativos para os passados. Por exemplo, para dizer "três meses
-// atrás", use -3. Para dizer mês/ano seguinte, use 1. Zero significa o
-// mês/ano corrente.
+// As duas opções seguintes servem para escolher qual será o valor padrão
+// que virá escolhido nos seletores de data De: e Até:. Coloque um número,
+// positivo ou negativo, que indicará o número de meses à partir da data
+// atual. Use números positivos para meses futuros e negativos para os
+// passados. Por exemplo, para dizer "três meses atrás", use -3. Para dizer
+// mês seguinte, use 1. Zero significa o mês corrente.
 //
-// initMonthOffsetFrom = -2     ;// Mensal: valor inicial da opção [X] De:
-// initMonthOffsetUntil = 0     ;// Mensal: valor inicial da opção [X] Até:
-// initYearOffsetFrom = -5      ;// Anual : valor inicial da opção [X] De:
-// initYearOffsetUntil = 5      ;// Anual : valor inicial da opção [X] Até:
+// initMonthOffsetFrom = -2     ;// Valor inicial da opção [X] De:
+// initMonthOffsetUntil = 0     ;// Valor inicial da opção [X] Até:
 
 
 ////// PARCIAIS MENSAIS
