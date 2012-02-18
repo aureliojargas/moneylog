@@ -2510,36 +2510,23 @@ function populateLastMonthsCombo() {
 function populateDateRangeCombos(comboType) {  // comboType: m, y
 	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
 
-	// XXX remove year combo code, since it's not used anymore?
-
-	if (comboType === 'y') {
-		el1 = document.getElementById('opt-date-1-year-combo');
-		el2 = document.getElementById('opt-date-2-year-combo');
-		offset1 = initYearOffsetFrom;
-		offset2 = initYearOffsetUntil;
-		fmt = 'Y';
-		range = getDataUniqueDates('y');
-	} else {
-		el1 = document.getElementById('opt-date-1-month-combo');
-		el2 = document.getElementById('opt-date-2-month-combo');
-		offset1 = initMonthOffsetFrom;
-		offset2 = initMonthOffsetUntil;
-		fmt = 'Y-m';
-		range = getDataUniqueDates('m');
-	}
+	el1 = document.getElementById('opt-date-1-month-combo');
+	el2 = document.getElementById('opt-date-2-month-combo');
+	offset1 = initMonthOffsetFrom;
+	offset2 = initMonthOffsetUntil;
+	fmt = 'Y-m';
+	range = getDataUniqueDates('m');
 
 	//// Let's choose which items to select by default.
 	//
 	// Get user defaults
 	if (typeof offset1 === 'number') {
-		offset1 = (comboType === 'y') ? offset1 * 12 : offset1;
 		index1 = range.indexOf(
 			formatDate(
 				addMonths(getCurrentDate(), offset1),  // apply offset
 				fmt));
 	}
 	if (typeof offset2 === 'number') {
-		offset2 = (comboType === 'y') ? offset2 * 12 : offset2;
 		index2 = range.indexOf(
 			formatDate(
 				addMonths(getCurrentDate(), offset2),  // apply offset
@@ -2560,14 +2547,9 @@ function populateDateRangeCombos(comboType) {  // comboType: m, y
 
 	// Both combos 1 and 2 will have the same items
 	for (i = 0, leni = range.length; i < leni; i++) {
-		if (comboType === 'y') {
-			el1.options[i] = new Option(range[i]);
-			el2.options[i] = new Option(range[i]);
-		} else {
-			my = (range[i] + '-01').toDate().format('b Y');  // short month name
-			el1.options[i] = new Option(my, range[i]);
-			el2.options[i] = new Option(my, range[i]);
-		}
+		my = (range[i] + '-01').toDate().format('b Y');  // short month name
+		el1.options[i] = new Option(my, range[i]);
+		el2.options[i] = new Option(my, range[i]);
 	}
 
 	// Set selected items
@@ -3406,8 +3388,6 @@ function init() {
 	document.getElementById('opt-date-2-check'       ).onclick  = toggleDateRange;
 	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;
 	document.getElementById('opt-date-2-month-combo' ).onchange = dateRangeComboChanged;
-	document.getElementById('opt-date-1-year-combo'  ).onchange = dateRangeComboChanged;
-	document.getElementById('opt-date-2-year-combo'  ).onchange = dateRangeComboChanged;
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
 	document.getElementById('chart-selector'         ).onchange = showReport;
