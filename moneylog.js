@@ -2898,9 +2898,9 @@ function Widget(widgetId, widgetName, instanceName) {
 	].join('\n');
 	this.checkboxTemplate = [
 		'	<div class="checkbox-option">',
-		'		<input id="{widgetId}-{optionId}" class="trigger" type="checkbox"',
+		'		<input id="{widgetId}-{idSuffix}" class="trigger" type="checkbox"',
 		'			onclick="{instanceName}.checkboxClicked(this)">',
-		'		<label for="{widgetId}-{optionId}">{label}</label>',
+		'		<label for="{widgetId}-{idSuffix}">{label}</label>',
 		'	</div>'
 	].join('\n');
 }
@@ -2994,7 +2994,7 @@ Widget.prototype.populate = function () {
 	return;
 };
 
-Widget.prototype.addCheckbox = function (id, label, checked) {
+Widget.prototype.addCheckbox = function (idSuffix, label, checked) {
 	// Append a new checkbox to the widget-box contents
 
 	var template = this.checkboxTemplate;
@@ -3004,11 +3004,11 @@ Widget.prototype.addCheckbox = function (id, label, checked) {
 
 	this.content.innerHTML += template
 		.replace(/\{widgetId\}/g, this.id)
-		.replace(/\{optionId\}/g, id)
+		.replace(/\{idSuffix\}/g, idSuffix)
 		.replace(/\{label\}/g, label)
 		.replace(/\{instanceName\}/g, this.instanceName);
 
-	return document.getElementById(this.id + '-' + id);  // return the element
+	return document.getElementById(this.id + '-' + idSuffix);  // return the element
 };
 
 Widget.prototype.checkboxClicked = function (element) {  // Event handler
