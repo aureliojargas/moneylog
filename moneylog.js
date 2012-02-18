@@ -41,18 +41,14 @@ var initYearOffsetUntil;          // To:   year will be N years from now (defaul
 // Widgets
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
 var initTagCloudOpen = true;      // Start app with the Tag Cloud widget opened?
-var initTagSummaryOpen = false;   // Start app with the Tag Summary widget opened?
 var showViewWidget = true;        // Show View widget in the sidebar?
 var showTagCloud = true;          // Show Tag Cloud widget in the sidebar?
-var showTagSummary = true;        // Show Tag Summary widget in the sidebar?
 
 // Tags
 var highlightTags = '';           // The tags you may want to highlight (ie: 'work kids')
 var ignoreTags = '';              // Ignore all entries that have one of these tags
 var initSelectedTags = '';        // Tag Cloud: start app with these tags already selected
 var initExcludedTags = '';        // Tag Cloud: start app with these tags already excluded
-var showEmptyTagInSummary = true; // The (no tag) sum should appear in Tag Summary?
-var checkTagSummarySort = false;  // Sort by value checkbox inits checked?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -184,11 +180,6 @@ var i18nDatabase = {
 		helpTagCloudReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagCloudGroup: 'Only match if the entry has ALL the selected tags.',
 		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
-		// Tag Summary
-		labelTagSummary: 'Tag Summary',
-		labelTagSummarySort: 'Sort by value',
-		helpTagSummary: 'Show/hide the tag summary.',
-		helpTagSummarySort: 'Order the Tag Summary by values instead tag names.',
 		// Rows Summary
 		labelRowsSummaryReset: 'Reset',
 		helpRowsSummaryReset: 'Undo all the selections you have made in the report.',
@@ -288,11 +279,6 @@ var i18nDatabase = {
 		helpTagCloudReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagCloudGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
 		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
-		// Tag Summary
-		labelTagSummary: 'Somatório de tags',
-		labelTagSummarySort: 'Ordenar por valor',
-		helpTagSummary: 'Mostra e esconde o somatório das tags.',
-		helpTagSummarySort: 'Ordena o sumário de tags pelos valores, não pelos nomes.',
 		// Rows Summary
 		labelRowsSummaryReset: 'Limpar',
 		helpRowsSummaryReset: 'Desmarca todas as linhas que você selecionou no extrato.',
@@ -486,6 +472,7 @@ var selectedRows = [];
 var multiRawData = '';
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
+var TagSummary;
 
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
@@ -499,7 +486,7 @@ if (isMobile) {
 	// Init with all widgets closed
 	initViewWidgetOpen = false;
 	initTagCloudOpen = false;
-	initTagSummaryOpen = false;
+	// initTagSummaryOpen = false;  // XXX not working anymore
 	// Save horizontal space in report table
 	showRowCount = false;
 	showMiniBars = false;
@@ -2141,94 +2128,6 @@ function updateSelectedRowsSummary() {
 	}
 }
 
-function updateTagSummary(theData) {
-	var i, leni, j, lenj, tag, results, tagNames, tagData, tableData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
-
-	results = [];
-	tagNames = [];
-	tagData = {};
-	tableData = [];
-	valueSort = document.getElementById('tag-summary-opt-nsort-check').checked;
-	noTagSum = undefined;  // Do not use 0. The final result may be zero.
-	theData = theData.clone();
-
-	// Scan report rows
-	for (i = 0, leni = theData.length; i < leni; i++) {
-		// rowDate        = theData[i][0];
-		rowAmount      = theData[i][1];
-		rowTags        = theData[i][2].clone();
-		// rowDescription = theData[i][3];
-
-		if (rowTags.length === 0) {
-			// No tag in this row
-			if (noTagSum === undefined) {
-				noTagSum = 0;
-			}
-			noTagSum += rowAmount;
-
-		} else {
-			// Sum all values for the same tag
-			for (j = 0, lenj = rowTags.length; j < lenj; j++) {
-				tag = rowTags[j];
-
-				// New tag?
-				if (!tagNames.hasItem(tag)) {
-					tagData[tag] = 0;
-					tagNames.push(tag);
-				}
-				tagData[tag] = tagData[tag] + rowAmount;
-			}
-		}
-	}
-
-	// We have tags?
-	if (tagNames.length || noTagSum !== undefined) {
-
-		// Sort tag names
-		tagNames.sort(sortIgnoreCase);
-
-		// Append no-tag data to the end of the table
-		if (noTagSum !== undefined && showEmptyTagInSummary) {
-			tagNames.push(i18n.labelTagCloudEmpty);
-			tagData[i18n.labelTagCloudEmpty] = noTagSum;
-		}
-
-		// Save table data, sorted by tag name
-		for (i = 0, leni = tagNames.length; i < leni; i++) {
-			tag = tagNames[i];
-			tableData.push([tag, tagData[tag]]);
-		}
-
-		// Sort by value?
-		if (valueSort) {
-			// Note: save/restore the global var contents
-			oldSort = sortColIndex;
-			sortColIndex = 1;
-			tableData.sort(sortArray);
-			sortColIndex = oldSort;
-		}
-
-		// Compose the HTML table
-		results.push('<table>');
-		for (i = 0, leni = tableData.length; i < leni; i++) {
-			results.push(
-				'<tr>' +
-				'<td>' + tableData[i][0] +  '<\/td>' +
-				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '<\/td>' +
-				'<\/tr>'
-			);
-		}
-		results.push('<\/table>');
-	}
-
-	// Save results to the respective DIV
-	results = results.join('\n');
-	document.getElementById('tag-summary-data').innerHTML = results;
-
-	// The options box is only shown if we have at least 2 tags
-	document.getElementById('tag-summary-options').style.display = (tableData.length > 1) ? 'block' : 'none';
-}
-
 function showOverview() {
 	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels;
 
@@ -2524,10 +2423,6 @@ function showDetailed() {
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
 		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 
-
-		// Tag Summary
-		updateTagSummary(theData);
-
 		// Always reset Rows Summary when generating reports
 		selectedRows = [];
 		updateSelectedRowsSummary();
@@ -2553,9 +2448,6 @@ function showDetailed() {
 
 	} else {
 		results = '<p>' + i18n.labelNoData + '<\/p>';
-
-		// Clear Tag Summary contents
-		updateTagSummary([]);
 
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
@@ -2699,7 +2591,7 @@ function populateValueFilterCombo() {
 }
 
 function updateToolbar() {
-	var i, leni, add, remove, hide, unhide, add_exceptions;
+	var i, leni, add, remove, hide, unhide, add_exceptions, tagSummaryOn;
 
 	// Visibility On/Off
 	// Monthly/Yearly report hides some controls from the toolbar.
@@ -2713,9 +2605,10 @@ function updateToolbar() {
 	unhide = [];
 	add_exceptions = [];
 
+	tagSummaryOn = (TagSummary && TagSummary.config.active) ? true : false;
+
 	if (!showViewWidget) { add_exceptions.push('view-options-box'); }
 	if (!showTagCloud)   { add_exceptions.push('tag-cloud-box'   ); }
-	if (!showTagSummary) { add_exceptions.push('tag-summary-box' ); }
 
 	// Daily
 	if (reportType === 'd') {
@@ -2723,8 +2616,7 @@ function updateToolbar() {
 			'search-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
-			'tag-cloud-box',
-			'tag-summary-box'
+			'tag-cloud-box'
 		];
 		add = [
 			'opt-date-1-month-combo',
@@ -2736,6 +2628,9 @@ function updateToolbar() {
 		];
 		if (useLegacyDateFilter) {
 			unhide.push('opt-last-months-box');
+		}
+		if (tagSummaryOn) {
+			unhide.push('tag-summary-box');
 		}
 
 	// Monthly
@@ -2744,8 +2639,7 @@ function updateToolbar() {
 			'search-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
-			'tag-cloud-box',
-			'tag-summary-box'
+			'tag-cloud-box'
 		];
 		add = [
 			'opt-date-1-month-combo',
@@ -2758,6 +2652,9 @@ function updateToolbar() {
 		if (useLegacyDateFilter) {
 			unhide.push('opt-last-months-box');
 		}
+		if (tagSummaryOn) {
+			hide.push('tag-summary-box');
+		}
 
 	// Yearly
 	} else if (reportType === 'y') {
@@ -2765,8 +2662,7 @@ function updateToolbar() {
 			'search-box',
 			'opt-monthly-box',
 			'opt-value-filter-box',
-			'tag-cloud-box',
-			'tag-summary-box'
+			'tag-cloud-box'
 		];
 		add = [
 			'opt-date-1-year-combo',
@@ -2779,6 +2675,9 @@ function updateToolbar() {
 		if (useLegacyDateFilter) {
 			// Recent *months* doesn't make sense in yearly report
 			hide.push('opt-last-months-box');
+		}
+		if (tagSummaryOn) {
+			hide.push('tag-summary-box');
 		}
 	}
 
@@ -2949,9 +2848,6 @@ function toggleViewOptions() {
 }
 function toggleTagCloud() {
 	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
-}
-function toggleTagSummary() {
-	return toggleToolbarBox('tag-summary-header', 'tag-summary-content');
 }
 
 function toggleLastMonths() {
@@ -3153,6 +3049,9 @@ Widget.prototype.create = function () {
 	this.header = document.getElementById(this.id + '-header');
 	this.content = document.getElementById(this.id + '-content');
 	this.created = (this.box && this.header && this.content) ? true : false;
+
+	// Set header tooltip
+	this.header.title = i18n[this.instanceName + 'HeaderHelp'];
 };
 
 Widget.prototype.populate = function () {
@@ -3188,6 +3087,157 @@ Widget.prototype.checkboxClicked = function (element) {  // Event handler
 
 // Hooks
 Widget.prototype.showReportPost = function () {};
+
+
+/////////////////////////////////////////////////////////////////////
+////
+//// Tag Summary Widget
+
+var TagSummary = new Widget('tag-summary', 'Tag Summary', 'TagSummary');
+
+// Widget config
+TagSummary.config.active = true;       // Is this widget active?
+TagSummary.config.opened = true;       // Start app with this widget opened?
+TagSummary.config.checkSort = false;   // [X] Sort by value checkbox inits checked?
+TagSummary.config.showTagless = true;  // The (no tag) sum should appear?
+
+// UI strings
+i18nDatabase.en.TagSummaryHeaderLabel = 'Tag Summary';
+i18nDatabase.en.TagSummaryHeaderHelp = 'Show/hide the tag summary.';
+i18nDatabase.en.TagSummarySortLabel = 'Sort by value';
+i18nDatabase.en.TagSummarySortHelp = 'Order the Tag Summary by values instead tag names.';
+//
+i18nDatabase.pt.TagSummaryHeaderLabel = 'Somatório de tags';
+i18nDatabase.pt.TagSummaryHeaderHelp = 'Mostra e esconde o somatório das tags.';
+i18nDatabase.pt.TagSummarySortLabel = 'Ordenar por valor';
+i18nDatabase.pt.TagSummarySortHelp = 'Ordena o sumário de tags pelos valores, não pelos nomes.';
+
+// Create elements
+TagSummary.populate = function () {
+
+	this.content.innerHTML = [
+		'<div id="tag-summary-data"></div>',
+		'',
+		'<div id="tag-summary-options" class="widget-options">',
+		'	<hr />',
+		'	<div id="tag-summary-opt-nsort-box" class="checkbox-option">',
+		'		<input id="tag-summary-opt-nsort-check" type="checkbox" class="trigger">',
+		'		<label id="tag-summary-opt-nsort-label" for="tag-summary-opt-nsort-check"></label>',
+		'	</div>',
+		'</div>'
+	].join('\n');
+
+	// Set option label & tooltip
+	document.getElementById('tag-summary-opt-nsort-label').title = i18n.TagSummarySortHelp;
+	document.getElementById('tag-summary-opt-nsort-label').innerHTML = i18n.TagSummarySortLabel;
+
+	// Save checkbox element for later use
+	this.sortCheckbox = document.getElementById('tag-summary-opt-nsort-check');
+
+	// Set checkbox action handler
+	this.sortCheckbox.onclick = showReport;
+
+	// Maybe the option should init checked?
+	if (this.config.checkSort) {
+		this.sortCheckbox.checked = true;
+	}
+};
+
+// hook
+TagSummary.showReportPost = function () {
+	if (reportType === 'd') {
+		this.update();
+	}
+};
+
+// Updates the summary with the current report information
+TagSummary.update = function () {
+	var i, leni, j, lenj, tag, results, tagNames, tagData, reportData, tableData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
+
+	results = [];
+	tagNames = [];
+	tagData = {};
+	tableData = [];
+	valueSort = this.sortCheckbox.checked;
+	noTagSum = undefined;  // Do not use 0. The final result may be zero.
+	reportData = dailyData.clone();
+
+	// Scan report rows
+	for (i = 0, leni = reportData.length; i < leni; i++) {
+		// rowDate        = reportData[i][0];
+		rowAmount      = reportData[i][1];
+		rowTags        = reportData[i][2].clone();
+		// rowDescription = reportData[i][3];
+
+		if (rowTags.length === 0) {
+			// No tag in this row
+			if (noTagSum === undefined) {
+				noTagSum = 0;
+			}
+			noTagSum += rowAmount;
+
+		} else {
+			// Sum all values for the same tag
+			for (j = 0, lenj = rowTags.length; j < lenj; j++) {
+				tag = rowTags[j];
+
+				// New tag?
+				if (!tagNames.hasItem(tag)) {
+					tagData[tag] = 0;
+					tagNames.push(tag);
+				}
+				tagData[tag] = tagData[tag] + rowAmount;
+			}
+		}
+	}
+
+	// We have tags?
+	if (tagNames.length || noTagSum !== undefined) {
+
+		// Sort tag names
+		tagNames.sort(sortIgnoreCase);
+
+		// Append no-tag data to the end of the table
+		if (noTagSum !== undefined && this.config.showTagless) {
+			tagNames.push(i18n.labelTagCloudEmpty);
+			tagData[i18n.labelTagCloudEmpty] = noTagSum;
+		}
+
+		// Save table data, sorted by tag name
+		for (i = 0, leni = tagNames.length; i < leni; i++) {
+			tag = tagNames[i];
+			tableData.push([tag, tagData[tag]]);
+		}
+
+		// Sort by value?
+		if (valueSort) {
+			// Note: save/restore the global var contents
+			oldSort = sortColIndex;
+			sortColIndex = 1;
+			tableData.sort(sortArray);
+			sortColIndex = oldSort;
+		}
+
+		// Compose the HTML table
+		results.push('<table>');
+		for (i = 0, leni = tableData.length; i < leni; i++) {
+			results.push(
+				'<tr>' +
+				'<td>' + tableData[i][0] +  '<\/td>' +
+				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '<\/td>' +
+				'<\/tr>'
+			);
+		}
+		results.push('<\/table>');
+	}
+
+	// Save results to the respective DIV
+	results = results.join('\n');
+	document.getElementById('tag-summary-data').innerHTML = results;
+
+	// The options box is only shown if we have at least 2 tags
+	document.getElementById('tag-summary-options').style.display = (tableData.length > 1) ? 'block' : 'none';
+};
 
 
 /////////////////////////////////////////////////////////////////////
@@ -3338,7 +3388,6 @@ function init() {
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagCloudReset;
-	document.getElementById('tag-summary-opt-nsort-label').innerHTML = i18n.labelTagSummarySort;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEditorOpen;
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelEditorCancel;
@@ -3347,7 +3396,6 @@ function init() {
 	document.getElementById('opt-date-1-label'         ).innerHTML = i18n.labelDateFrom + ':';
 	document.getElementById('opt-date-2-label'         ).innerHTML = i18n.labelDateUntil + ':';
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
-	document.getElementById('tag-summary-header'       ).innerHTML = i18n.labelTagSummary;
 	document.getElementById('rows-summary-reset'       ).innerHTML = i18n.labelRowsSummaryReset;
 
 	// Set interface tooltips
@@ -3364,10 +3412,8 @@ function init() {
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagCloudReset;
-	document.getElementById('tag-summary-opt-nsort-label').title = i18n.helpTagSummarySort;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewOptions;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
-	document.getElementById('tag-summary-header'       ).title = i18n.helpTagSummary;
 	document.getElementById('rows-summary-reset'       ).title = i18n.helpRowsSummaryReset;
 	document.getElementById('editor-open'              ).title = i18n.helpEditorOpen;
 	document.getElementById('editor-close'             ).title = i18n.helpEditorCancel;
@@ -3432,13 +3478,11 @@ function init() {
 	document.getElementById('opt-date-2-year-combo'  ).onchange = dateRangeComboChanged;
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
-	document.getElementById('tag-summary-opt-nsort-check').onclick  = showReport;
 	document.getElementById('chart-selector'         ).onchange = showReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('rows-summary-reset'     ).onclick  = showReport;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
-	document.getElementById('tag-summary-header'     ).onclick  = toggleTagSummary;
 	document.getElementById('editor-open'            ).onclick  = editorOn;
 	document.getElementById('editor-close'           ).onclick  = editorOff;
 	document.getElementById('editor-save'            ).onclick  = editorSave;
@@ -3451,7 +3495,6 @@ function init() {
 	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
 	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
 	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (checkTagSummarySort){ document.getElementById('tag-summary-opt-nsort-check').checked = true; }
 	document.getElementById('filter').value = defaultSearch;
 
 	// Apply user defaults - Legacy
@@ -3484,7 +3527,6 @@ function init() {
 	// Always show these toolbar boxes opened at init
 	if (initViewWidgetOpen)  { toggleViewOptions(); }
 	if (initTagCloudOpen)    {    toggleTagCloud(); }
-	if (initTagSummaryOpen)  {  toggleTagSummary(); }
 
 	// Maybe hide some widgets?
 	if (!showViewWidget) {
@@ -3492,9 +3534,6 @@ function init() {
 	}
 	if (!showTagCloud) {
 		document.getElementById('tag-cloud-box').style.display = 'none';
-	}
-	if (!showTagSummary) {
-		document.getElementById('tag-summary-box').style.display = 'none';
 	}
 
 	// Init all available Widgets one by one
