@@ -126,9 +126,14 @@
 //
 // initViewWidgetOpen = true    ;// Iniciar com a caixa Visualizar aberta?
 // initTagCloudOpen = true      ;// Iniciar com a nuvem de Tags aberta?
-// initTagSummaryOpen = false   ;// Iniciar com Somatório de tags aberto?
 // showTagCloud = true          ;// Usar o widget Nuvem de tags?
-// showTagSummary = true        ;// Usar o widget Somatório de tags?
+
+
+////// WIDGET: SOMATÓRIO DE TAGS
+// TagSummary.config.active = true      ;// Usar o widget Somatório de tags?
+// TagSummary.config.opened = true      ;// Iniciar com este widget já aberto?
+// TagSummary.config.showTagless = true ;// Mostrar o item (sem tag)?
+// TagSummary.config.checkSort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 
 
 ////// TABELA DO EXTRATO
@@ -162,8 +167,6 @@
 // ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
 // initExcludedTags = 'luz'     ;// Iniciar já com estas tags riscadas
-// showEmptyTagInSummary = true ;// Mostrar o item (sem tag) no somatório de tags?
-// checkTagSummarySort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
 
 
 ////// FORMATO DA DATA
