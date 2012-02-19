@@ -486,7 +486,7 @@ if (isMobile) {
 	// Init with all widgets closed
 	initViewWidgetOpen = false;
 	initTagCloudOpen = false;
-	// initTagSummaryOpen = false;  // XXX not working anymore
+	// Note: Tag Summary is closed at Widget definition. Search for isMobile.
 	// Save horizontal space in report table
 	showRowCount = false;
 	showMiniBars = false;
@@ -3016,6 +3016,8 @@ TagSummary.config.active = true;       // Is this widget active?
 TagSummary.config.opened = true;       // Start app with this widget opened?
 TagSummary.config.checkSort = false;   // [X] Sort by value checkbox inits checked?
 TagSummary.config.showTagless = true;  // The (no tag) sum should appear?
+
+if (isMobile) { TagSummary.config.opened = false; }  // In mobile, always closed
 
 // UI strings
 i18nDatabase.en.TagSummaryHeaderLabel = 'Tag Summary';
