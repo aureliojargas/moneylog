@@ -2742,6 +2742,9 @@ function showReport() {
 	for (i = 0; i < Widget.instances.length; i++) {
 		Widget.instances[i].showReportPost();
 	}
+
+	// Needed by #rows-summary-reset
+	return false;  // cancel link action
 }
 
 
