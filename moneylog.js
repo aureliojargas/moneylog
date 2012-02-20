@@ -788,39 +788,27 @@ function sortByIndex(index, type) {
 			return a[index] - b[index];
 		};
 	case 'd':
-		// date: "YYYY-MM-DD"
+		// date: 'YYYY-MM-DD'
 		return function (a, b) {
 			a = a[index];
 			b = b[index];
 			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 		};
+	case 't':
+		// tags: ['tag1', 'tag2', ...]
+		return function (a, b) {
+			a = a[index].join(',').toLowerCase().unacccent();
+			b = b[index].join(',').toLowerCase().unacccent();
+			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+		};
 	default:
-		// string: "á"
+		// string: 'á'
 		return function (a, b) {
 			a = a[index].toLowerCase().unacccent();
 			b = b[index].toLowerCase().unacccent();
 			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 		};
 	}
-}
-
-function sortArray(a, b) {
-	a = a[sortColIndex];
-	b = b[sortColIndex];
-	try {
-		if (sortColIndex == 2) {
-			a = a.toLowerCase();
-			b = b.toLowerCase();
-		}
-	} catch (e1) { }
-	try { // IE6...
-		if (a < b) {
-			return -1;
-		} else if (a > b) {
-			return 1;
-		}
-	} catch (e2) { }
-	return 0;
 }
 
 function sortIgnoreCase(a, b) {
@@ -2139,7 +2127,7 @@ function updateSelectedRowsSummary() {
 }
 
 function showOverview() {
-	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels;
+	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
 
 
 	results = [];
@@ -2221,7 +2209,8 @@ function showOverview() {
 
 		// Perform the user-selected sorting column and order
 		sortColIndex = currSortIndex;
-		overviewData.sort(sortArray);
+		colTypes = ['d', 'n', 'n', 'n', 'n'];
+		overviewData.sort(sortByIndex(sortColIndex, colTypes[sortColIndex]));
 		if (sortColRev) {
 			overviewData.reverse();
 		}
@@ -2310,7 +2299,7 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate;
+	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
@@ -2328,9 +2317,10 @@ function showDetailed() {
 
 		// Data sorting procedures
 		if (sortColIndex !== 0 || sortColRev) {
-			monthPartials.checked = false;
+			monthPartials.checked = false;  // turn OFF partials
 		}
-		theData.sort(sortArray);
+		colTypes = ['d', 'n', 't', 's', 'n'];
+		theData.sort(sortByIndex(sortColIndex, colTypes[sortColIndex]));
 		if (sortColRev) {
 			theData.reverse();
 		}
