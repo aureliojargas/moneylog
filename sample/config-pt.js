@@ -170,6 +170,7 @@
 // ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
 // initExcludedTags = 'luz'     ;// Iniciar já com estas tags riscadas
+// checkHideRelatedTags = false ;// Iniciar marcando a opção [X] Esconder relacionadas?
 
 
 ////// FORMATO DA DATA

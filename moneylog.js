@@ -49,6 +49,7 @@ var highlightTags = '';           // The tags you may want to highlight (ie: 'wo
 var ignoreTags = '';              // Ignore all entries that have one of these tags
 var initSelectedTags = '';        // Tag Cloud: start app with these tags already selected
 var initExcludedTags = '';        // Tag Cloud: start app with these tags already excluded
+var checkHideRelatedTags = false; // Tag Report option [ ] Hide related inits checked?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
@@ -195,6 +196,9 @@ var i18nDatabase = {
 		helpTagCloudReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagCloudGroup: 'Only match if the entry has ALL the selected tags.',
 		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
+		// Tag Report
+		labelTagReportRelated: 'Hide related tags',
+		helpTagReportRelated: 'For entries with multiple tags, ignore the tags that are not explicitly selected in Tag Cloud.',
 		// Rows Summary
 		labelRowsSummaryReset: 'Reset',
 		helpRowsSummaryReset: 'Undo all the selections you have made in the report.',
@@ -294,6 +298,9 @@ var i18nDatabase = {
 		helpTagCloudReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagCloudGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
 		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
+		// Tag Report
+		labelTagReportRelated: 'Esconder as tags relacionadas',
+		helpTagReportRelated: 'Para os lançamentos com múltiplas tags, ignore as tags que não estejam explicitamente selecionadas.',
 		// Rows Summary
 		labelRowsSummaryReset: 'Limpar',
 		helpRowsSummaryReset: 'Desmarca todas as linhas que você selecionou no extrato.',
@@ -2527,7 +2534,11 @@ function showTagReport() {
 	theData = reportData.clone();
 	sortIndex = sortData[reportType].indexTag;
 	sortRev = sortData[reportType].revTag;
-	container = document.getElementById('tag-report');
+	selectedTags = getSelectedTags();
+	hasRelated = false;
+	container = document.getElementById('tag-report-content');
+	options = document.getElementById('tag-report-options');
+	hideRelated = document.getElementById('tag-report-opt-related-check').checked;
 
 	// Daily report won't show Tag Report
 	if (reportType === 'd') {
@@ -2592,6 +2603,15 @@ function showTagReport() {
 
 				// New tag?
 				if (!tagNames.hasItem(tagName)) {
+
+					// Is this a related tag?
+					if (selectedTags.length > 0 && !selectedTags.hasItem(tagName)) {
+						hasRelated = true;
+						if (hideRelated) {
+							continue;  // ignore
+						}
+					}
+
 					tagNames.push(tagName);
 					tagData[tagName] = {};
 					tagData[tagName].total = 0;
@@ -2728,6 +2748,9 @@ function showTagReport() {
 
 	// Show report (if we have tags)
 	container.innerHTML = (tagNames.length > 0) ? results.join('\n') : '';
+
+	// Show/hide options
+	options.style.display = (hasRelated) ? 'block' : 'none';
 }
 
 function showReport() {
@@ -3594,6 +3617,7 @@ function init() {
 	document.getElementById('opt-date-1-label'         ).innerHTML = i18n.labelDateFrom + ':';
 	document.getElementById('opt-date-2-label'         ).innerHTML = i18n.labelDateUntil + ':';
 	document.getElementById('tag-cloud-header'         ).innerHTML = i18n.labelTagCloud;
+	document.getElementById('tag-report-opt-related-label').innerHTML = i18n.labelTagReportRelated;
 	document.getElementById('rows-summary-reset'       ).innerHTML = i18n.labelRowsSummaryReset;
 
 	// Set interface tooltips
@@ -3612,6 +3636,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagCloudReset;
 	document.getElementById('view-options-header'      ).title = i18n.helpViewOptions;
 	document.getElementById('tag-cloud-header'         ).title = i18n.helpTagCloud;
+	document.getElementById('tag-report-opt-related-label').title = i18n.helpTagReportRelated;
 	document.getElementById('rows-summary-reset'       ).title = i18n.helpRowsSummaryReset;
 	document.getElementById('editor-open'              ).title = i18n.helpEditorOpen;
 	document.getElementById('editor-close'             ).title = i18n.helpEditorCancel;
@@ -3675,6 +3700,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
 	document.getElementById('chart-selector'         ).onchange = showReport;
+	document.getElementById('tag-report-opt-related-check').onclick = showTagReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('rows-summary-reset'     ).onclick  = showReport;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
@@ -3691,6 +3717,9 @@ function init() {
 	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
 	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
 	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
+	if (checkHideRelatedTags) {
+		document.getElementById('tag-report-opt-related-check').checked = true;
+	}
 	document.getElementById('filter').value = defaultSearch;
 
 	// Apply user defaults - Legacy

@@ -532,6 +532,11 @@ table.chart tr:hover td {
 #tag-report td.total {
 	font-weight: bold;
 }
+#tag-report-options {
+	display: none;  /* JS will show */
+	text-align: center;
+	margin-top: 1.5em;
+}
 
 /* ---------------------------------------------- Rows summary */
 
