@@ -3299,7 +3299,7 @@ var TagSummary = new Widget('tag-summary', 'Tag Summary', 'TagSummary');
 
 // Widget config
 TagSummary.config.active = true;       // Is this widget active?
-TagSummary.config.opened = true;       // Start app with this widget opened?
+TagSummary.config.opened = false;      // Start app with this widget opened?
 TagSummary.config.checkSort = false;   // [X] Sort by value checkbox inits checked?
 TagSummary.config.showTagless = true;  // The (no tag) sum should appear?
 
