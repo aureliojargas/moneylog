@@ -92,6 +92,11 @@ sortData.m.index = 0;
 sortData.m.rev = false;
 sortData.y.index = 0;
 sortData.y.rev = false;
+// Tag Report
+sortData.m.indexTag = 0;
+sortData.m.revTag = false;
+sortData.y.indexTag = 0;
+sortData.y.revTag = false;
 
 
 // The appMode sets the Moneylog flavor:
@@ -1903,6 +1908,47 @@ function applyTags(theData) {
 	}
 }
 
+function groupByPeriod(arr, periodType) {  // m, y
+	// Group data by months/years, returning an object.
+	// Note: the input array may be unsorted
+	//
+	// groupByPeriod(
+	//     [
+	//         ['2012-02-15', '1.50', 'foo1'],
+	//         ['2012-02-18', '7.00', 'foo2'],
+	//         ['2012-03-04', '-4.44', 'bar1'],
+	//         ['2012-03-18', '-5.55', 'bar2'],
+	//     ], 'm')
+	// 
+	// returns:
+	// {
+	//     '2012-02': [
+	//         ['2012-02-15', '1.50', 'foo1'],
+	//         ['2012-02-18', '7.00', 'foo2'],
+	//     ],
+	//     '2012-03': [
+	//         ['2012-03-04', '-4.44', 'bar1'],
+	//         ['2012-03-18', '-5.55', 'bar2']
+	//     ],
+	//     keys: ['2012-02', '2012-03']  // always sorted
+	// }
+
+	var i, leni, item, slices, results = {};
+
+	results.keys = [];
+	slices = { 'y': 4, 'm': 7, 'd': 10 };
+	for (i = 0, leni = arr.length; i < leni; i++) {
+		item = arr[i][0].slice(0, slices[periodType]);  // get date
+		if (!results[item]) {
+			results[item] = [];
+			results.keys.push(item);
+		}
+		results[item].push(arr[i]);
+	}
+	results.keys.sort();
+	return results;
+}
+
 function createTagCloud(names) {
 	// Create all the <a> elements for the Tag Cloud
 	var i, leni, results = [];
@@ -2471,12 +2517,226 @@ function showDetailed() {
 	document.getElementById('report').innerHTML = results;
 }
 
+function showTagReport() {
+	var i, leni, j, lenj, results, tagNames, tagName, tagData, tableData, theData, groupedData, container, firstDate, lastDate, allDates, nDates, period, periodData, periodName, rowAmount, rowTags, index, total, tagless, tdClass, sortIndex, sortRev;
+
+	results = [];
+	tagNames = [];
+	tagData = {};
+	tableData = [];
+	theData = reportData.clone();
+	sortIndex = sortData[reportType].indexTag;
+	sortRev = sortData[reportType].revTag;
+	container = document.getElementById('tag-report');
+
+	// Daily report won't show Tag Report
+	if (reportType === 'd') {
+		container.innerHTML = '';
+		return false;
+	}
+
+	// Group report data by period (month or year), to make things easier
+	groupedData = groupByPeriod(theData, reportType);
+
+	/////////////////////////////////////////////////// MONTHS / YEARS
+
+	// Compose the list of all months/years in the period
+	// Note: can't use groupedData.keys because there may be gaps
+	firstDate = groupedData.keys[0];
+	lastDate = groupedData.keys[groupedData.keys.length - 1];
+
+	if (reportType === 'm') {
+		allDates = getMonthRange(firstDate + '-01', lastDate + '-01');
+	} else {
+		allDates = getYearRange(firstDate + '-01-01', lastDate + '-01-01');
+	}
+	nDates = allDates.length;
+
+	/////////////////////////////////////////////////// TAG TOTALS
+
+	// tagData = {
+	//     tag1: {
+	//         2012-01: 55,
+	//         2012-02: 26,
+	//         total: 81
+	//     },
+	//     tag2: {
+	//         2012-01: 34,
+	//         2012-02: 27,
+	//         2012-05: 25,
+	//         total: 86
+	//     }
+	// }
+
+	// Loop each month/year
+	for (period in groupedData) {
+		periodData = groupedData[period];
+
+		if (period === 'keys') { continue; }  // ignore
+
+		// Scan report rows for this period
+		for (i = 0, leni = periodData.length; i < leni; i++) {
+			// rowDate        = periodData[i][0];
+			rowAmount         = periodData[i][1];
+			rowTags           = periodData[i][2].clone();
+			// rowDescription = periodData[i][3];
+
+			// No tags in this row? Add a fake one
+			if (rowTags.length === 0) {
+				rowTags = [i18n.labelTagCloudEmpty];
+			}
+
+			// Scan tags and sum
+			for (j = 0, lenj = rowTags.length; j < lenj; j++) {
+				tagName = rowTags[j];
+
+				// New tag?
+				if (!tagNames.hasItem(tagName)) {
+					tagNames.push(tagName);
+					tagData[tagName] = {};
+					tagData[tagName].total = 0;
+				}
+
+				// First tag in this period?
+				if (!tagData[tagName][period]) {
+					tagData[tagName][period] = 0;
+				}
+
+				// Sum
+				tagData[tagName][period] += rowAmount;
+				tagData[tagName].total += rowAmount;
+			}
+		}
+	}
+
+	/////////////////////////////////////////////////// TABLE DATA
+
+	// tableData = [
+	//     ['tag1', 55, 26, 0, 0, 123, ...],
+	//     ['tag2', 34, 27, 0, 0, 25, ...]
+	// ]
+
+	// Save the table array, grouped by tag names
+	// This array will become the HTML table
+	for (i = 0, leni = tagNames.length; i < leni; i++) {
+		tagName = tagNames[i];
+		tableData.push([tagName]);
+		index = tableData.length - 1;
+		for (j = 0, lenj = nDates; j < lenj; j++) {
+			period = allDates[j];
+			total = tagData[tagName][period];
+			tableData[index].push(total || 0);
+		}
+		if (nDates > 1) {
+			// total & average
+			tableData[index].push(tagData[tagName].total);
+			tableData[index].push(tagData[tagName].total / nDates);
+		}
+	}
+
+	/////////////////////////////////////////////////// SORT
+
+	if (sortIndex === 0) {
+		// Sort by tag name, ignoring case and accents
+		tableData.sort(sortByIndex(0, 's'));
+
+		// Make sure the (no tag) row is always the last
+		if (tableData.length > 1 && tableData[0][0] === i18n.labelTagCloudEmpty) {
+			tagless = tableData.shift();
+			tableData.push(tagless);
+		}
+	} else {
+		// Sort by value
+		tableData.sort(sortByIndex(sortIndex, 'n'));
+	}
+	if (sortRev) {
+		tableData.reverse();
+	}
+
+	/////////////////////////////////////////////////// HTML
+
+	results.push('<table class="report">');
+
+	//// Table heading
+	results.push('<tr>');
+
+	// tag column
+	results.push(
+		'<th class="tagname" onClick="sortColTag(0)">' +
+		i18n.labelsDetailed[2] +
+		'<\/th>'
+	);
+	// dates
+	for (i = 0, leni = nDates; i < leni; i++) {
+		periodName = allDates[i];
+
+		// Month names get special formatting
+		if (reportType === 'm') {
+			periodName = (allDates[i] + '-01').toDate().format('Y-b');
+			periodName = periodName.
+				replace(/^(....)/, '<i>$1<\/i>').
+				replace('-', '<br>');
+		}
+
+		results.push(
+			'<th onClick="sortColTag(' + (i+1) +  ')">' +
+			periodName +
+			'<\/th>'
+		);
+	}
+	// total & average
+	if (nDates > 1) {
+		results.push(
+			'<th onClick="sortColTag(' + (i+1) + ')">' +
+			i18n.labelTotal +
+			'<\/th>'
+		);
+		results.push(
+			'<th onClick="sortColTag(' + (i+2) + ')">' +
+			i18n.labelAverage +
+			'<\/th>'
+		);
+	}
+	results.push('<\/tr>');
+
+	// Compose table body, one tag per row
+	for (i = 0, leni = tableData.length; i < leni; i++) {
+		results.push('<tr>');
+		results.push('<td>' + tableData[i][0] +  '<\/td>');  // tag name
+
+		// Now the numbers (Note: j=1)
+		for (j = 1, lenj = tableData[i].length; j < lenj; j++) {
+
+			// Mark the column Total (penultimate)
+			if (nDates > 1 && j === lenj - 2) {
+				tdClass = "number total";
+			} else {
+				tdClass = "number";
+			}
+
+			results.push(
+				'<td class="' + tdClass + '">' +
+				((tableData[i][j]) ? prettyFloat(tableData[i][j]) : '0') +
+				'<\/td>'
+			);
+			// Note: empty cells become 0 and not 0.00 to make the report less polluted
+		}
+		results.push('<\/tr>');
+	}
+
+	results.push('<\/table>');
+
+	// Show report (if we have tags)
+	container.innerHTML = (tagNames.length > 0) ? results.join('\n') : '';
+}
+
 function showReport() {
 	if (reportType === 'd') {
 		showDetailed();
 	} else {
 		showOverview();
 	}
+	showTagReport();
 
 	// Widget hook: showReportPost
 	for (i = 0; i < Widget.instances.length; i++) {
@@ -2658,6 +2918,18 @@ function sortCol(index) {
 	sortData[reportType].index = index;
 	// Refresh table
 	showReport();
+}
+
+function sortColTag(index) {
+	// If the same index, flip current reverse state, else reverse=false
+	sortData[reportType].revTag =
+		(sortData[reportType].indexTag === index) ?
+		!sortData[reportType].revTag :
+		false;
+	// Save new index
+	sortData[reportType].indexTag = index;
+	// Refresh table
+	showTagReport();
 }
 
 function changeReport() {

@@ -316,7 +316,7 @@ a.button.active {
 	white-space: nowrap;
 }
 #tag-cloud-tags a.selected {
-	background: silver;  /* _light */
+	background-color: silver;  /* _light */
 	color: black;
 }
 #tag-cloud-tags a.excluded  {
@@ -508,6 +508,31 @@ table.chart tr:hover td {
 	background-color: white;  /* content_bg */
 }
 
+/* ---------------------------------------------- Tag report */
+
+#tag-report {
+	margin-top: 4em;
+}
+#tag-report th {
+	text-align: right;
+	vertical-align: bottom;
+	padding: 6px 10px;  /* same as .report td */
+}
+#tag-report th.tagname {
+	text-align: left;
+}
+#tag-report th i {  /* obfuscate year */
+	font-weight: normal;
+	font-style: normal;
+	color: silver;
+}
+#tag-report th:hover i {
+	color: white;
+}
+#tag-report td.total {
+	font-weight: bold;
+}
+
 /* ---------------------------------------------- Rows summary */
 
 #rows-summary {
@@ -548,7 +573,7 @@ table.chart tr:hover td {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background: white;  /* content_bg */
+	background-color: white;  /* content_bg */
 }
 #editor-file-name {
 	position: fixed;
