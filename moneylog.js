@@ -779,6 +779,31 @@ function invalidData(lineno, message) {
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
 
+// Inspired by http://stackoverflow.com/a/979325
+function sortByIndex(index, type) {
+	switch (type) {
+	case 'n':
+		// number: int or float
+		return function (a, b) {
+			return a[index] - b[index];
+		};
+	case 'd':
+		// date: "YYYY-MM-DD"
+		return function (a, b) {
+			a = a[index];
+			b = b[index];
+			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+		};
+	default:
+		// string: "á"
+		return function (a, b) {
+			a = a[index].toLowerCase().unacccent();
+			b = b[index].toLowerCase().unacccent();
+			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+		};
+	}
+}
+
 function sortArray(a, b) {
 	a = a[sortColIndex];
 	b = b[sortColIndex];
@@ -1446,7 +1471,7 @@ function readData() {
 }
 
 function parseData() {
-	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, oldSort, trash, tagNames;
+	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, trash, tagNames;
 
 	// Reset the data holders
 	parsedData = [];
@@ -1656,11 +1681,7 @@ function parseData() {
 	}
 
 	// Sort by date
-	// Note: save/restore the global var contents
-	oldSort = sortColIndex;
-	sortColIndex = 0;
-	parsedData.sort(sortArray);
-	sortColIndex = oldSort;
+	parsedData.sort(sortByIndex(0, 'd'));
 
 	// Save first and last date as globals
 	if (parsedData.length > 0) {
@@ -3068,7 +3089,7 @@ TagSummary.showReportPost = function () {
 
 // Updates the summary with the current report information
 TagSummary.update = function () {
-	var i, leni, j, lenj, tag, results, tagNames, tagData, theData, tableData, rowAmount, rowTags, noTagSum, valueSort, oldSort;
+	var i, leni, j, lenj, tag, results, tagNames, tagData, theData, tableData, rowAmount, rowTags, noTagSum, valueSort;
 
 	results = [];
 	tagNames = [];
@@ -3127,11 +3148,7 @@ TagSummary.update = function () {
 
 		// Sort by value?
 		if (valueSort) {
-			// Note: save/restore the global var contents
-			oldSort = sortColIndex;
-			sortColIndex = 1;
-			tableData.sort(sortArray);
-			sortColIndex = oldSort;
+			tableData.sort(sortByIndex(1, 'n'));
 		}
 
 		// Compose the HTML table
