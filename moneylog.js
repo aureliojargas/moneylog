@@ -83,6 +83,16 @@ var oneFile;
 var useLocalStorage;
 var useDropboxStorage;
 
+// Default sort for all tables
+// d=daily, m=monthly, y=yearly, index=column(zero-based), reverse
+var sortData = {'d':{}, 'm':{}, 'y':{}};
+sortData.d.index = 0;
+sortData.d.rev = false;
+sortData.m.index = 0;
+sortData.m.rev = false;
+sortData.y.index = 0;
+sortData.y.rev = false;
+
 
 // The appMode sets the Moneylog flavor:
 // txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
@@ -455,10 +465,6 @@ var appName = 'MoneyLog';
 var appFlavor = '';
 var dropboxAppFolder = '/Apps/MoneyLog Cloud';
 var dropboxTxtFolder = '/txt';
-var sortColIndex = 0;
-var sortColRev = false;
-var oldSortColIndex;
-var oldSortColRev;
 var dataFirstDate;
 var dataLastDate;
 var highlightRegex;
@@ -2127,13 +2133,14 @@ function updateSelectedRowsSummary() {
 }
 
 function showOverview() {
-	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, currSortIndex, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
+	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, sortIndex, sortRev, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
 
 
 	results = [];
+	sortIndex = sortData[reportType].index;
+	sortRev = sortData[reportType].rev;
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
 	minPos = minNeg = minPartial = minBalance = maxPos = maxNeg = maxPartial = maxBalance = 0;
-	currSortIndex = sortColIndex;
 
 	// Table headings
 	thead = '<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>';
@@ -2208,10 +2215,9 @@ function showOverview() {
 		//// Now we must compose the report table
 
 		// Perform the user-selected sorting column and order
-		sortColIndex = currSortIndex;
 		colTypes = ['d', 'n', 'n', 'n', 'n'];
-		overviewData.sort(sortByIndex(sortColIndex, colTypes[sortColIndex]));
-		if (sortColRev) {
+		overviewData.sort(sortByIndex(sortIndex, colTypes[sortIndex]));
+		if (sortRev) {
 			overviewData.reverse();
 		}
 
@@ -2299,13 +2305,14 @@ function showOverview() {
 }
 
 function showDetailed() {
-	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes;
+	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes, sortIndex, sortRev;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
 	chartValues = [];
 	chartLabels = [];
-
+	sortIndex = sortData.d.index;
+	sortRev = sortData.d.rev;
 	monthPartials = document.getElementById('opt-monthly-check');
 
 	theData = applyTags(filterData());
@@ -2315,13 +2322,15 @@ function showDetailed() {
 
 		currentDate = getCurrentDate();
 
-		// Data sorting procedures
-		if (sortColIndex !== 0 || sortColRev) {
-			monthPartials.checked = false;  // turn OFF partials
+		// If not the default sort (0, asc), turn OFF partials
+		if (sortIndex !== 0 || sortRev) {
+			monthPartials.checked = false;
 		}
+
+		// Perform the user-selected sorting column and order
 		colTypes = ['d', 'n', 't', 's', 'n'];
-		theData.sort(sortByIndex(sortColIndex, colTypes[sortColIndex]));
-		if (sortColRev) {
+		theData.sort(sortByIndex(sortIndex, colTypes[sortIndex]));
+		if (sortRev) {
 			theData.reverse();
 		}
 
@@ -2640,14 +2649,19 @@ function updateToolbar() {
 /////////////////////////////////////////////////////////////////////
 
 function sortCol(index) {
-	// if the same, flip reverse state
-	sortColRev = (sortColIndex == index) ? !sortColRev : false;
-	sortColIndex = index;
+	// If the same index, flip current reverse state, else reverse=false
+	sortData[reportType].rev =
+		(sortData[reportType].index == index) ?
+		!sortData[reportType].rev :
+		false;
+	// Save new index
+	sortData[reportType].index = index;
+	// Refresh table
 	showReport();
 }
 
-function changeReport(el) {
-	var oldType, newType;
+function changeReport() {
+	var el, oldType, newType;
 
 	el = this;
 	oldType = reportType;
@@ -2656,21 +2670,6 @@ function changeReport(el) {
 	// Deactivate old report, activate new
 	removeClass(document.getElementById(oldType), 'active');
 	addClass(el, 'active');
-
-	//// Save / restore information
-
-	// From Daily to Monthly/Yearly
-	if (oldType === 'd' && newType !== 'd') {
-		oldSortColIndex = sortColIndex;
-		oldSortColRev = sortColRev;
-		sortColIndex = 0; // Default by date
-		sortColRev = false;
-	//
-	// From Monthly/Yearly to Daily
-	} else if (newType === 'd' && oldType !== 'd') {
-		sortColIndex = oldSortColIndex || 0;
-		sortColRev = oldSortColRev || false;
-	}
 
 	// Always reset Rows Summary when changing reports
 	selectedRows = [];
@@ -2790,8 +2789,9 @@ function toggleValueFilter() {
 
 function toggleMonthly() {
 	if (document.getElementById('opt-monthly-check').checked === true) {
-		sortColIndex = 0;
-		sortColRev = false;
+		// Restore default sort when activating Partials
+		sortData.d.index = 0;
+		sortData.d.rev = false;
 	}
 	showReport();
 }

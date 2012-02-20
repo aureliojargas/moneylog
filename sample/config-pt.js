@@ -139,6 +139,13 @@
 //
 // highlightWords = 'XXX TODO'  ;// Destacar estas palavras na Descrição
 // highlightTags = 'luz água'   ;// Destacar estas tags no extrato
+//
+// sortData.d.index = 0         ;// Diário: iniciar ordenando por esta coluna (0-3)
+// sortData.m.index = 0         ;// Mensal: iniciar ordenando por esta coluna (0-4)
+// sortData.y.index = 0         ;// Anual : iniciar ordenando por esta coluna (0-4)
+// sortData.d.rev = false       ;// Diário: iniciar com a ordem inversa?
+// sortData.m.rev = false       ;// Mensal: iniciar com a ordem inversa?
+// sortData.y.rev = false       ;// Anual : iniciar com a ordem inversa?
 
 
 ////// GRÁFICO DE BARRAS
