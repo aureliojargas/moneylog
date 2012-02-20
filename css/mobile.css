@@ -50,7 +50,7 @@
 	.checkbox-option {
 		line-height: 250%;
 	}
-	#report table {
+	table.report {
 		width: 100%;
 	}
 	#editor-file-name {
@@ -70,13 +70,13 @@
 	}
 
 	/* -------------------- Compress */
-	#report table {
+	.report {
 		font-size: 75%;		
 	}
-	#report th {
+	.report th {
 		font-size: 80%;
 	}
-	#report td {
+	.report td {
 		padding: 4px 2px !important;
 	}
 	td.date {

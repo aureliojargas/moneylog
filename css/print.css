@@ -45,11 +45,11 @@ td.minibar {
 }
 
 /* Remove (or lighten, or force B&W) colors */
-#report td {
+.report td {
 	border-color: #DDDDDD;
 }
-#report tr.selected,
-#report tr.selected .neg {
+tr.selected,
+tr.selected .neg {
 	background-color: #EEEEEE;
 	color: black ;
 }

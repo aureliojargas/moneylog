@@ -2148,7 +2148,7 @@ function showOverview() {
 	}
 
 	if (overviewData.length || theData.length) {
-		results.push('<table class="overview">');
+		results.push('<table class="report overview">');
 		results.push('<tr>' + thead + '<\/tr>');
 
 		// The cache is empty. Scan and calculate everything.
@@ -2323,7 +2323,7 @@ function showDetailed() {
 		if (showRowCount) {
 			thead = '<th class="row-count"><\/th>' + thead;
 		}
-		results.push('<table class="daily">');
+		results.push('<table class="report daily">');
 		results.push('<tr>' + thead + '<\/tr>');
 
 		// Compose table rows

@@ -340,34 +340,36 @@ a.button.active {
 }
 
 /* Report table */
-#report table {
+.report {
 	margin: 0 auto;  /* do not use width:100% */
 }
 
 /* Table headings are also buttons */
-#report th {
+.report th {
 	text-align: center;
 	cursor: pointer;
 	padding: 0.5em;
 }
-#report th:hover {
+.report th:hover {
 	background-color: black;  /* _dark */
 	color: white;
 }
 
 /* Column sorting is not working for some columns, so undo formatting */
-#report table.daily th.balance,
-#report table.overview th.percent {
-	cursor: auto;
+th.row-count,
+table.daily th.balance,
+table.overview th.percent {
+	cursor: auto !important;
 }
-#report table.daily th.balance:hover,
-#report table.overview th.percent:hover {
-	color: #333;  /* text_color */
-	background-color: white;  /* content_bg */
+th.row-count,
+table.daily th.balance:hover,
+table.overview th.percent:hover {
+	color: #333 !important;  /* text_color */
+	background-color: white !important;  /* content_bg */
 }
 
 /* Generic cell config */
-#report td {
+.report td {
 	border: 1px solid silver;  /* _light */
 	border-width: 1px 0;
 	vertical-align: middle;
@@ -408,10 +410,10 @@ tr.total {
 }
 
 /* Rows padding */
-#report td {
+.report td {
 	padding: 6px 10px;
 }
-#report tr.total td {
+.report tr.total td {
 	padding: 1px 10px; /* top/bottom: td - 6px */
 }
 
@@ -441,19 +443,19 @@ tr.total {
 
 /* ---------------------------------------------- Report - Monthly/Yearly */
 
-#report td.rowlabel {
+.report td.rowlabel {
 	font-weight: bold;
 }
 
 /* ---------------------------------------------- Minibars inside report table */
 
-#report table td.minibar {
+td.minibar {
 	border-style: none !important;
 }
-#report table div.minibar {
+div.minibar {
 	float: left;
 }
-#report table td.minibar .label {
+td.minibar .label {
 	float: left;
 	font-size: 75%;
 	color: white !important;

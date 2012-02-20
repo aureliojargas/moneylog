@@ -14,7 +14,7 @@
 
 /* Dark background for active/special buttons */
 #fullscreen,
-#report th:hover,
+.report th:hover,
 #editor-file-name,
 .button.active,
 a.button:active {
@@ -22,9 +22,9 @@ a.button:active {
 }
 
 /* Dark background for selected rows */
-#report tr.selected,
-#report tr.selected:hover td,
-#report tr.selected .neg {
+tr.selected,
+tr.selected:hover td,
+tr.selected .neg {
 	background-color: #E89E00;
 }
 
@@ -43,13 +43,13 @@ a.button:active {
 }
 
 /* Light background for totals */
-#report tr.total,
+tr.total,
 #rows-summary {
 	background-color: #FFEED1;
 }
 
 /* Light color for the report borders */
-#report td {
+.report td {
 	border-color: #FFEED1;
 }
 
