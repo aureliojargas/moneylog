@@ -88,6 +88,9 @@
 	#tag-report {
 		margin-top: 2em;
 	}
+	#tag-report-options {
+		font-size: 75%;		
+	}
 	#rows-summary {
 		padding: 3px;
 		border-width: 3px;
