@@ -2538,7 +2538,7 @@ function dailyReport() {
 }
 
 function tagReport() {
-	var i, leni, j, lenj, results, tagNames, tagName, tagData, tableData, theData, groupedData, container, firstDate, lastDate, allDates, nDates, period, periodData, periodName, rowAmount, rowTags, index, total, tagless, tdClass, sortIndex, sortRev;
+	var i, leni, j, lenj, results, tagNames, tagName, tagData, tableData, theData, groupedData, content, firstDate, lastDate, allDates, nDates, period, periodData, periodName, rowAmount, rowTags, index, total, tagless, tdClass, sortIndex, sortRev;
 
 	results = [];
 	tagNames = [];
@@ -2549,7 +2549,7 @@ function tagReport() {
 	sortRev = sortData[reportType].revTag;
 	selectedTags = getSelectedTags();
 	hasRelated = false;
-	container = document.getElementById('tag-report-content');
+	content = document.getElementById('tag-report-content');
 	options = document.getElementById('tag-report-options');
 	hideRelated = document.getElementById('tag-report-opt-related-check').checked;
 
@@ -2762,7 +2762,7 @@ function tagReport() {
 	results.push('<\/table>');
 
 	// Show report (if we have tags)
-	container.innerHTML = (tagNames.length > 0) ? results.join('\n') : '';
+	content.innerHTML = (tagNames.length > 0) ? results.join('\n') : '';
 
 	// Show/hide options
 	options.style.display = (hasRelated) ? 'block' : 'none';
