@@ -560,6 +560,14 @@ if (!Array.prototype.avg) {
 		return this.sum() / this.length;
 	};
 }
+// [[0,1,2], [3,4,5], [6,7,8]].getColumn(1) -> [1, 4, 7]
+Array.prototype.getColumn = function (n) {
+	var i, leni, results = [];
+	for (i = 0, leni = this.length; i < leni; i++) {
+		results.push(this[i][n]);
+	}
+	return results;
+};
 
 String.prototype.lstrip = function () {
 	return this.replace(/^\s+/, '');
@@ -1164,6 +1172,52 @@ function drawChart(values, labels) {
 
 	return chart;
 }
+
+function computeTotals(arr) {  // arr = [1,2,3,4,5]
+	var i, leni, n, o = {};
+
+	if (!arr.length) { return; }
+
+	o.min = 0;
+	o.max = 0;
+	o.sum = 0;
+	o.average = 0;
+	o.sumPositive = 0;
+	o.sumNegative = 0;
+	o.balance = [];
+
+	for (i = 0, leni = arr.length; i < leni; i++) {
+		n = arr[i];
+
+		// sum
+		if (n < 0) {
+			o.sumNegative += n;
+		} else {
+			o.sumPositive += n;
+		}
+		o.sum += n;
+
+		// balance
+		if (i === 0) {
+			o.balance.push(n);
+		} else {
+			o.balance.push(o.balance[o.balance.length - 1] + n);
+		}
+
+		// min/max
+		if (i === 0) {
+			// First value, store it as max and min
+			o.min = o.max = n;
+		} else {
+			o.min = (n < o.min) ? n : o.min;
+			o.max = (n > o.max) ? n : o.max;
+		}
+	}
+	o.average = o.sum / arr.length;
+	o.avg = o.average;  // alias
+	return o;
+}
+
 
 
 /////////////////////////////////////////////////////////////////////
@@ -2192,58 +2246,39 @@ function updateSelectedRowsSummary() {
 }
 
 function periodReport() {
-	var i, leni, z, len, rowDate, rowAmount, theData, overviewData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, sortIndex, sortRev, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
+	var i, leni, z, len, theData, overviewData, groupedData, balance, period, periods, periodValues, totals, thead, results, allPos, allNeg, allTotal, sortIndex, sortRev, chart, chartCol, chartValues, chartLabels, colTypes;
 
 	results = [];
 	overviewData = [];
+	balance = 0;
+	allNeg = [];
+	allPos = [];
+	allTotal = [];
 	theData = applyTags(filterData());
 	reportData = theData.clone();
 	sortIndex = sortData[reportType].index;
 	sortRev = sortData[reportType].rev;
-	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
-	minPos = minNeg = minPartial = minBalance = maxPos = maxNeg = maxPartial = maxBalance = 0;
 
 	if (theData.length) {
 
+		// Group report data by period (month or year), to make things easier
+		groupedData = groupByPeriod(theData, reportType);
+		periods = groupedData.keys.clone();
+
 		// Scan and calculate everything
-		for (i = 0, leni = theData.length; i < leni; i++) {
-			rowDate        = theData[i][0];
-			rowAmount      = theData[i][1];
-			// rowTags        = theData[i][2].clone();
-			// rowDescription = theData[i][3];
+		for (i = 0, leni = periods.length; i < leni; i++) {
+			period = periods[i];
+			periodValues = groupedData[period].getColumn(1);  // date, amount, tags, desc
+			totals = computeTotals(periodValues);
+			balance += totals.sum;
 
-			// rowDate.slice() size, to extract 2000 or 2000-01
-			dateSize = (reportType === 'y') ? 4 : 7;
+			// Save period totals for the grand total rows
+			allNeg.push(totals.sumNegative);
+			allPos.push(totals.sumPositive);
+			allTotal.push(totals.sum);
 
-			// First row, just save the month/year date
-			if (i === 0) {
-				rangeDate = rowDate.slice(0, dateSize);
-			}
-
-			// Other rows, detect if this is a new month/year
-			if (i > 0 &&
-					rowDate.slice(0, dateSize) !=
-					theData[i - 1][0].slice(0, dateSize)) {
-
-				// Send old month/year totals to the report
-				overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
-				// Reset totals
-				rangeTotal = rangePos = rangeNeg = 0;
-				// Save new month/year date
-				rangeDate = rowDate.slice(0, dateSize);
-			}
-
-			// Common processing for all rows: update totals
-			grandTotal += rowAmount;
-			rangeTotal += rowAmount;
-			if (rowAmount < 0) {
-				rangeNeg += rowAmount;
-			} else {
-				rangePos += rowAmount;
-			}
+			overviewData.push([period, totals.sumPositive, totals.sumNegative, totals.sum, balance]);
 		}
-		// No more rows. Send the last range totals to the report.
-		overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 
 		//// Report data is OK inside overviewData array
 		//// Now we must compose the report table
@@ -2275,46 +2310,21 @@ function periodReport() {
 
 		// Array2Html
 		for (i = 0, leni = overviewData.length; i < leni; i++) {
-
-			// Calculate overall totals
 			z = overviewData[i].clone();
-			sumPos   += z[1];
-			sumNeg   += z[2];
-			sumTotal += z[3];
-
-			// Store min/max values
-			if (i === 0) {
-				// First value, store it as max and min
-				minPos     = maxPos     = z[1];
-				minNeg     = maxNeg     = z[2];
-				minPartial = maxPartial = z[3];
-				minBalance = maxBalance = z[4];
-			} else {
-				// Minimum
-				minPos     = (z[1] < minPos)     ? z[1] : minPos;
-				minNeg     = (z[2] < minNeg)     ? z[2] : minNeg;
-				minPartial = (z[3] < minPartial) ? z[3] : minPartial;
-				minBalance = (z[4] < minBalance) ? z[4] : minBalance;
-				// Maximum
-				maxPos     = (z[1] > maxPos)     ? z[1] : maxPos;
-				maxNeg     = (z[2] > maxNeg)     ? z[2] : maxNeg;
-				maxPartial = (z[3] > maxPartial) ? z[3] : maxPartial;
-				maxBalance = (z[4] > maxBalance) ? z[4] : maxBalance;
-			}
-
 			// Save this row to the report table
 			results.push(getOverviewRow(z[0], z[1], z[2], z[3], z[4], i + 1));
 		}
-		maxNumbers = [0, maxPos, maxNeg, maxPartial, maxBalance];
-		minNumbers = [0, minPos, minNeg, minPartial, minBalance];
 
 		// Compose the final rows: total, avg, min, max
 		len = overviewData.length;
 		if (len > 1) {
-			results.push(getOverviewTotalsRow(i18n.labelTotal, sumPos, sumNeg, sumPos + sumNeg));
-			results.push(getOverviewTotalsRow(i18n.labelAverage, sumPos / len, sumNeg / len, sumTotal / len));
-			results.push(getOverviewTotalsRow(i18n.labelMinimum, minPos, maxNeg, minPartial));
-			results.push(getOverviewTotalsRow(i18n.labelMaximum, maxPos, minNeg, maxPartial, maxBalance));
+			allNeg = computeTotals(allNeg);
+			allPos = computeTotals(allPos);
+			allTotal = computeTotals(allTotal);
+			results.push(getOverviewTotalsRow(i18n.labelTotal, allPos.sum, allNeg.sum, allTotal.sum));
+			results.push(getOverviewTotalsRow(i18n.labelAverage, allPos.avg, allNeg.avg, allTotal.avg));
+			results.push(getOverviewTotalsRow(i18n.labelMinimum, allPos.min, allNeg.max, allTotal.min));
+			results.push(getOverviewTotalsRow(i18n.labelMaximum, allPos.max, allNeg.min, allTotal.max));
 			// Note: Yes, maxNeg and minNeg are swapped for better reading
 		}
 
