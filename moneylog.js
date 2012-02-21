@@ -2326,7 +2326,7 @@ function periodReport() {
 			results.push(getOverviewTotalsRow(i18n.labelAverage, allPos.avg, allNeg.avg, allTotal.avg));
 			results.push(getOverviewTotalsRow(i18n.labelMinimum, allPos.min, allNeg.max, allTotal.min));
 			results.push(getOverviewTotalsRow(i18n.labelMaximum, allPos.max, allNeg.min, allTotal.max));
-			// Note: Yes, maxNeg and minNeg are swapped for better reading
+			// Note: Yes, allNeg.max and allNeg.min are swapped for better reading
 		}
 
 		// And we're done on the report table
@@ -2339,16 +2339,10 @@ function periodReport() {
 
 		// Now charts!
 		if (showCharts) {
-
-			chartValues = [];
-			chartLabels = [];
-
 			// Get all values for the selected column
 			chartCol = parseInt(document.getElementById('chart-selector').value, 10) || 1;
-			for (i = 0, leni = overviewData.length; i < leni; i++) {
-				chartValues.push(overviewData[i][chartCol]);
-				chartLabels.push(overviewData[i][0]);  // month or year
-			}
+			chartValues = overviewData.getColumn(chartCol);
+			chartLabels = overviewData.getColumn(0);  // month or year
 
 			// Get chart and show it
 			chart = drawChart(chartValues, chartLabels);
@@ -2516,11 +2510,8 @@ function dailyReport() {
 		if (showCharts && monthPartials.checked) {
 
 			// Get all values for the selected column
-			chartValuesSelected = [];
 			chartCol = parseInt(document.getElementById('chart-selector').value, 10) || 1;
-			for (i = 0, leni = chartValues.length; i < leni; i++) {
-				chartValuesSelected.push(chartValues[i][chartCol]);
-			}
+			chartValuesSelected = chartValues.getColumn(chartCol);
 
 			// Get chart and show it
 			chart = drawChart(chartValuesSelected, chartLabels);
