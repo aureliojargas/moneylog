@@ -1267,9 +1267,8 @@ function getMiniBar(pos, neg) {
 }
 
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
-	var partial, theRow;
+	var partial = [], results = [];
 
-	partial = [];
 	partial.push('<table class="posneg number"><tr>');
 	partial.push('<td> +');
 	partial.push(prettyFloat(monthPos, true) + '<br>');
@@ -1282,18 +1281,19 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
 	}
 
-	theRow = '<tr class="total">';
+	results.push('<tr class="total">');
 	if (showRowCount) {
-		theRow += '<td class="row-count"><\/td>';
+		results.push('<td class="row-count"><\/td>');
 	}
-	theRow += '<td><\/td>';
-	theRow += '<td>' + partial + '<\/td>';
-	theRow += '<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>';
+	results.push('<td><\/td>');
+	results.push('<td>' + partial + '<\/td>');
+	results.push('<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>');
 	if (showBalance) {
-		theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
+		results.push('<td class="number">' + prettyFloat(total) + '<\/td>');
 	}
-	theRow += '<\/tr>';
-	return theRow;
+	results.push('<\/tr>');
+
+	return results.join('');
 }
 
 function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowCount) {
@@ -2246,7 +2246,7 @@ function updateSelectedRowsSummary() {
 }
 
 function periodReport() {
-	var i, leni, z, len, theData, overviewData, groupedData, balance, period, periods, periodValues, totals, thead, results, allPos, allNeg, allTotal, sortIndex, sortRev, chart, chartCol, chartValues, chartLabels, colTypes;
+	var i, leni, z, len, theData, overviewData, groupedData, balance, period, periods, periodValues, totals, results, allPos, allNeg, allTotal, sortIndex, sortRev, chart, chartCol, chartValues, chartLabels, colTypes;
 
 	results = [];
 	overviewData = [];
@@ -2293,20 +2293,21 @@ function periodReport() {
 		results.push('<table class="report overview">');
 
 		// Table headings
-		thead = '<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>';
-		thead += '<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>';
-		thead += '<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>';
-		thead += '<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>';
+		results.push('<tr>');
+		if (showRowCount) {
+			results.push('<th class="row-count"><\/th>');
+		}
+		results.push('<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>');
+		results.push('<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>');
+		results.push('<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>');
+		results.push('<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>');
 		if (showBalance) {
-			thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
+			results.push('<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>');
 		}
 		if (showMiniBars) {
-			thead += '<th class="percent">%<\/th>';
+			results.push('<th class="percent">%<\/th>');
 		}
-		if (showRowCount) {
-			thead = '<th class="row-count"><\/th>' + thead;
-		}
-		results.push('<tr>' + thead + '<\/tr>');
+		results.push('<\/tr>');
 
 		// Array2Html
 		for (i = 0, leni = overviewData.length; i < leni; i++) {
@@ -2367,7 +2368,7 @@ function periodReport() {
 }
 
 function dailyReport() {
-	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes, sortIndex, sortRev;
+	var i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes, sortIndex, sortRev;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
 	results = [];
@@ -2396,19 +2397,21 @@ function dailyReport() {
 			theData.reverse();
 		}
 
-		// Compose table headings
-		thead = '<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '<\/th>';
-		thead += '<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>';
-		thead += '<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>';
-		thead += '<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>';
-		if (showBalance) {
-			thead += '<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>';
-		}
-		if (showRowCount) {
-			thead = '<th class="row-count"><\/th>' + thead;
-		}
 		results.push('<table class="report daily">');
-		results.push('<tr>' + thead + '<\/tr>');
+
+		// Compose table headings
+		results.push('<tr>');
+		if (showRowCount) {
+			results.push('<th class="row-count"><\/th>');
+		}
+		results.push('<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '<\/th>');
+		results.push('<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>');
+		results.push('<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>');
+		results.push('<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>');
+		if (showBalance) {
+			results.push('<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>');
+		}
+		results.push('<\/tr>');
 
 		// Compose table rows
 		for (i = 0, leni = theData.length; i < leni; i++) {
