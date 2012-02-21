@@ -2192,7 +2192,7 @@ function updateSelectedRowsSummary() {
 	}
 }
 
-function showOverview() {
+function periodReport() {
 	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, sortIndex, sortRev, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
 
 
@@ -2366,7 +2366,7 @@ function showOverview() {
 	document.getElementById('report').innerHTML = results;
 }
 
-function showDetailed() {
+function dailyReport() {
 	var thead, i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes, sortIndex, sortRev;
 
 	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
@@ -2537,7 +2537,7 @@ function showDetailed() {
 	document.getElementById('report').innerHTML = results;
 }
 
-function showTagReport() {
+function tagReport() {
 	var i, leni, j, lenj, results, tagNames, tagName, tagData, tableData, theData, groupedData, container, firstDate, lastDate, allDates, nDates, period, periodData, periodName, rowAmount, rowTags, index, total, tagless, tdClass, sortIndex, sortRev;
 
 	results = [];
@@ -2768,11 +2768,11 @@ function showTagReport() {
 
 function showReport() {
 	if (reportType === 'd') {
-		showDetailed();
+		dailyReport();
 	} else {
-		showOverview();
+		periodReport();
 	}
-	showTagReport();
+	tagReport();
 
 	// Widget hook: showReportPost
 	for (i = 0; i < Widget.instances.length; i++) {
@@ -2970,7 +2970,7 @@ function sortColTag(index) {
 	// Save new index
 	sortData[reportType].indexTag = index;
 	// Refresh table
-	showTagReport();
+	tagReport();
 }
 
 function changeReport() {
@@ -3715,7 +3715,7 @@ function init() {
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
 	document.getElementById('tag-cloud-opt-reset-check' ).onclick  = resetTagCloud;
 	document.getElementById('chart-selector'         ).onchange = showReport;
-	document.getElementById('tag-report-opt-related-check').onclick = showTagReport;
+	document.getElementById('tag-report-opt-related-check').onclick = tagReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('rows-summary-reset'     ).onclick  = showReport;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
