@@ -700,7 +700,7 @@ if (!Array.prototype.indexOf) {
 			}
 		}
 		return -1;
-	}
+	};
 }
 RegExp.escape = function (str) {
 	var specials = new RegExp('[.*+?|\\^$()\\[\\]{}\\\\]', 'g');
@@ -2532,7 +2532,7 @@ function dailyReport() {
 }
 
 function tagReport() {
-	var i, leni, j, lenj, results, tagNames, tagName, tagData, tableData, theData, groupedData, content, firstDate, lastDate, allDates, nDates, period, periodData, periodName, rowAmount, rowTags, index, total, tagless, tdClass, sortIndex, sortRev;
+	var i, leni, j, lenj, results, hasRelated, hideRelated, tagNames, tagName, selectedTags, tagData, tableData, theData, groupedData, content, options, firstDate, lastDate, allDates, nDates, period, periodData, periodName, rowAmount, rowTags, index, total, tagless, tdClass, sortIndex, sortRev;
 
 	results = [];
 	tagNames = [];
@@ -2763,6 +2763,8 @@ function tagReport() {
 }
 
 function showReport() {
+	var i;
+
 	if (reportType === 'd') {
 		dailyReport();
 	} else {
