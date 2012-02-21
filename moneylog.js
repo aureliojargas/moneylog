@@ -3020,7 +3020,7 @@ function lastMonthsChanged() {
 
 function dateRangeComboChanged() {
 	document.getElementById(this.id.replace(/(month|year)-combo/, 'check')).checked = true;
-	toggleDateRange();
+	showReport();
 }
 
 function toggleFullScreen() {
@@ -3042,14 +3042,6 @@ function toggleFullScreen() {
 		isFullScreen = true;
 	}
 	return false;  // cancel link action
-}
-
-function toggleFuture() {
-	showReport();
-}
-
-function toggleDateRange() {
-	showReport();
 }
 
 function toggleToolbarBox(header_id, content_id) {
@@ -3687,15 +3679,15 @@ function init() {
 	document.getElementById('opt-value-filter-check' ).onclick  = toggleValueFilter;
 	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
 	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
-	document.getElementById('opt-future-check'       ).onclick  = toggleFuture;
+	document.getElementById('opt-future-check'       ).onclick  = showReport;
 	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
 	document.getElementById('source-file'            ).onchange = loadSelectedFile;
 	document.getElementById('source-reload'          ).onclick  = reloadSelectedFile;
-	document.getElementById('opt-date-1-check'       ).onclick  = toggleDateRange;
-	document.getElementById('opt-date-2-check'       ).onclick  = toggleDateRange;
+	document.getElementById('opt-date-1-check'       ).onclick  = showReport;
+	document.getElementById('opt-date-2-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;
 	document.getElementById('opt-date-2-month-combo' ).onchange = dateRangeComboChanged;
 	document.getElementById('tag-cloud-opt-group-check' ).onclick  = showReport;
