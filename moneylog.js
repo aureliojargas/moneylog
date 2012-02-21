@@ -1218,6 +1218,35 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 	return o;
 }
 
+function getSelectedTags() {
+	// Get currently selected tags (from interface)
+	var i, leni, el, els, results = [];
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		if (hasClass(el, 'selected')) {
+			results.push(el.innerHTML);
+		}
+	}
+	return results;
+}
+
+function getExcludedTags() {
+	// Get currently excluded tags (from interface)
+	var i, leni, el, els, results = [];
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		if (hasClass(el, 'excluded')) {
+			results.push(el.innerHTML);
+		}
+	}
+	return results;
+}
 
 
 /////////////////////////////////////////////////////////////////////
@@ -1489,13 +1518,13 @@ function getSelectedFile() {
 	return dataFiles[document.getElementById('source-file').selectedIndex];
 	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
 }
-function reloadSelectedFile() {
-	// Save currently selected tags
-	initSelectedTags = getSelectedTags();
-	initExcludedTags = getExcludedTags();
-	// Reload
-	loadSelectedFile();
-	return false;  // cancel link action
+function showHideEditButton() {
+	var el;
+	if (appMode === 'dropbox') {
+		// Hide Edit button when current file is '*'
+		el = document.getElementById('editor-open');
+		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
+	}
 }
 function loadSelectedFile() {
 	var filePath;
@@ -1517,6 +1546,14 @@ function loadSelectedFile() {
 	} else {
 		loadDataFile(filePath);
 	}
+	return false;  // cancel link action
+}
+function reloadSelectedFile() {
+	// Save currently selected tags
+	initSelectedTags = getSelectedTags();
+	initExcludedTags = getExcludedTags();
+	// Reload
+	loadSelectedFile();
 	return false;  // cancel link action
 }
 
@@ -2106,36 +2143,6 @@ function resetTagCloud() {
 	this.checked = false;
 
 	showReport();
-}
-
-function getSelectedTags() {
-	// Get currently selected tags (from interface)
-	var i, leni, el, els, results = [];
-
-	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
-	for (i = 0, leni = els.length; i < leni; i++) {
-		el = els[i];
-
-		if (hasClass(el, 'selected')) {
-			results.push(el.innerHTML);
-		}
-	}
-	return results;
-}
-
-function getExcludedTags() {
-	// Get currently excluded tags (from interface)
-	var i, leni, el, els, results = [];
-
-	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
-	for (i = 0, leni = els.length; i < leni; i++) {
-		el = els[i];
-
-		if (hasClass(el, 'excluded')) {
-			results.push(el.innerHTML);
-		}
-	}
-	return results;
 }
 
 function tagClicked(el) {
@@ -3137,15 +3144,6 @@ function valueFilterChanged() {
 function resetRowsSummary() {
 	showReport();
 	return false;  // cancel link action
-}
-
-function showHideEditButton() {
-	var el;
-	if (appMode === 'dropbox') {
-		// Hide Edit button when current file is '*'
-		el = document.getElementById('editor-open');
-		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
-	}
 }
 
 
