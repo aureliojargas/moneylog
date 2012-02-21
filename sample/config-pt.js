@@ -121,8 +121,8 @@
 ////// WIDGETS
 //
 // initViewWidgetOpen = true    ;// Iniciar com a caixa Visualizar aberta?
-// initTagCloudOpen = true      ;// Iniciar com a nuvem de Tags aberta?
-// showTagCloud = true          ;// Usar o widget Nuvem de tags?
+// initTagCloudOpen = true      ;// Iniciar com a Nuvem de Tags aberta?
+// showTagCloud = true          ;// Usar o widget Nuvem de Tags?
 
 
 ////// WIDGET: SOMATÓRIO DE TAGS
@@ -134,6 +134,7 @@
 
 ////// TABELA DO EXTRATO
 //
+// showBalance = true           ;// Mostrar a coluna Acumulado?
 // showRowCount = true          ;// Mostrar o número da linha à esquerda?
 // monthlyRowCount = true       ;// O número da linha recomeça a cada mês?
 //

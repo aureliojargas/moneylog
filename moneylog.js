@@ -23,6 +23,7 @@ var checkMonthPartials = true;    // Monthly checkbox inits checked?
 var showRowCount = true;          // Show the row numbers at left?
 var monthlyRowCount = true;       // The row numbers are reset each month?
 var highlightWords = '';          // The words you may want to highlight (ie: 'XXX TODO')
+var showBalance = true;           // Show the Balance column in reports?
 
 // Search
 var defaultSearch = '';           // Search for this text on init
@@ -1234,7 +1235,9 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	theRow += '<td><\/td>';
 	theRow += '<td>' + partial + '<\/td>';
 	theRow += '<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>';
-	theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
+	if (showBalance) {
+		theRow += '<td class="number">' + prettyFloat(total) + '<\/td>';
+	}
 	theRow += '<\/tr>';
 	return theRow;
 }
@@ -1252,7 +1255,9 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
+	if (showBalance) {
+		theRow.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
+	}
 
 	if (showMiniBars) {
 		theRow.push(getMiniBar(monthPos, monthNeg));
@@ -1272,7 +1277,9 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 	theRow.push('<td class="number">' + prettyFloat(n1) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(n2) + '<\/td>');
 	theRow.push('<td class="number">' + prettyFloat(n3) + '<\/td>');
-	theRow.push('<td><\/td>');
+	if (showBalance) {
+		theRow.push('<td><\/td>');
+	}
 	theRow.push('<\/tr>');
 	return theRow.join('\n');
 }
@@ -2200,7 +2207,9 @@ function showOverview() {
 	thead += '<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>';
 	thead += '<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>';
 	thead += '<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>';
-	thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
+	if (showBalance) {
+		thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
+	}
 	if (showMiniBars) {
 		thead += '<th class="percent">%<\/th>';
 	}
@@ -2392,7 +2401,9 @@ function showDetailed() {
 		thead += '<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>';
 		thead += '<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>';
 		thead += '<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>';
-		thead += '<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>';
+		if (showBalance) {
+			thead += '<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>';
+		}
 		if (showRowCount) {
 			thead = '<th class="row-count"><\/th>' + thead;
 		}
@@ -2469,13 +2480,15 @@ function showDetailed() {
 			results.push('<td class="number">' + prettyFloat(rowAmount)    + '<\/td>');
 			results.push('<td class="tags">'   + rowTags.join(', ')        + '<\/td>');
 			results.push('<td>'                + rowDescription            + '<\/td>');
-			results.push('<td class="number">' + prettyFloat(sumTotal)     + '<\/td>');
+			if (showBalance) {
+				results.push('<td class="number">' + prettyFloat(sumTotal)     + '<\/td>');
+			}
 			results.push('<\/tr>');
 
 		}
 
 		// Should we show the full month partials at the last row?
-		if (monthPartials.checked) {
+		if (monthPartials.checked || !showBalance) {
 			results.push(getTotalsRow(sumTotal, monthTotal, monthNeg, monthPos));
 		} else {
 			results.push(getTotalsRow(sumTotal, '', sumNeg, sumPos));
@@ -2780,7 +2793,9 @@ function populateChartColsCombo() {
 	el.options[0] = new Option(i18n.labelsOverview[1], 1);  // Incoming
 	el.options[1] = new Option(i18n.labelsOverview[2], 2);  // Expense
 	el.options[2] = new Option(i18n.labelsOverview[3], 3);  // Partial
-	el.options[3] = new Option(i18n.labelsOverview[4], 4);  // Balance
+	if (showBalance) {
+		el.options[3] = new Option(i18n.labelsOverview[4], 4);  // Balance
+	}
 }
 
 function populateRowsSummaryCombo() {

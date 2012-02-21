@@ -20,9 +20,9 @@ NerdToy.config.opened = true;  // Start app with this widget opened?
 NerdToy.populate = function () {
 	var i, opts, opt;
 	opts = [
+		'showBalance',
 		'showChartBarLabel',
 		'showCharts',
-		'showEmptyTagInSummary',
 		'showLocaleDate',
 		'showMiniBars',
 		'showMiniBarsLabels',
