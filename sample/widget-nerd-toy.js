@@ -27,6 +27,7 @@ NerdToy.populate = function () {
 		'showMiniBars',
 		'showMiniBarsLabels',
 		'showRowCount',
+		'showTagReport',
 		'monthlyRowCount'
 	];
 	for (i = 0; i < opts.length; i++) {

@@ -51,12 +51,13 @@ var ignoreTags = '';              // Ignore all entries that have one of these t
 var initSelectedTags = '';        // Tag Cloud: start app with these tags already selected
 var initExcludedTags = '';        // Tag Cloud: start app with these tags already excluded
 var checkHideRelatedTags = false; // Tag Report option [ ] Hide related inits checked?
+var showTagReport = true;         // Show the Tag Report after monthly/yearly reports?
 
 // Charts
 var showMiniBars = true;          // Show the percentage bars in monthly/yearly reports?
 var showMiniBarsLabels = true;    // Show the labels inside the bars?
 var miniBarWidth = 70;            // The percentage bar width, in pixels
-var showCharts = true;            // Show the bar chart after the monthly/yearly report?
+var showCharts = true;            // Show the bar chart after the report?
 var showChartBarLabel = true;     // Show the labels above the bars?
 var initChartDaily = 3;           // Initial selected item for the daily chart [1-4]
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
@@ -2554,7 +2555,7 @@ function tagReport() {
 	hideRelated = document.getElementById('tag-report-opt-related-check').checked;
 
 	// Hide the Tag report when in Daily report
-	if (reportType === 'd') {
+	if (!showTagReport || reportType === 'd') {
 		document.getElementById('tag-report').style.display = 'none';
 		return false;
 	} else {
