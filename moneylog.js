@@ -491,6 +491,9 @@ var selectedRows = [];
 var multiRawData = '';
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
+var initDropbox;  // to be implemented in server side
+var showReport;  // to make JSLint happy
+var Widget;
 var TagSummary;
 
 // We have special rules for tiny screens (480px or less)
@@ -3324,7 +3327,7 @@ Widget.prototype.showReportPost = function () {};
 ////
 //// Tag Summary Widget
 
-var TagSummary = new Widget('tag-summary', 'Tag Summary', 'TagSummary');
+TagSummary = new Widget('tag-summary', 'Tag Summary', 'TagSummary');
 
 // Widget config
 TagSummary.config.active = true;       // Is this widget active?
