@@ -2553,10 +2553,12 @@ function tagReport() {
 	options = document.getElementById('tag-report-options');
 	hideRelated = document.getElementById('tag-report-opt-related-check').checked;
 
-	// Daily report won't show Tag Report
+	// Hide the Tag report when in Daily report
 	if (reportType === 'd') {
-		container.innerHTML = '';
+		document.getElementById('tag-report').style.display = 'none';
 		return false;
+	} else {
+		document.getElementById('tag-report').style.display = 'block';
 	}
 
 	// Group report data by period (month or year), to make things easier
