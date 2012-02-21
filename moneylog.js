@@ -3170,6 +3170,7 @@ function Widget(widgetId, widgetName, instanceName) {
 	this.id = widgetId;
 	this.widgetName = widgetName;
 	this.instanceName = instanceName;
+	this.initDone = false;
 	this.created = false;
 
 	// Save the instance into a global holder
@@ -3257,6 +3258,8 @@ Widget.prototype.init = function () {
 	// user config is applied and app UI is ready. But user data was not
 	// read/parsed yet.
 
+	if (this.initDone) { return; }  // already done
+
 	// Create widget DIV if config allows
 	this.create();
 	if (!this.created) { return; }
@@ -3268,12 +3271,15 @@ Widget.prototype.init = function () {
 	if (this.config.opened && this.config.active) {
 		this.toggle();
 	}
+
+	this.initDone = true;
 };
 
 Widget.prototype.create = function () {
 	// Append a new widget-box to the #widgets area
 
 	if (!this.config.active) { return; }
+	if (this.created) { return; }  // already done
 
 	document.getElementById('widgets').innerHTML += this.boxTemplate
 		.replace(/\{widgetId\}/g, this.id)
