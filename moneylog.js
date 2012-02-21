@@ -2194,9 +2194,10 @@ function updateSelectedRowsSummary() {
 function periodReport() {
 	var i, leni, z, len, rowDate, rowAmount, theData, overviewData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, sortIndex, sortRev, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
 
-
 	results = [];
 	overviewData = [];
+	theData = applyTags(filterData());
+	reportData = theData.clone();
 	sortIndex = sortData[reportType].index;
 	sortRev = sortData[reportType].rev;
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
@@ -2216,9 +2217,6 @@ function periodReport() {
 	if (showRowCount) {
 		thead = '<th class="row-count"><\/th>' + thead;
 	}
-
-	theData = applyTags(filterData());
-	reportData = theData.clone();
 
 	if (theData.length) {
 		results.push('<table class="report overview">');
