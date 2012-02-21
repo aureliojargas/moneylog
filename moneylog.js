@@ -857,10 +857,27 @@ function getCurrentDate() {
 	return new Date().toML();
 }
 
-function getPastMonth(months) {
-	// months=0 means current month
-	// Returns: YYYY-MM-00
-	return formatDate(addMonths(getCurrentDate(), -months), 'Y-m-00');
+function formatDate(date, fmt) {
+	// date: YYYY-MM-DD, fmt: see Date.prototype.format()
+	return date.toDate().format(fmt);
+}
+
+function formatReportDate(date) {
+	// This key controls if the report date should be formatted
+	if (!showLocaleDate) {
+		return date;  // nothing to do
+	}
+
+	switch (date.length) {
+		case 10:  // YYYY-MM-DD
+			return formatDate(date, i18n.dateFormat);
+		case 7:  // YYYY-MM
+			return formatDate(date + '-01', i18n.dateFormatMonth);
+		case 4:  // YYYY
+			return formatDate(date + '-01-01', i18n.dateFormatYear);
+		default:  // unknown format
+			return date;
+	}
 }
 
 function addMonths(yyyymmdd, n) {
@@ -872,6 +889,12 @@ function addMonths(yyyymmdd, n) {
 	z.setDate(1);  // set day 1st
 	z.setMonthOffset(n);  // add
 	return z.toML().slice(0, 8) + yyyymmdd.slice(8, 10);  // restore original day
+}
+
+function getPastMonth(months) {
+	// months=0 means current month
+	// Returns: YYYY-MM-00
+	return formatDate(addMonths(getCurrentDate(), -months), 'Y-m-00');
 }
 
 function getDataUniqueDates(periodType) {  // periodType: d, m, y
@@ -939,29 +962,6 @@ function getMonthRange(date1, date2) {
 		}
 	}
 	return results;
-}
-
-function formatDate(date, fmt) {
-	// date: YYYY-MM-DD, fmt: see Date.prototype.format()
-	return date.toDate().format(fmt);
-}
-
-function formatReportDate(date) {
-	// This key controls if the report date should be formatted
-	if (!showLocaleDate) {
-		return date;  // nothing to do
-	}
-
-	switch (date.length) {
-		case 10:  // YYYY-MM-DD
-			return formatDate(date, i18n.dateFormat);
-		case 7:  // YYYY-MM
-			return formatDate(date + '-01', i18n.dateFormatMonth);
-		case 4:  // YYYY
-			return formatDate(date + '-01-01', i18n.dateFormatYear);
-		default:  // unknown format
-			return date;
-	}
 }
 
 function prettyFloat(num, noHtml) {
@@ -1380,11 +1380,6 @@ function editorOff() {
 
 	return false;  // cancel link action
 }
-function editorSave() {
-	editorOff();
-	saveLocalData();
-	return false;  // cancel link action
-}
 function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
 
@@ -1408,6 +1403,11 @@ function loadLocalData() {
 		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
 	}
 	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
+}
+function editorSave() {
+	editorOff();
+	saveLocalData();
+	return false;  // cancel link action
 }
 // Allows to insert TABs inside textarea
 // Opera bug: needs to be attached to onkeypress instead onkeydown
@@ -3065,9 +3065,19 @@ function toggleToolbarBox(header_id, content_id) {
 	}
 	return false;  // cancel link action
 }
+
+function toggleCheckboxOptionExtra(checkbox) {
+	// Show/hide the "*-extra" DIV with aditional options
+	var extra = document.getElementById(checkbox.id.replace('-check', '-extra'));
+	if (hasClass(extra, 'auto-hide')) {
+		extra.style.display = (checkbox.checked) ? 'block' : 'none';
+	}
+}
+
 function toggleViewOptions() {
 	return toggleToolbarBox('view-options-header', 'view-options-content');
 }
+
 function toggleTagCloud() {
 	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
 }
@@ -3089,14 +3099,6 @@ function toggleMonthly() {
 		sortData.d.rev = false;
 	}
 	showReport();
-}
-
-function toggleCheckboxOptionExtra(checkbox) {
-	// Show/hide the "*-extra" DIV with aditional options
-	var extra = document.getElementById(checkbox.id.replace('-check', '-extra'));
-	if (hasClass(extra, 'auto-hide')) {
-		extra.style.display = (checkbox.checked) ? 'block' : 'none';
-	}
 }
 
 function toggleRowHighlight(el) {
