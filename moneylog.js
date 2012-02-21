@@ -1485,112 +1485,6 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 
 
 /////////////////////////////////////////////////////////////////////
-//                        DATA EDITOR
-/////////////////////////////////////////////////////////////////////
-
-function editorOn() {
-	var filepath;
-
-	// Load the current data to the editor
-	// Note: already loaded when localStorage
-	if (appMode !== 'localStorage') {
-		document.getElementById('editor-data').value = rawData;
-	}
-
-	// Hide content to avoid scroll bars
-	document.getElementById('content').style.display = 'none';
-
-	// Set file name
-	if (appMode === 'localStorage') {
-		filepath = 'Browser localStorage: ' + localStorageKey;
-	} else if (appMode === 'dropbox') {
-		filepath = 'Dropbox: ' + dropboxAppFolder + dropboxTxtFolder + '/' + getSelectedFile();
-	} else {
-		filepath = getSelectedFile();
-	}
-	document.getElementById('editor-file-name').innerHTML = filepath;
-
-	// Show editor
-	document.getElementById('editor').style.display = 'block';
-
-	return false;  // cancel link action
-}
-function editorOff() {
-
-	// Hide editor
-	document.getElementById('editor').style.display = 'none';
-
-	// Restore content
-	document.getElementById('content').style.display = 'block';
-
-	return false;  // cancel link action
-}
-function saveLocalData() {
-	var editButton = document.getElementById('editor-open');
-
-	editButton.innerHTML = i18n.msgSaving;
-	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
-
-	// Save currently selected tags
-	initSelectedTags = getSelectedTags();
-	initExcludedTags = getExcludedTags();
-
-	// Reload report
-	resetData();
-	readData();
-	parseData();
-	showReport();
-	editButton.innerHTML = i18n.labelEditorOpen;
-}
-function loadLocalData() {
-	// first time using localStorage (or empty), load default data from #data (PRE)
-	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
-		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
-	}
-	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
-}
-function editorSave() {
-	editorOff();
-	saveLocalData();
-	return false;  // cancel link action
-}
-// Allows to insert TABs inside textarea
-// Opera bug: needs to be attached to onkeypress instead onkeydown
-// Original from: http://pallieter.org/Projects/insertTab/ (see <script> at page source)
-function insertTab(e) {
-	var kC, oS, sS, sE, o = this; // aurelio: make jslint happy
-
-	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
-	o = this; // aurelio: removed this on calling
-
-	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
-	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey) {
-		oS = o.scrollTop; // Set the current scroll position.
-		if (o.setSelectionRange) {
-			// For: Opera + FireFox + Safari
-			sS = o.selectionStart;
-			sE = o.selectionEnd;
-			o.value = o.value.substring(0, sS) + '\t' + o.value.substr(sE);
-			o.setSelectionRange(sS + 1, sS + 1);
-			o.focus();
-		} else if (o.createTextRange) {
-			// For: MSIE
-			document.selection.createRange().text = '\t'; // String.fromCharCode(9)
-			// o.onblur = function() { o.focus(); o.onblur = null; };
-		}
-		o.scrollTop = oS; // Return to the original scroll position.
-		if (e.preventDefault) {  // aurelio change
-			e.preventDefault();
-		} else {
-			e.returnValue = false;
-		}
-		return false; // Not needed, but good practice.
-	}
-	return true;
-}
-
-
-/////////////////////////////////////////////////////////////////////
 //                        DATA HANDLERS
 /////////////////////////////////////////////////////////////////////
 
@@ -1671,6 +1565,14 @@ function reloadSelectedFile() {
 	// Reload
 	loadSelectedFile();
 	return false;  // cancel link action
+}
+
+function loadLocalData() {
+	// first time using localStorage (or empty), load default data from #data (PRE)
+	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
+		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
+	}
+	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
 }
 
 function readData() {
@@ -2788,6 +2690,105 @@ function showReport() {
 	for (i = 0; i < Widget.instances.length; i++) {
 		Widget.instances[i].showReportPost();
 	}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//                        DATA EDITOR
+/////////////////////////////////////////////////////////////////////
+
+function editorOn() {
+	var filepath;
+
+	// Load the current data to the editor
+	// Note: already loaded when localStorage
+	if (appMode !== 'localStorage') {
+		document.getElementById('editor-data').value = rawData;
+	}
+
+	// Hide content to avoid scroll bars
+	document.getElementById('content').style.display = 'none';
+
+	// Set file name
+	if (appMode === 'localStorage') {
+		filepath = 'Browser localStorage: ' + localStorageKey;
+	} else if (appMode === 'dropbox') {
+		filepath = 'Dropbox: ' + dropboxAppFolder + dropboxTxtFolder + '/' + getSelectedFile();
+	} else {
+		filepath = getSelectedFile();
+	}
+	document.getElementById('editor-file-name').innerHTML = filepath;
+
+	// Show editor
+	document.getElementById('editor').style.display = 'block';
+
+	return false;  // cancel link action
+}
+function editorOff() {
+
+	// Hide editor
+	document.getElementById('editor').style.display = 'none';
+
+	// Restore content
+	document.getElementById('content').style.display = 'block';
+
+	return false;  // cancel link action
+}
+function saveLocalData() {
+	var editButton = document.getElementById('editor-open');
+
+	editButton.innerHTML = i18n.msgSaving;
+	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
+
+	// Save currently selected tags
+	initSelectedTags = getSelectedTags();
+	initExcludedTags = getExcludedTags();
+
+	// Reload report
+	resetData();
+	readData();
+	parseData();
+	showReport();
+	editButton.innerHTML = i18n.labelEditorOpen;
+}
+function editorSave() {
+	editorOff();
+	saveLocalData();
+	return false;  // cancel link action
+}
+// Allows to insert TABs inside textarea
+// Opera bug: needs to be attached to onkeypress instead onkeydown
+// Original from: http://pallieter.org/Projects/insertTab/ (see <script> at page source)
+function insertTab(e) {
+	var kC, oS, sS, sE, o = this; // aurelio: make jslint happy
+
+	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
+	o = this; // aurelio: removed this on calling
+
+	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
+	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey) {
+		oS = o.scrollTop; // Set the current scroll position.
+		if (o.setSelectionRange) {
+			// For: Opera + FireFox + Safari
+			sS = o.selectionStart;
+			sE = o.selectionEnd;
+			o.value = o.value.substring(0, sS) + '\t' + o.value.substr(sE);
+			o.setSelectionRange(sS + 1, sS + 1);
+			o.focus();
+		} else if (o.createTextRange) {
+			// For: MSIE
+			document.selection.createRange().text = '\t'; // String.fromCharCode(9)
+			// o.onblur = function() { o.focus(); o.onblur = null; };
+		}
+		o.scrollTop = oS; // Return to the original scroll position.
+		if (e.preventDefault) {  // aurelio change
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+		return false; // Not needed, but good practice.
+	}
+	return true;
 }
 
 
