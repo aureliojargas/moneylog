@@ -2769,9 +2769,6 @@ function showReport() {
 	for (i = 0; i < Widget.instances.length; i++) {
 		Widget.instances[i].showReportPost();
 	}
-
-	// Needed by #rows-summary-reset
-	return false;  // cancel link action
 }
 
 
@@ -3134,6 +3131,11 @@ function valueFilterChanged() {
 	}
 
 	showReport();
+}
+
+function resetRowsSummary() {
+	showReport();
+	return false;  // cancel link action
 }
 
 function showHideEditButton() {
@@ -3701,7 +3703,7 @@ function init() {
 	document.getElementById('chart-selector'         ).onchange = showReport;
 	document.getElementById('tag-report-opt-related-check').onclick = tagReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
-	document.getElementById('rows-summary-reset'     ).onclick  = showReport;
+	document.getElementById('rows-summary-reset'     ).onclick  = resetRowsSummary;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
 	document.getElementById('editor-open'            ).onclick  = editorOn;
