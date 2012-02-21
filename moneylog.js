@@ -1485,6 +1485,167 @@ function getOverviewTotalsRow(label, n1, n2, n3) {
 
 
 /////////////////////////////////////////////////////////////////////
+//                       INTERFACE UPDATE
+/////////////////////////////////////////////////////////////////////
+
+function populateChartColsCombo() {
+	var el = document.getElementById('chart-selector');
+	el.options[0] = new Option(i18n.labelsOverview[1], 1);  // Incoming
+	el.options[1] = new Option(i18n.labelsOverview[2], 2);  // Expense
+	el.options[2] = new Option(i18n.labelsOverview[3], 3);  // Partial
+	if (showBalance) {
+		el.options[3] = new Option(i18n.labelsOverview[4], 4);  // Balance
+	}
+}
+
+function populateRowsSummaryCombo() {
+	var el = document.getElementById('rows-summary-index');
+	el.options[0] = new Option(i18n.labelsOverview[1], 2);  // Incoming
+	el.options[1] = new Option(i18n.labelsOverview[2], 3);  // Expense
+	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
+}
+
+function populateDataFilesCombo() {
+	var el, i, leni;
+	if (appMode === 'txt' || appMode === 'dropbox') {
+		el = document.getElementById('source-file');
+		for (i = 0, leni = dataFiles.length; i < leni; i++) {
+			el.options[i] = new Option(dataFiles[i]);
+		}
+	}
+}
+
+function populateLastMonthsCombo() {
+	var el, label, i;
+	el = document.getElementById('opt-last-months-combo');
+	label = i18n.labelMonths[0];
+	for (i = 1; i <= maxLastMonths; i++) {
+		if (i > 1) {
+			label = i18n.labelMonths[1];
+		}
+		el.options[i - 1] = new Option(i + ' ' + label, i);
+	}
+	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
+}
+
+function populateDateRangeCombos() {
+	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
+
+	el1 = document.getElementById('opt-date-1-month-combo');
+	el2 = document.getElementById('opt-date-2-month-combo');
+	offset1 = initMonthOffsetFrom;
+	offset2 = initMonthOffsetUntil;
+	fmt = 'Y-m';
+	range = getDataUniqueDates('m');
+
+	//// Let's choose which items to select by default.
+	//
+	// Get user defaults
+	if (typeof offset1 === 'number') {
+		index1 = range.indexOf(
+			formatDate(
+				addMonths(getCurrentDate(), offset1),  // apply offset
+				fmt));
+	}
+	if (typeof offset2 === 'number') {
+		index2 = range.indexOf(
+			formatDate(
+				addMonths(getCurrentDate(), offset2),  // apply offset
+				fmt));
+	}
+	//
+	// If unset or out of range, we'll select the oldest and newer
+	if (index1 === -1) {
+		index1 = 0;
+	}
+	if (index2 === -1) {
+		index2 = range.length - 1;
+	}
+
+	// First, make sure the combo is empty
+	el1.options.length = 0;
+	el2.options.length = 0;
+
+	// Both combos 1 and 2 will have the same items
+	for (i = 0, leni = range.length; i < leni; i++) {
+		my = (range[i] + '-01').toDate().format('b Y');  // short month name
+		el1.options[i] = new Option(my, range[i]);
+		el2.options[i] = new Option(my, range[i]);
+	}
+
+	// Set selected items
+	el1.selectedIndex = index1;
+	el2.selectedIndex = index2;
+}
+
+function populateValueFilterCombo() {
+	var el;
+	el = document.getElementById('opt-value-filter-combo');
+	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
+	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
+	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
+	el.options[3] = new Option('< ' + i18n.labelLessThan, '<');
+}
+
+function updateToolbar() {
+	var i, leni, add, remove, hide, unhide;
+
+	// Visibility On/Off
+	// Monthly/Yearly report hides some controls from the toolbar.
+	//
+	// Some fields are just hidden to preserve the page layout.
+	// Others must be removed to free vertical space.
+
+	add = [];
+	remove = [];
+	hide = [];
+	unhide = [];
+
+	// Daily
+	if (reportType === 'd') {
+		unhide = [
+			'opt-monthly-box'
+		];
+
+	// Monthly
+	} else if (reportType === 'm') {
+		hide = [
+			'opt-monthly-box'
+		];
+
+	// Yearly
+	} else if (reportType === 'y') {
+		hide = [
+			'opt-monthly-box'
+		];
+	}
+
+	// In Mobile toolbar we always add/remove, there's no hide.
+	// We save vertical space, and the report jump is not an issue.
+	if (isMobile) {
+		add = add.concat(unhide);
+		remove = remove.concat(hide);
+		hide = [];
+		unhide = [];
+	}
+
+	// Show/hide toolbar elements
+	for (i = 0, leni = add.length; i < leni; i++) {
+		document.getElementById(add[i]).style.display = 'block';
+	}
+	for (i = 0, leni = remove.length; i < leni; i++) {
+		document.getElementById(remove[i]).style.display = 'none';
+	}
+	for (i = 0, leni = hide.length; i < leni; i++) {
+		document.getElementById(hide[i]).style.visibility = 'hidden';
+	}
+	for (i = 0, leni = unhide.length; i < leni; i++) {
+		document.getElementById(unhide[i]).style.visibility = 'visible';
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////
 //                        DATA HANDLERS
 /////////////////////////////////////////////////////////////////////
 
@@ -2789,167 +2950,6 @@ function insertTab(e) {
 		return false; // Not needed, but good practice.
 	}
 	return true;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-//                       INTERFACE UPDATE
-/////////////////////////////////////////////////////////////////////
-
-function populateChartColsCombo() {
-	var el = document.getElementById('chart-selector');
-	el.options[0] = new Option(i18n.labelsOverview[1], 1);  // Incoming
-	el.options[1] = new Option(i18n.labelsOverview[2], 2);  // Expense
-	el.options[2] = new Option(i18n.labelsOverview[3], 3);  // Partial
-	if (showBalance) {
-		el.options[3] = new Option(i18n.labelsOverview[4], 4);  // Balance
-	}
-}
-
-function populateRowsSummaryCombo() {
-	var el = document.getElementById('rows-summary-index');
-	el.options[0] = new Option(i18n.labelsOverview[1], 2);  // Incoming
-	el.options[1] = new Option(i18n.labelsOverview[2], 3);  // Expense
-	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
-}
-
-function populateDataFilesCombo() {
-	var el, i, leni;
-	if (appMode === 'txt' || appMode === 'dropbox') {
-		el = document.getElementById('source-file');
-		for (i = 0, leni = dataFiles.length; i < leni; i++) {
-			el.options[i] = new Option(dataFiles[i]);
-		}
-	}
-}
-
-function populateLastMonthsCombo() {
-	var el, label, i;
-	el = document.getElementById('opt-last-months-combo');
-	label = i18n.labelMonths[0];
-	for (i = 1; i <= maxLastMonths; i++) {
-		if (i > 1) {
-			label = i18n.labelMonths[1];
-		}
-		el.options[i - 1] = new Option(i + ' ' + label, i);
-	}
-	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
-}
-
-function populateDateRangeCombos() {
-	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
-
-	el1 = document.getElementById('opt-date-1-month-combo');
-	el2 = document.getElementById('opt-date-2-month-combo');
-	offset1 = initMonthOffsetFrom;
-	offset2 = initMonthOffsetUntil;
-	fmt = 'Y-m';
-	range = getDataUniqueDates('m');
-
-	//// Let's choose which items to select by default.
-	//
-	// Get user defaults
-	if (typeof offset1 === 'number') {
-		index1 = range.indexOf(
-			formatDate(
-				addMonths(getCurrentDate(), offset1),  // apply offset
-				fmt));
-	}
-	if (typeof offset2 === 'number') {
-		index2 = range.indexOf(
-			formatDate(
-				addMonths(getCurrentDate(), offset2),  // apply offset
-				fmt));
-	}
-	//
-	// If unset or out of range, we'll select the oldest and newer
-	if (index1 === -1) {
-		index1 = 0;
-	}
-	if (index2 === -1) {
-		index2 = range.length - 1;
-	}
-
-	// First, make sure the combo is empty
-	el1.options.length = 0;
-	el2.options.length = 0;
-
-	// Both combos 1 and 2 will have the same items
-	for (i = 0, leni = range.length; i < leni; i++) {
-		my = (range[i] + '-01').toDate().format('b Y');  // short month name
-		el1.options[i] = new Option(my, range[i]);
-		el2.options[i] = new Option(my, range[i]);
-	}
-
-	// Set selected items
-	el1.selectedIndex = index1;
-	el2.selectedIndex = index2;
-}
-
-function populateValueFilterCombo() {
-	var el;
-	el = document.getElementById('opt-value-filter-combo');
-	el.options[0] = new Option('+ ' + i18n.labelPositive, '+');
-	el.options[1] = new Option('- ' + i18n.labelNegative, '-');
-	el.options[2] = new Option('> ' + i18n.labelGreaterThan, '>');
-	el.options[3] = new Option('< ' + i18n.labelLessThan, '<');
-}
-
-function updateToolbar() {
-	var i, leni, add, remove, hide, unhide;
-
-	// Visibility On/Off
-	// Monthly/Yearly report hides some controls from the toolbar.
-	//
-	// Some fields are just hidden to preserve the page layout.
-	// Others must be removed to free vertical space.
-
-	add = [];
-	remove = [];
-	hide = [];
-	unhide = [];
-
-	// Daily
-	if (reportType === 'd') {
-		unhide = [
-			'opt-monthly-box'
-		];
-
-	// Monthly
-	} else if (reportType === 'm') {
-		hide = [
-			'opt-monthly-box'
-		];
-
-	// Yearly
-	} else if (reportType === 'y') {
-		hide = [
-			'opt-monthly-box'
-		];
-	}
-
-	// In Mobile toolbar we always add/remove, there's no hide.
-	// We save vertical space, and the report jump is not an issue.
-	if (isMobile) {
-		add = add.concat(unhide);
-		remove = remove.concat(hide);
-		hide = [];
-		unhide = [];
-	}
-
-	// Show/hide toolbar elements
-	for (i = 0, leni = add.length; i < leni; i++) {
-		document.getElementById(add[i]).style.display = 'block';
-	}
-	for (i = 0, leni = remove.length; i < leni; i++) {
-		document.getElementById(remove[i]).style.display = 'none';
-	}
-	for (i = 0, leni = hide.length; i < leni; i++) {
-		document.getElementById(hide[i]).style.visibility = 'hidden';
-	}
-	for (i = 0, leni = unhide.length; i < leni; i++) {
-		document.getElementById(unhide[i]).style.visibility = 'visible';
-	}
 }
 
 
