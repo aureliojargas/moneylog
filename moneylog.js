@@ -486,7 +486,6 @@ var i18n;
 var rawData = '';
 var parsedData = [];
 var reportData = [];  // filtered by applyTags(filterData())
-var overviewData = [];
 var waitingToLoad = [];
 var selectedRows = [];
 var multiRawData = '';
@@ -1397,7 +1396,6 @@ function insertTab(e) {
 /////////////////////////////////////////////////////////////////////
 
 function resetData() {
-	overviewData = [];
 	reportData = [];
 	parsedData = [];
 	rawData = '';
@@ -2194,10 +2192,11 @@ function updateSelectedRowsSummary() {
 }
 
 function periodReport() {
-	var i, leni, z, len, rowDate, rowAmount, theData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, sortIndex, sortRev, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
+	var i, leni, z, len, rowDate, rowAmount, theData, overviewData, thead, results, grandTotal, dateSize, rangeDate, rangeTotal, rangePos, rangeNeg, sumPos, sumNeg, sumTotal, sortIndex, sortRev, minPos, minNeg, minPartial, minBalance, maxPos, maxNeg, maxPartial, maxBalance, maxNumbers, minNumbers, chart, chartCol, chartValues, chartLabels, colTypes;
 
 
 	results = [];
+	overviewData = [];
 	sortIndex = sortData[reportType].index;
 	sortRev = sortData[reportType].rev;
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
@@ -2218,61 +2217,52 @@ function periodReport() {
 		thead = '<th class="row-count"><\/th>' + thead;
 	}
 
-	// XXX Disabling cache for now
-	overviewData = [];
+	theData = applyTags(filterData());
+	reportData = theData.clone();
 
-	if (!overviewData.length) { // Data not cached
-		theData = applyTags(filterData());
-		reportData = theData.clone();
-	}
-
-	if (overviewData.length || theData.length) {
+	if (theData.length) {
 		results.push('<table class="report overview">');
 		results.push('<tr>' + thead + '<\/tr>');
 
-		// The cache is empty. Scan and calculate everything.
-		if (!overviewData.length) {
+		// Scan and calculate everything
+		for (i = 0, leni = theData.length; i < leni; i++) {
+			rowDate        = theData[i][0];
+			rowAmount      = theData[i][1];
+			// rowTags        = theData[i][2].clone();
+			// rowDescription = theData[i][3];
 
-			for (i = 0, leni = theData.length; i < leni; i++) {
-				rowDate        = theData[i][0];
-				rowAmount      = theData[i][1];
-				// rowTags        = theData[i][2].clone();
-				// rowDescription = theData[i][3];
+			// rowDate.slice() size, to extract 2000 or 2000-01
+			dateSize = (reportType === 'y') ? 4 : 7;
 
-				// rowDate.slice() size, to extract 2000 or 2000-01
-				dateSize = (reportType === 'y') ? 4 : 7;
-
-				// First row, just save the month/year date
-				if (i === 0) {
-					rangeDate = rowDate.slice(0, dateSize);
-				}
-
-				// Other rows, detect if this is a new month/year
-				if (i > 0 &&
-						rowDate.slice(0, dateSize) !=
-						theData[i - 1][0].slice(0, dateSize)) {
-
-					// Send old month/year totals to the report
-					overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
-					// Reset totals
-					rangeTotal = rangePos = rangeNeg = 0;
-					// Save new month/year date
-					rangeDate = rowDate.slice(0, dateSize);
-				}
-
-				// Common processing for all rows: update totals
-				grandTotal += rowAmount;
-				rangeTotal += rowAmount;
-				if (rowAmount < 0) {
-					rangeNeg += rowAmount;
-				} else {
-					rangePos += rowAmount;
-				}
+			// First row, just save the month/year date
+			if (i === 0) {
+				rangeDate = rowDate.slice(0, dateSize);
 			}
-			// No more rows. Send the last range totals to the report.
-			overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
+
+			// Other rows, detect if this is a new month/year
+			if (i > 0 &&
+					rowDate.slice(0, dateSize) !=
+					theData[i - 1][0].slice(0, dateSize)) {
+
+				// Send old month/year totals to the report
+				overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
+				// Reset totals
+				rangeTotal = rangePos = rangeNeg = 0;
+				// Save new month/year date
+				rangeDate = rowDate.slice(0, dateSize);
+			}
+
+			// Common processing for all rows: update totals
+			grandTotal += rowAmount;
+			rangeTotal += rowAmount;
+			if (rowAmount < 0) {
+				rangeNeg += rowAmount;
+			} else {
+				rangePos += rowAmount;
+			}
 		}
-		// End of cache filling
+		// No more rows. Send the last range totals to the report.
+		overviewData.push([rangeDate, rangePos, rangeNeg, rangeTotal, grandTotal]);
 
 		//// Report data is OK inside overviewData array
 		//// Now we must compose the report table
@@ -2992,7 +2982,6 @@ function changeReport() {
 	updateSelectedRowsSummary();
 
 	reportType = newType;
-	overviewData = [];
 	updateToolbar();
 	showReport();
 
@@ -3031,7 +3020,6 @@ function iframeLoaded(el) {
 
 function lastMonthsChanged() {
 	document.getElementById('opt-last-months-check').checked = true;
-	overviewData = [];
 	showReport();
 }
 
@@ -3062,12 +3050,10 @@ function toggleFullScreen() {
 }
 
 function toggleFuture() {
-	overviewData = [];  // clear cache
 	showReport();
 }
 
 function toggleDateRange() {
-	overviewData = [];  // clear cache
 	showReport();
 }
 
@@ -3094,7 +3080,6 @@ function toggleTagCloud() {
 
 function toggleLastMonths() {
 	toggleCheckboxOptionExtra(this);
-	overviewData = [];  // clear cache
 	showReport();
 }
 
@@ -3140,8 +3125,6 @@ function toggleRowHighlight(el) {
 }
 
 function valueFilterChanged() {
-	overviewData = [];
-
 	// autocheck checkbox
 	document.getElementById('opt-value-filter-check').checked = true;
 
