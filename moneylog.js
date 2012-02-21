@@ -2203,24 +2203,7 @@ function periodReport() {
 	grandTotal = rangeTotal = rangePos = rangeNeg = sumPos = sumNeg = sumTotal = 0;
 	minPos = minNeg = minPartial = minBalance = maxPos = maxNeg = maxPartial = maxBalance = 0;
 
-	// Table headings
-	thead = '<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>';
-	thead += '<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>';
-	thead += '<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>';
-	thead += '<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>';
-	if (showBalance) {
-		thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
-	}
-	if (showMiniBars) {
-		thead += '<th class="percent">%<\/th>';
-	}
-	if (showRowCount) {
-		thead = '<th class="row-count"><\/th>' + thead;
-	}
-
 	if (theData.length) {
-		results.push('<table class="report overview">');
-		results.push('<tr>' + thead + '<\/tr>');
 
 		// Scan and calculate everything
 		for (i = 0, leni = theData.length; i < leni; i++) {
@@ -2271,6 +2254,24 @@ function periodReport() {
 		if (sortRev) {
 			overviewData.reverse();
 		}
+
+		results.push('<table class="report overview">');
+
+		// Table headings
+		thead = '<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>';
+		thead += '<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>';
+		thead += '<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>';
+		thead += '<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>';
+		if (showBalance) {
+			thead += '<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>';
+		}
+		if (showMiniBars) {
+			thead += '<th class="percent">%<\/th>';
+		}
+		if (showRowCount) {
+			thead = '<th class="row-count"><\/th>' + thead;
+		}
+		results.push('<tr>' + thead + '<\/tr>');
 
 		// Array2Html
 		for (i = 0, leni = overviewData.length; i < leni; i++) {
