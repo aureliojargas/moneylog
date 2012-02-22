@@ -30,7 +30,9 @@ body {
 }
 #toolbar {
 	position: fixed;
-	height: 100%;
+	top: 57px;  /* This is the height of #logo-wrapper */
+	bottom: 0;
+	left: 0;
 	width: 217px;
 	overflow: auto;
 }
@@ -153,7 +155,6 @@ a.button {
 #toolbar-controls-wrapper {
 	background-color: #FAFAFA;
 	clear: both;
-	margin-top: 57px;
 	width: 200px;
 }
 
