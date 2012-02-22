@@ -175,6 +175,7 @@ a.button {
 	border: 1px solid #bbb;  /* element_border */
 	background-color: white;
 	background-color: #F4F4F4;  /* button_bg */
+	position: relative;
 }
 .button.active,
 a.button:active {
@@ -194,13 +195,25 @@ a.button.active {
 	width: 100% !important;
 }
 
+.widget-box .button:before {
+	content: "▶";
+	position: absolute;
+	top: 0;
+	left: 8px;  /* The same as .widget-content padding-left */
+}
+.widget-box .button.active:before {
+	content: "▼";
+	position: absolute;
+	top: 0;
+	left: 8px;  /* The same as .widget-content padding-left */
+}
+
 /* ---------------------------------------------- [ boxes ] */
 
 .widget-content {
 	background-color: white;
 	border: 1px solid #bbb;  /* element_border */
 	border-top-width: 0;
-	padding: 0.5em 10px;
 	padding: 8px;
 	line-height: 185%;
 }
