@@ -61,7 +61,7 @@ label,
 }
 tr:hover td,
 tr.future:hover td {  /* explicit TD to exclude TH */
-	background-color: #eee;  /* hover_bg */
+	background-color: #eee !important;  /* hover_bg */
 	color: black;
 }
 #toolbar input,
@@ -535,8 +535,12 @@ table.chart tr:hover td {
 #tag-report th:hover i {
 	color: white;
 }
+#tag-report td.totals {
+	background-color: inherit;
+	font-style: italic;
+}
 #tag-report td.total {
-/*	font-weight: bold;*/
+	padding-left: 20px;  /* separate */
 }
 #tag-report-options {
 	display: none;  /* JS will show */
