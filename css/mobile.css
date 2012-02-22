@@ -26,7 +26,7 @@
 	}
 	#logo-wrapper {
 		position: static;
-	}	
+	}
 	#content {
 		margin: 0;
 		padding: 0;
@@ -43,6 +43,12 @@
 	/* -------------------- Stretch */
 	#fullscreen {
 		width: 50px;
+	}
+	#source-file.mini {
+		width: 80%;
+	}
+	#source-reload.mini {
+		width: 2em;  /* square: .button font-size*2 */
 	}
 	#report-nav a {
 		width: 30% !important;
@@ -125,6 +131,6 @@
 	td.tags {
 		text-align: center;
 	}
-	
+
 } /* close @media */
- 
+

@@ -194,6 +194,10 @@ a.button.active {
 	float: none !important;
 	width: 100% !important;
 }
+.button.naked {
+	background-color: inherit;
+	border-style: none;
+}
 
 .widget-box .button:before {
 	content: "▶";
@@ -233,6 +237,13 @@ a.button.active {
 	width: 100%;
 }
 
+#source-file-box.mini {
+	line-height: 150%;
+}
+#source-file.mini {
+	width: 140px;
+}
+
 /* ---------------------------------------------- [edit] [reload] */
 
 #source-reload,
@@ -242,6 +253,18 @@ a.button.active {
 }
 #source-reload {
 	float: right;
+}
+
+#source-reload.mini {  /* ↻ */
+	float: right;
+	margin: 0;
+	padding: 0;
+	line-height: 150%;
+	width: 1.5em;
+}
+#source-reload.mini:hover {
+	background-color: black;
+	color: white;
 }
 
 /* ---------------------------------------------- [daily] [monthly] [yearly] */

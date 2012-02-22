@@ -3573,8 +3573,12 @@ function init() {
 		case 'txt':
 			// Hide Edit button. Not functional.
 			document.getElementById('editor-open').style.display = 'none';
-			// Stretch Reload button
-			addClass(document.getElementById('source-reload'), 'wide');
+			// Inline mini reload button: [ file.txt ] ↻
+			i18n.labelReload = '<b>↻</b>';
+			addClass(document.getElementById('source-file-box'), 'mini');
+			addClass(document.getElementById('source-file'), 'mini');
+			addClass(document.getElementById('source-reload'), 'mini');
+			addClass(document.getElementById('source-reload'), 'naked');
 			break;
 	}
 
