@@ -44,6 +44,7 @@ a.button:active {
 
 /* Light background for totals */
 tr.total,
+td.total,
 #rows-summary {
 	background-color: #E5EFDE;
 }

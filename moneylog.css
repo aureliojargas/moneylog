@@ -405,8 +405,9 @@ tr.selected .neg {
 	color: white;
 }
 
-/* Total row */
-tr.total {
+/* Total row & cells */
+tr.total,
+td.total {
 	background-color: #ddd;  /* _light */
 }
 
@@ -531,7 +532,7 @@ table.chart tr:hover td {
 	color: white;
 }
 #tag-report td.total {
-	font-weight: bold;
+/*	font-weight: bold;*/
 }
 #tag-report-options {
 	display: none;  /* JS will show */

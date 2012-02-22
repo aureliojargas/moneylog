@@ -2794,12 +2794,12 @@ function tagReport() {
 	// total & average
 	if (nDates > 1) {
 		results.push(
-			'<th onClick="sortColTag(' + (i+1) + ')">' +
+			'<th onClick="sortColTag(' + (i+1) + ')" class="total">' +
 			i18n.labelTotal +
 			'<\/th>'
 		);
 		results.push(
-			'<th onClick="sortColTag(' + (i+2) + ')">' +
+			'<th onClick="sortColTag(' + (i+2) + ')" class="total">' +
 			i18n.labelAverage +
 			'<\/th>'
 		);
@@ -2814,8 +2814,10 @@ function tagReport() {
 		// Now the numbers (Note: j=1)
 		for (j = 1, lenj = tableData[i].length; j < lenj; j++) {
 
-			// Mark the column Total (penultimate)
-			if (nDates > 1 && j === lenj - 2) {
+			// Mark the Totals columns
+			if (nDates > 1 && j === lenj - 2) {  // penultimate
+				tdClass = "number total";
+			} else if (nDates > 1 && j === lenj - 1) {  // last
 				tdClass = "number total";
 			} else {
 				tdClass = "number";
