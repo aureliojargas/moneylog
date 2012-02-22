@@ -405,10 +405,14 @@ tr.selected .neg {
 	color: white;
 }
 
-/* Total row & cells */
+/* Totals rows & cells */
 tr.totals,
 td.totals {
 	background-color: #ddd;  /* _light */
+}
+tr.total,
+td.total {
+	font-weight: bold;
 }
 
 /* Rows padding */

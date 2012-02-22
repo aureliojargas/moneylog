@@ -1469,9 +1469,13 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	return theRow.join('\n');
 }
 
-function getOverviewTotalsRow(label, n1, n2, n3) {
+function getOverviewTotalsRow(label, n1, n2, n3, extraClass) {
 	var theRow = [];
-	theRow.push('<tr class="totals">');
+	if (extraClass) {
+		theRow.push('<tr class="totals ' + extraClass + '">');
+	} else {
+		theRow.push('<tr class="totals">');
+	}
 	if (showRowCount) {
 		theRow.push('<td class="row-count"><\/td>');
 	}
@@ -2400,7 +2404,7 @@ function periodReport() {
 			allNeg = computeTotals(allNeg);
 			allPos = computeTotals(allPos);
 			allTotal = computeTotals(allTotal);
-			results.push(getOverviewTotalsRow(i18n.labelTotal, allPos.sum, allNeg.sum, allTotal.sum));
+			results.push(getOverviewTotalsRow(i18n.labelTotal, allPos.sum, allNeg.sum, allTotal.sum, 'total'));
 			results.push(getOverviewTotalsRow(i18n.labelAverage, allPos.avg, allNeg.avg, allTotal.avg));
 			results.push(getOverviewTotalsRow(i18n.labelMinimum, allPos.min, allNeg.max, allTotal.min));
 			results.push(getOverviewTotalsRow(i18n.labelMaximum, allPos.max, allNeg.min, allTotal.max));
@@ -2816,9 +2820,9 @@ function tagReport() {
 
 			// Mark the Totals columns
 			if (nDates > 1 && j === lenj - 2) {  // penultimate
-				tdClass = "number totals";
+				tdClass = "number totals total";
 			} else if (nDates > 1 && j === lenj - 1) {  // last
-				tdClass = "number totals";
+				tdClass = "number totals average";
 			} else {
 				tdClass = "number";
 			}
