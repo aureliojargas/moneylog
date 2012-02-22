@@ -17,8 +17,8 @@
 
 /* Remove row backgrounds */
 tr.future,
-tr.total,
-td.total {
+tr.totals,
+td.totals {
 	background-color: white !important;
 }
 

@@ -1429,7 +1429,7 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
 	}
 
-	results.push('<tr class="total">');
+	results.push('<tr class="totals">');
 	if (showRowCount) {
 		results.push('<td class="row-count"><\/td>');
 	}
@@ -1471,7 +1471,7 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 
 function getOverviewTotalsRow(label, n1, n2, n3) {
 	var theRow = [];
-	theRow.push('<tr class="total">');
+	theRow.push('<tr class="totals">');
 	if (showRowCount) {
 		theRow.push('<td class="row-count"><\/td>');
 	}
@@ -2794,12 +2794,12 @@ function tagReport() {
 	// total & average
 	if (nDates > 1) {
 		results.push(
-			'<th onClick="sortColTag(' + (i+1) + ')" class="total">' +
+			'<th onClick="sortColTag(' + (i+1) + ')" class="totals">' +
 			i18n.labelTotal +
 			'<\/th>'
 		);
 		results.push(
-			'<th onClick="sortColTag(' + (i+2) + ')" class="total">' +
+			'<th onClick="sortColTag(' + (i+2) + ')" class="totals">' +
 			i18n.labelAverage +
 			'<\/th>'
 		);
@@ -2816,9 +2816,9 @@ function tagReport() {
 
 			// Mark the Totals columns
 			if (nDates > 1 && j === lenj - 2) {  // penultimate
-				tdClass = "number total";
+				tdClass = "number totals";
 			} else if (nDates > 1 && j === lenj - 1) {  // last
-				tdClass = "number total";
+				tdClass = "number totals";
 			} else {
 				tdClass = "number";
 			}

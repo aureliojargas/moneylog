@@ -43,8 +43,8 @@ a.button:active {
 }
 
 /* Light background for totals */
-tr.total,
-td.total,
+tr.totals,
+td.totals,
 #rows-summary {
 	background-color: #E5EFDE;
 }

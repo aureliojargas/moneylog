@@ -406,8 +406,8 @@ tr.selected .neg {
 }
 
 /* Total row & cells */
-tr.total,
-td.total {
+tr.totals,
+td.totals {
 	background-color: #ddd;  /* _light */
 }
 
@@ -415,31 +415,31 @@ td.total {
 .report td {
 	padding: 6px 10px;
 }
-.report tr.total td {
+.report tr.totals td {
 	padding: 1px 10px; /* top/bottom: td - 6px */
 }
 
 /* ---------------------------------------------- Report - Daily */
 
 /* Total row tweaks */
-#report table.daily tr.total {
+#report table.daily tr.totals {
 	font-weight: bold;
 }
-#report table.daily tr.total table.posneg {
+#report table.daily tr.totals table.posneg {
 	float: right;
 	font-size: 90%;
 	font-weight: normal;
 }
-#report table.daily tr.total table.posneg td {
+#report table.daily tr.totals table.posneg td {
 	padding: 0;
 	white-space: nowrap;
 	border-style: none;
 }
-#report table.daily tr.total td.monthtotal {
+#report table.daily tr.totals td.monthtotal {
 	text-align: left;
 	padding-left: 0;
 }
-#report table.daily tr.total td.monthtotal .arrow {
+#report table.daily tr.totals td.monthtotal .arrow {
 	margin-right: 8px;
 }
 
