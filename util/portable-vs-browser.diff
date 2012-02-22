@@ -1,5 +1,5 @@
---- all-in-one.html	2012-02-02 08:35:58.000000000 -0200
-+++ online.html	2012-02-02 08:36:06.000000000 -0200
+--- p.html	2012-02-22 17:45:01.000000000 -0200
++++ b.html	2012-02-22 17:45:01.000000000 -0200
 @@ -3,17 +3,6 @@
  
  <!--
@@ -18,19 +18,95 @@
  MoneyLog Experience - http://aurelio.net/moneylog/
  ===================
  
-@@ -607,7 +596,7 @@
- var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
+@@ -734,17 +723,17 @@
+ </style>
+ <style type="text/css">
+ /*
+-	MoneyLog Portable theme
++	MoneyLog Browser theme
+ 	by Aurelio Jargas
+ 	http://aurelio.net/moneylog/
  
- // Program structure and files
--var appMode = 'one';              // txt, one, dropbox, localStorage
-+var appMode = 'localStorage';              // txt, one, dropbox, localStorage
-                                   // [txt] Read user data from local TXT files
-                                   // [one] Full app is at moneylog.html single file
-                                   // [dropbox] Read data from TXT files in a Dropbox account
-@@ -3312,3 +3301,8 @@
+-	Light green: #E5EFDE
+-	 Dark green: #4D8A68
++	Light red: #FFEED1
++	 Dark red: #E89E00
+ */
  
- 2011-09-05	-200*6	aluguel| Aluguel da casa (seis meses)
- 2011-09-10	 100*4	presente| O Zé vai me dar 100 pilas por mês até o fim do ano
+ 
+ #app-flavor {
+-	color: #4D8A68;
++	color: #E89E00;
+ }
+ 
+ /* Dark background for active/special buttons */
+@@ -753,14 +742,14 @@
+ #editor-file-name,
+ .button.active,
+ a.button:active {
+-	background-color: #4D8A68;
++	background-color: #E89E00;
+ }
+ 
+ /* Dark background for selected rows */
+ tr.selected,
+ tr.selected:hover td,
+ tr.selected .neg {
+-	background-color: #4D8A68;
++	background-color: #E89E00;
+ }
+ 
+ /* Dark color for borders */
+@@ -768,32 +757,27 @@
+ #rows-summary,
+ .button.active,
+ a.button:active {
+-	border-color: #4D8A68;
++	border-color: #E89E00;
+ }
+ 
+ /* Light background for selections */
+ .hl,
+ #tag-cloud-tags a.selected {
+-	background-color: #E5EFDE;
++	background-color: #FFEED1;
+ }
+ 
+ /* Light background for totals */
+ tr.totals,
+ td.totals,
+ #rows-summary {
+-	background-color: #E5EFDE;
++	background-color: #FFEED1;
+ }
+ 
+ /* Light color for the report borders */
+ .report td {
+-	border-color: #E5EFDE;
++	border-color: #FFEED1;
+ }
+ 
+-
+-/* Special: interface dark green for the positive chart bar */
+-.posbar {
+-	background-color: #4D8A68;
+-}
+ </style>
+ <style type="text/css">
+ /*
+@@ -1107,7 +1091,7 @@
+ // one          Full app is in a single moneylog.html file, with user data at the end.
+ // dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
+ // localStorage Read/edit/save user data to the browser. Must always use the same browser.
+-var appMode = 'portable';
++var appMode = 'localStorage';
+ 
+ // Data format
+ var dataFieldSeparator = '\t';  // Only used if useLegacyDataFormat=true
+@@ -5115,3 +5099,8 @@
+ 
+ 2011-09-05    -200*6     aluguel| Aluguel da casa (seis meses)
+ 2011-09-10     100*4     presente| O Zé vai me dar 100 pilas por mês até o fim do ano
 +</pre>
 +
 +</div><!-- #container -->

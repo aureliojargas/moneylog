@@ -128,7 +128,7 @@ sed -f sed_script "$html_path" |
 		/^<script .* src="config.js"><\/script>/ d
 
 		# Turn ON one-file mode
-		/^var appMode = .txt.;/ s/txt/one/
+		/^var appMode = .txt.;/ s/txt/portable/
 
 		# Remove closing tags at the end
 		/^<\/pre>/, $ d

@@ -1750,7 +1750,7 @@ function readData() {
 	if (appMode === 'localStorage') {
 		loadLocalData();
 		rawData = document.getElementById('editor-data').value;
-	} else if (appMode === 'one' || appMode === 'dropbox') {
+	} else if (appMode === 'portable' || appMode === 'dropbox') {
 		rawData = document.getElementById('data').innerHTML;
 	} else {
 		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
@@ -3489,7 +3489,7 @@ TagSummary.update = function () {
 function initAppMode() {
 	switch(appMode) {
 
-		case 'one':
+		case 'portable':
 			appFlavor = 'Portable';
 			i18n.appUrl = 'http://aurelio.net/moneylog/moneylog5.html';
 			break;
@@ -3526,7 +3526,7 @@ function init() {
 	// Legacy: discover app mode using obsoleted settings
 	if (!appMode) {
 		if (oneFile) {
-			appMode = 'one';
+			appMode = 'portable';
 		} else if (useLocalStorage) {
 			appMode = 'localStorage';
 		} else if (useDropboxStorage) {
@@ -3551,7 +3551,7 @@ function init() {
 
 	// UI surgery for each mode
 	switch(appMode) {
-		case 'one':
+		case 'portable':
 			// Remove all file-related options
 			document.getElementById('source-file-box').style.display = 'none';
 			document.getElementById('toolbar-sep-1').style.display = 'none';
@@ -3815,7 +3815,7 @@ function init() {
 		} else {
 			initDropbox();
 		}
-	} else if (appMode === 'one' || appMode === 'localStorage') {
+	} else if (appMode === 'portable' || appMode === 'localStorage') {
 		readData();
 		parseData();
 		showReport();
