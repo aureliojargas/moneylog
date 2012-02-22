@@ -57,7 +57,7 @@ label,
 }
 .hl {  /* Highlighted words */
 	color: black;
-	background-color: silver;  /* _light */
+	background-color: #ddd;  /* _light */
 }
 tr:hover td,
 tr.future:hover td {  /* explicit TD to exclude TH */
@@ -317,7 +317,7 @@ a.button.active {
 	white-space: nowrap;
 }
 #tag-cloud-tags a.selected {
-	background-color: silver;  /* _light */
+	background-color: #ddd;  /* _light */
 	color: black;
 }
 #tag-cloud-tags a.excluded  {
@@ -371,7 +371,7 @@ table.overview th.percent:hover {
 
 /* Generic cell config */
 .report td {
-	border: 1px solid silver;  /* _light */
+	border: 1px solid #ddd;  /* _light */
 	border-width: 1px 0;
 	vertical-align: middle;
 }
@@ -382,7 +382,7 @@ td.row-count {
 	font-size: 75%;
 	border-style: none !important;
 	background-color: white !important;  /* content_bg */
-	color: silver !important;
+	color: silver !important;  /* _light_text */
 }
 td.date {
 	white-space: nowrap;
@@ -407,7 +407,7 @@ tr.selected .neg {
 
 /* Total row */
 tr.total {
-	background-color: silver;  /* _light */
+	background-color: #ddd;  /* _light */
 }
 
 /* Rows padding */
@@ -525,7 +525,7 @@ table.chart tr:hover td {
 #tag-report th i {  /* obfuscate year */
 	font-weight: normal;
 	font-style: normal;
-	color: silver;
+	color: silver;  /* _light_text */
 }
 #tag-report th:hover i {
 	color: white;
@@ -548,7 +548,7 @@ table.chart tr:hover td {
 	bottom: 0;
 	padding: 5px;
 	border: 8px solid black;  /* _dark */
-	background-color: silver;  /* _light */
+	background-color: #ddd;  /* _light */
 }
 #rows-summary-content td {
 	padding: 4px 10px;
@@ -564,7 +564,7 @@ table.chart tr:hover td {
 /* ---------------------------------------------- Footer */
 
 #footer-message {
-	color: #CCCCCC;
+	color: silver;  /* _light_text */
 	text-align: center;
 	margin-top: 4em;
 }
