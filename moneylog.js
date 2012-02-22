@@ -3574,6 +3574,7 @@ function init() {
 			// Hide Edit button. Not functional.
 			document.getElementById('editor-open').style.display = 'none';
 			// Inline mini reload button: [ file.txt ] ↻
+			// Note: "⟳" is better, but few fonts support it :(
 			i18n.labelReload = '<b>↻</b>';
 			addClass(document.getElementById('source-file-box'), 'mini');
 			addClass(document.getElementById('source-file'), 'mini');
