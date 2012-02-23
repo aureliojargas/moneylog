@@ -94,8 +94,8 @@
 
 ////// PERÍODO - DATA INICIAL E FINAL
 //
-// checkDateFrom = true         ;// Iniciar marcando a opção [X] De:?
-// checkDateUntil = true        ;// Iniciar marcando a opção [X] Até:?
+// checkDateFrom = true         ;// Marcar a opção [X] De:?
+// checkDateUntil = true        ;// Marcar a opção [X] Até:?
 //
 // As duas opções seguintes servem para escolher qual será o valor padrão
 // que virá escolhido nos seletores de data De: e Até:. Coloque um número,
@@ -110,7 +110,7 @@
 
 ////// PARCIAIS MENSAIS
 //
-// checkMonthPartials = true    ;// Iniciar mostrando as parciais mensais?
+// checkMonthPartials = true    ;// Marcar a opção [X] Parciais Mensais?
 
 
 ////// SOMENTE VALORES
@@ -172,7 +172,7 @@
 // ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
 // initExcludedTags = 'luz'     ;// Iniciar já com estas tags riscadas
-// checkHideRelatedTags = false ;// Iniciar marcando a opção [X] Esconder relacionadas?
+// checkHideRelatedTags = false ;// Marcar a opção [X] Esconder relacionadas?
 
 
 ////// FORMATO DA DATA
