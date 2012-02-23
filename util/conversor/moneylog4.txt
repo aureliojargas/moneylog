@@ -1,0 +1,29 @@
+# comentário
+
+2009-05-01	-100	normal, sem centavos
+2009-05-01	-100,00	normal, com centavos
+2009-05-01	+100.00	normal, com centavos ponto
+
+2009-05-01	    -100	4 espaços antes do sinal, sem centavos
+2009-05-01	    +100,00	4 espaços antes do sinal, com centavos
+2009-05-01	    -100.00	4 espaços antes do sinal, com centavos ponto
+
+2009-05-01	+    100	4 espaços após o sinal, sem centavos
+2009-05-01	-    100,00	4 espaços após o sinal, com centavos
+2009-05-01	-    100.00	4 espaços após o sinal, com centavos ponto
+
+2009-05-01	-100/2	normal, sem centavos, recorrente sem espaços
+2009-05-01	-100,00/2	normal, com centavos, recorrente sem espaços
+2009-05-01	+100.00/2	normal, com centavos ponto, recorrente sem espaços
+
+2009-05-01	-100*2	normal, sem centavos, recorrente sem espaços
+2009-05-01	+100,00*2	normal, com centavos, recorrente sem espaços
+2009-05-01	-100.00*2	normal, com centavos ponto, recorrente sem espaços
+
+2009-05-01	+    100    *2	4 espaços após o sinal, sem centavos, recorrente com espaços
+2009-05-01	-    100,00 *2	4 espaços após o sinal, com centavos, recorrente com espaços
+2009-05-01	-    100.00 *2	4 espaços após o sinal, com centavos ponto, recorrente com espaços
+
+2009-05-01	-    100    /2	4 espaços após o sinal, sem centavos, recorrente com espaços
+2009-05-01	-    100,00 /2	4 espaços após o sinal, com centavos, recorrente com espaços
+2009-05-01	+    100.00 /2	4 espaços após o sinal, com centavos ponto, recorrente com espaços
