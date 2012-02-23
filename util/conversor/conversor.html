@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	
+
 <!--
 2009-08-19
 BB: OFX, OFC, TXT, PALM, CSV, PDF (@botobr)
@@ -16,7 +16,7 @@ HSBC: OFC (MS Money 2002, Quicken 6.0), TXT, XLS, DOC (@dsracoon @polvaceo @dani
 	<title>Importar dados para o MoneyLog</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta name="author" content="Aurelio Marinho Jargas www.aurelio.net">
-	
+
 <script type="text/javascript">
 
 var dataFieldSeparator = '\t';
@@ -53,12 +53,12 @@ function convertOFX(rawData) {
 	// There are little differences, noted on the comments.
 	// As a XML file, it can be indented by spaces or TABs (or both)
 	// and tags could be closed or left open (<foo>bar or <foo>bar</foo>)
-	
+
 	var i, newline, parsedData, rowDate, rowAmount, rowDescription, rowDocNumber, matches, m;
-		
+
 	newline = /\r?\n[\t ]*/g;  // \r\n Windows, \n Linux/Mac (plus leading TABS/spaces)
 	parsedData = [];
-	
+
 	rawData = rawData.replace(newline, ''); // one big line
 
 	matches = rawData.match(/<STMTTRN>.*?<\/STMTTRN>/g);
@@ -69,7 +69,7 @@ function convertOFX(rawData) {
 	for (i = 0; i < matches.length; i++) {
 
 		rowDate = rowAmount = rowDocNumber = rowDescription = '';
-		
+
 		// <DTPOSTED>20090801080000 (OFX - Real)
 		// <DTPOSTED>20090211120000[-3:BRT]</DTPOSTED> (OFX - Caixa)
 		// <DTPOSTED>20090801 (OFC - Caixa)
@@ -79,7 +79,7 @@ function convertOFX(rawData) {
 		} else {
 			rowDate = 'DATA_INVÁLIDA';
 		}
-		
+
 		// <TRNAMT>1234.00
 		// <TRNAMT>-1234.00
 		// <TRNAMT>-1234.00</TRNAMT>
@@ -117,7 +117,7 @@ function convertOFX(rawData) {
 }
 function convertQIF(rawData, version) {
 	// Thanks Leslie Harlley Watter
-	
+
 	// The only difference between QIF versions are in the date format:
 	// Quicken    : @@@D12/31'09
 	// MS Money 97: @@@D31/12'09
@@ -125,23 +125,23 @@ function convertQIF(rawData, version) {
 	// MS Money 99: @@@D31/12/09
 
 	var i, m, newline, sep, parsedData, rows, rowDate, rowDateCentury, rowAmount, rowDescription, rowDocNumber;
-	
+
 	newline = /\r?\n/g;  // \r\n Windows, \n Linux/Mac
 	sep = '@@@';
 	parsedData = [];
-	
+
 	rawData = rawData.replace(newline, sep);
 	rawData = rawData.replace(new RegExp(sep + '\\^', 'g'), '\n^');
 
 	// Split lines
 	rows = rawData.split('\n');
-	
+
 	for (i = 0; i < rows.length; i++) {
 
 		rowDate = rowAmount = rowDocNumber = rowDescription = rowDateCentury = '';
 
 		// ^@@@D04/07'09@@@T4.59@@@N0002313@@@MJUROS POUPANCA
-		
+
 		// Invalid Line
 		if (rows[i].substring(0, 1) != '^') {
 			continue;
@@ -149,7 +149,7 @@ function convertQIF(rawData, version) {
 		if (rows[i].length < 10) {
 			continue;
 		}
-		
+
 		// @@@D31/12'09 or @@@D31/12/09 or @@@D12/31'09 --> 09-12-31		
 		m = rows[i].match(/@@@D(\d\d)\/(\d\d)['\/](\d\d)/);
 		if (m) {
@@ -158,7 +158,7 @@ function convertQIF(rawData, version) {
 			} else {
 				rowDate = m[3] + '-' + m[2] + '-' + m[1]; // d/m/y > y-m-d
 			}
-		
+
 			// YY-MM-DD --> YYYY-MM-DD (where YYYY == 19* || 20*)
 			// Our range: 1960 - 2059
 			rowDateCentury = (m[3].substring(0, 1) >= 6) ? '19' : '20';
@@ -166,7 +166,7 @@ function convertQIF(rawData, version) {
 		} else {
 			rowDate = 'DATA_INVÁLIDA';
 		}
-	
+
 		// @@@T4.59
 		// @@@T-4.59
 		m = rows[i].match(/@@@T(-?[\d.]+)/);
@@ -175,7 +175,7 @@ function convertQIF(rawData, version) {
 		} else {
 			rowAmount = 'VALOR_INVÁLIDO';
 		}
-		
+
 		// @@@N0002313
 		m = rows[i].match(/@@@N(\d+)/);
 		if (m) {
@@ -187,7 +187,7 @@ function convertQIF(rawData, version) {
 		// @@@MJUROS POUPANCA
 		m = rows[i].match(/@@@M(.*?)(@@@|$)/);
 		rowDescription = m[1];
-		
+
 		parsedData.push([
 			rowDate,
 			formatValue(rowAmount),
@@ -199,7 +199,7 @@ function convertQIF(rawData, version) {
 
 function convertMyMoneyLog(rawData) {
 	var i, parsedData, rows, rowDate, rowAmount, rowTags, fields, rowDescription, rowCategories, rowAccount;
-	
+
 	// Reset the data holder
 	parsedData = [];
 	// Split lines
@@ -223,13 +223,13 @@ function convertMyMoneyLog(rawData) {
 
 		// Separate fields
 		fields = rows[i].split(dataFieldSeparator);
-		
+
 		rowDate = fields[0];
 		rowAmount = fields[1];
 		rowDescription = fields[2];
 		rowCategories = fields[3];
 		rowAccount = fields[4];
-		
+
 		// Account turns to Tag
 		if (rowAccount) {
 			rowTags.push(rowAccount);
@@ -244,7 +244,7 @@ function convertMyMoneyLog(rawData) {
 		} else {
 			rowTags = '';
 		}
-		
+
 		parsedData.push([
 			rowDate,
 			formatValue(rowAmount),
@@ -256,12 +256,12 @@ function convertMyMoneyLog(rawData) {
 
 function convert() {
 	var mode, rawData, parsedData;
-	
+
 	// Read input data
 	rawData = document.getElementById('input_data').value;
 	// Reset output
 	document.getElementById('output_data').value = '';
-	
+
 
 	mode = document.getElementById('mode').value;
 	if (mode == 'myml') {
@@ -271,7 +271,7 @@ function convert() {
 	} else if (mode == 'ofx' || mode == 'ofc') {
 		parsedData = convertOFX(rawData);
 	}
-	
+
 	// Save output
 	document.getElementById('output_data').value = parsedData.join('\n');
 }
