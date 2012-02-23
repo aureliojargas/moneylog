@@ -29,7 +29,6 @@ fi
 
 # Files
 html_path="../moneylog.html"
-txt_path="../sample/data-$lang.txt"
 
 # Patterns:
 # <link rel="stylesheet" type="text/css" href="moneylog.css">
@@ -81,9 +80,6 @@ insert_js='
 	d
 }
 '
-insert_txt="
-/^<pre/ r $txt_path
-"
 insert_meta='
 /^<link rel="shortcut icon"/ a \
 <link rel="apple-touch-startup-image" href="images/ios_splash.png" />
@@ -97,7 +93,7 @@ insert_analytics='
 }
 '
 
-echo "$insert_css $insert_js $insert_txt $insert_meta $insert_analytics" > sed_script
+echo "$insert_css $insert_js $insert_meta $insert_analytics" > sed_script
 
 # Do it
 control_m=$(printf '\r');
