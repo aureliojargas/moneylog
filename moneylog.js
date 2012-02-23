@@ -82,9 +82,6 @@ var maxLastMonths = 12;           // Number of months on the last months combo
 var initLastMonths = 3;           // Initial value for last months combo
 var defaultLastMonths = false;    // Last months combo inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
-var oneFile;
-var useLocalStorage;
-var useDropboxStorage;
 
 // Default sort for all tables
 // d=daily, m=monthly, y=yearly, index=column(zero-based), reverse
@@ -3525,19 +3522,6 @@ function init() {
 
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
-
-	// Legacy: discover app mode using obsoleted settings
-	if (!appMode) {
-		if (oneFile) {
-			appMode = 'portable';
-		} else if (useLocalStorage) {
-			appMode = 'localStorage';
-		} else if (useDropboxStorage) {
-			appMode = 'dropbox';
-		} else {  // local TXT
-			appMode = 'txt';
-		}
-	}
 
 	// Check app mode
 	initAppMode();
