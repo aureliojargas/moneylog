@@ -254,6 +254,38 @@ function convertMyMoneyLog(rawData) {
 	return parsedData;
 }
 
+function convertMoneyLog4(rawData) {
+	// Removes the extra spaces that are now invalid:
+	// Spaces after the signal :  - 1.23  or  + 10
+	// Spaces before reccurring: 1.23 *2  or  10 /2
+
+	// From MoneyLog v4:
+	//
+	// var dataPatterns = {
+	// 	date:
+	// 		// YYYY-MM-DD
+	// 		/^ *(\d{4}-\d\d-\d\d) *$/,
+	// 	amountNumber:
+	// 		// 7  +7  -7  7.00  7,00  1234567,89  1.234.567,89  1,234,567.89 1234567,89
+	// 		/^ *([+\-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
+	// 	amountCents:
+	// 		// .12  ,12
+	// 		/[.,](\d\d) *$/,
+	// 	amountRecurrent:
+	// 		// *N or /N where N>0
+	// 		/([*\/])([1-9][0-9]*) *$/
+	// };
+
+	// So let's just join all these regexes together in an ugly monster
+	// and fix the formatting
+	return [rawData.replace(
+		/^ *(\d{4}-\d\d-\d\d *\t *)([+\-]?)( *)(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?( *)([*\/][1-9][0-9]*)?( *\t)/gm,
+		'$1$3$2$4$6$8$7$9'
+		// Note: I'm not deleting the extra spaces, just swapping positions.
+		//       Making this way, I keep the original align intact.
+	)];
+}
+
 function convert() {
 	var mode, rawData, parsedData;
 
@@ -266,6 +298,8 @@ function convert() {
 	mode = document.getElementById('mode').value;
 	if (mode == 'myml') {
 		parsedData = convertMyMoneyLog(rawData);
+	} else if (mode == 'moneylog4') {
+		parsedData = convertMoneyLog4(rawData);
 	} else if (mode == 'money97' || mode == 'money98' || mode == 'money99' || mode == 'quicken') {
 		parsedData = convertQIF(rawData, mode);
 	} else if (mode == 'ofx' || mode == 'ofc') {
@@ -294,6 +328,7 @@ function convert() {
 
 <p>De:
 	<select id="mode" onchange="convert();">
+		<option value="moneylog4">MoneyLog v4, v3, v2, v1</option>
 		<option value="ofx">OFX</option>
 		<option value="ofc">OFC</option>
 		<option value="quicken">QIF — Quicken</option>
@@ -316,11 +351,10 @@ function convert() {
 	<br><input id="usecommas" type="checkbox" onclick="convert();"> Forçar o uso de vírgulas nos valores
 	<br><input id="lowerdesc" type="checkbox" onclick="convert();"> Forçar a descrição em minúsculas
 	<br><input id="hidedocnumber" type="checkbox" onclick="convert();"> Descartar o Número do Documento
+
+	<p><strong>CONFIRA O RESULTADO.</strong> Este é um processo automático, pode haver falhas.</p>
 </blockquote>
 
-<p><br><br></p>
-
-<p>CONFIRA O RESULTADO. Este é um processo automático, pode haver falhas.</p>
 
 </body>
 </html>
