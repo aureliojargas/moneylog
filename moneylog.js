@@ -102,13 +102,6 @@ sortData.y.indexTag = 0;
 sortData.y.revTag = false;
 
 
-// The appMode sets the Moneylog flavor:
-// txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
-// one          Full app is in a single moneylog.html file, with user data at the end.
-// dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
-// localStorage Read/edit/save user data to the browser. Must always use the same browser.
-var appMode = 'txt';
-
 // Data format
 var dataFieldSeparator = '\t';  // Only used if useLegacyDataFormat=true
 var dataRecordSeparator = /\r?\n/;  // \r\n Windows, \n Linux/Mac
@@ -470,7 +463,17 @@ var i18nDatabase = {
 		return this[lang];
 	}
 };
-// End of user Config
+
+//// End of user Config
+
+
+// The appMode sets the Moneylog flavor:
+// txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
+// one          Full app is in a single moneylog.html file, with user data at the end.
+// dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
+// localStorage Read/edit/save user data to the browser. Must always use the same browser.
+//
+var appMode = 'txt';  // DO NOT CHANGE
 
 
 // Global vars
