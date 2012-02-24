@@ -2,10 +2,10 @@
 // Este é o arquivo de configuração do MoneyLog.
 //
 // Aqui você pode alterar o comportamento padrão do programa, modificando as
-// opções disponíveis. Você pode, por exemplo, mudar o idioma para inglês ou
-// sempre iniciar no relatório mensal.
+// configurações disponíveis. Você pode, por exemplo, mudar o idioma para
+// inglês ou sempre iniciar no relatório mensal.
 //
-// Para saber mais informações sobre cada uma das opções, visite:
+// Para saber mais informações sobre cada uma das configurações, visite:
 //
 //     http://aurelio.net/moneylog/config/
 //
@@ -13,18 +13,18 @@
 //
 // Este é um arquivo em JavaScript, você deve seguir as regras de sintaxe da
 // linguagem. Se você não sabe nada de JavaScript, não se preocupe. Vou lhe
-// explicar o básico necessário. As opções estão logo após este texto
+// explicar o básico necessário. As configurações estão logo após este texto
 // explicativo.
 //
-// COMO ATIVAR/DESATIVAR UMA OPÇÃO
-// -------------------------------
+// COMO ATIVAR/DESATIVAR UMA CONFIGURAÇÃO
+// --------------------------------------
 //
-// Todas as opções deste arquivo estão desativadas. Isso quer dizer que
-// nenhuma delas vai afetar o funcionamento do MoneyLog. Você precisa ativar
-// aquelas que desejar utilizar.
+// Todas as configurações deste arquivo estão desativadas. Isso quer dizer
+// que nenhuma delas vai afetar o funcionamento do MoneyLog. Você precisa
+// ativar aquelas que desejar utilizar.
 //
-// É muito simples, para ativar uma opção, basta apagar os // que estão no
-// começo da linha.
+// É muito simples, para ativar uma configuração, basta apagar os // que
+// estão no começo da linha.
 //
 // De:
 //     // opcaoBacana = 12         ;// comentário
@@ -32,14 +32,15 @@
 // Para:
 //     opcaoBacana = 12         ;// comentário
 //
-// Se você mudar de ideia e quiser desativar a opção, fazendo o MoneyLog
-// voltar ao seu comportamento padrão, basta recolocar os // na frente.
+// Se você mudar de ideia e quiser desativar a configuração, fazendo o
+// MoneyLog voltar ao seu comportamento padrão, basta recolocar os // na
+// frente.
 //
 //
-// COMO ALTERAR UMA OPÇÃO ATIVA
-// ----------------------------
+// COMO ALTERAR UMA CONFIGURAÇÃO ATIVA
+// -----------------------------------
 //
-// Basta apenas alterar o conteúdo de cada opção e não mexer no resto.
+// Basta apenas alterar o conteúdo de cada configuração e não mexer no resto.
 // Por exemplo, estes são os três formatos que você vai encontrar:
 //
 //     opcaoBacana = 12         ;// comentário
@@ -49,13 +50,13 @@
 // No primeiro exemplo o conteúdo é um número, 12. Basta você trocar este
 // número por outro e pronto. Deixe todo o resto intocado.
 //
-// No segundo exemplo é uma opção que recebe um texto entre aspas. As aspas
-// são importantes, não as apague. Apenas troque a palavra que está dentro
-// delas.
+// No segundo exemplo é uma configuração que recebe um texto entre aspas. As
+// aspas são importantes, não as apague. Apenas troque a palavra que está
+// dentro delas.
 //
-// No terceiro exemplo é uma opção do tipo LIGA/DESLIGA. Há somente dois
-// valores possíveis para ela: true (LIGA) e false (DESLIGA). Não use números
-// ou qualquer outra palavra, nem aspas.
+// No terceiro exemplo é uma configuração do tipo LIGA/DESLIGA. Há somente
+// dois valores possíveis para ela: true (LIGA) e false (DESLIGA). Não use
+// números ou qualquer outra palavra, nem aspas.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -97,10 +98,10 @@
 // checkDateFrom = true         ;// Marcar a opção [X] De:?
 // checkDateUntil = true        ;// Marcar a opção [X] Até:?
 //
-// As duas opções seguintes servem para escolher qual será o valor padrão
-// que virá escolhido nos seletores de data De: e Até:. Coloque um número,
-// positivo ou negativo, que indicará o número de meses à partir da data
-// atual. Use números positivos para meses futuros e negativos para os
+// As duas configurações seguintes servem para escolher qual será o valor
+// padrão que virá escolhido nos seletores de data De: e Até:. Coloque um
+// número, positivo ou negativo, que indicará o número de meses à partir da
+// data atual. Use números positivos para meses futuros e negativos para os
 // passados. Por exemplo, para dizer "três meses atrás", use -3. Para dizer
 // mês seguinte, use 1. Zero significa o mês corrente.
 //
@@ -198,8 +199,8 @@
 // ignorar os lançamentos antigos, dos anos anteriores. Ou ainda, limitar a
 // visão de anos futuros para poucos anos, sumindo de sua vista com aquelas
 // dezenas de parcelas do financiamento que vai demorar para acabar. Basta
-// colocar nas opções seguintes as datas limite, no passado e/ou no futuro,
-// e o MoneyLog vai fingir que não viu nada :)
+// colocar nas configurações seguintes as datas limite, no passado e/ou no
+// futuro, e o MoneyLog vai fingir que não viu nada :)
 //
 // ignoreDataOlderThan = '2010-01-01'   ;// Ignorar lançamentos de 2009, 2008...
 // ignoreDataNewerThan = '2020-12-31'   ;// Ignorar lançamentos após 2020
@@ -209,8 +210,8 @@
 //
 //<Dropbox>
 // Se você usa mais de um arquivo TXT, o MoneyLog automaticamente carrega
-// todos os arquivos que encontrar em sua pasta. Com essa opção você pode
-// mudar isso e carregar somente um arquivo específico no início.
+// todos os arquivos que encontrar em sua pasta. Com essa configuração você
+// pode mudar isso e carregar somente um arquivo específico no início.
 //
 // dataFilesDefault = 'meu-arquivo.txt';
 //</Dropbox>
@@ -228,7 +229,7 @@
 // dataFiles = ['*', 'salario.txt', 'carro.txt', 'escola.txt', 'geral.txt'];
 //
 // Ao iniciar, o MoneyLog sempre carregará o primeiro item da lista. Para
-// mudar isso e carregar outro, basta usar esta opção:
+// mudar isso e carregar outro, basta usar esta configuração:
 //
 // dataFilesDefault = 'carro.txt';
 //</SVN>
