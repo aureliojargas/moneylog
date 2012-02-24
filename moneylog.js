@@ -1226,6 +1226,60 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 //                         TAGS
 /////////////////////////////////////////////////////////////////////
 
+function createTagCloud(names) {
+	// Create all the <a> elements for the Tag Cloud
+	var i, leni, results = [];
+
+	for (i = 0, leni = names.length; i < leni; i++) {
+		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>');
+	}
+
+	document.getElementById('tag-cloud-tags').innerHTML = results.join('\n');
+}
+
+function resetTagCloud() {
+	var i, leni, els, el;
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		removeClass(el, 'selected');
+		removeClass(el, 'excluded');
+		addClass(el, 'unselected');
+	}
+
+	// The calling checkbox acts like a button, with temporary ON state
+	this.checked = false;
+
+	showReport();
+}
+
+function updateTagCloud(visibleTags) {
+	// Show/hide the Tag Cloud elements, and set classes
+	var i, leni, el, els;
+
+	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
+	for (i = 0, leni = els.length; i < leni; i++) {
+		el = els[i];
+
+		if (visibleTags.hasItem(el.innerHTML)) {
+			if (el.style.display === 'none') {
+				// unhide element
+				el.style.display = '';
+			}
+		} else {
+			if (el.style.display !== 'none') {
+				// hide element and reset classes
+				el.style.display = 'none';
+				removeClass(el, 'selected');
+				removeClass(el, 'excluded');
+				addClass(el, 'unselected');
+			}
+		}
+	}
+}
+
 function getSelectedTags() {
 	// Get currently selected tags (from interface)
 	var i, leni, el, els, results = [];
@@ -1254,42 +1308,6 @@ function getExcludedTags() {
 		}
 	}
 	return results;
-}
-
-function createTagCloud(names) {
-	// Create all the <a> elements for the Tag Cloud
-	var i, leni, results = [];
-
-	for (i = 0, leni = names.length; i < leni; i++) {
-		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>');
-	}
-
-	document.getElementById('tag-cloud-tags').innerHTML = results.join('\n');
-}
-
-function updateTagCloud(visibleTags) {
-	// Show/hide the Tag Cloud elements, and set classes
-	var i, leni, el, els;
-
-	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
-	for (i = 0, leni = els.length; i < leni; i++) {
-		el = els[i];
-
-		if (visibleTags.hasItem(el.innerHTML)) {
-			if (el.style.display === 'none') {
-				// unhide element
-				el.style.display = '';
-			}
-		} else {
-			if (el.style.display !== 'none') {
-				// hide element and reset classes
-				el.style.display = 'none';
-				removeClass(el, 'selected');
-				removeClass(el, 'excluded');
-				addClass(el, 'unselected');
-			}
-		}
-	}
 }
 
 function setSelectedTags(tags) {
@@ -1328,24 +1346,6 @@ function setExcludedTags(tags) {
 			el.style.display = '';
 		}
 	}
-}
-
-function resetTagCloud() {
-	var i, leni, els, el;
-
-	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
-	for (i = 0, leni = els.length; i < leni; i++) {
-		el = els[i];
-
-		removeClass(el, 'selected');
-		removeClass(el, 'excluded');
-		addClass(el, 'unselected');
-	}
-
-	// The calling checkbox acts like a button, with temporary ON state
-	this.checked = false;
-
-	showReport();
 }
 
 function tagClicked(el) {
