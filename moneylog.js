@@ -1292,7 +1292,7 @@ function updateTagCloud(visibleTags) {
 	}
 }
 
-function selectTheseTags(tags) {
+function setSelectedTags(tags) {
 	// Force select some tags, used at start up or reload
 	var i, leni, el, els;
 
@@ -1311,7 +1311,7 @@ function selectTheseTags(tags) {
 	}
 }
 
-function excludeTheseTags(tags) {
+function setExcludedTags(tags) {
 	// Force select some tags, used at start up or reload
 	var i, leni, el, els;
 
@@ -1990,11 +1990,11 @@ function parseData() {
 
 	// Already select some tags now?
 	if (initSelectedTags.length > 0) {
-		selectTheseTags(initSelectedTags);
+		setSelectedTags(initSelectedTags);
 	}
 	// Already exclude some tags now?
 	if (initExcludedTags.length > 0) {
-		excludeTheseTags(initExcludedTags);
+		setExcludedTags(initExcludedTags);
 	}
 }
 
