@@ -44,19 +44,19 @@
 // Por exemplo, estes são os três formatos que você vai encontrar:
 //
 //     opcaoBacana = 12         ;// comentário
+//     opcaoBacana = S          ;// comentário
 //     opcaoBacana = 'texto'    ;// comentário
-//     opcaoBacana = true       ;// comentário
 //
 // No primeiro exemplo o conteúdo é um número, 12. Basta você trocar este
 // número por outro e pronto. Deixe todo o resto intocado.
 //
-// No segundo exemplo é uma configuração que recebe um texto entre aspas. As
-// aspas são importantes, não as apague. Apenas troque a palavra que está
-// dentro delas.
+// No segundo exemplo é uma configuração do tipo LIGA/DESLIGA. Há somente
+// dois valores possíveis para ela: S e N, que significam sim e não. Não use
+// números ou qualquer outra letra, nem aspas. Não use minúsculas.
 //
-// No terceiro exemplo é uma configuração do tipo LIGA/DESLIGA. Há somente
-// dois valores possíveis para ela: true (LIGA) e false (DESLIGA). Não use
-// números ou qualquer outra palavra, nem aspas.
+// No terceiro exemplo é uma configuração que recebe um texto entre aspas.
+// As aspas são importantes, não as apague. Apenas troque a palavra que está
+// dentro delas.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -83,20 +83,20 @@
 
 ////// TELA CHEIA
 //
-// initFullScreen = false       ;// Iniciar o app já no modo Tela Cheia?
+// initFullScreen = N           ;// Iniciar o app já no modo Tela Cheia?
 
 
 ////// BUSCA
 //
 // defaultSearch = ''           ;// Iniciar já pesquisando por este texto
-// checkRegex = false           ;// Marcar a opção [X] regex?
-// checkNegate = false          ;// Marcar a opção [X] excluir?
+// checkRegex = N               ;// Marcar a opção [X] regex?
+// checkNegate = N              ;// Marcar a opção [X] excluir?
 
 
 ////// PERÍODO - DATA INICIAL E FINAL
 //
-// checkDateFrom = true         ;// Marcar a opção [X] De:?
-// checkDateUntil = true        ;// Marcar a opção [X] Até:?
+// checkDateFrom = S            ;// Marcar a opção [X] De:?
+// checkDateUntil = S           ;// Marcar a opção [X] Até:?
 //
 // As duas configurações seguintes servem para escolher qual será o valor
 // padrão que virá escolhido nos seletores de data De: e Até:. Coloque um
@@ -111,7 +111,7 @@
 
 ////// PARCIAIS MENSAIS
 //
-// checkMonthPartials = true    ;// Marcar a opção [X] Parciais Mensais?
+// checkMonthPartials = S       ;// Marcar a opção [X] Parciais Mensais?
 
 
 ////// SOMENTE VALORES
@@ -121,23 +121,23 @@
 
 ////// WIDGETS
 //
-// initViewWidgetOpen = true    ;// Iniciar com a caixa Visualizar aberta?
-// initTagCloudOpen = true      ;// Iniciar com a Nuvem de Tags aberta?
-// showTagCloud = true          ;// Usar o widget Nuvem de Tags?
+// initViewWidgetOpen = S       ;// Iniciar com a caixa Visualizar aberta?
+// initTagCloudOpen = S         ;// Iniciar com a Nuvem de Tags aberta?
+// showTagCloud = S             ;// Usar o widget Nuvem de Tags?
 
 
 ////// WIDGET: SOMATÓRIO DE TAGS
-// TagSummary.config.active = true      ;// Usar o widget Somatório de tags?
-// TagSummary.config.opened = true      ;// Iniciar com este widget já aberto?
-// TagSummary.config.showTagless = true ;// Mostrar o item (sem tag)?
-// TagSummary.config.checkSort = false  ;// Marcar a opção [X] Ordenar por valor?
+// TagSummary.config.active = S         ;// Usar o widget Somatório de tags?
+// TagSummary.config.opened = S         ;// Iniciar com este widget já aberto?
+// TagSummary.config.showTagless = S    ;// Mostrar o item (sem tag)?
+// TagSummary.config.checkSort = N      ;// Marcar a opção [X] Ordenar por valor?
 
 
 ////// TABELA DO EXTRATO
 //
-// showBalance = true           ;// Mostrar a coluna Acumulado?
-// showRowCount = true          ;// Mostrar o número da linha à esquerda?
-// monthlyRowCount = true       ;// O número da linha recomeça a cada mês?
+// showBalance = S              ;// Mostrar a coluna Acumulado?
+// showRowCount = S             ;// Mostrar o número da linha à esquerda?
+// monthlyRowCount = S          ;// O número da linha recomeça a cada mês?
 //
 // highlightWords = 'XXX TODO'  ;// Destacar estas palavras na Descrição
 // highlightTags = 'luz água'   ;// Destacar estas tags no extrato
@@ -145,15 +145,15 @@
 // sortData.d.index = 1         ;// Diário: iniciar ordenando por esta coluna (1-4)
 // sortData.m.index = 1         ;// Mensal: iniciar ordenando por esta coluna (1-5)
 // sortData.y.index = 1         ;// Anual : iniciar ordenando por esta coluna (1-5)
-// sortData.d.rev = false       ;// Diário: iniciar com a ordem inversa?
-// sortData.m.rev = false       ;// Mensal: iniciar com a ordem inversa?
-// sortData.y.rev = false       ;// Anual : iniciar com a ordem inversa?
+// sortData.d.rev = N           ;// Diário: iniciar com a ordem inversa?
+// sortData.m.rev = N           ;// Mensal: iniciar com a ordem inversa?
+// sortData.y.rev = N           ;// Anual : iniciar com a ordem inversa?
 
 
 ////// GRÁFICO DE BARRAS
 //
-// showCharts = true            ;// Mostrar gráfico de barras depois do extrato?
-// showChartBarLabel = true     ;// Mostrar os números no topo de cada barra?
+// showCharts = S               ;// Mostrar gráfico de barras depois do extrato?
+// showChartBarLabel = S        ;// Mostrar os números no topo de cada barra?
 //
 // initChartDaily = 3           ;// Iniciar mostrando este item no gráfico diário [1-4]
 // initChartMonthly = 1         ;// Iniciar mostrando este item no gráfico mensal [1-4]
@@ -162,23 +162,23 @@
 
 ////// BARRA DE PORCENTAGEM
 //
-// showMiniBars = true          ;// Mostrar barra de porcentagem no mensal/anual?
-// showMiniBarsLabels = true    ;// Mostrar os números dentro destas barras?
+// showMiniBars = S             ;// Mostrar barra de porcentagem no mensal/anual?
+// showMiniBarsLabels = S       ;// Mostrar os números dentro destas barras?
 // miniBarWidth = 70            ;// Largura da barra de porcentagem, em pixels
 
 
 ////// TAGS
 //
-// showTagReport = true         ;// Mostrar o relatório de tags?
+// showTagReport = S            ;// Mostrar o relatório de tags?
 // ignoreTags = 'poupança'      ;// Ignorar lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
 // initExcludedTags = 'luz'     ;// Iniciar já com estas tags riscadas
-// checkHideRelatedTags = false ;// Marcar a opção [X] Esconder relacionadas?
+// checkHideRelatedTags = N     ;// Marcar a opção [X] Esconder relacionadas?
 
 
 ////// FORMATO DA DATA
 //
-// showLocaleDate = false       ;// Mostrar datas no formato regional d/m/a?
+// showLocaleDate = N           ;// Mostrar datas no formato regional d/m/a?
 //
 // Você também pode personalizar o formato regional: usar outros separadores,
 // mudar a ordem ou até escolher exatamente quais componentes mostrar. Além

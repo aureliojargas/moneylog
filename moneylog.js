@@ -6,6 +6,11 @@
 	http://aurelio.net/moneylog/
 */
 
+/* shortcuts for config */
+var Y = S = true;
+var N = false;
+
+
 /*********************************************************************
 * User Config
 * -----------
