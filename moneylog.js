@@ -84,18 +84,18 @@ var defaultLastMonths = false;    // Last months combo inits checked?
 var defaultFuture = false;        // Show future checkbox inits checked?
 
 // Default sort for all tables
-// d=daily, m=monthly, y=yearly, index=column(zero-based), reverse
+// d=daily, m=monthly, y=yearly, index=column(one-based), reverse
 var sortData = {'d':{}, 'm':{}, 'y':{}};
-sortData.d.index = 0;
+sortData.d.index = 1;
 sortData.d.rev = false;
-sortData.m.index = 0;
+sortData.m.index = 1;
 sortData.m.rev = false;
-sortData.y.index = 0;
+sortData.y.index = 1;
 sortData.y.rev = false;
 // Tag Report
-sortData.m.indexTag = 0;
+sortData.m.indexTag = 1;
 sortData.m.revTag = false;
-sortData.y.indexTag = 0;
+sortData.y.indexTag = 1;
 sortData.y.revTag = false;
 
 
@@ -2338,7 +2338,7 @@ function periodReport() {
 	allTotal = [];
 	theData = applyTags(filterData());
 	reportData = theData.clone();
-	sortIndex = sortData[reportType].index;
+	sortIndex = sortData[reportType].index - 1;  // config is one-based
 	sortRev = sortData[reportType].rev;
 
 	if (theData.length) {
@@ -2450,7 +2450,7 @@ function dailyReport() {
 	results = [];
 	chartValues = [];
 	chartLabels = [];
-	sortIndex = sortData.d.index;
+	sortIndex = sortData.d.index - 1;  // config is one-based
 	sortRev = sortData.d.rev;
 	monthPartials = document.getElementById('opt-monthly-check');
 
@@ -2621,7 +2621,7 @@ function tagReport() {
 	tagData = {};
 	tableData = [];
 	theData = reportData.clone();
-	sortIndex = sortData[reportType].indexTag;
+	sortIndex = sortData[reportType].indexTag - 1;  // config is one-based
 	sortRev = sortData[reportType].revTag;
 	selectedTags = getSelectedTags();
 	hasRelated = false;
@@ -2967,25 +2967,29 @@ function insertTab(e) {
 /////////////////////////////////////////////////////////////////////
 
 function sortCol(index) {
+	// Note: sortData config is one-based, sortCol() is zero-based
+
 	// If the same index, flip current reverse state, else reverse=false
 	sortData[reportType].rev =
-		(sortData[reportType].index == index) ?
+		(sortData[reportType].index == (index + 1)) ?
 		!sortData[reportType].rev :
 		false;
 	// Save new index
-	sortData[reportType].index = index;
+	sortData[reportType].index = index + 1;
 	// Refresh table
 	showReport();
 }
 
 function sortColTag(index) {
+	// Note: sortData config is one-based, sortColTag() is zero-based
+
 	// If the same index, flip current reverse state, else reverse=false
 	sortData[reportType].revTag =
-		(sortData[reportType].indexTag === index) ?
+		(sortData[reportType].indexTag === (index + 1)) ?
 		!sortData[reportType].revTag :
 		false;
 	// Save new index
-	sortData[reportType].indexTag = index;
+	sortData[reportType].indexTag = index + 1;
 	// Refresh table
 	tagReport();
 }
@@ -3117,7 +3121,7 @@ function toggleValueFilter() {
 function toggleMonthly() {
 	if (document.getElementById('opt-monthly-check').checked === true) {
 		// Restore default sort when activating Partials
-		sortData.d.index = 0;
+		sortData.d.index = 1;
 		sortData.d.rev = false;
 	}
 	showReport();
