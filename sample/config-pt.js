@@ -129,7 +129,7 @@
 // TagSummary.config.active = true      ;// Usar o widget Somatório de tags?
 // TagSummary.config.opened = true      ;// Iniciar com este widget já aberto?
 // TagSummary.config.showTagless = true ;// Mostrar o item (sem tag)?
-// TagSummary.config.checkSort = false  ;// Iniciar marcando a opção [X] Ordenar por valor?
+// TagSummary.config.checkSort = false  ;// Marcar a opção [X] Ordenar por valor?
 
 
 ////// TABELA DO EXTRATO
