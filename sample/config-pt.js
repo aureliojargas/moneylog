@@ -169,7 +169,7 @@
 ////// TAGS
 //
 // showTagReport = true         ;// Mostrar o relatório de tags?
-// ignoreTags = 'poupança'      ;// Ignorar todos os lançamentos com estas tags
+// ignoreTags = 'poupança'      ;// Ignorar lançamentos com estas tags
 // initSelectedTags = 'água'    ;// Iniciar já com estas tags marcadas
 // initExcludedTags = 'luz'     ;// Iniciar já com estas tags riscadas
 // checkHideRelatedTags = false ;// Marcar a opção [X] Esconder relacionadas?
