@@ -92,11 +92,23 @@ sortData.m.index = 1;
 sortData.m.rev = false;
 sortData.y.index = 1;
 sortData.y.rev = false;
-// Tag Report
+
+// Tag Report, DO NOT CHANGE
 sortData.m.indexTag = 1;
 sortData.m.revTag = false;
 sortData.y.indexTag = 1;
 sortData.y.revTag = false;
+
+// Sort index limits, DO NOT CHANGE
+sortData.d.min = 1;
+sortData.m.min = 1;
+sortData.y.min = 1;
+sortData.d.max = 4;
+sortData.m.max = 5;
+sortData.y.max = 5;
+sortData.m.minTag = 1;
+sortData.y.minTag = 1;
+// sortData.*.maxTag is variable
 
 
 // Data format
@@ -3797,6 +3809,16 @@ function init() {
 			document.getElementById('source-file').selectedIndex = 0;
 		}
 	}
+
+	// Validate the sort data config
+	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
+	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
+	if (sortData.y.index < sortData.y.min) { sortData.y.index = sortData.y.min; }
+	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
+	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
+	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
+	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
+	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
 
 	// Everything is ok, time to read/parse/show the user data
 	if (appMode === 'dropbox') {
