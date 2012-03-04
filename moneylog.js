@@ -3544,7 +3544,7 @@ function initAppMode() {
 
 		case 'txt':
 			appFlavor = 'TXT';
-			appVersion = '∞';
+			appVersion = 'r' + appRevision;
 			i18n.appUrl = 'http://aurelio.net/moneylog/beta.html';
 			break;
 
