@@ -506,6 +506,7 @@ var reportData = [];  // filtered by applyTags(filterData())
 var waitingToLoad = [];
 var selectedRows = [];
 var multiRawData = '';
+var savedDateRangeIndexes = [];  // used in TXT reload process
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
 var initDropbox;  // to be implemented in server side
@@ -1578,6 +1579,14 @@ function populateDateRangeCombos() {
 				fmt));
 	}
 	//
+	// Wait! Maybe we're just reloading?
+	// Then we need to keep the currently selected items
+	if (savedDateRangeIndexes.length === 2) {
+		index1 = savedDateRangeIndexes[0];
+		index2 = savedDateRangeIndexes[1];
+		savedDateRangeIndexes = [];  // reset
+	}
+	//
 	// If unset or out of range, we'll select the oldest and newer
 	if (index1 === -1) {
 		index1 = 0;
@@ -1747,6 +1756,11 @@ function reloadSelectedFile() {
 	// Save currently selected tags
 	initSelectedTags = getSelectedTags();
 	initExcludedTags = getExcludedTags();
+	// Save currently selected date range
+	savedDateRangeIndexes = [
+		document.getElementById('opt-date-1-month-combo').selectedIndex,
+		document.getElementById('opt-date-2-month-combo').selectedIndex
+	];
 	// Reload
 	loadSelectedFile();
 	return false;  // cancel link action
