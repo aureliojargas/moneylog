@@ -59,9 +59,10 @@ label,
 	color: black;
 	background-color: #ddd;  /* _light */
 }
+#tag-report tr:hover td.totals,
 tr:hover td,
 tr.future:hover td {  /* explicit TD to exclude TH */
-	background-color: #eee !important;  /* hover_bg */
+	background-color: #eee;  /* hover_bg */
 	color: black;
 }
 #toolbar input,
