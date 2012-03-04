@@ -69,7 +69,7 @@ March, 2012
 
 
 == Filters for all reports ==
-- Now all filters are also available in Monthly and Yearly reports. (thanks @denilsonsa, Edmilson Evangelista) [r514]
+- Now all filters are also available in Monthly and Yearly reports. (thanks @denilsonsa, @eeev2011) [r514]
 
 
 == View widget ==
@@ -78,7 +78,7 @@ March, 2012
 
 
 == Tag Cloud widget ==
-- New option in Tag Cloud: [X] Reset. (thanks William Comnisky) [r383]
+- New option in Tag Cloud: [X] Reset. (thanks @wcomnisky) [r383]
 - **New tri-state Tag Cloud:** first click select, second exclude (negate), third unselect. The option "[X] Group selected tags" does not affect excluded tags. [r451]
 - New config ``showTagCloud`` to enable/disable the Tag Cloud. [r387]
 - New config ``initTagCloudOpen`` to open/close the Tag Cloud. [r386]
@@ -120,7 +120,7 @@ March, 2012
 
 
 == Date range ==
-- **New date filter:** combos to choose an initial and final month for the reports. It disables the Recent Only and Future Data options. (thanks @denilsonsa) [r358]
+- **New date filter:** combos to choose an initial and final month for the reports. It disables the Recent Only and Future Data options. (thanks @denilsonsa, @adolfont, @magasine) [r358]
 - Now the new date filter is the default. New config ``useLegacyDateFilter`` to bring the old options back. (thanks @denilsonsa) [r369]
 - New configs ``checkDateFrom`` and ``checkDateUntil``, to check/uncheck date filters at startup. [r378]
 - New config ``initMonthsOffsetFrom`` to set the initial selected item for From:. [r405]
