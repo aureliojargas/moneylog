@@ -3594,6 +3594,11 @@ function init() {
 			break;
 
 		case 'txt':
+			// Show app version
+			document.getElementById('app-version').innerHTML = linkme(
+				'http://code.google.com/p/moneylog-dev/source/detail?r=' + appRevision,
+				appVersion
+			);
 			// Hide Edit button. Not functional.
 			document.getElementById('editor-open').style.display = 'none';
 			// Inline mini reload button: [ file.txt ] ↻

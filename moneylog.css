@@ -120,6 +120,8 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 }
 #app-version {
 	padding-top: 10px;
+	text-align: center;
+	font-size: 85%;
 }
 #app-version a {
 	color: #2B97E9;  /* cloud_blue */
