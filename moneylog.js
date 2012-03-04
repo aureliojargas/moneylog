@@ -494,7 +494,7 @@ var appMode = 'txt';  // DO NOT CHANGE
 var appVersion = '5b';
 var appName = 'MoneyLog';
 var appFlavor = '';
-var appRevision = '$Revision$';  // automatic, from SVN
+var appRevision = '$Revision$'.replace(/[^0-9]/g, '');  // automatic, from SVN
 var dropboxAppFolder = '/Apps/MoneyLog Cloud';
 var dropboxTxtFolder = '/txt';
 var dataFirstDate;
