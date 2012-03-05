@@ -3585,7 +3585,10 @@ AboutWidget.populate = function () {
 		html.push('<div id="about-dropbox">');
 		html.push('Dropbox backend by');
 		html.push(linkme('http://twitter.com/xupisco', '@xupisco'));
-		html.push('(<a id="about-dropbox-version" href="#">GitHub</a>)');
+		html.push('(' + linkme('https://github.com/xupisco/MoneyLog-Cloud', 'GitHub') + ')');
+		html.push('<br>');
+		html.push('commit:');
+		html.push('<a id="about-dropbox-version" href="#"></a>');
 		html.push('</div>');
 	}
 
