@@ -118,15 +118,6 @@ tr.future:hover td {  /* explicit TD to exclude TH */
 	text-transform: lowercase;
 	color: black;  /* _dark */
 }
-#app-version {
-	padding-top: 10px;
-	text-align: center;
-	font-size: 85%;
-}
-#app-version a {
-	color: #2B97E9;  /* cloud_blue */
-	text-decoration: underline;
-}
 
 /* ---------------------------------------------- Full screen */
 
@@ -215,7 +206,7 @@ a.button.active {
 	left: 8px;  /* The same as .widget-content padding-left */
 }
 
-/* ---------------------------------------------- [ boxes ] */
+/* ---------------------------------------------- [ widgets ] */
 
 .widget-content {
 	background-color: white;
@@ -224,7 +215,12 @@ a.button.active {
 	padding: 8px;
 	line-height: 185%;
 }
-
+.widget-content a {
+	color: #2B97E9;  /* cloud_blue */
+}
+.widget-content a:hover {
+	text-decoration: underline !important;
+}
 .widget-content select,
 .widget-content table {
 	width: 100%;
@@ -370,6 +366,20 @@ a.button.active {
 
 #tag-summary-content {
 	display: none;  /* JS will show */
+}
+
+/* ---------------------------------------------- [ about ] */
+
+#about-content {
+	display: none;  /* JS will show */
+	text-align: center;
+}
+#about-donate {
+	font-size: 150%;
+}
+#about-credits {
+	display: inline-block;
+	text-align: left;
 }
 
 /* ---------------------------------------------- Report */

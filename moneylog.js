@@ -3518,6 +3518,82 @@ TagSummary.update = function () {
 };
 
 
+
+/////////////////////////////////////////////////////////////////////
+////
+//// About Widget
+
+AboutWidget = new Widget('about', 'About', 'AboutWidget');
+
+// Widget config
+AboutWidget.config.active = true;       // Is this widget active?
+AboutWidget.config.opened = false;      // Start app with this widget opened?
+
+// UI strings
+i18nDatabase.en.AboutWidgetHeaderLabel = 'About';
+i18nDatabase.en.AboutWidgetHeaderHelp = 'Show/hide the about box.';
+//
+i18nDatabase.pt.AboutWidgetHeaderLabel = 'Sobre';
+i18nDatabase.pt.AboutWidgetHeaderHelp = 'Mostra e esconde a caixa Sobre.';
+
+// Create elements
+AboutWidget.populate = function () {
+	var version, html = [];
+
+	// Link to SVN commit
+	if (appMode === 'txt' || appMode === 'dropbox') {
+		version = linkme(
+			'http://code.google.com/p/moneylog-dev/source/detail?r=' + appRevision,
+			appVersion
+		);
+	// ...or link to the website
+	} else {
+		version = linkme(
+			'http://aurelio.net/moneylog/v' + appVersion + '/',
+			'v' + appVersion
+		);
+	}
+
+	html.push('<div id="about-app">');
+	html.push(linkme('http://aurelio.net/moneylog/', appName) + ' ' + appFlavor);
+	html.push('<span id="app-version">' + version + '</span>');
+	html.push('</div>');
+
+	html.push('<div id="about-copyright">');
+	html.push(linkme('http://en.wikipedia.org/wiki/MIT_license', '©') +	'2012,');
+	html.push(linkme('http://twitter.com/oreio', '@oreio'));
+	html.push('</div>');
+
+	html.push('<div id="about-donate">');
+	html.push(linkme('http://aurelio.net/moneylog/donate/', '♥'));
+	html.push('</div>');
+
+	html.push('<hr>');
+	html.push('<div id="about-credits">');
+	html.push('UI design:');
+	html.push(linkme('http://twitter.com/xupisco', '@xupisco'));
+	html.push('<br>');
+	html.push('i18n ca:');
+	html.push(linkme('http://twitter.com/pacoriviere', '@pacoriviere'));
+	html.push('<br>');
+	html.push('i18n es:');
+	html.push(linkme('http://twitter.com/g_nemmi', '@g_nemmi'));
+	html.push('</div>');
+
+	if (appMode === 'dropbox') {
+		html.push('<hr>');
+		html.push('<div id="about-dropbox">');
+		html.push('Dropbox backend by');
+		html.push(linkme('http://twitter.com/xupisco', '@xupisco'));
+		html.push('(<a id="about-dropbox-version" href="#">GitHub</a>)');
+		html.push('</div>');
+	}
+
+	this.content.innerHTML = html.join('\n');
+};
+
+
+
 /////////////////////////////////////////////////////////////////////
 //                             INIT
 /////////////////////////////////////////////////////////////////////
@@ -3594,11 +3670,6 @@ function init() {
 			break;
 
 		case 'txt':
-			// Show app version
-			document.getElementById('app-version').innerHTML = linkme(
-				'http://code.google.com/p/moneylog-dev/source/detail?r=' + appRevision,
-				appVersion
-			);
 			// Hide Edit button. Not functional.
 			document.getElementById('editor-open').style.display = 'none';
 			// Inline mini reload button: [ file.txt ] ↻
