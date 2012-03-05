@@ -3588,7 +3588,7 @@ AboutWidget.populate = function () {
 		html.push('(' + linkme('https://github.com/xupisco/MoneyLog-Cloud', 'GitHub') + ')');
 		html.push('<br>');
 		html.push('commit:');
-		html.push('<a id="about-dropbox-version" href="#"></a>');
+		html.push('<a id="about-dropbox-version" href="#"></a>');  // filled in initDropbox()
 		html.push('</div>');
 	}
 
