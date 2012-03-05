@@ -22,7 +22,7 @@ March, 2012
 
 == New flavors ==
 - Now the app come in four flavors:
-  - **MoneyLog Cloud** — runs online, get TXT files from [Dropbox http://dropbox.com]. (by @xupisco)
+  - **MoneyLog Cloud** — runs online, get TXT and config files from [Dropbox http://dropbox.com]. (by @xupisco)
   - **MoneyLog Browser** — runs online and offline, saves data to browser [localStorage http://en.wikipedia.org/wiki/Web_storage].
   - **MoneyLog Portable** — runs offline, all-in-one HTML file with app and user data.
   - **MoneyLog TXT** — runs offline, with local TXT files. This is the default SVN version.
