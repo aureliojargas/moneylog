@@ -1,5 +1,8 @@
 MoneyLog Experience
 -------------------
+by Aurelio Jargas
+
+------------------------------------------------------------
 
 English website:
 	http://aurelio.net/soft/moneylog/
