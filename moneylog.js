@@ -514,6 +514,7 @@ var initDropbox;  // to be implemented in server side
 var showReport;  // to make JSLint happy
 var Widget;
 var TagSummary;
+var AboutWidget;
 
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
