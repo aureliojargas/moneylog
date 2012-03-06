@@ -1096,6 +1096,20 @@ function toggleClass(el, klass) {
 	}
 }
 
+// DO NOT append elements using el.innerHTML += "foo";
+// This is extremely inefficient and removes previous onclick handlers.
+// http://stackoverflow.com/a/1387475
+// http://stackoverflow.com/a/6304927
+//
+function appendHTML(el, html) {
+	var tempDiv = document.createElement('div');
+	tempDiv.innerHTML = html;
+
+	while (tempDiv.firstChild) {
+		el.appendChild(tempDiv.firstChild);
+	}
+}
+
 // CSS stylesheet add/remove
 //
 // http://stackoverflow.com/q/524696
@@ -3323,9 +3337,13 @@ Widget.prototype.create = function () {
 	if (!this.config.active) { return; }
 	if (this.created) { return; }  // already done
 
-	document.getElementById('widgets').innerHTML += this.boxTemplate
-		.replace(/\{widgetId\}/g, this.id)
-		.replace(/\{widgetName\}/g, i18n[this.instanceName + 'HeaderLabel'] || this.widgetName);
+	// Append elements to #widgets
+	appendHTML(
+		document.getElementById('widgets'),
+		this.boxTemplate
+			.replace(/\{widgetId\}/g, this.id)
+			.replace(/\{widgetName\}/g, i18n[this.instanceName + 'HeaderLabel'] || this.widgetName)
+	);
 
 	this.box = document.getElementById(this.id + '-box');
 	this.header = document.getElementById(this.id + '-header');
@@ -3350,11 +3368,14 @@ Widget.prototype.addCheckbox = function (idSuffix, label, checked) {
 		template = template.replace('<input', '<input checked="checked"');
 	}
 
-	this.content.innerHTML += template
-		.replace(/\{widgetId\}/g, this.id)
-		.replace(/\{idSuffix\}/g, idSuffix)
-		.replace(/\{label\}/g, label)
-		.replace(/\{instanceName\}/g, this.instanceName);
+	appendHTML(
+		this.content,
+		template
+			.replace(/\{widgetId\}/g, this.id)
+			.replace(/\{idSuffix\}/g, idSuffix)
+			.replace(/\{label\}/g, label)
+			.replace(/\{instanceName\}/g, this.instanceName)
+	);
 
 	return document.getElementById(this.id + '-' + idSuffix);  // return the element
 };
