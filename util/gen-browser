@@ -84,7 +84,7 @@ insert_txt="
 echo "$insert_css $insert_js $insert_txt" > sed_script
 
 # Do it
-control_m=$(printf '\r');
+control_m=$(printf '\r')
 
 sed -f sed_script "$html_path" |
 	# Set language

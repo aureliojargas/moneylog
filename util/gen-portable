@@ -117,7 +117,7 @@ echo "$warning" > temp1
 echo '5 r temp1' >> sed_script
 
 # Do it
-control_m=$(printf '\r');
+control_m=$(printf '\r')
 
 sed -f sed_script "$html_path" |
 	# Set language
