@@ -3640,6 +3640,7 @@ function initAppMode() {
 			// Can't use the word Dropbox in app name
 			// https://www.dropbox.com/developers/reference/branding
 			appFlavor = 'Cloud';
+			appVersion = 'r' + appRevision;
 			i18n.appUrl = 'http://moneylog-cloud.aurelio.net';
 			break;
 
