@@ -218,8 +218,9 @@ a.button.active {
 .widget-content a {
 	color: #2B97E9;  /* cloud_blue */
 }
-.widget-content a:hover {
-	text-decoration: underline !important;
+#about-content a:hover {
+	text-decoration: underline;
+	/* Restricted to #about, this breaks Tag Cloud <a> */
 }
 .widget-content select,
 .widget-content table {
