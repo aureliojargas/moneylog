@@ -1,39 +1,37 @@
 # Cambie estos datos por los suyos, separando las columnas usando la tecla TAB o espacios en blanco
 # La fecha debe ser ingresada en el formato AÑO-MES-DÍA
 
-2011-09-01    -100,00    Saldo inicial :(
-2011-09-15     -74,23    comida|
-2011-09-15      -1,99    nerd| Cuota del mouse 10/12
-2011-09-23     -39,90    regalos, libros| Libro "Horóscopo de los Duendes"
+2011-11-01    -100,00    Saldo inicial :(
 
-2011-10-03    -342,59    regalos| Un Shrubbery
-2011-10-11     +30,00    Le gané una apuesta a Marcos
-2011-10-12     -35,00    regalos, nerd| Poster 3D en colores de Tux en Ascii Art
-2011-10-15      -1,99    nerd| Cuota del mouse 11/12
-2011-10-29     -95,67    comida|
+2011-12-15     -74,23    comida|
+2011-12-23     -39,90    regalos, libros| Libro "Horóscopo de los Duendes"
 
-2011-11-12    -199,90    regalos| Segway usado en mercadolibre.com
-2011-11-15      -1,99    nerd| Cuota del mouse 12/12 (terminó!)
+2012-01-03    -342,59    regalos| Un Shrubbery
+2012-01-11     +30,00    Le gané una apuesta a Marcos
+2012-01-12     -35,00    regalos, nerd| Poster 3D en colores de Tux en Ascii Art
+2012-01-29     -95,67    comida|
 
-2011-12-20     -10,00    Carnet del Club
+2012-02-12    -199,90    regalos| Segway usado en mercadolibre.com
+
+2012-03-20     -10,00    Carnet del Club
 
 # Es posible dejar juntos todos los movimientos periodicos. El orden no importa en este caso
 
-2011-09-05     500       salario|
-2011-10-05     500       salario|
-2011-11-05     500       salario|
 2011-12-05     500       salario|
 2012-01-05     500       salario|
+2012-02-05     500       salario|
+2012-03-05     500       salario|
+2012-04-05     500       salario|
 
-2011-09-07     -25,00    luz|
-2011-10-07     -20,00    luz|
-2011-11-07     -29,00    luz|
 2011-12-07     -25,00    luz|
+2012-01-07     -20,00    luz|
+2012-02-07     -29,00    luz|
+2012-03-07     -25,00    luz|
 
-2011-09-07     -20,00    agua|
-2011-10-07     -17,80    agua|
-2011-11-07     -32,37    agua|
-2011-12-07     -30,00    agua|
+2011-12-07     -20,00    agua|
+2012-01-07     -17,80    agua|
+2012-02-07     -32,37    agua|
+2012-03-07     -30,00    agua|
 
 # Movimientos Futuros!
 
@@ -46,5 +44,5 @@
 
 # Ingresos y Egresos recurrentes
 
-2011-09-05    -200*6     alquiler| Alquiler de la casa (seis meses)
-2011-09-10     100*4     apuestas| Marcos me va a dar 100 pesos por mes hasta fin de año
+2012-01-05    -200*6     alquiler| Alquiler de la casa (seis meses)
+2011-11-10     100*2     apuestas| Marcos me va a dar 100 pesos por mes hasta fin de año
