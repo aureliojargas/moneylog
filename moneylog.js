@@ -336,8 +336,8 @@ var i18nDatabase = {
 		msgTypePassword: 'Digite a sua senha:',
 		msgWrongPassword: 'Senha errada.',
 		// App
-		appUrl: 'http://aurelio.net/moneylog/beta.html',
-		appUrlOnline: 'http://aurelio.net/moneylog/online/',
+		appUrl: 'http://aurelio.net/moneylog/beta/',
+		appUrlOnline: 'http://aurelio.net/moneylog/browser/app/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
 		helpWebsite: 'Visite o website do MoneyLog.'
 
@@ -3671,12 +3671,12 @@ function initAppMode() {
 
 		case 'portable':
 			appFlavor = 'Portable';
-			i18n.appUrl = 'http://aurelio.net/moneylog/moneylog5.html';
+			i18n.appUrl = 'http://aurelio.net/moneylog/portable/';
 			break;
 
 		case 'localStorage':
 			appFlavor = 'Browser';
-			i18n.appUrl = i18n.appUrlOnline;
+			i18n.appUrl = 'http://aurelio.net/moneylog/browser/';
 			break;
 
 		case 'dropbox':
@@ -3684,13 +3684,17 @@ function initAppMode() {
 			// https://www.dropbox.com/developers/reference/branding
 			appFlavor = 'Cloud';
 			appVersion = 'r' + appRevision;
-			i18n.appUrl = 'http://moneylog-cloud.aurelio.net';
+			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
 			break;
 
 		case 'txt':
-			appFlavor = 'TXT';
+			// appFlavor = 'TXT';
+			// appFlavor = 'l33t';
+			// appFlavor = 'Dev';
+			appFlavor = 'Beta';
+			// I'm not happy with any name :/
 			appVersion = 'r' + appRevision;
-			i18n.appUrl = 'http://aurelio.net/moneylog/beta.html';
+			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
 			break;
 
 		default:
