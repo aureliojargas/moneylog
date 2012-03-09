@@ -7,7 +7,8 @@
 */
 
 /* shortcuts for config */
-var Y = S = true;
+var Y = true;
+var S = true;
 var N = false;
 
 
@@ -490,7 +491,7 @@ var i18nDatabase = {
 		//-msgTypePassword: 'Type your password:',
 		//-msgWrongPassword: 'Wrong password.',
 		// App
-		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
+		appDescription: 'Controle sus finanzas de forma práctica. Simple!'
 		//-helpWebsite: 'Go to the MoneyLog website.'
 
 		// Old messages
