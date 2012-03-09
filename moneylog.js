@@ -535,7 +535,7 @@ var appMode = 'txt';  // DO NOT CHANGE
 
 
 // Global vars
-var appVersion = '5';
+var appVersion = '6b';
 var appName = 'MoneyLog';
 var appFlavor = '';
 var appRevision = '$Revision$'.replace(/[^0-9]/g, '');  // automatic, from SVN
