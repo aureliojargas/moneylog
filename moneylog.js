@@ -406,19 +406,19 @@ var i18nDatabase = {
 		dateFormat: 'd/m/Y',
 		//-dateFormatMonth: 'B Y',
 		//-dateFormatYear: 'Y',
-		//-monthNames: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		monthNames: ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 		labelNoData: 'Sin movimientos.',
 		labelTotal: 'Total',
 		labelAverage: 'Promedio',
 		labelMinimum: 'Min',
 		labelMaximum: 'Max',
-		//-labelCount: 'Count',
+		labelCount: 'Cuenta',
 		labelMonths: ['mes', 'meses'],
 		// Report headers
 		labelsDetailed: ['Fecha', 'Monto', 'Concepto', 'Descripción', 'Balance'],
 		labelsOverview: ['Período', 'Ingresos', 'Egresos', 'Saldo', 'Balance'],
 		// Full Screen
-		//-helpFullScreen: 'Turns ON/OFF the Full Screen mode: only the report is shown, with no toolbar.',
+		helpFullScreen: 'Activa/Desactiva el modo Pantalla Completa: solo se muestra el reporte, sin la barra de herramientas.',
 		// Datafile
 		labelReload: 'Recargar',
 		helpReload: 'Recargar solo la información y no la página entera.',
@@ -433,20 +433,20 @@ var i18nDatabase = {
 		labelSearchRegex: 'regex',
 		labelSearchNegate: 'negar',
 		helpSearch: 'Evalue los reportes en tiempo real a medida que los va tipeando.',
-		helpSearchRegex: 'Use expresiones regulares en la caja de búsqueda.',
-		helpSearchNegate: 'Invierte el criterio de búsqueda.',
+		helpSearchRegex: 'Usar expresiones regulares en la caja de búsqueda.',
+		helpSearchNegate: 'Invertir el criterio de búsqueda.',
 		// View Options
-		//-labelViewOptions: 'View',
-		//-labelDateFrom: 'From',
-		//-labelDateUntil: 'Until',
+		labelViewOptions: 'Ver',
+		labelDateFrom: 'Desde',
+		labelDateUntil: 'Hasta',
 		labelMonthPartials: 'Mostrar parcial mensual',
 		labelValueFilter: 'Mostrar solo montos',
 		labelPositive: 'positivos',
 		labelNegative: 'negativos',
 		labelGreaterThan: 'mayores a',
 		labelLessThan: 'menores a',
-		//-helpViewOptions: 'Show/hide the view options.',
-		helpMonthPartials: 'Vea el balance mensual, con el saldo mensual, el acumulado y totales de ingresos y egresos.',
+		helpViewOptions: 'Mostrar/esconder opciones.',
+		helpMonthPartials: 'Vea el balance con el saldo mensual, el acumulado y totales de ingresos y egresos.',
 		helpValueFilter: 'Vea solo los montos positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
 		// Legacy
 		labelLastMonths: 'Mostrar solo últimos',
@@ -454,27 +454,27 @@ var i18nDatabase = {
 		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
 		helpShowFuture: 'Vea movimientos agendados a futuro.',
 		// Tag Cloud
-		//-labelTagCloud: 'Tag Cloud',
-		//-labelTagCloudEmpty: '(no tag)',
-		//-labelTagCloudReset: 'Reset',
+		labelTagCloud: 'Conceptos',
+		labelTagCloudEmpty: '(vacío)',
+		labelTagCloudReset: 'Limpiar',
 		labelTagCloudGroup: 'Unir conceptos seleccionados',
-		//-helpTagCloud: 'Show/hide the tag cloud.',
-		//-helpTagCloudReset: 'Undo all the selections you have made in the Tag Cloud.',
+		helpTagCloud: 'Mostrar/esconder Conceptos.',
+		helpTagCloudReset: 'Deshacer selección de Conceptos.',
 		helpTagCloudGroup: 'Mostrar solo los movimientos rotulados con los conceptos seleccionados.',
 		// Tag Report
-		//-labelTagReportRelated: 'Hide related tags',
-		//-helpTagReportRelated: 'For entries with multiple tags, ignore the tags that are not explicitly selected in Tag Cloud.',
+		labelTagReportRelated: 'Esconder conceptos relacionados',
+		helpTagReportRelated: 'Para opciones con vários conceptos, ignorar conceptos que no estén explícitamente seleccionados.',
 		// Rows Summary
-		//-labelRowsSummaryReset: 'Reset',
-		//-helpRowsSummaryReset: 'Undo all the selections you have made in the report.',
+		labelRowsSummaryReset: 'Limpiar',
+		helpRowsSummaryReset: 'Deshacer selección en el reporte.',
 		// Editor
-		//-labelEditorOpen: 'Edit',
-		//-labelEditorClose: 'Close',
-		//-labelEditorCancel: 'Cancel',
-		//-labelEditorSave: 'Save',
+		labelEditorOpen: 'Editar',
+		labelEditorClose: 'Cerrar',
+		labelEditorCancel: 'Cancelar',
+		labelEditorSave: 'Guardar',
 		helpEditorOpen: 'Abre el editor de movimientos para incluir/eliminar/editar los datos de un extracto.',
 		helpEditorClose: 'Cierra el editor de movimientos (solo cierra, no guarda los cambios!).',
-		//-helpEditorCancel: 'Discard changes and close the editor.',
+		helpEditorCancel: 'Cerrar el editor sin guardar los cambios.',
 		helpEditorSave: 'Guarda las movimientos editados.',
 		// Error
 		errorInvalidData: 'Información invalida en la línea ',
@@ -482,17 +482,17 @@ var i18nDatabase = {
 		errorTooManySeparators: 'Demasiados separadores',
 		errorInvalidDate: 'Fecha invalida:',
 		errorInvalidAmount: 'Cantidad invalida:',
-		//-errorNoLocalStorage: 'Sorry, your browser does not have localStorage support. %s will not work.',
-		//-errorNoDropboxSupport: 'Cannot find the Dropbox support files. %s will not work.',
-		//-errorRequirements: 'Minimum requirements:',
+		errorNoLocalStorage: 'Lo sentimos, su navegador no tiene soporte para localStorage. %s no funcionará.',
+		errorNoDropboxSupport: 'No se puede encontrar los archivos de soporte para Dropbox. %s no funcionará.',
+		errorRequirements: 'Requisitos mínimos:',
 		// Message
 		msgLoading: 'Cargando %s...',
-		//-msgSaving: 'Saving...',
-		//-msgTypePassword: 'Type your password:',
-		//-msgWrongPassword: 'Wrong password.',
+		msgSaving: 'Guardando ...',
+		msgTypePassword: 'Ingrese su contraseña:',
+		msgWrongPassword: 'Contraseña incorrecta.',
 		// App
-		appDescription: 'Controle sus finanzas de forma práctica. Simple!'
-		//-helpWebsite: 'Go to the MoneyLog website.'
+		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
+		helpWebsite: 'Ir al sitio web de MoneyLog.'
 
 		// Old messages
 		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
@@ -3461,6 +3461,11 @@ i18nDatabase.pt.TagSummaryHeaderLabel = 'Somatório de tags';
 i18nDatabase.pt.TagSummaryHeaderHelp = 'Mostra e esconde o somatório das tags.';
 i18nDatabase.pt.TagSummarySortLabel = 'Ordenar por valor';
 i18nDatabase.pt.TagSummarySortHelp = 'Ordena o sumário de tags pelos valores, não pelos nomes.';
+//
+//i18nDatabase.es.TagSummaryHeaderLabel = 'Sumario'; // ADDED THIS STRINGS JUST IN CASE THEY NEED TO BE TRANSLATED!
+//i18nDatabase.es.TagSummaryHeaderHelp = 'Mostrar/esconder Sumario.';
+//i18nDatabase.es.TagSummarySortLabel = 'Ordenar por valor';
+//i18nDatabase.es.TagSummarySortHelp = 'Ordenar Sumario por valor en lugar de Concepto.';
 
 // Create elements
 TagSummary.populate = function () {
@@ -3601,6 +3606,10 @@ i18nDatabase.en.AboutWidgetHeaderHelp = 'Show/hide the about box.';
 //
 i18nDatabase.pt.AboutWidgetHeaderLabel = 'Sobre';
 i18nDatabase.pt.AboutWidgetHeaderHelp = 'Mostra e esconde a caixa Sobre.';
+//
+//i18nDatabase.es.AboutWidgetHeaderLabel = 'Acerca de'; // ADDED THIS STRINGS JUST IN CASE THEY NEED TO BE TRANSLATED!
+//i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
+
 
 // Create elements
 AboutWidget.populate = function () {
