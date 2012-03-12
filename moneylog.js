@@ -3462,10 +3462,10 @@ i18nDatabase.pt.TagSummaryHeaderHelp = 'Mostra e esconde o somatório das tags.'
 i18nDatabase.pt.TagSummarySortLabel = 'Ordenar por valor';
 i18nDatabase.pt.TagSummarySortHelp = 'Ordena o sumário de tags pelos valores, não pelos nomes.';
 //
-//i18nDatabase.es.TagSummaryHeaderLabel = 'Sumario'; // ADDED THIS STRINGS JUST IN CASE THEY NEED TO BE TRANSLATED!
-//i18nDatabase.es.TagSummaryHeaderHelp = 'Mostrar/esconder Sumario.';
-//i18nDatabase.es.TagSummarySortLabel = 'Ordenar por valor';
-//i18nDatabase.es.TagSummarySortHelp = 'Ordenar Sumario por valor en lugar de Concepto.';
+i18nDatabase.es.TagSummaryHeaderLabel = 'Sumario';
+i18nDatabase.es.TagSummaryHeaderHelp = 'Mostrar/esconder Sumario.';
+i18nDatabase.es.TagSummarySortLabel = 'Ordenar por valor';
+i18nDatabase.es.TagSummarySortHelp = 'Ordenar Sumario por valor en lugar de Concepto.';
 
 // Create elements
 TagSummary.populate = function () {
@@ -3607,8 +3607,8 @@ i18nDatabase.en.AboutWidgetHeaderHelp = 'Show/hide the about box.';
 i18nDatabase.pt.AboutWidgetHeaderLabel = 'Sobre';
 i18nDatabase.pt.AboutWidgetHeaderHelp = 'Mostra e esconde a caixa Sobre.';
 //
-//i18nDatabase.es.AboutWidgetHeaderLabel = 'Acerca de'; // ADDED THIS STRINGS JUST IN CASE THEY NEED TO BE TRANSLATED!
-//i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
+i18nDatabase.es.AboutWidgetHeaderLabel = 'Acerca de';
+i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
 
 
 // Create elements
