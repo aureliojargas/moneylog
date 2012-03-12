@@ -5,6 +5,7 @@ March, 2012
 %
 %!target: html
 %!encoding: UTF-8
+%!options: --toc
 %
 % Twitter autolink
 %!preproc(html): @([A-Za-z0-9_]+)    [@\1 http://twitter.com/\1]
