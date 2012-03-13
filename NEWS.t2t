@@ -119,7 +119,7 @@ March, 2012
 
 
 == Date format ==[date-format]
-- **New configs to set locale date**: ``showLocaleDate``, ``i18nDatabase.pt.dateFormat``, ``i18n.pt.dateFormatMonth``, ``i18n.pt.dateFormatYear``. Change "pt" to "en", "es"…. (thanks @g_nemmi) [r113] [r352]
+- **New configs to set locale date**: ``showLocaleDate``, ``i18nDatabase.pt.dateFormat``, ``i18nDatabase.pt.dateFormatMonth``, ``i18nDatabase.pt.dateFormatYear``. Change "pt" to "en", "es"…. (thanks @g_nemmi) [r113] [r352]
 - New tokens for locale dates: B = full month name, b = abbreviated month name. [r356]
 - **Now showing locale dates by default.** [r412]
 - Now using month names instead numbers in default locale format. [r420]
