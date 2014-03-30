@@ -31,6 +31,9 @@ fi
 html_path="../moneylog.html"
 txt_path="../sample/data-$lang.txt"
 
+# Set $commit_id to the latest Git commit hash
+source set-commit-id.sh
+
 # This warning and instructions are for the all-in-one version only
 warning='
 	****************************************************************
@@ -122,6 +125,8 @@ control_m=$(printf '\r')
 sed -f sed_script "$html_path" |
 	# Set language
 	sed "/^var lang = 'pt';/ s/pt/$lang/" |
+	# Set commit id
+	sed "/^var appCommit = '';/ s/'/'$commit_id/" |
 	# clean up
 	sed '
 		# Remove config.js call

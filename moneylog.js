@@ -539,7 +539,7 @@ var appVersion = '6β';
 var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
 var appFlavor = '';
-var appCommit = '';  // set by util/gen-cloud
+var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
 var dropboxAppFolder = '/Apps/MoneyLog Cloud';
 var dropboxTxtFolder = '/txt';
@@ -3616,22 +3616,30 @@ i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
 
 // Create elements
 AboutWidget.populate = function () {
-	var version, html = [];
+	var version, commit, html = [];
 
-	switch (appMode) {
-		case 'dropbox':
-			version = linkme(appRepository + '/commit/' + appCommit, appVersion);  // commit
-			break;
-		case 'txt':
-			version = linkme(appRepository, appVersion);  // repo
-			break;
-		default:
-			version = linkme('http://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);  // website
+	// When in β: always show the commit ID
+	if (isBeta) {
+		version = 'v' + appVersion;
+		commit = linkme(appRepository + '/commit/' + appCommit, appCommit);
+
+	// When stable: hide commit, version links to website
+	} else {
+		version = linkme('http://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);
+		commit = ''
+	}
+
+	// When in txt mode: link to repository since we can't get the commit hash
+	if (appMode === 'txt') {
+		version = linkme(appRepository, 'v' + appVersion);
 	}
 
 	html.push('<div id="about-app">');
 	html.push(linkme('http://aurelio.net/moneylog/', appName) + ' ' + appFlavor);
 	html.push('<span id="app-version">' + version + '</span>');
+	if (isBeta && appCommit !== '') {
+		html.push('<div>commit: ' + commit + '</div>');
+	}
 	html.push('</div>');
 
 	html.push('<div id="about-copyright">');
@@ -3693,7 +3701,6 @@ function initAppMode() {
 			// Why Cloud: can't use the word Dropbox in app name
 			// https://www.dropbox.com/developers/reference/branding
 			appFlavor = 'Cloud';
-			appVersion = appCommit.slice(0, 4);  // Git commit hash
 			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
 			break;
 
@@ -3703,7 +3710,6 @@ function initAppMode() {
 			// appFlavor = 'Dev';
 			appFlavor = 'Beta';
 			// I'm not happy with any name :/
-			appVersion = '∞';  // Can't get Git commit hash in Beta version
 			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
 			break;
 
