@@ -536,6 +536,7 @@ var appMode = 'txt';  // DO NOT CHANGE
 
 // Global vars
 var appVersion = '6β';
+var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
 var appFlavor = '';
 var appCommit = '';  // set by util/gen-cloud
@@ -3634,7 +3635,7 @@ AboutWidget.populate = function () {
 	html.push('</div>');
 
 	html.push('<div id="about-copyright">');
-	html.push(linkme('http://en.wikipedia.org/wiki/MIT_license', '©') +	'2012,');
+	html.push(linkme('http://en.wikipedia.org/wiki/MIT_license', '©') + (isBeta ? new Date().getYearML() : appYear) + ',');
 	html.push(linkme('http://twitter.com/oreio', '@oreio'));
 	html.push('</div>');
 
