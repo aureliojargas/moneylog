@@ -538,7 +538,8 @@ var appMode = 'txt';  // DO NOT CHANGE
 var appVersion = '6b';
 var appName = 'MoneyLog';
 var appFlavor = '';
-var appRevision = '$Revision$'.replace(/[^0-9]/g, '');  // automatic, from SVN
+var appCommit = '';  // set by util/gen-cloud
+var appRepository = 'https://github.com/aureliojargas/moneylog';
 var dropboxAppFolder = '/Apps/MoneyLog Cloud';
 var dropboxTxtFolder = '/txt';
 var dataFirstDate;
@@ -3615,18 +3616,15 @@ i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
 AboutWidget.populate = function () {
 	var version, html = [];
 
-	// Link to SVN commit
-	if (appMode === 'txt' || appMode === 'dropbox') {
-		version = linkme(
-			'http://code.google.com/p/moneylog-dev/source/detail?r=' + appRevision,
-			appVersion
-		);
-	// ...or link to the website
-	} else {
-		version = linkme(
-			'http://aurelio.net/moneylog/v' + appVersion + '/',
-			'v' + appVersion
-		);
+	switch (appMode) {
+		case 'dropbox':
+			version = linkme(appRepository + '/commit/' + appCommit, appVersion);  // commit
+			break;
+		case 'txt':
+			version = linkme(appRepository, appVersion);  // repo
+			break;
+		default:
+			version = linkme('http://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);  // website
 	}
 
 	html.push('<div id="about-app">');
@@ -3693,7 +3691,7 @@ function initAppMode() {
 			// Why Cloud: can't use the word Dropbox in app name
 			// https://www.dropbox.com/developers/reference/branding
 			appFlavor = 'Cloud';
-			appVersion = 'r' + appRevision;
+			appVersion = appCommit.slice(0, 4);  // Git commit hash
 			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
 			break;
 
@@ -3703,7 +3701,7 @@ function initAppMode() {
 			// appFlavor = 'Dev';
 			appFlavor = 'Beta';
 			// I'm not happy with any name :/
-			appVersion = 'r' + appRevision;
+			appVersion = '∞';  // Can't get Git commit hash in Beta version
 			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
 			break;
 

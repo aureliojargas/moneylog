@@ -30,6 +30,9 @@ fi
 # Files
 html_path="../moneylog.html"
 
+# Set $commit_id to the latest Git commit hash
+source set-commit-id.sh
+
 # Patterns:
 # <link rel="stylesheet" type="text/css" href="moneylog.css">
 # <script type="text/javascript" src="moneylog.js"></script>
@@ -102,6 +105,8 @@ control_m=$(printf '\r')
 sed -f sed_script "$html_path" |
 	# Set language
 	sed "/^var lang = 'pt';/ s/pt/$lang/" |
+	# Set commit id
+	sed "/^var appCommit = '';/ s/'/'$commit_id/" |
 	# clean up
 	sed '
 		# Remove config.js call
