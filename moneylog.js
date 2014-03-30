@@ -3690,7 +3690,7 @@ function initAppMode() {
 			break;
 
 		case 'dropbox':
-			// Can't use the word Dropbox in app name
+			// Why Cloud: can't use the word Dropbox in app name
 			// https://www.dropbox.com/developers/reference/branding
 			appFlavor = 'Cloud';
 			appVersion = 'r' + appRevision;
