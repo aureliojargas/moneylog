@@ -555,6 +555,7 @@ var multiRawData = '';
 var savedDateRangeIndexes = [];  // used in TXT reload process
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
+var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
 var initDropbox;  // to be implemented in server side
 var showReport;  // to make JSLint happy
 var Widget;
