@@ -1,18 +1,11 @@
-MoneyLog Experience
--------------------
-by Aurelio Jargas
+# MoneyLog Experience, by Aurelio Jargas
 
-------------------------------------------------------------
+English website:    <http://aurelio.net/soft/moneylog/>
 
-English website:
-	http://aurelio.net/soft/moneylog/
+Portuguese website: <http://aurelio.net/moneylog/>
 
-Portuguese website:
-	http://aurelio.net/moneylog/
 
-------------------------------------------------------------
-
-To generate the app flavors:
+## To generate the app flavors
 
 	./util/gen-browser > browser.html
 
