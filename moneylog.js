@@ -535,7 +535,7 @@ var appMode = 'txt';  // DO NOT CHANGE
 
 
 // Global vars
-var appVersion = '6b';
+var appVersion = '6β';
 var appName = 'MoneyLog';
 var appFlavor = '';
 var appCommit = '';  // set by util/gen-cloud
