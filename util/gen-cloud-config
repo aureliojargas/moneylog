@@ -28,8 +28,8 @@ file_path="../sample/config-$lang.js"
 if test -f "$file_path"
 then
 	sed '
-		# Remove SVN-specific data
-		/^\/\/<SVN>/, /^\/\/<\/SVN>/ d
+		# Remove Beta-specific data
+		/^\/\/<Beta>/, /^\/\/<\/Beta>/ d
 
 		# Remove marker lines
 		/^\/\/<Dropbox>/ d

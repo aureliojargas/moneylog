@@ -1,14 +1,14 @@
 #!/bin/bash
 # Aurelio Jargas, http://aurelio.net/moneylog/
 #
-# Generates the commented config.js sample, with SVN specific sections.
+# Generates the commented config.js sample, with Beta specific sections.
 #
 # Usage:
-#	gen-svn-config [--lang XX]
+#	gen-beta-config [--lang XX]
 #
 # Examples:
-#	gen-svn-config                   # Portuguese version
-#	gen-svn-config --lang en         # English version
+#	gen-beta-config                  # Portuguese version
+#	gen-beta-config --lang en        # English version
 
 
 cd $(dirname "$0")
@@ -32,8 +32,8 @@ then
 		/^\/\/<Dropbox>/, /^\/\/<\/Dropbox>/ d
 
 		# Remove marker lines
-		/^\/\/<SVN>/ d
-		/^\/\/<\/SVN>/ d
+		/^\/\/<Beta>/ d
+		/^\/\/<\/Beta>/ d
 	
 	' "$file_path"
 else

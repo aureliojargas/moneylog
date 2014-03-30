@@ -215,7 +215,7 @@
 //
 // dataFilesDefault = 'meu-arquivo.txt';
 //</Dropbox>
-//<SVN>
+//<Beta>
 // Se você quer usar mais de um arquivo TXT, deverá cadastrar todos eles no
 // array dataFiles. Podem ser inúmeros, tantos quantos você queira. Se você
 // colocar um asterisco (*), ele significa TODOS os arquivos. Útil para
@@ -232,7 +232,7 @@
 // mudar isso e carregar outro, basta usar esta configuração:
 //
 // dataFilesDefault = 'carro.txt';
-//</SVN>
+//</Beta>
 
 
 
