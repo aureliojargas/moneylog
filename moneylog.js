@@ -239,7 +239,11 @@ var i18nDatabase = {
 		appUrl: 'http://aurelio.net/soft/moneylog/',
 		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
-		helpWebsite: 'Go to the MoneyLog website.'
+		helpWebsite: 'Go to the MoneyLog website.',
+		// Previous balance
+		labelPrevBalance: 'Previous Balance',
+		helpPrevBalance: 'Show the previous balance',
+		descrPrevBalance: 'Previous balance'
 
 		// helpHelp: 'Show/hide the help text.',
 		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
@@ -340,7 +344,11 @@ var i18nDatabase = {
 		appUrl: 'http://aurelio.net/moneylog/beta/',
 		appUrlOnline: 'http://aurelio.net/moneylog/browser/app/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
-		helpWebsite: 'Visite o website do MoneyLog.'
+		helpWebsite: 'Visite o website do MoneyLog.',
+		// Previous balance
+		labelPrevBalance: 'Saldo Anterior',
+		helpPrevBalance: 'Exibe saldo anterior',
+		descrPrevBalance: 'Saldo anterior'
 
 		// helpHelp: 'Mostra e esconde o texto de ajuda.',
 		// helpTip: 'Dica: Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
@@ -394,7 +402,11 @@ var i18nDatabase = {
 		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
 		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
 		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
-		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
+		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
+		// Previous balance
+		labelPrevBalance: 'Saldo Anterior',
+		helpPrevBalance: 'Mostra el saldo anterior',
+		descrPrevBalance: 'Saldo anterior'
 
 		// helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
 		// helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
@@ -492,7 +504,11 @@ var i18nDatabase = {
 		msgWrongPassword: 'Contraseña incorrecta.',
 		// App
 		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
-		helpWebsite: 'Ir al sitio web de MoneyLog.'
+		helpWebsite: 'Ir al sitio web de MoneyLog.',
+		// Previous balance
+		labelPrevBalance: 'Saldo Anterior',
+		helpPrevBalance: 'Muestra el saldo anterior',
+		descrPrevBalance: 'Saldo anterior'
 
 		// Old messages
 		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
@@ -2137,7 +2153,7 @@ function filterData() {
 		valueFilter = document.getElementById('opt-value-filter-combo').value;
 		valueFilterArg = parseInt(document.getElementById('opt-value-filter-number').value, 10) || 0;
 	}
-
+	
 	// Hack: Value filtering on the search box!
 	// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
 	temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
@@ -2155,6 +2171,10 @@ function filterData() {
 			filter = filter.toLowerCase();
 		}
 	}
+	
+	// Show previous balance?
+	var showPrevBalance = document.getElementById('opt-prev-balance-check').checked;
+	var prevBalanceValue= 0;
 
 	// Scan data rows
 	for (i = 0, leni = theData.length; i < leni; i++) {
@@ -2169,6 +2189,9 @@ function filterData() {
 
 		// Apply date filter
 		if (thisDate < firstDate) {
+			if (showPrevBalance) {
+				prevBalanceValue += thisValue;
+			}
 			continue;
 		}
 		if (thisDate > lastDate) {
@@ -2200,6 +2223,10 @@ function filterData() {
 
 		// Save the results
 		filteredData.push([thisDate, thisValue, thisTags, thisDescription]);
+	}
+	
+	if (showPrevBalance) {
+		filteredData.push([firstDate, prevBalanceValue, [], i18n.descrPrevBalance]);
 	}
 
 	return filteredData;
@@ -3818,6 +3845,7 @@ function init() {
 	document.getElementById('opt-last-months-label'    ).innerHTML = i18n.labelLastMonths + ':';
 	document.getElementById('opt-value-filter-label'   ).innerHTML = i18n.labelValueFilter + ':';
 	document.getElementById('opt-future-label'         ).innerHTML = i18n.labelShowFuture;
+	document.getElementById('opt-prev-balance-label'   ).innerHTML = i18n.labelPrevBalance;
 	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelSearchRegex;
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
@@ -3841,6 +3869,7 @@ function init() {
 	document.getElementById('opt-last-months-label'    ).title = i18n.helpLastMonths;
 	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;
 	document.getElementById('opt-future-label'         ).title = i18n.helpShowFuture;
+	document.getElementById('opt-prev-balance-label'   ).title = i18n.helpPrevBalance;
 	document.getElementById('opt-monthly-label'        ).title = i18n.helpMonthPartials;
 	document.getElementById('filter'                   ).title = i18n.helpSearch;
 	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
@@ -3901,6 +3930,7 @@ function init() {
 	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
 	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
 	document.getElementById('opt-future-check'       ).onclick  = showReport;
+	document.getElementById('opt-prev-balance-check' ).onclick  = showReport;
 	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
@@ -3962,6 +3992,10 @@ function init() {
 		// disable auto-hide since now we have only one option who uses it
 		removeClass(document.getElementById('opt-value-filter-extra'), 'auto-hide');
 	}
+	
+	// Previous balance option
+	document.getElementById('opt-prev-balance-box').style.display = 'block';
+	document.getElementById('opt-prev-balance-check').checked = false;
 
 	// Always show these toolbar boxes opened at init
 	if (initViewWidgetOpen)  { toggleViewOptions(); }
