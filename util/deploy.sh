@@ -9,9 +9,14 @@ root="$PWD"
 
 deploy_dir="$root/public"
 
-# Copy files
+# Copy main file
+cp moneylog.html "$deploy_dir/index.html"
+
+# Copy other files
 cp -r \
-  moneylog.{css,js,html} \
+  moneylog.css \
+  moneylog.js \
   css/ \
   storage/ \
   "$deploy_dir"
+
