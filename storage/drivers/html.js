@@ -3,6 +3,7 @@
 ml.storage.drivers.html = {
 	name: '<pre> element',
 	setup: function () {
+		ml.storage.isAsync = false;
 		ml.storage.isEditable = false;
 		ml.storage.isFileBased = false;
 		ml.storage.isReloadable = false;

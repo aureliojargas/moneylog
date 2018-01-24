@@ -560,9 +560,7 @@ var i18n;
 var rawData = '';
 var parsedData = [];
 var reportData = [];  // filtered by applyTags(filterData())
-var waitingToLoad = [];
 var selectedRows = [];
-var multiRawData = '';
 var savedDateRangeIndexes = [];  // used in TXT reload process
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
@@ -575,9 +573,6 @@ var AboutWidget;
 
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
-
-// The iframe loading occurs in parallel with the main execution, we need to know when it's done
-var iframeIsLoaded = true;
 
 // Change some defaults for the mobile version.
 // User can still overwrite those.
@@ -1116,6 +1111,15 @@ function linkme(url, text) {
 	return '<a href="' + url + '">' + text + '<\/a>';
 }
 
+function selectOptionByText(combo, optionText) {
+	for (var i = 0; i < combo.options.length; i++) {
+		if (combo.options[i].text === optionText) {
+			combo.selectedIndex = i;
+			break;
+		}
+	}
+}
+
 // DOM Class helpers
 function getClass(el) {
 	if (el.className) {
@@ -1604,16 +1608,6 @@ function populateRowsSummaryCombo() {
 	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
 }
 
-function populateDataFilesCombo() {
-	var el, i, leni;
-	if (appMode === 'txt' || appMode === 'dropbox') {
-		el = document.getElementById('source-file');
-		for (i = 0, leni = dataFiles.length; i < leni; i++) {
-			el.options[i] = new Option(dataFiles[i]);
-		}
-	}
-}
-
 function populateLastMonthsCombo() {
 	var el, label, i;
 	el = document.getElementById('opt-last-months-combo');
@@ -1788,7 +1782,12 @@ function loadData() {
 
 	// Read user data, process it and show results
 	if (ml.storage.isFileBased) {
-		// TODO
+		messageBoard.innerText = i18n.msgLoading.replace('%s', getSelectedFile().name);
+		ml.storage.readAsync(getSelectedFile(), function (contents) {
+			rawData = contents;
+			parseData();
+			showReport();
+		});
 	} else {
 		messageBoard.innerText = i18n.msgLoading.replace('%s', '');
 		rawData = ml.storage.read();
@@ -1797,97 +1796,20 @@ function loadData() {
 	}
 }
 
-function loadDataFile(filePath) {
-	document.getElementById('charts').style.display = 'none';  // hide charts when loading
-	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
-	resetData();
-	iframeIsLoaded = false;
-	document.getElementById('data-frame').src = filePath;
-	// This triggers the onLoad iframe event, handled by iframeLoaded()
-}
-
-function loadWaitingDataFiles() {
-	var filePath;
-
-	// This is a pooling function that keeps calling itself until the
-	// waitingToLoad array is empty. I have to do this instead a simple
-	// while loop because the iframe loading occurs in parallel, the
-	// JavaScript engine don't hang up waiting for it to complete.
-	//
-	// See also: iframeLoaded()
-
-	// The last file has finished loading, so now we can load the next
-	if (iframeIsLoaded) {
-		filePath = waitingToLoad.shift();
-		loadDataFile(filePath);
-	}
-
-	// There is another file to load? Schedule it
-	if (waitingToLoad.length > 0) {
-		setTimeout(loadWaitingDataFiles, 100);
-	}
-}
 function getSelectedFile() {
-	return dataFiles[document.getElementById('source-file').selectedIndex];
-	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
+	var combo = document.getElementById('source-file');
+	return {
+		id:   combo.options[combo.selectedIndex].value,
+		name: combo.options[combo.selectedIndex].text
+	};
 }
+
 function showHideEditButton() {
 	var el;
 	if (appMode === 'dropbox') {
 		// Hide Edit button when current file is '*'
 		el = document.getElementById('editor-open');
 		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
-	}
-}
-function loadSelectedFile() {
-	var filePath;
-
-	// Reset multifile data
-	multiRawData = '';
-	waitingToLoad = [];
-
-	filePath = getSelectedFile();
-
-	showHideEditButton();
-
-	// We will load a single file or all of them?
-	if (filePath === '*') {
-		waitingToLoad = dataFiles.removePattern('*');
-		if (waitingToLoad.length > 0) {
-			loadWaitingDataFiles();
-		}
-	} else {
-		loadDataFile(filePath);
-	}
-	return false;  // cancel link action
-}
-function reloadSelectedFile() {
-	// Save currently selected tags
-	initSelectedTags = getSelectedTags();
-	initExcludedTags = getExcludedTags();
-	// Save currently selected date range
-	savedDateRangeIndexes = [
-		document.getElementById('opt-date-1-month-combo').selectedIndex,
-		document.getElementById('opt-date-2-month-combo').selectedIndex
-	];
-	// Reload
-	loadSelectedFile();
-	return false;  // cancel link action
-}
-
-function readData() {
-	var iframeDoc;
-
-	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
-	if (appMode === 'localStorage') {
-		loadLocalData();
-		rawData = document.getElementById('editor-data').value;
-	} else if (appMode === 'portable' || appMode === 'dropbox') {
-		rawData = document.getElementById('data').innerHTML;
-	} else {
-		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
-		iframeDoc = document.getElementById('data-frame').contentWindow.document;
-		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
 	}
 }
 
@@ -3010,7 +2932,7 @@ function editorOn() {
 
 	// Set file name
 	if (ml.storage.isFileBased) {
-		filepath = getSelectedFile();
+		filepath = getSelectedFile().name;
 	} else {
 		filepath = ml.storage.drivers[ml.storage.currentDriver].name;
 	}
@@ -3135,36 +3057,6 @@ function changeReport() {
 	showReport();
 
 	return false;  // cancel link action
-}
-
-function iframeLoaded(el) {
-	// Note: This function is attached to the iframe onLoad event.
-
-	// Discard the first iframe load, it's always blank, on the initial page load.
-	// The other loads are for real.
-	if (typeof el.loadCount == 'undefined') {
-		el.loadCount = 1;
-		return;
-	}
-	el.loadCount++;
-
-	// Read iframe contents
-	readData();
-	iframeIsLoaded = true;
-
-	if (waitingToLoad.length > 0) {
-		// We're on multifiles mode, just append the new data to the temporary holder.
-		multiRawData = multiRawData + '\n' + rawData;
-	} else {
-		if (multiRawData) {
-			// We're on multifiles mode and the last file was loaded.
-			// Join the new data to the holder and save it all to rawData.
-			rawData = multiRawData + '\n' + rawData;
-		}
-		// One file or multifile, now it's time to process what we've read
-		parseData();
-		showReport();
-	}
 }
 
 function lastMonthsChanged() {
@@ -3771,14 +3663,8 @@ function init() {
 	// Set page title
 	document.title = appName + ' ' + appFlavor;
 
-	// Set default dataFile
-	if (dataFiles.length === 0 && (appMode === 'txt' || appMode === 'dropbox')) {
-		dataFiles = ['sample/data-' + lang + '.txt'];
-	}
-
 	// Prepare UI elements
 	populateLastMonthsCombo();
-	populateDataFilesCombo();
 	populateChartColsCombo();
 	populateRowsSummaryCombo();
 	populateValueFilterCombo();
@@ -3894,8 +3780,8 @@ function init() {
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
 	document.getElementById('storage-driver'         ).onchange = ml.storage.driversComboChanged;
-	document.getElementById('source-file'            ).onchange = loadSelectedFile;
-	document.getElementById('source-reload'          ).onclick  = reloadSelectedFile;
+	document.getElementById('source-file'            ).onchange = loadData;
+	document.getElementById('source-reload'          ).onclick  = reloadData;
 	document.getElementById('opt-date-1-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-2-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;
@@ -3980,15 +3866,6 @@ function init() {
 		updateToolbar();
 	}
 
-	// Set the default file to load when using multiple files: dataFilesDefault or first
-	if (dataFiles.length > 1) {
-		if (dataFilesDefault && dataFiles.indexOf(dataFilesDefault) !== -1) {
-			document.getElementById('source-file').selectedIndex = dataFiles.indexOf(dataFilesDefault);
-		} else {
-			document.getElementById('source-file').selectedIndex = 0;
-		}
-	}
-
 	// Validate the sort data config
 	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
 	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
@@ -4014,7 +3891,8 @@ function init() {
 		ml.storage.init();
 		ml.storage.setDriver('browser');
 	} else {  // txt
-		loadSelectedFile();
+		ml.storage.init();
+		ml.storage.setDriver('filesystem');
 	}
 
 	// Uncomment this line to focus the search box at init

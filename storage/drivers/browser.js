@@ -4,6 +4,7 @@ ml.storage.drivers.browser = {
 	name: 'Browser (localStorage)',
 	setup: function () {
 
+		ml.storage.isAsync = false;
 		ml.storage.isEditable = true;
 		ml.storage.isFileBased = false;
 		ml.storage.isReloadable = false;

@@ -7,19 +7,25 @@ ml.storage = {
 	availableDrivers: [
 		'html',
 		'browser',
+		'filesystem',
 	],
-	currentDriver: 'html',	// default if not specified in config
+	currentDriver: 'filesystem',	// default if not specified in config
 	drivers: {},	// driver's implementations
 
 	// properties to be set by each driver (all are required)
+	isAsync: false,
 	isEditable: false,
 	isFileBased: false,
 	isReloadable: false,
 	loadDataAtSetup: false,
 
+	// to be set by file based drivers
+	userFiles: [],	// [{id:'', name:''}, ...]
+
 	// stubs to be implemented by each driver (some are optional)
 	write: function (contents) { console.log('write'); },
 	read: function () { return ''; },
+	readAsync: function (fileData, callback) { callback('contents') },
 
 	// module methods, drivers should not reimplement those:
 
@@ -41,6 +47,24 @@ ml.storage = {
 		var combo = document.getElementById('storage-driver');
 		var driver = combo.options[combo.selectedIndex].value;
 		ml.storage.setDriver(driver);
+	},
+
+	resetFilesCombo: function () {
+		document.getElementById('source-file').options.length = 0;
+	},
+
+	populateFilesCombo: function () {
+		var nr_files = this.userFiles.length;
+		var combo = document.getElementById('source-file');
+
+		// Clean then add all files
+		this.resetFilesCombo();
+		for (var i = 0; i < nr_files; i++) {
+			combo.add(new Option(
+				this.userFiles[i].name,
+				this.userFiles[i].id
+			));
+		}
 	},
 
 	setDriver: function (driverName) {
