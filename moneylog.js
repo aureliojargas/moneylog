@@ -236,7 +236,6 @@ var i18nDatabase = {
 		errorInvalidDate: 'Invalid date:',
 		errorInvalidAmount: 'Invalid amount:',
 		errorNoLocalStorage: 'Sorry, your browser does not have localStorage support. %s will not work.',
-		errorNoDropboxSupport: 'Cannot find the Dropbox support files. %s will not work.',
 		errorRequirements: 'Minimum requirements:',
 		// Message
 		msgLoading: 'Loading %s...',
@@ -493,7 +492,6 @@ var i18nDatabase = {
 		errorInvalidDate: 'Fecha invalida:',
 		errorInvalidAmount: 'Cantidad invalida:',
 		errorNoLocalStorage: 'Lo sentimos, su navegador no tiene soporte para localStorage. %s no funcionará.',
-		errorNoDropboxSupport: 'No se puede encontrar los archivos de soporte para Dropbox. %s no funcionará.',
 		errorRequirements: 'Requisitos mínimos:',
 		// Message
 		msgLoading: 'Cargando %s...',
@@ -541,8 +539,6 @@ var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
 var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
-var dropboxAppFolder = '/Apps/MoneyLog Cloud';
-var dropboxTxtFolder = '/txt';
 var dataFirstDate;
 var dataLastDate;
 var highlightRegex;
@@ -555,7 +551,6 @@ var savedDateRangeIndexes = [];  // used in TXT reload process
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
 var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
-var initDropbox;  // to be implemented in server side
 var showReport;  // to make JSLint happy
 var Widget;
 var TagSummary;
@@ -3594,18 +3589,6 @@ AboutWidget.populate = function () {
 	html.push(linkme('http://twitter.com/g_nemmi', '@g_nemmi'));
 	html.push('</div>');
 
-	if (ml.storage.currentDriver === 'dropbox') {
-		html.push('<hr>');
-		html.push('<div id="about-dropbox">');
-		html.push('Dropbox backend by');
-		html.push(linkme('http://twitter.com/xupisco', '@xupisco'));
-		html.push('(' + linkme('https://github.com/xupisco/MoneyLog-Cloud', 'GitHub') + ')');
-		html.push('<br>');
-		html.push('commit:');
-		html.push('<a id="about-dropbox-version" href="#"></a>');  // filled in initDropbox()
-		html.push('</div>');
-	}
-
 	this.content.innerHTML = html.join('\n');
 };
 
@@ -3846,18 +3829,10 @@ function init() {
 	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
 	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
 
-	// Everything is ok, time to read/parse/show the user data
-	if (ml.storage.currentDriver === 'dropbox') {
-		if (typeof initDropbox === 'undefined') {
-			showError(i18n.errorNoDropboxSupport.replace('%s', appName), '');
-			return; // abort
-		} else {
-			initDropbox();
-		}
-	} else {
-		ml.storage.init();
-		ml.storage.setDriver();
-	}
+	// UI is ok, so now let's setup storage and (maybe) load user data
+	// Exception: some cloud storages defer user data loading after the file picker
+	ml.storage.init();
+	ml.storage.setDriver();
 
 	// Uncomment this line to focus the search box at init
 	// document.getElementById('filter').focus();
