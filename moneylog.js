@@ -2303,7 +2303,7 @@ function groupByPeriod(arr, periodType) {  // m, y
 	//         ['2012-03-04', '-4.44', 'bar1'],
 	//         ['2012-03-18', '-5.55', 'bar2'],
 	//     ], 'm')
-	// 
+	//
 	// returns:
 	// {
 	//     '2012-02': [
@@ -3626,7 +3626,7 @@ AboutWidget.populate = function () {
 	// When stable: hide commit, version links to website
 	} else {
 		version = linkme('http://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);
-		commit = ''
+		commit = '';
 	}
 
 	// When in txt mode: link to repository since we can't get the commit hash
@@ -4025,4 +4025,3 @@ function init() {
 	// document.getElementById('filter').focus();
 }
 window.onload = init;
-
