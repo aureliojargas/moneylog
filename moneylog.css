@@ -160,7 +160,7 @@ a.button {
 
 .button {
 	display: block;
-	margin: 1em 0 0 0;
+	margin: 0;
 	text-align: center;
 	font-weight: normal;
 	font-size: 100%;
@@ -193,13 +193,13 @@ a.button.active {
 	border-style: none;
 }
 
-.widget-box .button:before {
+.widget-box > .button:before {
 	content: "▶";
 	position: absolute;
 	top: 0;
 	left: 8px;  /* The same as .widget-content padding-left */
 }
-.widget-box .button.active:before {
+.widget-box > .button.active:before {
 	content: "▼";
 	position: absolute;
 	top: 0;
@@ -208,6 +208,12 @@ a.button.active {
 
 /* ---------------------------------------------- [ widgets ] */
 
+.widget-box {
+	margin: 1em 0;
+}
+.widget-box:first-child {
+	margin-top: 0;
+}
 .widget-content {
 	background-color: white;
 	border: 1px solid #bbb;  /* element_border */
@@ -217,6 +223,9 @@ a.button.active {
 }
 .widget-content a {
 	color: #2B97E9;  /* cloud_blue */
+}
+.widget-content a.button {
+	color: inherit;
 }
 #about-content a:hover {
 	text-decoration: underline;
@@ -235,6 +244,7 @@ a.button.active {
 
 #source-file {
 	width: 100%;
+	margin-bottom: 1em;
 }
 
 #source-file-box.mini {
