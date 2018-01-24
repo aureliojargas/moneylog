@@ -2972,40 +2972,6 @@ function editorSave() {
 	saveLocalData();
 	return false;  // cancel link action
 }
-// Allows to insert TABs inside textarea
-// Opera bug: needs to be attached to onkeypress instead onkeydown
-// Original from: http://pallieter.org/Projects/insertTab/ (see <script> at page source)
-function insertTab(e) {
-	var kC, oS, sS, sE, o = this; // aurelio: make jslint happy
-
-	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
-	o = this; // aurelio: removed this on calling
-
-	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
-	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey) {
-		oS = o.scrollTop; // Set the current scroll position.
-		if (o.setSelectionRange) {
-			// For: Opera + FireFox + Safari
-			sS = o.selectionStart;
-			sE = o.selectionEnd;
-			o.value = o.value.substring(0, sS) + '\t' + o.value.substr(sE);
-			o.setSelectionRange(sS + 1, sS + 1);
-			o.focus();
-		} else if (o.createTextRange) {
-			// For: MSIE
-			document.selection.createRange().text = '\t'; // String.fromCharCode(9)
-			// o.onblur = function() { o.focus(); o.onblur = null; };
-		}
-		o.scrollTop = oS; // Return to the original scroll position.
-		if (e.preventDefault) {  // aurelio change
-			e.preventDefault();
-		} else {
-			e.returnValue = false;
-		}
-		return false; // Not needed, but good practice.
-	}
-	return true;
-}
 
 
 /////////////////////////////////////////////////////////////////////
@@ -3751,7 +3717,6 @@ function init() {
 	document.getElementById('editor-open'            ).onclick  = editorOn;
 	document.getElementById('editor-close'           ).onclick  = editorOff;
 	document.getElementById('editor-save'            ).onclick  = editorSave;
-	document.getElementById('editor-data')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 
 	// Apply user defaults (this code must be after event handlers adding)
 	if (initFullScreen)     { toggleFullScreen(); }
