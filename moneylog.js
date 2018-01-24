@@ -3893,6 +3893,7 @@ function init() {
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
+	document.getElementById('storage-driver'         ).onchange = ml.storage.driversComboChanged;
 	document.getElementById('source-file'            ).onchange = loadSelectedFile;
 	document.getElementById('source-reload'          ).onclick  = reloadSelectedFile;
 	document.getElementById('opt-date-1-check'       ).onclick  = showReport;
@@ -4007,8 +4008,10 @@ function init() {
 			initDropbox();
 		}
 	} else if (appMode === 'portable') {
+		ml.storage.init();
 		ml.storage.setDriver('html');
 	} else if (appMode === 'localStorage') {
+		ml.storage.init();
 		ml.storage.setDriver('browser');
 	} else {  // txt
 		loadSelectedFile();

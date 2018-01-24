@@ -23,6 +23,26 @@ ml.storage = {
 
 	// module methods, drivers should not reimplement those:
 
+	populateDriversCombo: function () {
+		var combo = document.getElementById('storage-driver');
+		for (i = 0; i < this.availableDrivers.length; i++) {
+			combo.add(new Option(
+				this.drivers[this.availableDrivers[i]].name,
+				this.availableDrivers[i]
+			));
+		}
+		// Select the current driver
+		if (this.currentDriver) {
+			combo.value = this.currentDriver;
+		}
+	},
+
+	driversComboChanged: function () {
+		var combo = document.getElementById('storage-driver');
+		var driver = combo.options[combo.selectedIndex].value;
+		ml.storage.setDriver(driver);
+	},
+
 	setDriver: function (driverName) {
 		try {
 			this.currentDriver = driverName || this.currentDriver;
@@ -40,5 +60,9 @@ ml.storage = {
 			console.log('ERROR: Cannot setup storage: ' + this.currentDriver);
 			console.log(error);
 		}
+	},
+
+	init: function () {
+		this.populateDriversCombo();
 	}
 };
