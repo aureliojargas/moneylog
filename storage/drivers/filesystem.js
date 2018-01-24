@@ -2,8 +2,8 @@
 
 ml.storage.drivers.filesystem = {
 	name: 'Local text files',
-	dataFiles: [],	// flat array, meant for easier user config
-	userFiles: [],	// objects array
+	dataFiles: [],  // flat array, meant for easier user config
+	userFiles: [],  // objects array
 	defaultFile: '',
 
 	setUserFilesFromFlatArray: function (arr) {
@@ -31,9 +31,9 @@ ml.storage.drivers.filesystem = {
 			iframe.src = fileData.name;
 			iframe.onload = function () {
 				callback(iframe.contentWindow.document.getElementsByTagName('pre')[0].innerText);
-				iframe.parentNode.removeChild(iframe);	//del iframe
+				iframe.parentNode.removeChild(iframe);  //del iframe
 			};
-			document.body.appendChild(iframe);	// add iframe
+			document.body.appendChild(iframe);  // add iframe
 		};
 
 		// Honor legacy global config: dataFiles array

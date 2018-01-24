@@ -10,8 +10,8 @@ ml.storage = {
 		'filesystem',
 		'googledrive'
 	],
-	currentDriver: 'filesystem',	// default if not specified in config
-	drivers: {},	// driver's implementations
+	currentDriver: 'filesystem',  // default if not specified in config
+	drivers: {},  // driver's implementations
 
 	// properties to be set by each driver (all are required)
 	isAsync: false,
@@ -21,7 +21,7 @@ ml.storage = {
 	loadDataAtSetup: false,
 
 	// to be set by file based drivers
-	userFiles: [],	// [{id:'', name:''}, ...]
+	userFiles: [],  // [{id:'', name:''}, ...]
 
 	// stubs to be implemented by each driver (some are optional)
 	write: function (contents) { console.log('write'); },
@@ -76,11 +76,11 @@ ml.storage = {
 	setDriver: function (driverName) {
 		try {
 			this.currentDriver = driverName || this.currentDriver;
-			this.drivers[this.currentDriver].setup();	// driver-specific setup
+			this.drivers[this.currentDriver].setup();  // driver-specific setup
 
 			// Show/hide UI elements for each mode
-			document.getElementById('source-file'	).style.display		= (this.isFileBased ) ? '' : 'none';
-			document.getElementById('editor-open'	).style.visibility = (this.isEditable	) ? 'visible' : 'hidden';
+			document.getElementById('source-file'  ).style.display    = (this.isFileBased ) ? '' : 'none';
+			document.getElementById('editor-open'  ).style.visibility = (this.isEditable  ) ? 'visible' : 'hidden';
 			document.getElementById('source-reload').style.visibility = (this.isReloadable) ? 'visible' : 'hidden';
 
 			if (this.loadDataAtSetup) {

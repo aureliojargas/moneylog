@@ -82,13 +82,13 @@ ml.storage.drivers.googledrive = (function () {
 			userFiles = [];
 			for (var i = 0; i < data.docs.length; i++) {
 				userFiles.push({
-					id:	 data.docs[i].id,
+					id:   data.docs[i].id,
 					name: data.docs[i].name
 				});
 			}
 
 			ml.storage.userFiles = userFiles;
-			// dataFiles.sort();	XXX TODO
+			// dataFiles.sort(); XXX TODO
 			ml.storage.populateFilesCombo();
 
 			// Set the default file to load when using multiple files
@@ -134,7 +134,7 @@ ml.storage.drivers.googledrive = (function () {
 		ml.storage.isEditable = false;
 		ml.storage.isFileBased = true;
 		ml.storage.isReloadable = true;
-		ml.storage.loadDataAtSetup = false;	// file picker first
+		ml.storage.loadDataAtSetup = false;  // file picker first
 		ml.storage.readAsync = function (fileData, callback) {
 			readFile(fileData.id, callback);
 		};

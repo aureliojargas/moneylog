@@ -317,7 +317,7 @@ a.button.active {
 
 #toolbar label:hover,
 #toolbar input:hover + label {
-/*	font-weight: bold;*/
+	/*font-weight: bold;*/
 }
 .checkbox-option {
 	text-align: left;

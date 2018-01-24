@@ -505,7 +505,7 @@ var i18nDatabase = {
 		// Old messages
 		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
 		// helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
-		// helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
+		// helpTip: 'Consejo: Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
 		// helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
 		// helpTranslator: 'Traducción: Gonzalo Nemmi'
 	},
