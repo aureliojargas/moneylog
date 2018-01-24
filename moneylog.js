@@ -548,7 +548,6 @@ var appMode = 'txt';  // DO NOT CHANGE
 var appVersion = '6β';
 var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
-var appFlavor = '';
 var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
 var dropboxAppFolder = '/Apps/MoneyLog Cloud';
@@ -3558,7 +3557,7 @@ AboutWidget.populate = function () {
 	}
 
 	html.push('<div id="about-app">');
-	html.push(linkme('http://aurelio.net/moneylog/', appName) + ' ' + appFlavor);
+	html.push(linkme('http://aurelio.net/moneylog/', appName));
 	html.push('<span id="app-version">' + version + '</span>');
 	if (isBeta && appCommit !== '') {
 		html.push('<div>commit: ' + commit + '</div>');
@@ -3611,28 +3610,18 @@ function initAppMode() {
 	switch(appMode) {
 
 		case 'portable':
-			appFlavor = 'Portable';
 			i18n.appUrl = 'http://aurelio.net/moneylog/portable/';
 			break;
 
 		case 'localStorage':
-			appFlavor = 'Browser';
 			i18n.appUrl = 'http://aurelio.net/moneylog/browser/';
 			break;
 
 		case 'dropbox':
-			// Why Cloud: can't use the word Dropbox in app name
-			// https://www.dropbox.com/developers/reference/branding
-			appFlavor = 'Cloud';
 			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
 			break;
 
 		case 'txt':
-			// appFlavor = 'TXT';
-			// appFlavor = 'l33t';
-			// appFlavor = 'Dev';
-			appFlavor = 'Beta';
-			// I'm not happy with any name :/
 			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
 			break;
 
@@ -3653,15 +3642,12 @@ function init() {
 	// Password protected?
 	if (myPassword) {
 		// Prompt user and check
-		if (myPassword != prompt(appName + ' ' + appFlavor + ' — ' + i18n.msgTypePassword)) {
+		if (myPassword != prompt(appName + ' — ' + i18n.msgTypePassword)) {
 			// Destroy full interface and show error
 			document.getElementById('container').innerHTML = '<h2 style="padding:30px;">' + i18n.msgWrongPassword + '</h2>';
 			return;  // abort
 		}
 	}
-
-	// Set page title
-	document.title = appName + ' ' + appFlavor;
 
 	// Prepare UI elements
 	populateLastMonthsCombo();
@@ -3694,7 +3680,6 @@ function init() {
 	}
 
 	// Set interface labels
-	document.getElementById('app-flavor'               ).innerHTML = appFlavor;
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
