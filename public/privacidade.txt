@@ -1,0 +1,27 @@
+Política de Privacidade
+-----------------------
+
+Este site não identifica o usuário.
+
+Este site não guarda nenhum dado do usuário.
+
+Este site é apenas um programa simples, para uso anônimo, sem cadastro
+nem login.
+
+Este programa funciona exclusivamente no equipamento do usuário
+(JavaScript client side). Não há processamento no servidor. Não há envio
+de dados para o servidor.
+
+É a API oficial do Google Drive quem autentica e obtém o arquivo do
+usuário. Esta comunicação acontece diretamente entre o equipamento do
+usuário e a API, sem intermédio do servidor deste programa.
+
+Os dados do arquivo do Google Drive ficam apenas na memória do
+equipamento do usuário, e são apagados ao fechar a janela ou aba do
+navegador.
+
+O responsável pelo site não tem acesso à identidade do usuário, aos
+dados carregados no programa nem à conta do usuário no Google Drive.
+
+Este programa é um software livre e todo o seu código fonte está disponível
+para inspeção em https://github.com/aureliojargas/moneylog/
