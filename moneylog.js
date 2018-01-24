@@ -6,7 +6,11 @@
 	http://aurelio.net/moneylog/
 */
 
-/* shortcuts for config */
+// I hope someday I can move everything under this namespace.
+// Until then, MoneyLog is a globals festival :(
+var ml = {};
+
+// shortcuts for config
 var Y = true;
 var S = true;
 var N = false;
@@ -46,8 +50,10 @@ var initYearOffsetFrom;           // From: year will be N years from now (defaul
 var initYearOffsetUntil;          // To:   year will be N years from now (default OFF)
 
 // Widgets
+var initStorageWidgetOpen = true; // Start app with the Storage widget opened?
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
 var initTagCloudOpen = true;      // Start app with the Tag Cloud widget opened?
+var showStorageWidget = true;     // Show Storage widget in the sidebar?
 var showViewWidget = true;        // Show View widget in the sidebar?
 var showTagCloud = true;          // Show Tag Cloud widget in the sidebar?
 
@@ -163,8 +169,10 @@ var i18nDatabase = {
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
 		// Full Screen
 		helpFullScreen: 'Turns ON/OFF the Full Screen mode: only the report is shown, with no toolbar.',
-		// Datafile
+		// Storage
+		labelStorage: 'Storage',
 		labelReload: 'Reload',
+		helpStorage: 'Choose the storage for your data.',
 		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// Report types
 		labelReports: 'Reports',
@@ -265,8 +273,10 @@ var i18nDatabase = {
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
 		// Full Screen
 		helpFullScreen: 'Liga/desliga o modo tela cheia: aparece somente o extrato, sem a barra de ferramentas.',
-		// Datafile
+		// Storage
+		labelStorage: 'Lançamentos',
 		labelReload: 'Recarregar',
+		helpStorage: 'Escolha a fonte dos seus dados (lançamentos).',
 		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// Report types
 		labelReports: 'Extratos',
@@ -525,20 +535,10 @@ var i18nDatabase = {
 //// End of user Config
 
 
-// The appMode sets the Moneylog flavor:
-// txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
-// one          Full app is in a single moneylog.html file, with user data at the end.
-// dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
-// localStorage Read/edit/save user data to the browser. Must always use the same browser.
-//
-var appMode = 'txt';  // DO NOT CHANGE
-
-
 // Global vars
 var appVersion = '6β';
 var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
-var appFlavor = '';
 var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
 var dropboxAppFolder = '/Apps/MoneyLog Cloud';
@@ -550,9 +550,7 @@ var i18n;
 var rawData = '';
 var parsedData = [];
 var reportData = [];  // filtered by applyTags(filterData())
-var waitingToLoad = [];
 var selectedRows = [];
-var multiRawData = '';
 var savedDateRangeIndexes = [];  // used in TXT reload process
 var isFullScreen = false;
 var isOpera = (window.opera) ? true : false;
@@ -566,13 +564,11 @@ var AboutWidget;
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
 
-// The iframe loading occurs in parallel with the main execution, we need to know when it's done
-var iframeIsLoaded = true;
-
 // Change some defaults for the mobile version.
 // User can still overwrite those.
 if (isMobile) {
 	// Init with all widgets closed
+	initStorageWidgetOpen = true;  // exception
 	initViewWidgetOpen = false;
 	initTagCloudOpen = false;
 	// Note: Tag Summary is closed at Widget definition. Search for isMobile.
@@ -1105,6 +1101,15 @@ function linkme(url, text) {
 	return '<a href="' + url + '">' + text + '<\/a>';
 }
 
+function selectOptionByText(combo, optionText) {
+	for (var i = 0; i < combo.options.length; i++) {
+		if (combo.options[i].text === optionText) {
+			combo.selectedIndex = i;
+			break;
+		}
+	}
+}
+
 // DOM Class helpers
 function getClass(el) {
 	if (el.className) {
@@ -1593,16 +1598,6 @@ function populateRowsSummaryCombo() {
 	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
 }
 
-function populateDataFilesCombo() {
-	var el, i, leni;
-	if (appMode === 'txt' || appMode === 'dropbox') {
-		el = document.getElementById('source-file');
-		for (i = 0, leni = dataFiles.length; i < leni; i++) {
-			el.options[i] = new Option(dataFiles[i]);
-		}
-	}
-}
-
 function populateLastMonthsCombo() {
 	var el, label, i;
 	el = document.getElementById('opt-last-months-combo');
@@ -1751,105 +1746,67 @@ function resetData() {
 	rawData = '';
 }
 
-function loadDataFile(filePath) {
-	document.getElementById('charts').style.display = 'none';  // hide charts when loading
-	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
-	resetData();
-	iframeIsLoaded = false;
-	document.getElementById('data-frame').src = filePath;
-	// This triggers the onLoad iframe event, handled by iframeLoaded()
-}
-
-function loadWaitingDataFiles() {
-	var filePath;
-
-	// This is a pooling function that keeps calling itself until the
-	// waitingToLoad array is empty. I have to do this instead a simple
-	// while loop because the iframe loading occurs in parallel, the
-	// JavaScript engine don't hang up waiting for it to complete.
-	//
-	// See also: iframeLoaded()
-
-	// The last file has finished loading, so now we can load the next
-	if (iframeIsLoaded) {
-		filePath = waitingToLoad.shift();
-		loadDataFile(filePath);
-	}
-
-	// There is another file to load? Schedule it
-	if (waitingToLoad.length > 0) {
-		setTimeout(loadWaitingDataFiles, 100);
-	}
-}
-function getSelectedFile() {
-	return dataFiles[document.getElementById('source-file').selectedIndex];
-	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
-}
-function showHideEditButton() {
-	var el;
-	if (appMode === 'dropbox') {
-		// Hide Edit button when current file is '*'
-		el = document.getElementById('editor-open');
-		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
-	}
-}
-function loadSelectedFile() {
-	var filePath;
-
-	// Reset multifile data
-	multiRawData = '';
-	waitingToLoad = [];
-
-	filePath = getSelectedFile();
-
-	showHideEditButton();
-
-	// We will load a single file or all of them?
-	if (filePath === '*') {
-		waitingToLoad = dataFiles.removePattern('*');
-		if (waitingToLoad.length > 0) {
-			loadWaitingDataFiles();
-		}
-	} else {
-		loadDataFile(filePath);
-	}
-	return false;  // cancel link action
-}
-function reloadSelectedFile() {
+function reloadData() {
 	// Save currently selected tags
 	initSelectedTags = getSelectedTags();
 	initExcludedTags = getExcludedTags();
+
 	// Save currently selected date range
 	savedDateRangeIndexes = [
 		document.getElementById('opt-date-1-month-combo').selectedIndex,
 		document.getElementById('opt-date-2-month-combo').selectedIndex
 	];
-	// Reload
-	loadSelectedFile();
+
+	loadData();
+
 	return false;  // cancel link action
 }
 
-function loadLocalData() {
-	// first time using localStorage (or empty), load default data from #data (PRE)
-	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
-		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
+function loadData() {
+	// Hide charts when loading
+	document.getElementById('charts').style.display = 'none';
+	// Where to show the "loading..." message
+	var messageBoard = document.getElementById('report');
+
+	resetData();
+
+	// Read user data, process it and show results
+	if (ml.storage.isFileBased) {
+		messageBoard.innerText = i18n.msgLoading.replace('%s', getSelectedFile().name);
+		showHideEditButton();
+		ml.storage.readAsyncMulti(getActiveDataFiles(), function (contents) {
+			rawData = contents;
+			parseData();
+			showReport();
+		});
+	} else {
+		messageBoard.innerText = i18n.msgLoading.replace('%s', '');
+		rawData = ml.storage.read();
+		parseData();
+		showReport();
 	}
-	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
 }
 
-function readData() {
-	var iframeDoc;
+function getSelectedFile() {
+	var combo = document.getElementById('source-file');
+	return {
+		id:   combo.options[combo.selectedIndex].value,
+		name: combo.options[combo.selectedIndex].text
+	};
+}
 
-	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
-	if (appMode === 'localStorage') {
-		loadLocalData();
-		rawData = document.getElementById('editor-data').value;
-	} else if (appMode === 'portable' || appMode === 'dropbox') {
-		rawData = document.getElementById('data').innerHTML;
+function getActiveDataFiles() {
+	if (getSelectedFile().name === '*') {
+		return ml.storage.userFiles;  // all files
 	} else {
-		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
-		iframeDoc = document.getElementById('data-frame').contentWindow.document;
-		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
+		return [getSelectedFile()];
+	}
+}
+
+function showHideEditButton() {
+	// Hide Edit button when current file is '*'
+	if (ml.storage.isEditable && ml.storage.isFileBased) {
+		document.getElementById('editor-open').style.visibility = (getSelectedFile().name === '*') ? 'hidden' : 'visible';
 	}
 }
 
@@ -2965,21 +2922,16 @@ function editorOn() {
 	var filepath;
 
 	// Load the current data to the editor
-	// Note: already loaded when localStorage
-	if (appMode !== 'localStorage') {
-		document.getElementById('editor-data').value = rawData;
-	}
+	document.getElementById('editor-data').value = rawData;
 
 	// Hide content to avoid scroll bars
 	document.getElementById('content').style.display = 'none';
 
 	// Set file name
-	if (appMode === 'localStorage') {
-		filepath = 'Browser localStorage: ' + localStorageKey;
-	} else if (appMode === 'dropbox') {
-		filepath = 'Dropbox: ' + dropboxAppFolder + dropboxTxtFolder + '/' + getSelectedFile();
+	if (ml.storage.isFileBased) {
+		filepath = getSelectedFile().name;
 	} else {
-		filepath = getSelectedFile();
+		filepath = ml.storage.drivers[ml.storage.currentDriver].name;
 	}
 	document.getElementById('editor-file-name').innerHTML = filepath;
 
@@ -3002,17 +2954,11 @@ function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
 
 	editButton.innerHTML = i18n.msgSaving;
-	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
-
-	// Save currently selected tags
-	initSelectedTags = getSelectedTags();
-	initExcludedTags = getExcludedTags();
+	ml.storage.write(document.getElementById('editor-data').value);
 
 	// Reload report
-	resetData();
-	readData();
-	parseData();
-	showReport();
+	reloadData();
+
 	editButton.innerHTML = i18n.labelEditorOpen;
 }
 function editorSave() {
@@ -3110,36 +3056,6 @@ function changeReport() {
 	return false;  // cancel link action
 }
 
-function iframeLoaded(el) {
-	// Note: This function is attached to the iframe onLoad event.
-
-	// Discard the first iframe load, it's always blank, on the initial page load.
-	// The other loads are for real.
-	if (typeof el.loadCount == 'undefined') {
-		el.loadCount = 1;
-		return;
-	}
-	el.loadCount++;
-
-	// Read iframe contents
-	readData();
-	iframeIsLoaded = true;
-
-	if (waitingToLoad.length > 0) {
-		// We're on multifiles mode, just append the new data to the temporary holder.
-		multiRawData = multiRawData + '\n' + rawData;
-	} else {
-		if (multiRawData) {
-			// We're on multifiles mode and the last file was loaded.
-			// Join the new data to the holder and save it all to rawData.
-			rawData = multiRawData + '\n' + rawData;
-		}
-		// One file or multifile, now it's time to process what we've read
-		parseData();
-		showReport();
-	}
-}
-
 function lastMonthsChanged() {
 	document.getElementById('opt-last-months-check').checked = true;
 	showReport();
@@ -3192,6 +3108,10 @@ function toggleCheckboxOptionExtra(checkbox) {
 	if (hasClass(extra, 'auto-hide')) {
 		extra.style.display = (checkbox.checked) ? 'block' : 'none';
 	}
+}
+
+function toggleStorage() {
+	return toggleToolbarBox('storage-header', 'storage-content');
 }
 
 function toggleViewOptions() {
@@ -3630,12 +3550,12 @@ AboutWidget.populate = function () {
 	}
 
 	// When in txt mode: link to repository since we can't get the commit hash
-	if (appMode === 'txt') {
+	if (ml.storage.currentDriver === 'filesystem') {
 		version = linkme(appRepository, 'v' + appVersion);
 	}
 
 	html.push('<div id="about-app">');
-	html.push(linkme('http://aurelio.net/moneylog/', appName) + ' ' + appFlavor);
+	html.push(linkme('http://aurelio.net/moneylog/', appName));
 	html.push('<span id="app-version">' + version + '</span>');
 	if (isBeta && appCommit !== '') {
 		html.push('<div>commit: ' + commit + '</div>');
@@ -3663,7 +3583,7 @@ AboutWidget.populate = function () {
 	html.push(linkme('http://twitter.com/g_nemmi', '@g_nemmi'));
 	html.push('</div>');
 
-	if (appMode === 'dropbox') {
+	if (ml.storage.currentDriver === 'dropbox') {
 		html.push('<hr>');
 		html.push('<div id="about-dropbox">');
 		html.push('Dropbox backend by');
@@ -3684,104 +3604,27 @@ AboutWidget.populate = function () {
 //                             INIT
 /////////////////////////////////////////////////////////////////////
 
-function initAppMode() {
-	switch(appMode) {
-
-		case 'portable':
-			appFlavor = 'Portable';
-			i18n.appUrl = 'http://aurelio.net/moneylog/portable/';
-			break;
-
-		case 'localStorage':
-			appFlavor = 'Browser';
-			i18n.appUrl = 'http://aurelio.net/moneylog/browser/';
-			break;
-
-		case 'dropbox':
-			// Why Cloud: can't use the word Dropbox in app name
-			// https://www.dropbox.com/developers/reference/branding
-			appFlavor = 'Cloud';
-			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
-			break;
-
-		case 'txt':
-			// appFlavor = 'TXT';
-			// appFlavor = 'l33t';
-			// appFlavor = 'Dev';
-			appFlavor = 'Beta';
-			// I'm not happy with any name :/
-			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
-			break;
-
-		default:
-			alert('FATAL ERROR: Invalid setting appMode = ' + appMode);
-	}
-}
-
 function init() {
 	var i;
 
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
 
-	// Check app mode
-	initAppMode();
+	// Set app URL
+	i18n.appUrl = 'https://moneylog.aurelio.net';
 
 	// Password protected?
 	if (myPassword) {
 		// Prompt user and check
-		if (myPassword != prompt(appName + ' ' + appFlavor + ' — ' + i18n.msgTypePassword)) {
+		if (myPassword != prompt(appName + ' — ' + i18n.msgTypePassword)) {
 			// Destroy full interface and show error
 			document.getElementById('container').innerHTML = '<h2 style="padding:30px;">' + i18n.msgWrongPassword + '</h2>';
 			return;  // abort
 		}
 	}
 
-	// UI surgery for each mode
-	switch(appMode) {
-		case 'portable':
-			// Remove all file-related options
-			document.getElementById('source-file-box').style.display = 'none';
-			document.getElementById('toolbar-sep-1').style.display = 'none';
-			break;
-
-		case 'localStorage':
-			// Hide Reload button and files combo. Not needed.
-			document.getElementById('source-reload').style.display = 'none';
-			document.getElementById('source-file').style.display = 'none';
-			// Stretch Edit button
-			addClass(document.getElementById('editor-open'), 'wide');
-			document.getElementById('editor-open').style.marginTop = 0;
-			break;
-
-		case 'dropbox':
-			showHideEditButton();
-			break;
-
-		case 'txt':
-			// Hide Edit button. Not functional.
-			document.getElementById('editor-open').style.display = 'none';
-			// Inline mini reload button: [ file.txt ] ↻
-			// i18n.labelReload = '<b>⟳</b>';  // missing in Opera, Safari Mac/iOS
-			i18n.labelReload = '<b>↻</b>';  // missing in Opera
-			addClass(document.getElementById('source-file-box'), 'mini');
-			addClass(document.getElementById('source-file'), 'mini');
-			addClass(document.getElementById('source-reload'), 'mini');
-			addClass(document.getElementById('source-reload'), 'naked');
-			break;
-	}
-
-	// Set page title
-	document.title = appName + ' ' + appFlavor;
-
-	// Set default dataFile
-	if (dataFiles.length === 0 && (appMode === 'txt' || appMode === 'dropbox')) {
-		dataFiles = ['sample/data-' + lang + '.txt'];
-	}
-
 	// Prepare UI elements
 	populateLastMonthsCombo();
-	populateDataFilesCombo();
 	populateChartColsCombo();
 	populateRowsSummaryCombo();
 	populateValueFilterCombo();
@@ -3811,7 +3654,6 @@ function init() {
 	}
 
 	// Set interface labels
-	document.getElementById('app-flavor'               ).innerHTML = appFlavor;
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
@@ -3823,6 +3665,7 @@ function init() {
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagCloudReset;
+	document.getElementById('storage-header'           ).innerHTML = i18n.labelStorage;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEditorOpen;
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelEditorCancel;
@@ -3845,6 +3688,7 @@ function init() {
 	document.getElementById('filter'                   ).title = i18n.helpSearch;
 	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
 	document.getElementById('opt-negate-label'         ).title = i18n.helpSearchNegate;
+	document.getElementById('storage-header'           ).title = i18n.helpStorage;
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagCloudReset;
@@ -3868,17 +3712,6 @@ function init() {
 	}
 	if (ignoreTags.length > 0) {
 		document.getElementById('footer-message').innerHTML += 'ignoreTags = ' + ignoreTags.join(', ') + '<br>';
-	}
-
-	// localStorage browser support check
-	if (appMode === 'localStorage' && !window.localStorage) {
-		document.getElementById('editor-open').style.display = 'none'; // hide button
-		showError(
-			i18n.errorNoLocalStorage.replace('%s', appName),
-			'<p>' + i18n.errorRequirements +
-				array2ul(['Internet Explorer 8', 'Firefox 3', 'Google Chrome 3', 'Safari 4', 'Opera 10.50'])
-		);
-		return; // abort
 	}
 
 	// Set initial chart type for the reports (before event handlers)
@@ -3905,8 +3738,9 @@ function init() {
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
-	document.getElementById('source-file'            ).onchange = loadSelectedFile;
-	document.getElementById('source-reload'          ).onclick  = reloadSelectedFile;
+	document.getElementById('storage-driver'         ).onchange = ml.storage.driversComboChanged;
+	document.getElementById('source-file'            ).onchange = loadData;
+	document.getElementById('source-reload'          ).onclick  = reloadData;
 	document.getElementById('opt-date-1-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-2-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;
@@ -3917,6 +3751,7 @@ function init() {
 	document.getElementById('tag-report-opt-related-check').onclick = tagReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('rows-summary-reset'     ).onclick  = resetRowsSummary;
+	document.getElementById('storage-header'         ).onclick  = toggleStorage;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
 	document.getElementById('editor-open'            ).onclick  = editorOn;
@@ -3964,10 +3799,14 @@ function init() {
 	}
 
 	// Always show these toolbar boxes opened at init
-	if (initViewWidgetOpen)  { toggleViewOptions(); }
-	if (initTagCloudOpen)    {    toggleTagCloud(); }
+	if (initStorageWidgetOpen) {     toggleStorage(); }
+	if (initViewWidgetOpen)    { toggleViewOptions(); }
+	if (initTagCloudOpen)      {    toggleTagCloud(); }
 
 	// Maybe hide some widgets?
+	if (!showStorageWidget) {
+		document.getElementById('storage-box').style.display = 'none';
+	}
 	if (!showViewWidget) {
 		document.getElementById('view-options-box').style.display = 'none';
 	}
@@ -3986,15 +3825,6 @@ function init() {
 		updateToolbar();
 	}
 
-	// Set the default file to load when using multiple files: dataFilesDefault or first
-	if (dataFiles.length > 1) {
-		if (dataFilesDefault && dataFiles.indexOf(dataFilesDefault) !== -1) {
-			document.getElementById('source-file').selectedIndex = dataFiles.indexOf(dataFilesDefault);
-		} else {
-			document.getElementById('source-file').selectedIndex = 0;
-		}
-	}
-
 	// Validate the sort data config
 	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
 	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
@@ -4006,19 +3836,16 @@ function init() {
 	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
 
 	// Everything is ok, time to read/parse/show the user data
-	if (appMode === 'dropbox') {
+	if (ml.storage.currentDriver === 'dropbox') {
 		if (typeof initDropbox === 'undefined') {
 			showError(i18n.errorNoDropboxSupport.replace('%s', appName), '');
 			return; // abort
 		} else {
 			initDropbox();
 		}
-	} else if (appMode === 'portable' || appMode === 'localStorage') {
-		readData();
-		parseData();
-		showReport();
-	} else {  // txt
-		loadSelectedFile();
+	} else {
+		ml.storage.init();
+		ml.storage.setDriver();
 	}
 
 	// Uncomment this line to focus the search box at init

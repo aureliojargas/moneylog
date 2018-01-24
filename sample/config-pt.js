@@ -217,16 +217,14 @@
 //</Dropbox>
 //<Beta>
 // Se você quer usar mais de um arquivo TXT, deverá cadastrar todos eles no
-// array dataFiles. Podem ser inúmeros, tantos quantos você queira. Se você
-// colocar um asterisco (*), ele significa TODOS os arquivos. Útil para
-// unificar todos os arquivos em um relatório só. Veja alguns exemplos,
-// separado por ano, por tipo de conta e por tipo de gasto:
+// array dataFiles. Podem ser inúmeros, tantos quantos você queira. Veja
+// alguns exemplos, separado por ano, por tipo de conta e por tipo de gasto:
 //
 // dataFiles = ['2012.txt', '2011.txt', '2010.txt'];
 //
-// dataFiles = ['*', 'bb.txt', 'caixa.txt', 'itau.txt', 'dinheiro.txt'];
+// dataFiles = ['bb.txt', 'caixa.txt', 'itau.txt', 'dinheiro.txt'];
 //
-// dataFiles = ['*', 'salario.txt', 'carro.txt', 'escola.txt', 'geral.txt'];
+// dataFiles = ['salario.txt', 'carro.txt', 'escola.txt', 'geral.txt'];
 //
 // Ao iniciar, o MoneyLog sempre carregará o primeiro item da lista. Para
 // mudar isso e carregar outro, basta usar esta configuração:

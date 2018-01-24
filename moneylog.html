@@ -47,6 +47,10 @@ License/Licença:
 
 <!-- Scripts -->
 <script type="text/javascript" src="moneylog.js"></script>
+<script type="text/javascript" src="storage/index.js"></script>
+<script type="text/javascript" src="storage/drivers/html.js"></script>
+<script type="text/javascript" src="storage/drivers/browser.js"></script>
+<script type="text/javascript" src="storage/drivers/filesystem.js"></script>
 <script type="text/javascript" src="config.js"></script>
 
 </head>
@@ -60,7 +64,7 @@ License/Licença:
 	<div id="logo-wrapper">
 		<div id="logo">
 			<div id="app-name"><a id="website" href="http://aurelio.net/moneylog/">MoneyLog</a></div>
-			<div id="app-flavor"></div>
+			<div id="app-flavor">online</div>
 		</div>
 
 		<div id="fullscreen" class="trigger">||</div>
@@ -69,13 +73,18 @@ License/Licença:
 	<div id="toolbar-controls-wrapper">
 		<div id="toolbar-controls">
 
-			<!-- Data Files -->
-			<div id="source-file-box">
-				<select
-					id="source-file" size="1"></select>
-				<a
-					id="editor-open" class="button" href="#"></a><a
-					id="source-reload" class="button" href="#"></a>
+			<!-- Storage -->
+			<div id="storage-box" class="widget-box">
+				<a id="storage-header" class="button" href="#">Storage</a>
+				<div id="storage-content" class="widget-content">
+					<select
+						id="storage-driver" size="1"></select>
+					<select
+						id="source-file" size="1"></select>
+					<a
+						id="editor-open" class="button" href="#"></a><a
+						id="source-reload" class="button" href="#"></a>
+				</div>
 			</div>
 
 			<hr id="toolbar-sep-1" />
@@ -271,13 +280,6 @@ License/Licença:
 		<a id="editor-save" class="button active" href="#"></a>
 	</div>
 </div>
-
-
-<!-- Data - local TXT mode -->
-<iframe id="data-frame" onload="iframeLoaded(this)">
-	<p>Sorry. No iframes support detected, please use the Portable version.</p>
-	<p>Ops! Seu navegador não entende iframes. Use a versão Portable.</p>
-</iframe>
 
 <!-- Data - Portable mode -->
 <pre id="data">
