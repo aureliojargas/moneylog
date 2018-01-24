@@ -2,6 +2,7 @@
 
 ml.storage.drivers.browser = {
 	name: 'Browser (localStorage)',
+	key: 'moneylogData',  // keyname for the localStorage database
 	setup: function () {
 
 		ml.storage.isAsync = false;
@@ -11,16 +12,18 @@ ml.storage.drivers.browser = {
 		ml.storage.loadDataAtSetup = true;
 
 		ml.storage.write = function (contents) {
-			localStorage.setItem(localStorageKey, contents);
+			localStorage.setItem(ml.storage.drivers.browser.key, contents);
 		};
 
 		ml.storage.read = function () {
+			var key = ml.storage.drivers.browser.key;
+
 			// when empty (or undefined), save it with default data from #data (PRE)
-			if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === '') {
+			if (!localStorage.getItem(key) || localStorage.getItem(key).strip() === '') {
 				ml.storage.write(document.getElementById('data').innerText);
 			}
 
-			return localStorage.getItem(localStorageKey);
+			return localStorage.getItem(key);
 		};
 
 		// localStorage browser support check

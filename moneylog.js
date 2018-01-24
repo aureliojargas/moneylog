@@ -1,4 +1,4 @@
-/*global window: false, localStorage: false */
+/*global window: false */
 /*jslint devel: true, regexp: true, browser: true, undef: true, continue: true, sloppy: true, eqeq: true, white: true, forin: true, plusplus: true, maxerr: 500 */
 
 /*
@@ -79,9 +79,6 @@ var initChartYearly = 1;          // Initial selected item for the yearly chart 
 // Note: The file encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
 var dataFiles = [];               // The paths for the TXT data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
-
-// MoneyLog Browser config
-var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
 // Ignore old or future data - Use with care!
 var ignoreDataOlderThan = '';     // Ignore entries older than this date (ie: 2010-01-01)
