@@ -65,6 +65,11 @@ ml.storage = {
 				this.userFiles[i].id
 			));
 		}
+
+		// Extra option at the end: parse all files
+		if (nr_files > 1) {
+			combo.add(new Option('*'));
+		}
 	},
 
 	setDriver: function (driverName) {
@@ -83,6 +88,28 @@ ml.storage = {
 		} catch(error) {
 			console.log('ERROR: Cannot setup storage: ' + this.currentDriver);
 			console.log(error);
+		}
+	},
+
+	// Read multiple files (async) and callback with a single string with
+	// all their contents concatenated (in random order)
+	readAsyncMulti: function (filenames, callback) {
+		var loadedData = [];
+
+		function allDone() {
+			callback(loadedData.join('\n'));
+		}
+
+		function oneFileWasRead(contents) {
+			loadedData.push(contents);
+
+			if (loadedData.length === filenames.length) {
+				allDone();
+			}
+		}
+
+		for (var i = 0; i < filenames.length; i++) {
+			ml.storage.readAsync(filenames[i], oneFileWasRead);
 		}
 	},
 

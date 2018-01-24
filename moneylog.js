@@ -1773,7 +1773,8 @@ function loadData() {
 	// Read user data, process it and show results
 	if (ml.storage.isFileBased) {
 		messageBoard.innerText = i18n.msgLoading.replace('%s', getSelectedFile().name);
-		ml.storage.readAsync(getSelectedFile(), function (contents) {
+		showHideEditButton();
+		ml.storage.readAsyncMulti(getActiveDataFiles(), function (contents) {
 			rawData = contents;
 			parseData();
 			showReport();
@@ -1794,12 +1795,18 @@ function getSelectedFile() {
 	};
 }
 
+function getActiveDataFiles() {
+	if (getSelectedFile().name === '*') {
+		return ml.storage.userFiles;  // all files
+	} else {
+		return [getSelectedFile()];
+	}
+}
+
 function showHideEditButton() {
-	var el;
-	if (appMode === 'dropbox') {
-		// Hide Edit button when current file is '*'
-		el = document.getElementById('editor-open');
-		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
+	// Hide Edit button when current file is '*'
+	if (ml.storage.isEditable && ml.storage.isFileBased) {
+		document.getElementById('editor-open').style.visibility = (getSelectedFile().name === '*') ? 'hidden' : 'visible';
 	}
 }
 
