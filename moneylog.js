@@ -6,7 +6,11 @@
 	http://aurelio.net/moneylog/
 */
 
-/* shortcuts for config */
+// I hope someday I can move everything under this namespace.
+// Until then, MoneyLog is a globals festival :(
+var ml = {};
+
+// shortcuts for config
 var Y = true;
 var S = true;
 var N = false;
