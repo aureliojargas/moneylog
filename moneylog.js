@@ -50,8 +50,10 @@ var initYearOffsetFrom;           // From: year will be N years from now (defaul
 var initYearOffsetUntil;          // To:   year will be N years from now (default OFF)
 
 // Widgets
+var initStorageWidgetOpen = true; // Start app with the Storage widget opened?
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
 var initTagCloudOpen = true;      // Start app with the Tag Cloud widget opened?
+var showStorageWidget = true;     // Show Storage widget in the sidebar?
 var showViewWidget = true;        // Show View widget in the sidebar?
 var showTagCloud = true;          // Show Tag Cloud widget in the sidebar?
 
@@ -167,8 +169,10 @@ var i18nDatabase = {
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
 		// Full Screen
 		helpFullScreen: 'Turns ON/OFF the Full Screen mode: only the report is shown, with no toolbar.',
-		// Datafile
+		// Storage
+		labelStorage: 'Storage',
 		labelReload: 'Reload',
+		helpStorage: 'Choose the storage for your data.',
 		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// Report types
 		labelReports: 'Reports',
@@ -269,8 +273,10 @@ var i18nDatabase = {
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
 		// Full Screen
 		helpFullScreen: 'Liga/desliga o modo tela cheia: aparece somente o extrato, sem a barra de ferramentas.',
-		// Datafile
+		// Storage
+		labelStorage: 'Lançamentos',
 		labelReload: 'Recarregar',
+		helpStorage: 'Escolha a fonte dos seus dados (lançamentos).',
 		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// Report types
 		labelReports: 'Extratos',
@@ -577,6 +583,7 @@ var iframeIsLoaded = true;
 // User can still overwrite those.
 if (isMobile) {
 	// Init with all widgets closed
+	initStorageWidgetOpen = true;  // exception
 	initViewWidgetOpen = false;
 	initTagCloudOpen = false;
 	// Note: Tag Summary is closed at Widget definition. Search for isMobile.
@@ -3214,6 +3221,10 @@ function toggleCheckboxOptionExtra(checkbox) {
 	}
 }
 
+function toggleStorage() {
+	return toggleToolbarBox('storage-header', 'storage-content');
+}
+
 function toggleViewOptions() {
 	return toggleToolbarBox('view-options-header', 'view-options-content');
 }
@@ -3757,40 +3768,6 @@ function init() {
 		}
 	}
 
-	// UI surgery for each mode
-	switch(appMode) {
-		case 'portable':
-			// Remove all file-related options
-			document.getElementById('source-file-box').style.display = 'none';
-			document.getElementById('toolbar-sep-1').style.display = 'none';
-			break;
-
-		case 'localStorage':
-			// Hide Reload button and files combo. Not needed.
-			document.getElementById('source-reload').style.display = 'none';
-			document.getElementById('source-file').style.display = 'none';
-			// Stretch Edit button
-			addClass(document.getElementById('editor-open'), 'wide');
-			document.getElementById('editor-open').style.marginTop = 0;
-			break;
-
-		case 'dropbox':
-			showHideEditButton();
-			break;
-
-		case 'txt':
-			// Hide Edit button. Not functional.
-			document.getElementById('editor-open').style.display = 'none';
-			// Inline mini reload button: [ file.txt ] ↻
-			// i18n.labelReload = '<b>⟳</b>';  // missing in Opera, Safari Mac/iOS
-			i18n.labelReload = '<b>↻</b>';  // missing in Opera
-			addClass(document.getElementById('source-file-box'), 'mini');
-			addClass(document.getElementById('source-file'), 'mini');
-			addClass(document.getElementById('source-reload'), 'mini');
-			addClass(document.getElementById('source-reload'), 'naked');
-			break;
-	}
-
 	// Set page title
 	document.title = appName + ' ' + appFlavor;
 
@@ -3843,6 +3820,7 @@ function init() {
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagCloudReset;
+	document.getElementById('storage-header'           ).innerHTML = i18n.labelStorage;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEditorOpen;
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelEditorCancel;
@@ -3865,6 +3843,7 @@ function init() {
 	document.getElementById('filter'                   ).title = i18n.helpSearch;
 	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
 	document.getElementById('opt-negate-label'         ).title = i18n.helpSearchNegate;
+	document.getElementById('storage-header'           ).title = i18n.helpStorage;
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagCloudReset;
@@ -3926,6 +3905,7 @@ function init() {
 	document.getElementById('tag-report-opt-related-check').onclick = tagReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('rows-summary-reset'     ).onclick  = resetRowsSummary;
+	document.getElementById('storage-header'         ).onclick  = toggleStorage;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
 	document.getElementById('editor-open'            ).onclick  = editorOn;
@@ -3973,10 +3953,14 @@ function init() {
 	}
 
 	// Always show these toolbar boxes opened at init
-	if (initViewWidgetOpen)  { toggleViewOptions(); }
-	if (initTagCloudOpen)    {    toggleTagCloud(); }
+	if (initStorageWidgetOpen) {     toggleStorage(); }
+	if (initViewWidgetOpen)    { toggleViewOptions(); }
+	if (initTagCloudOpen)      {    toggleTagCloud(); }
 
 	// Maybe hide some widgets?
+	if (!showStorageWidget) {
+		document.getElementById('storage-box').style.display = 'none';
+	}
 	if (!showViewWidget) {
 		document.getElementById('view-options-box').style.display = 'none';
 	}

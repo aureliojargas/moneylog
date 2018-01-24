@@ -242,6 +242,11 @@ a.button.active {
 
 /* ---------------------------------------------- [file.txt ▼] */
 
+#storage-content {
+	display: none;  /* JS will show */
+}
+
+#storage-driver,
 #source-file {
 	width: 100%;
 	margin-bottom: 1em;
@@ -259,10 +264,11 @@ a.button.active {
 #source-reload,
 #editor-open {
 	display: inline-block;  /* see showHideEditButton() */
-	width: 78px;
+	width: 69px;
+	margin: 0;
 }
-#source-reload {
-	float: right;
+#editor-open {
+	margin-right: 5px;
 }
 
 #source-reload.mini {  /* ↻ */
