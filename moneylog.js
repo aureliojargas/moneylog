@@ -1163,6 +1163,17 @@ function appendHTML(el, html) {
 	}
 }
 
+// http://unixpapa.com/js/dyna.html
+// https://stackoverflow.com/a/22534608/1623438
+function addScript(scriptUrl, callback) {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.onload = callback;
+	script.src = scriptUrl;
+	head.appendChild(script);
+}
+
 // CSS stylesheet add/remove
 //
 // http://stackoverflow.com/q/524696

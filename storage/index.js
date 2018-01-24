@@ -8,6 +8,7 @@ ml.storage = {
 		'html',
 		'browser',
 		'filesystem',
+		'googledrive'
 	],
 	currentDriver: 'filesystem',	// default if not specified in config
 	drivers: {},	// driver's implementations
