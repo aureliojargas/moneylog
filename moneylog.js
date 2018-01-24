@@ -535,15 +535,6 @@ var i18nDatabase = {
 //// End of user Config
 
 
-// The appMode sets the Moneylog flavor:
-// txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
-// one          Full app is in a single moneylog.html file, with user data at the end.
-// dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
-// localStorage Read/edit/save user data to the browser. Must always use the same browser.
-//
-var appMode = 'txt';  // DO NOT CHANGE
-
-
 // Global vars
 var appVersion = '6β';
 var appYear = '2014';  // only used in official releases
@@ -3552,7 +3543,7 @@ AboutWidget.populate = function () {
 	}
 
 	// When in txt mode: link to repository since we can't get the commit hash
-	if (appMode === 'txt') {
+	if (ml.storage.currentDriver === 'filesystem') {
 		version = linkme(appRepository, 'v' + appVersion);
 	}
 
@@ -3585,7 +3576,7 @@ AboutWidget.populate = function () {
 	html.push(linkme('http://twitter.com/g_nemmi', '@g_nemmi'));
 	html.push('</div>');
 
-	if (appMode === 'dropbox') {
+	if (ml.storage.currentDriver === 'dropbox') {
 		html.push('<hr>');
 		html.push('<div id="about-dropbox">');
 		html.push('Dropbox backend by');
@@ -3606,38 +3597,14 @@ AboutWidget.populate = function () {
 //                             INIT
 /////////////////////////////////////////////////////////////////////
 
-function initAppMode() {
-	switch(appMode) {
-
-		case 'portable':
-			i18n.appUrl = 'http://aurelio.net/moneylog/portable/';
-			break;
-
-		case 'localStorage':
-			i18n.appUrl = 'http://aurelio.net/moneylog/browser/';
-			break;
-
-		case 'dropbox':
-			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
-			break;
-
-		case 'txt':
-			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
-			break;
-
-		default:
-			alert('FATAL ERROR: Invalid setting appMode = ' + appMode);
-	}
-}
-
 function init() {
 	var i;
 
 	// Load the i18n messages (must be the first)
 	i18n = i18nDatabase.getLanguage(lang);
 
-	// Check app mode
-	initAppMode();
+	// Set app URL
+	i18n.appUrl = 'https://moneylog.aurelio.net';
 
 	// Password protected?
 	if (myPassword) {
@@ -3862,22 +3829,16 @@ function init() {
 	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
 
 	// Everything is ok, time to read/parse/show the user data
-	if (appMode === 'dropbox') {
+	if (ml.storage.currentDriver === 'dropbox') {
 		if (typeof initDropbox === 'undefined') {
 			showError(i18n.errorNoDropboxSupport.replace('%s', appName), '');
 			return; // abort
 		} else {
 			initDropbox();
 		}
-	} else if (appMode === 'portable') {
+	} else {
 		ml.storage.init();
-		ml.storage.setDriver('html');
-	} else if (appMode === 'localStorage') {
-		ml.storage.init();
-		ml.storage.setDriver('browser');
-	} else {  // txt
-		ml.storage.init();
-		ml.storage.setDriver('filesystem');
+		ml.storage.setDriver();
 	}
 
 	// Uncomment this line to focus the search box at init
