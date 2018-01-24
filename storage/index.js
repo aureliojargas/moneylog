@@ -6,6 +6,7 @@ ml.storage = {
 	// drivers
 	availableDrivers: [
 		'html',
+		'browser',
 	],
 	currentDriver: 'html',	// default if not specified in config
 	drivers: {},	// driver's implementations

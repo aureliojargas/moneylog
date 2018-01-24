@@ -1755,6 +1755,22 @@ function resetData() {
 	rawData = '';
 }
 
+function reloadData() {
+	// Save currently selected tags
+	initSelectedTags = getSelectedTags();
+	initExcludedTags = getExcludedTags();
+
+	// Save currently selected date range
+	savedDateRangeIndexes = [
+		document.getElementById('opt-date-1-month-combo').selectedIndex,
+		document.getElementById('opt-date-2-month-combo').selectedIndex
+	];
+
+	loadData();
+
+	return false;  // cancel link action
+}
+
 function loadData() {
 	// Hide charts when loading
 	document.getElementById('charts').style.display = 'none';
@@ -1850,14 +1866,6 @@ function reloadSelectedFile() {
 	// Reload
 	loadSelectedFile();
 	return false;  // cancel link action
-}
-
-function loadLocalData() {
-	// first time using localStorage (or empty), load default data from #data (PRE)
-	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
-		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
-	}
-	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
 }
 
 function readData() {
@@ -2988,21 +2996,16 @@ function editorOn() {
 	var filepath;
 
 	// Load the current data to the editor
-	// Note: already loaded when localStorage
-	if (appMode !== 'localStorage') {
-		document.getElementById('editor-data').value = rawData;
-	}
+	document.getElementById('editor-data').value = rawData;
 
 	// Hide content to avoid scroll bars
 	document.getElementById('content').style.display = 'none';
 
 	// Set file name
-	if (appMode === 'localStorage') {
-		filepath = 'Browser localStorage: ' + localStorageKey;
-	} else if (appMode === 'dropbox') {
-		filepath = 'Dropbox: ' + dropboxAppFolder + dropboxTxtFolder + '/' + getSelectedFile();
-	} else {
+	if (ml.storage.isFileBased) {
 		filepath = getSelectedFile();
+	} else {
+		filepath = ml.storage.drivers[ml.storage.currentDriver].name;
 	}
 	document.getElementById('editor-file-name').innerHTML = filepath;
 
@@ -3025,17 +3028,11 @@ function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
 
 	editButton.innerHTML = i18n.msgSaving;
-	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
-
-	// Save currently selected tags
-	initSelectedTags = getSelectedTags();
-	initExcludedTags = getExcludedTags();
+	ml.storage.write(document.getElementById('editor-data').value);
 
 	// Reload report
-	resetData();
-	readData();
-	parseData();
-	showReport();
+	reloadData();
+
 	editButton.innerHTML = i18n.labelEditorOpen;
 }
 function editorSave() {
@@ -3893,17 +3890,6 @@ function init() {
 		document.getElementById('footer-message').innerHTML += 'ignoreTags = ' + ignoreTags.join(', ') + '<br>';
 	}
 
-	// localStorage browser support check
-	if (appMode === 'localStorage' && !window.localStorage) {
-		document.getElementById('editor-open').style.display = 'none'; // hide button
-		showError(
-			i18n.errorNoLocalStorage.replace('%s', appName),
-			'<p>' + i18n.errorRequirements +
-				array2ul(['Internet Explorer 8', 'Firefox 3', 'Google Chrome 3', 'Safari 4', 'Opera 10.50'])
-		);
-		return; // abort
-	}
-
 	// Set initial chart type for the reports (before event handlers)
 	if (reportType === 'd') {
 		document.getElementById('chart-selector').selectedIndex = initChartDaily - 1;
@@ -4039,9 +4025,7 @@ function init() {
 	} else if (appMode === 'portable') {
 		ml.storage.setDriver('html');
 	} else if (appMode === 'localStorage') {
-		readData();
-		parseData();
-		showReport();
+		ml.storage.setDriver('browser');
 	} else {  // txt
 		loadSelectedFile();
 	}
