@@ -1755,6 +1755,25 @@ function resetData() {
 	rawData = '';
 }
 
+function loadData() {
+	// Hide charts when loading
+	document.getElementById('charts').style.display = 'none';
+	// Where to show the "loading..." message
+	var messageBoard = document.getElementById('report');
+
+	resetData();
+
+	// Read user data, process it and show results
+	if (ml.storage.isFileBased) {
+		// TODO
+	} else {
+		messageBoard.innerText = i18n.msgLoading.replace('%s', '');
+		rawData = ml.storage.read();
+		parseData();
+		showReport();
+	}
+}
+
 function loadDataFile(filePath) {
 	document.getElementById('charts').style.display = 'none';  // hide charts when loading
 	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
@@ -4017,7 +4036,9 @@ function init() {
 		} else {
 			initDropbox();
 		}
-	} else if (appMode === 'portable' || appMode === 'localStorage') {
+	} else if (appMode === 'portable') {
+		ml.storage.setDriver('html');
+	} else if (appMode === 'localStorage') {
 		readData();
 		parseData();
 		showReport();
