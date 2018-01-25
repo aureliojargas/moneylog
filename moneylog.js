@@ -75,8 +75,10 @@ var initChartDaily = 3;           // Initial selected item for the daily chart [
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
 var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
 
-// External TXT files (used in flavors TXT and Cloud)
-// Note: The file encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
+// Legacy config for external TXT files. Will be kept here for some time.
+// Now use:
+//   ml.storage.drivers.filesystem.dataFiles = [];
+//   ml.storage.drivers.filesystem.defaultFile = '';
 var dataFiles = [];               // The paths for the TXT data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
 
@@ -517,7 +519,7 @@ var rawData = '';
 var parsedData = [];
 var reportData = [];  // filtered by applyTags(filterData())
 var selectedRows = [];
-var savedDateRangeIndexes = [];  // used in TXT reload process
+var savedDateRangeIndexes = [];  // used in the reload process
 var isFullScreen = false;
 var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
 var showReport;  // to make JSLint happy
