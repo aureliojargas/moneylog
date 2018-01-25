@@ -210,7 +210,6 @@ var i18nDatabase = {
 		helpTagCloud: 'Show/hide the tag cloud.',
 		helpTagCloudReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagCloudGroup: 'Only match if the entry has ALL the selected tags.',
-		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
 		// Tag Report
 		labelTagReportRelated: 'Hide related tags',
 		helpTagReportRelated: 'For entries with multiple tags, ignore the tags that are not explicitly selected in Tag Cloud.',
@@ -244,11 +243,6 @@ var i18nDatabase = {
 		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
 		helpWebsite: 'Go to the MoneyLog website.'
-
-		// helpHelp: 'Show/hide the help text.',
-		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
-		// helpInstall: 'Instructions: Save this page, use a plain text editor to add your own transactions and open it on the browser.',
-		// helpTranslator: ''
 	},
 	pt: {
 		centsSeparator: ',',
@@ -313,7 +307,6 @@ var i18nDatabase = {
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpTagCloudReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagCloudGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
-		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
 		// Tag Report
 		labelTagReportRelated: 'Esconder as tags relacionadas',
 		helpTagReportRelated: 'Para os lançamentos com múltiplas tags, ignore as tags que não estejam explicitamente selecionadas.',
@@ -347,10 +340,6 @@ var i18nDatabase = {
 		appUrlOnline: 'http://aurelio.net/moneylog/browser/app/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
 		helpWebsite: 'Visite o website do MoneyLog.'
-
-		// helpHelp: 'Mostra e esconde o texto de ajuda.',
-		// helpTip: 'Dica: Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
-		// helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
 	},
 	ca: {
 		centsSeparator: ',',
@@ -369,7 +358,6 @@ var i18nDatabase = {
 		labelLessThan: 'més petit que',
 		labelShowFuture: 'Mostra les dades futures',
 		labelMonthPartials: 'Mostra els Parcials Mensuals',
-		// labelSearch: 'Camp de cerca',
 		labelSearchRegex: 'regex',
 		labelSearchNegate: 'nega-ho',
 		labelReload: 'Carrega',
@@ -397,21 +385,13 @@ var i18nDatabase = {
 		helpSearch: 'Filtre dels informes en temps real, a mesura que escriu.',
 		helpSearchRegex: 'Utilitza expressions regulars en el camp de cerca.',
 		helpSearchNegate: "Eliminar els resultats de cerca de l'informe.",
-		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
 		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
-		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
 		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
-
-		// helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
-		// helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
-		// helpTranslator: 'Traducció: Paco Rivière, http://pacoriviere.cat'
 	},
 	es: {
 		centsSeparator: ',',
 		thousandSeparator: '.',
 		dateFormat: 'd/m/Y',
-		//-dateFormatMonth: 'B Y',
-		//-dateFormatYear: 'Y',
 		monthNames: ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 		labelNoData: 'Sin movimientos.',
 		labelTotal: 'Total',
@@ -498,13 +478,6 @@ var i18nDatabase = {
 		// App
 		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
 		helpWebsite: 'Ir al sitio web de MoneyLog.'
-
-		// Old messages
-		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
-		// helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
-		// helpTip: 'Consejo: Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
-		// helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
-		// helpTranslator: 'Traducción: Gonzalo Nemmi'
 	},
 	getLanguage: function (lang) {
 		var phrase, defaultLang = this.defaultLanguage;
@@ -546,7 +519,6 @@ var reportData = [];  // filtered by applyTags(filterData())
 var selectedRows = [];
 var savedDateRangeIndexes = [];  // used in TXT reload process
 var isFullScreen = false;
-var isOpera = (window.opera) ? true : false;
 var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
 var showReport;  // to make JSLint happy
 var Widget;
