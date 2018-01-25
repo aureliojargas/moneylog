@@ -349,10 +349,6 @@ a.button.active {
 #opt-date-2-year-combo {
 	display: none;  /* appears in Yearly report */
 }
-#opt-future-box,
-#opt-last-months-box {
-	display: none;  /* legacy, JS will show */
-}
 #opt-value-filter-number {
 	display: none;  /* appears when SELECT item is chosen */
 }

@@ -88,11 +88,6 @@ var ignoreDataNewerThan = '';     // Ignore entries newer than this date (ie: 20
 
 // Legacy options
 var useLegacyDataFormat = false;  // Use v4-style TAB-only as separator?
-var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
-var maxLastMonths = 12;           // Number of months on the last months combo
-var initLastMonths = 3;           // Initial value for last months combo
-var defaultLastMonths = false;    // Last months combo inits checked?
-var defaultFuture = false;        // Show future checkbox inits checked?
 
 // Default sort for all tables
 // d=daily, m=monthly, y=yearly, index=column(one-based), reverse
@@ -199,11 +194,6 @@ var i18nDatabase = {
 		helpViewOptions: 'Show/hide the view options.',
 		helpMonthPartials: 'Shows the monthly balance, with sums of your incoming and expenses on the period.',
 		helpValueFilter: 'See only positive or negative values, or greater/lesser than some value.',
-		// Legacy
-		labelLastMonths: 'Recent Only',
-		labelShowFuture: 'Future Data',
-		helpLastMonths: 'See only the latest data, ignoring oldies.',
-		helpShowFuture: 'Shows future incoming and expenses.',
 		// Tag Cloud
 		labelTagCloud: 'Tag Cloud',
 		labelTagCloudEmpty: '(no tag)',
@@ -296,11 +286,6 @@ var i18nDatabase = {
 		helpViewOptions: 'Mostra e esconde as opções de visualização.',
 		helpMonthPartials: 'Resumo do mês, com saldo mensal e acumulado, e totais de ganhos e gastos.',
 		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
-		// Legacy
-		labelLastMonths: 'Somente Recentes',
-		labelShowFuture: 'Lançamentos Futuros',
-		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
-		helpShowFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
 		// Tag Cloud
 		labelTagCloud: 'Tags',
 		labelTagCloudEmpty: '(sem tag)',
@@ -352,13 +337,11 @@ var i18nDatabase = {
 		labelDaily: 'diari',
 		labelMonthly: 'mensual',
 		labelYearly: 'anual',
-		labelLastMonths: 'Només els Darrers',
 		labelValueFilter: 'Valors Filtrats',
 		labelPositive: 'positiu',
 		labelNegative: 'negatiu',
 		labelGreaterThan: 'més gran que',
 		labelLessThan: 'més petit que',
-		labelShowFuture: 'Mostra les dades futures',
 		labelMonthPartials: 'Mostra els Parcials Mensuals',
 		labelSearchRegex: 'regex',
 		labelSearchNegate: 'nega-ho',
@@ -380,9 +363,7 @@ var i18nDatabase = {
 		errorInvalidAmount: "L'import no és vàlid:",
 		msgLoading: "S'està carregant %s...",
 		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
-		helpLastMonths: 'Mostra només les dades més recents, omet les antigues.',
 		helpValueFilter: 'Mostra només els valors positius o negatius, o major / menor que un cert valor.',
-		helpShowFuture: 'Mostra els ingressos i despeses futures.',
 		helpMonthPartials: 'Mostra el saldo mensual, amb sumes dels vostres ingressos i despeses del període.',
 		helpSearch: 'Filtre dels informes en temps real, a mesura que escriu.',
 		helpSearchRegex: 'Utilitza expressions regulars en el camp de cerca.',
@@ -436,11 +417,6 @@ var i18nDatabase = {
 		helpViewOptions: 'Mostrar/esconder opciones.',
 		helpMonthPartials: 'Vea el balance con el saldo mensual, el acumulado y totales de ingresos y egresos.',
 		helpValueFilter: 'Vea solo los montos positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
-		// Legacy
-		labelLastMonths: 'Mostrar solo últimos',
-		labelShowFuture: 'Mostrar movimientos futuros',
-		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
-		helpShowFuture: 'Vea movimientos agendados a futuro.',
 		// Tag Cloud
 		labelTagCloud: 'Conceptos',
 		labelTagCloudEmpty: '(vacío)',
@@ -1575,19 +1551,6 @@ function populateRowsSummaryCombo() {
 	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
 }
 
-function populateLastMonthsCombo() {
-	var el, label, i;
-	el = document.getElementById('opt-last-months-combo');
-	label = i18n.labelMonths[0];
-	for (i = 1; i <= maxLastMonths; i++) {
-		if (i > 1) {
-			label = i18n.labelMonths[1];
-		}
-		el.options[i - 1] = new Option(i + ' ' + label, i);
-	}
-	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
-}
-
 function populateDateRangeCombos() {
 	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
 
@@ -2027,7 +1990,7 @@ function parseData() {
 }
 
 function filterData() {
-	var i, leni, temp, theData, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
+	var i, leni, temp, theData, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
 	theData = parsedData.clone();
 	isRegex = false;
@@ -2037,30 +2000,13 @@ function filterData() {
 	lastDate = '9999-99-99';
 	filteredData = [];
 
-	// New style date options
-	if (!useLegacyDateFilter) {
-
-		if (document.getElementById('opt-date-1-check').checked) {
-			firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
-		}
-		if (document.getElementById('opt-date-2-check').checked) {
-			lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
-		}
-
-	// Old style date options
-	} else {
-
-		// [X] Recent Only, works for daily/monthly
-		if (document.getElementById('opt-last-months-check').checked) {
-			firstDate = getPastMonth(parseInt(document.getElementById('opt-last-months-combo').value, 10) - 1);  // 1 = current
-		}
-		// [X] Future Data, works for all reports
-		showFuture = document.getElementById('opt-future-check').checked;
-		if (!showFuture) {
-			lastDate = getCurrentDate();
-		}
+	// Date filters
+	if (document.getElementById('opt-date-1-check').checked) {
+		firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
 	}
-
+	if (document.getElementById('opt-date-2-check').checked) {
+		lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
+	}
 
 	// Get filters data for the report
 	filter = document.getElementById('filter').value;
@@ -2999,11 +2945,6 @@ function changeReport() {
 	return false;  // cancel link action
 }
 
-function lastMonthsChanged() {
-	document.getElementById('opt-last-months-check').checked = true;
-	showReport();
-}
-
 function dateRangeComboChanged() {
 	document.getElementById(this.id.replace(/(month|year)-combo/, 'check')).checked = true;
 	showReport();
@@ -3063,11 +3004,6 @@ function toggleViewOptions() {
 
 function toggleTagCloud() {
 	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
-}
-
-function toggleLastMonths() {
-	toggleCheckboxOptionExtra(this);
-	showReport();
 }
 
 function toggleValueFilter() {
@@ -3555,7 +3491,6 @@ function init() {
 	}
 
 	// Prepare UI elements
-	populateLastMonthsCombo();
 	populateChartColsCombo();
 	populateRowsSummaryCombo();
 	populateValueFilterCombo();
@@ -3588,9 +3523,7 @@ function init() {
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
-	document.getElementById('opt-last-months-label'    ).innerHTML = i18n.labelLastMonths + ':';
 	document.getElementById('opt-value-filter-label'   ).innerHTML = i18n.labelValueFilter + ':';
-	document.getElementById('opt-future-label'         ).innerHTML = i18n.labelShowFuture;
 	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelSearchRegex;
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
@@ -3612,9 +3545,7 @@ function init() {
 	document.getElementById('fullscreen'               ).title = i18n.helpFullScreen;
 	document.getElementById('website'                  ).title = i18n.helpWebsite;
 	document.getElementById('report-nav'               ).title = i18n.helpReports;
-	document.getElementById('opt-last-months-label'    ).title = i18n.helpLastMonths;
 	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;
-	document.getElementById('opt-future-label'         ).title = i18n.helpShowFuture;
 	document.getElementById('opt-monthly-label'        ).title = i18n.helpMonthPartials;
 	document.getElementById('filter'                   ).title = i18n.helpSearch;
 	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
@@ -3659,12 +3590,9 @@ function init() {
 	document.getElementById('d'                      ).onclick  = changeReport;
 	document.getElementById('m'                      ).onclick  = changeReport;
 	document.getElementById('y'                      ).onclick  = changeReport;
-	document.getElementById('opt-last-months-check'  ).onclick  = toggleLastMonths;
-	document.getElementById('opt-last-months-combo'  ).onchange = lastMonthsChanged;
 	document.getElementById('opt-value-filter-check' ).onclick  = toggleValueFilter;
 	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
 	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
-	document.getElementById('opt-future-check'       ).onclick  = showReport;
 	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
@@ -3700,33 +3628,6 @@ function init() {
 		document.getElementById('tag-report-opt-related-check').checked = true;
 	}
 	document.getElementById('filter').value = defaultSearch;
-
-	// Apply user defaults - Legacy
-	if (defaultFuture) {
-		document.getElementById('opt-future-check' ).checked = true;
-	}
-	if (defaultLastMonths) {
-		document.getElementById('opt-last-months-check').checked = true;
-		document.getElementById('opt-last-months-extra').style.display = 'block';
-	}
-
-	// User wants old style date filters?
-	if (useLegacyDateFilter) {
-		// restore old
-		document.getElementById('opt-future-box').style.display = 'block';
-		document.getElementById('opt-last-months-box').style.display = 'block';
-		// disable new
-		document.getElementById('opt-date-1-box').style.display = 'none';
-		document.getElementById('opt-date-2-box').style.display = 'none';
-		document.getElementById('opt-date-1-check').checked = false;
-		document.getElementById('opt-date-2-check').checked = false;
-	} else {
-		// disable old
-		document.getElementById('opt-last-months-check').checked = false;
-		document.getElementById('opt-future-check').checked = false;
-		// disable auto-hide since now we have only one option who uses it
-		removeClass(document.getElementById('opt-value-filter-extra'), 'auto-hide');
-	}
 
 	// Always show these toolbar boxes opened at init
 	if (initStorageWidgetOpen) {     toggleStorage(); }
