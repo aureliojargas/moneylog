@@ -46,8 +46,6 @@ var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
 var initMonthOffsetFrom = -2;     // From: month will be N months from now
 var initMonthOffsetUntil = 0;     // To:   month will be N months from now
-var initYearOffsetFrom;           // From: year will be N years from now (default OFF)
-var initYearOffsetUntil;          // To:   year will be N years from now (default OFF)
 
 // Widgets
 var initStorageWidgetOpen = true; // Start app with the Storage widget opened?
