@@ -118,7 +118,7 @@ function checkObject(results, ok) {
 
 console.log('-------------- MoneyLog Tests BEGIN');
 
-var zz = 0;
+zz = 0;
 zz++; checkArray([], []);
 zz++; checkArray([1,2,3], [1,2,3]);
 zz++; checkArray([[1,2,3]], [[1,2,3]]);

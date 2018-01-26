@@ -496,10 +496,8 @@ var selectedRows = [];
 var savedDateRangeIndexes = [];  // used in the reload process
 var isFullScreen = false;
 var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
-var showReport;  // to make JSLint happy
-var Widget;
-var TagSummary;
-var AboutWidget;
+var TagSummary;   // to make ESLint happy
+var AboutWidget;  // to make ESLint happy
 
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);

@@ -24,7 +24,7 @@ ml.storage = {
 	userFiles: [],  // [{id:'', name:''}, ...]
 
 	// stubs to be implemented by each driver (some are optional)
-	write: function (contents) { console.log('write'); },
+	write: function (contents) { console.log(contents); },
 	read: function () { return ''; },
 	readAsync: function (fileData, callback) { callback('contents'); },
 
@@ -32,7 +32,7 @@ ml.storage = {
 
 	populateDriversCombo: function () {
 		var combo = document.getElementById('storage-driver');
-		for (i = 0; i < this.availableDrivers.length; i++) {
+		for (var i = 0; i < this.availableDrivers.length; i++) {
 			combo.add(new Option(
 				this.drivers[this.availableDrivers[i]].name,
 				this.availableDrivers[i]
