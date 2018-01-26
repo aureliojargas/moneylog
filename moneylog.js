@@ -358,14 +358,14 @@ var i18nDatabase = {
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Hi ha masses separadors',
 		errorInvalidDate: 'La data no és vàlida:',
-		errorInvalidAmount: "L'import no és vàlid:",
-		msgLoading: "S'està carregant %s...",
+		errorInvalidAmount: 'L\'import no és vàlid:',
+		msgLoading: 'S\'està carregant %s...',
 		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
 		helpValueFilter: 'Mostra només els valors positius o negatius, o major / menor que un cert valor.',
 		helpMonthPartials: 'Mostra el saldo mensual, amb sumes dels vostres ingressos i despeses del període.',
 		helpSearch: 'Filtre dels informes en temps real, a mesura que escriu.',
 		helpSearchRegex: 'Utilitza expressions regulars en el camp de cerca.',
-		helpSearchNegate: "Eliminar els resultats de cerca de l'informe.",
+		helpSearchNegate: 'Eliminar els resultats de cerca de l\'informe.',
 		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
 		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
 	},
@@ -677,7 +677,7 @@ Array.prototype.removePattern = function (patt, n) { // n = number of removes
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
-		"use strict";
+		'use strict';
 		var t, len, n, k;
 		if (this == null) {
 			throw new TypeError();
@@ -2792,11 +2792,11 @@ function tagReport() {
 
 			// Mark the Totals columns
 			if (nDates > 1 && j === lenj - 2) {  // penultimate
-				tdClass = "number totals total";
+				tdClass = 'number totals total';
 			} else if (nDates > 1 && j === lenj - 1) {  // last
-				tdClass = "number totals average";
+				tdClass = 'number totals average';
 			} else {
-				tdClass = "number";
+				tdClass = 'number';
 			}
 
 			results.push(
