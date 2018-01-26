@@ -59,18 +59,18 @@ ml.storage.drivers.googledrive = (function () {
 	var createPicker = function () {
 		if (pickerApiLoaded && oauthToken) {
 			var view = new google.picker.DocsView()
-					// txt files only
-					.setMimeTypes("text/plain");
+				// txt files only
+				.setMimeTypes('text/plain');
 
 			var picker = new google.picker.PickerBuilder()
-					.addView(view)
-					.setOAuthToken(oauthToken)
-					.setDeveloperKey(developerKey)
-					.setCallback(pickerCallback)
-					.enableFeature(google.picker.Feature.NAV_HIDDEN)
-					.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-					.setLocale('pt-BR')
-					.build();
+				.addView(view)
+				.setOAuthToken(oauthToken)
+				.setDeveloperKey(developerKey)
+				.setCallback(pickerCallback)
+				.enableFeature(google.picker.Feature.NAV_HIDDEN)
+				.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+				.setLocale('pt-BR')
+				.build();
 			picker.setVisible(true);
 		}
 	};

@@ -762,30 +762,30 @@ Date.prototype.format = function (fmt) {
 	var d = this;
 	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
 	return fmt.replace(
-			/(\\)?[YymdBb]/g,
-			function (m) {
-				// Ignore escaped chars as \Y, \b, ...
-				if (m.charAt(0) === '\\') {
-					return m.replace('\\', '');
-				}
-				switch (m) {
-					case 'Y':
-						return d.getYearML() || 'Y';
-					case 'y':
-						return d.getYearML().slice(2, 4) || 'y';
-					case 'm':
-						return d.getMonthML() || 'm';
-					case 'd':
-						return d.getDateML() || 'd';
-					case 'B':
-						return d.getMonthName() || 'B';
-					case 'b':
-						return d.getMonthShortName() || 'b';
-					default:
-						return m;
-				}
+		/(\\)?[YymdBb]/g,
+		function (m) {
+			// Ignore escaped chars as \Y, \b, ...
+			if (m.charAt(0) === '\\') {
+				return m.replace('\\', '');
 			}
-		);
+			switch (m) {
+			case 'Y':
+				return d.getYearML() || 'Y';
+			case 'y':
+				return d.getYearML().slice(2, 4) || 'y';
+			case 'm':
+				return d.getMonthML() || 'm';
+			case 'd':
+				return d.getDateML() || 'd';
+			case 'B':
+				return d.getMonthName() || 'B';
+			case 'b':
+				return d.getMonthShortName() || 'b';
+			default:
+				return m;
+			}
+		}
+	);
 };
 Date.prototype.setMonthOffset = function (n) {  // negative n is ok
 	// Beware: 2010-01-31 + 1 = 2010-03-03
@@ -875,14 +875,14 @@ function formatReportDate(date) {
 	}
 
 	switch (date.length) {
-		case 10:  // YYYY-MM-DD
-			return formatDate(date, i18n.dateFormat);
-		case 7:  // YYYY-MM
-			return formatDate(date + '-01', i18n.dateFormatMonth);
-		case 4:  // YYYY
-			return formatDate(date + '-01-01', i18n.dateFormatYear);
-		default:  // unknown format
-			return date;
+	case 10:  // YYYY-MM-DD
+		return formatDate(date, i18n.dateFormat);
+	case 7:  // YYYY-MM
+		return formatDate(date + '-01', i18n.dateFormatMonth);
+	case 4:  // YYYY
+		return formatDate(date + '-01-01', i18n.dateFormatYear);
+	default:  // unknown format
+		return date;
 	}
 }
 
@@ -1485,8 +1485,8 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	var theRow = [];
 
 	theRow.push((theMonth <= getCurrentDate().slice(0, 7)) ?
-			'<tr onClick="toggleRowHighlight(this)">' :
-			'<tr onClick="toggleRowHighlight(this)" class="future">');
+		'<tr onClick="toggleRowHighlight(this)">' :
+		'<tr onClick="toggleRowHighlight(this)" class="future">');
 	if (showRowCount) {
 		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
 	}
@@ -2123,19 +2123,19 @@ function applyTags(theData) {
 
 		// Ignore this row if it matches the excluded tags
 		if (matchExcluded && (
-				//  !group && matchedOne  ||  group && matchedAll
-				(!groupExcluded && rowTags.hasArrayItem(excludedTags)) ||
+			//  !group && matchedOne  ||  group && matchedAll
+			(!groupExcluded && rowTags.hasArrayItem(excludedTags)) ||
 				( groupExcluded && rowTags.hasAllArrayItems(excludedTags))
-			)) {
+		)) {
 			continue;
 		}
 
 		// Ignore this row if it does not match the selected tags
 		if (matchSelected && (
-				//  !group && !matchedOne  ||  group && !matchedAll
-				(!groupSelected && !rowTags.hasArrayItem(selectedTags)) ||
+			//  !group && !matchedOne  ||  group && !matchedAll
+			(!groupSelected && !rowTags.hasArrayItem(selectedTags)) ||
 				( groupSelected && !rowTags.hasAllArrayItems(selectedTags))
-			)) {
+		)) {
 			continue;
 		}
 
@@ -2899,8 +2899,8 @@ function sortCol(index) {
 	// If the same index, flip current reverse state, else reverse=false
 	sortData[reportType].rev =
 		(sortData[reportType].index == (index + 1)) ?
-		!sortData[reportType].rev :
-		false;
+			!sortData[reportType].rev :
+			false;
 	// Save new index
 	sortData[reportType].index = index + 1;
 	// Refresh table
@@ -2913,8 +2913,8 @@ function sortColTag(index) {
 	// If the same index, flip current reverse state, else reverse=false
 	sortData[reportType].revTag =
 		(sortData[reportType].indexTag === (index + 1)) ?
-		!sortData[reportType].revTag :
-		false;
+			!sortData[reportType].revTag :
+			false;
 	// Save new index
 	sortData[reportType].indexTag = index + 1;
 	// Refresh table
