@@ -1,5 +1,27 @@
 env:
   browser: true
+# Unfortunately, MoneyLog is a globals festival :(
+# These globals are used by other files than moneylog.js
+globals:
+  addScript: false
+  appName: false
+  array2ul: false
+  computeTotals: false
+  dataFiles: false
+  dataFilesDefault: false
+  gapi: false
+  google: false
+  groupByPeriod: false
+  i18nDatabase: false
+  loadData: false
+  ml: false
+  selectOptionByText: false
+  showError: false
+  showReport: false
+  Widget: false
+  # modified
+  i18n: true
+  lang: true
 extends: 'eslint:recommended'
 rules:
   indent: [error, tab]
