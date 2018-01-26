@@ -1,5 +1,6 @@
 env:
   browser: true
+
 # Unfortunately, MoneyLog is a globals festival :(
 # These globals are used by other files than moneylog.js
 globals:
@@ -22,6 +23,7 @@ globals:
   # modified
   i18n: true
   lang: true
+
 extends: 'eslint:recommended'
 rules:
   indent: [error, tab]
