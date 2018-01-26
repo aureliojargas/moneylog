@@ -26,7 +26,7 @@ ml.storage = {
 	// stubs to be implemented by each driver (some are optional)
 	write: function (contents) { console.log('write'); },
 	read: function () { return ''; },
-	readAsync: function (fileData, callback) { callback('contents') },
+	readAsync: function (fileData, callback) { callback('contents'); },
 
 	// module methods, drivers should not reimplement those:
 
