@@ -1160,7 +1160,7 @@ function drawChart(values, labels) {
 		valueShort = prettyBarLabel(values[i]); // 1k2
 
 		// Date: 2010-12 -> 2010<br>12
-		label =  labels[i].replace('-', '<br>');
+		label = labels[i].replace('-', '<br>');
 
 		chartData.push([label, height, value, valueShort]);
 	}
@@ -1486,11 +1486,11 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 		theRow.push('<td class="row-count">' + rowCount + '</td>');
 	}
 	theRow.push('<td>' + formatReportDate(theMonth) + '</td>');
-	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '</td>');
-	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthPos) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthNeg) + '</td>');
 	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '</td>');
 	if (showBalance) {
-		theRow.push('<td class="number">' + prettyFloat(theTotal)  + '</td>');
+		theRow.push('<td class="number">' + prettyFloat(theTotal) + '</td>');
 	}
 
 	if (showMiniBars) {
@@ -2268,7 +2268,7 @@ function updateSelectedRowsSummary() {
 			value = arr[i][1];
 			table.push(
 				'<tr>' +
-				'<td>' + label +  '</td>' +
+				'<td>' + label + '</td>' +
 				'<td class="number"> ' + value + '</td>' +
 				'</tr>'
 			);
@@ -2521,7 +2521,7 @@ function dailyReport() {
 			results.push('<td class="tags">'   + rowTags.join(', ')        + '</td>');
 			results.push('<td>'                + rowDescription            + '</td>');
 			if (showBalance) {
-				results.push('<td class="number">' + prettyFloat(sumTotal)     + '</td>');
+				results.push('<td class="number">' + prettyFloat(sumTotal) + '</td>');
 			}
 			results.push('</tr>');
 
@@ -2751,7 +2751,7 @@ function tagReport() {
 		}
 
 		results.push(
-			'<th onClick="sortColTag(' + (i+1) +  ')">' +
+			'<th onClick="sortColTag(' + (i+1) + ')">' +
 			periodName +
 			'</th>'
 		);
@@ -2774,7 +2774,7 @@ function tagReport() {
 	// Compose table body, one tag per row
 	for (i = 0, leni = tableData.length; i < leni; i++) {
 		results.push('<tr>');
-		results.push('<td>' + tableData[i][0] +  '</td>');  // tag name
+		results.push('<td>' + tableData[i][0] + '</td>');  // tag name
 
 		// Now the numbers (Note: j=1)
 		for (j = 1, lenj = tableData[i].length; j < lenj; j++) {
@@ -3361,7 +3361,7 @@ TagSummary.update = function () {
 		for (i = 0, leni = tableData.length; i < leni; i++) {
 			results.push(
 				'<tr>' +
-				'<td>' + tableData[i][0] +  '</td>' +
+				'<td>' + tableData[i][0] + '</td>' +
 				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '</td>' +
 				'</tr>'
 			);
