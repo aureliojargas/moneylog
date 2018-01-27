@@ -33,7 +33,7 @@ ml.storage.drivers.googledrive = (function () {
 	};
 
 	var onAuthApiLoad = function () {
-		window.gapi.auth.authorize(
+		gapi.auth.authorize(
 			{
 				'client_id': clientId,
 				'scope': scope,
