@@ -85,7 +85,7 @@ ml.storage.drivers.googledrive = (function () {
 			self.userFiles = [];
 			for (var i = 0; i < data.docs.length; i++) {
 				self.userFiles.push({
-					id:   data.docs[i].id,
+					id: data.docs[i].id,
 					name: data.docs[i].name
 				});
 			}

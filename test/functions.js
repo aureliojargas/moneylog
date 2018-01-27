@@ -124,10 +124,10 @@ zz++; checkArray([1, 2, 3], [1, 2, 3]);
 zz++; checkArray([[1, 2, 3]], [[1, 2, 3]]);
 zz++; checkArray([1, [2, [3, [4]]]], [1, [2, [3, [4]]]]);
 zz++; checkObject({}, {});
-zz++; checkObject({n:1}, {n:1});
-zz++; checkObject({n:1, s:'x', a:[1]}, {n:1, s:'x', a:[1]});
-zz++; checkObject({n:1, s:'x', a:[1, [2, [3]]]}, {n:1, s:'x', a:[1, [2, [3]]]});
-zz++; checkObject({a1:[1, [2, [3]]], a2:[3, [2, [1]]]}, {a2:[3, [2, [1]]], a1:[1, [2, [3]]]});
+zz++; checkObject({n: 1}, {n: 1});
+zz++; checkObject({n: 1, s: 'x', a: [1]}, {n: 1, s: 'x', a: [1]});
+zz++; checkObject({n: 1, s: 'x', a: [1, [2, [3]]]}, {n: 1, s: 'x', a: [1, [2, [3]]]});
+zz++; checkObject({a1: [1, [2, [3]]], a2: [3, [2, [1]]]}, {a2: [3, [2, [1]]], a1: [1, [2, [3]]]});
 ///////////////////////////////////////////////////////////////////// ^ Test 9
 
 // function Array.getColumn(n)
@@ -144,27 +144,27 @@ zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(3), [undefined, und
 zz++; check(computeTotals([]), undefined);
 zz++; checkObject(
 	computeTotals([0]),
-	{min:0, max:0, sum:0, average:0, sumPositive:0, sumNegative:0, balance:[0]}
+	{min: 0, max: 0, sum: 0, average: 0, sumPositive: 0, sumNegative: 0, balance: [0]}
 );
 zz++; checkObject(
 	computeTotals([1]),
-	{min:1, max:1, sum:1, average:1, sumPositive:1, sumNegative:0, balance:[1]}
+	{min: 1, max: 1, sum: 1, average: 1, sumPositive: 1, sumNegative: 0, balance: [1]}
 );
 zz++; checkObject(
 	computeTotals([-1]),
-	{min:-1, max:-1, sum:-1, average:-1, sumPositive:0, sumNegative:-1, balance:[-1]}
+	{min: -1, max: -1, sum: -1, average: -1, sumPositive: 0, sumNegative: -1, balance: [-1]}
 );
 zz++; checkObject(
 	computeTotals([0, 0, 0, 0]),
-	{min:0, max:0, sum:0, average:0, sumPositive:0, sumNegative:0, balance:[0, 0, 0, 0]}
+	{min: 0, max: 0, sum: 0, average: 0, sumPositive: 0, sumNegative: 0, balance: [0, 0, 0, 0]}
 );
 zz++; checkObject(
 	computeTotals([-2, -1, 0, 1, 2]),
-	{min:-2, max:2, sum:0, average:0, sumPositive:3, sumNegative:-3, balance:[-2, -3, -3, -2, 0]}
+	{min: -2, max: 2, sum: 0, average: 0, sumPositive: 3, sumNegative: -3, balance: [-2, -3, -3, -2, 0]}
 );
 zz++; checkObject(
 	computeTotals([10.00, 25.50, -5.50, 33.33]),
-	{min:-5.50, max:33.33, sum:63.33, average:15.8325, sumPositive:68.83, sumNegative:-5.50, balance:[10.00, 35.50, 30.00, 63.33]}
+	{min: -5.50, max: 33.33, sum: 63.33, average: 15.8325, sumPositive: 68.83, sumNegative: -5.50, balance: [10.00, 35.50, 30.00, 63.33]}
 );
 ///////////////////////////////////////////////////////////////////// ^ Test 23
 

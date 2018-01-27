@@ -88,7 +88,7 @@ var useLegacyDataFormat = false;  // Use v4-style TAB-only as separator?
 
 // Default sort for all tables
 // d=daily, m=monthly, y=yearly, index=column(one-based), reverse
-var sortData = {'d':{}, 'm':{}, 'y':{}};
+var sortData = {'d': {}, 'm': {}, 'y': {}};
 sortData.d.index = 1;
 sortData.d.rev = false;
 sortData.m.index = 1;
@@ -1710,7 +1710,7 @@ function loadData() {
 function getSelectedFile() {
 	var combo = document.getElementById('source-file');
 	return {
-		id:   combo.options[combo.selectedIndex].value,
+		id: combo.options[combo.selectedIndex].value,
 		name: combo.options[combo.selectedIndex].text
 	};
 }

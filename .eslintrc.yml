@@ -90,7 +90,7 @@ rules:
   indent-legacy: 'off'
   init-declarations: 'off'
   jsx-quotes: error
-  key-spacing: 'off'
+  key-spacing: error
   keyword-spacing: 'off'
   line-comment-position: 'off'
   linebreak-style:
