@@ -1747,7 +1747,7 @@ function showHideEditButton() {
 }
 
 function parseData() {
-	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, trash, tagNames;
+	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, tagNames;
 
 	// Reset the data holders
 	parsedData = [];
@@ -1783,7 +1783,7 @@ function parseData() {
 				return;  // abort at first error
 			}
 
-			trash = fields.shift();  // field[0] is the full match
+			fields.shift();  // discard field[0], the full match
 
 		// Old style matching method: split
 		} else {
