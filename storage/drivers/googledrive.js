@@ -114,10 +114,10 @@ ml.storage.drivers.googledrive = (function () {
 			xhr.open('GET', downloadUrl);
 			xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
 
-			xhr.onload = function() {
+			xhr.onload = function () {
 				callback(xhr.responseText);
 			};
-			xhr.onerror = function() {
+			xhr.onerror = function () {
 				console.log('ERROR: xhr error');
 			};
 			xhr.send();

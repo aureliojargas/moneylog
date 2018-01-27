@@ -600,7 +600,7 @@ String.prototype.unacccent = function () {
 		.replace(/ñ/g,        'n');
 };
 
-Array.prototype.clone = function() {
+Array.prototype.clone = function () {
 	return [].concat(this);
 };
 
@@ -642,7 +642,7 @@ Array.prototype.hasAllArrayItems = function (arr) {
 
 // http://www.shamasis.net/2009/09/fast-algorithm-to-find-unique-items-in-javascript-array/
 // I choose the "classic" version, it's more reliable.
-Array.prototype.unique = function() {
+Array.prototype.unique = function () {
 	var i, j, a = [], l = this.length;
 	for (i = 0; i < l; i++) {
 		for (j = i+1; j < l; j++) {
