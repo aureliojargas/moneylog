@@ -156,7 +156,7 @@ rules:
     - error
     - allowSamePrecedence: true
   no-mixed-requires: error
-  no-multi-assign: 'off'
+  no-multi-assign: error
   no-multi-spaces: 'off'
   no-multi-str: error
   no-multiple-empty-lines:

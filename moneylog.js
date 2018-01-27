@@ -1240,7 +1240,8 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 		// min/max
 		if (i === 0) {
 			// First value, store it as max and min
-			o.min = o.max = n;
+			o.min = n;
+			o.max = n;
 		} else {
 			o.min = (n < o.min) ? n : o.min;
 			o.max = (n > o.max) ? n : o.max;
@@ -1743,7 +1744,9 @@ function parseData() {
 	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
 		thisRow = rows[i].lstrip();  // Ignore left spacing
-		rowDate = rowAmount = rowText = '';
+		rowDate = '';
+		rowAmount = '';
+		rowText = '';
 
 		///////////////////////////////////////////////////////////// Firewall
 
@@ -2392,7 +2395,13 @@ function periodReport() {
 function dailyReport() {
 	var i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes, sortIndex, sortRev;
 
-	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
+	sumTotal = 0;
+	sumPos = 0;
+	sumNeg = 0;
+	monthTotal = 0;
+	monthPos = 0;
+	monthNeg = 0;
+	rowCount = 0;
 	results = [];
 	chartValues = [];
 	chartLabels = [];
