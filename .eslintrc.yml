@@ -61,7 +61,7 @@ rules:
     - never
   consistent-return: 'off'
   consistent-this: 'off'
-  curly: 'off'
+  curly: error
   default-case: error
   dot-location:
     - error

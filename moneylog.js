@@ -553,7 +553,7 @@ if (!Array.prototype.sum) {
 	Array.prototype.sum = function () {
 		var i, sum;
 		// for (i = 0, sum = 0; i < this.length ; sum += this[i++]);
-		for (sum = 0, i = this.length; i; sum += this[--i]);
+		for (sum = 0, i = this.length; i; sum += this[--i]);  // eslint-disable-line curly
 		return sum;
 	};
 }
