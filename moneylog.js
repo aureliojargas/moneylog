@@ -1,3 +1,4 @@
+/* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
 
 /*
 	moneylog.js
