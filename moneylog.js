@@ -454,24 +454,24 @@ var i18nDatabase = {
 		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
 		helpWebsite: 'Ir al sitio web de MoneyLog.'
 	},
-	getLanguage: function (lang) {
+	getLanguage: function (langCode) {
 		var phrase, defaultLang = this.defaultLanguage;
 
-		if (defaultLang !== lang) {
-			if (this[lang]) {
-				// check if all attributes from 'defaultLang' are in 'lang'
+		if (defaultLang !== langCode) {
+			if (this[langCode]) {
+				// check if all attributes from 'defaultLang' are in 'langCode'
 				// if not, copy from 'defaultLang'
 				for (phrase in this[defaultLang]) {
-					if (!this[lang][phrase] || this[lang][phrase].length === 0) {
-						this[lang][phrase] = this[defaultLang][phrase];
+					if (!this[langCode][phrase] || this[langCode][phrase].length === 0) {
+						this[langCode][phrase] = this[defaultLang][phrase];
 					}
 				}
 			} else {
 				// unknown lang, show default instead
-				lang = defaultLang;
+				langCode = defaultLang;
 			}
 		}
-		return this[lang];
+		return this[langCode];
 	}
 };
 
