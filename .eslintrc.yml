@@ -206,7 +206,7 @@ rules:
   no-useless-concat: error
   no-useless-constructor: error
   no-useless-rename: error
-  no-useless-return: 'off'
+  no-useless-return: error
   no-var: 'off'
   no-void: error
   no-warning-comments: 'off'

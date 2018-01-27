@@ -3191,7 +3191,6 @@ Widget.prototype.create = function () {
 Widget.prototype.populate = function () {
 	// Called right after create(), here you create the widget contents.
 	// You must implement this function in your widget.
-	return;
 };
 
 Widget.prototype.addCheckbox = function (idSuffix, label, checked) {

@@ -33,7 +33,6 @@ ml.storage.drivers.browser = {
 				'<p>' + i18n.errorRequirements +
 					array2ul(['Internet Explorer 8', 'Firefox 3', 'Google Chrome 3', 'Safari 4', 'Opera 10.50'])
 			);
-			return;  // Abort setup
 		}
 	}
 };
