@@ -74,7 +74,7 @@ rules:
     - error
     - never
   func-style: 'off'
-  function-paren-newline: 'off'
+  function-paren-newline: error
   generator-star-spacing: error
   getter-return: error
   global-require: error

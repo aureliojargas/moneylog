@@ -970,8 +970,10 @@ function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
 	num = num.toFixed(2).replace('.', i18n.centsSeparator);
 	while (i18n.thousandSeparator && num.search(/[0-9]{4}/) > -1) {
-		num = num.replace(/([0-9])([0-9]{3})([^0-9])/,
-			'$1' + i18n.thousandSeparator + '$2$3');
+		num = num.replace(
+			/([0-9])([0-9]{3})([^0-9])/,
+			'$1' + i18n.thousandSeparator + '$2$3'
+		);
 	}
 	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '</span>';
 }
@@ -1178,12 +1180,8 @@ function drawChart(values, labels) {
 
 		// Will show bar value at top?
 		if (showChartBarLabel) {
-			chart.push(
-				'<span class="label" title="' + chartData[i][2] + '">' +
-				chartData[i][3] +
-				'</span>'
-				// Showing short value. Real value is stored as a tooltip.
-			);
+			// Showing short value. Real value is stored as a tooltip.
+			chart.push('<span class="label" title="' + chartData[i][2] + '">' + chartData[i][3] + '</span>');
 		}
 
 		// The bar, a painted div with exact height
@@ -1556,18 +1554,12 @@ function populateDateRangeCombos() {
 
 	//// Let's choose which items to select by default.
 	//
-	// Get user defaults
+	// Get user defaults and apply the offsets
 	if (typeof offset1 === 'number') {
-		index1 = range.indexOf(
-			formatDate(
-				addMonths(getCurrentDate(), offset1),  // apply offset
-				fmt));
+		index1 = range.indexOf(formatDate(addMonths(getCurrentDate(), offset1), fmt));
 	}
 	if (typeof offset2 === 'number') {
-		index2 = range.indexOf(
-			formatDate(
-				addMonths(getCurrentDate(), offset2),  // apply offset
-				fmt));
+		index2 = range.indexOf(formatDate(addMonths(getCurrentDate(), offset2), fmt));
 	}
 	//
 	// Wait! Maybe we're just reloading?
@@ -1840,10 +1832,10 @@ function parseData() {
 			// Normalize Value
 			// Force '.' as internal cents separator, remove other punctuation
 			// Ex.: 1.234,56 > 1.234@56 > 1234@56 > 1234.56
-			rowAmount = rowAmount.replace(
-				dataPatterns.amountCents, '@$1').replace(
-				/[.,]/g, '').replace(
-				'@', '.');
+			rowAmount = rowAmount
+				.replace(dataPatterns.amountCents, '@$1')
+				.replace(/[.,]/g, '')
+				.replace('@', '.');
 
 			// Now we can validate the number (str2float)
 			rowAmount = parseFloat(rowAmount);
@@ -2260,12 +2252,11 @@ function updateSelectedRowsSummary() {
 		for (i = 0, leni = arr.length; i < leni; i++) {
 			label = arr[i][0];
 			value = arr[i][1];
-			table.push(
-				'<tr>' +
-				'<td>' + label + '</td>' +
-				'<td class="number"> ' + value + '</td>' +
-				'</tr>'
-			);
+
+			table.push('<tr>');
+			table.push('<td>' + label + '</td>');
+			table.push('<td class="number"> ' + value + '</td>');
+			table.push('</tr>');
 		}
 		table.push('</table>');
 
@@ -2727,11 +2718,8 @@ function tagReport() {
 	results.push('<tr>');
 
 	// tag column
-	results.push(
-		'<th class="tagname" onClick="sortColTag(0)">' +
-		i18n.labelsDetailed[2] +
-		'</th>'
-	);
+	results.push('<th class="tagname" onClick="sortColTag(0)">' + i18n.labelsDetailed[2] + '</th>');
+
 	// dates
 	for (i = 0, leni = nDates; i < leni; i++) {
 		periodName = allDates[i];
@@ -2744,25 +2732,15 @@ function tagReport() {
 				replace('-', '<br>');
 		}
 
-		results.push(
-			'<th onClick="sortColTag(' + (i+1) + ')">' +
-			periodName +
-			'</th>'
-		);
+		results.push('<th onClick="sortColTag(' + (i+1) + ')">' + periodName + '</th>');
 	}
+
 	// total & average
 	if (nDates > 1) {
-		results.push(
-			'<th onClick="sortColTag(' + (i+1) + ')" class="totals">' +
-			i18n.labelTotal +
-			'</th>'
-		);
-		results.push(
-			'<th onClick="sortColTag(' + (i+2) + ')" class="totals">' +
-			i18n.labelAverage +
-			'</th>'
-		);
+		results.push('<th onClick="sortColTag(' + (i+1) + ')" class="totals">' + i18n.labelTotal + '</th>');
+		results.push('<th onClick="sortColTag(' + (i+2) + ')" class="totals">' + i18n.labelAverage + '</th>');
 	}
+
 	results.push('</tr>');
 
 	// Compose table body, one tag per row
@@ -2782,11 +2760,7 @@ function tagReport() {
 				tdClass = 'number';
 			}
 
-			results.push(
-				'<td class="' + tdClass + '">' +
-				((tableData[i][j]) ? prettyFloat(tableData[i][j]) : '0') +
-				'</td>'
-			);
+			results.push('<td class="' + tdClass + '">' + ((tableData[i][j]) ? prettyFloat(tableData[i][j]) : '0') + '</td>');
 			// Note: empty cells become 0 and not 0.00 to make the report less polluted
 		}
 		results.push('</tr>');
@@ -3352,12 +3326,10 @@ TagSummary.update = function () {
 		// Compose the HTML table
 		results.push('<table>');
 		for (i = 0, leni = tableData.length; i < leni; i++) {
-			results.push(
-				'<tr>' +
-				'<td>' + tableData[i][0] + '</td>' +
-				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '</td>' +
-				'</tr>'
-			);
+			results.push('<tr>');
+			results.push('<td>' + tableData[i][0] + '</td>');
+			results.push('<td class="number"> ' + prettyFloat(tableData[i][1]) + '</td>');
+			results.push('</tr>');
 		}
 		results.push('</table>');
 	}
