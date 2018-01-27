@@ -801,7 +801,7 @@ String.prototype.toDate = function () {
 
 function showError(title, msg) {
 	document.getElementById('error').style.display = 'block';
-	document.getElementById('error').innerHTML = '<h2>' + title + '<\/h2>' + msg;
+	document.getElementById('error').innerHTML = '<h2>' + title + '</h2>' + msg;
 }
 
 function invalidData(lineno, message) {
@@ -973,8 +973,7 @@ function prettyFloat(num, noHtml) {
 		num = num.replace(/([0-9])([0-9]{3})([^0-9])/,
 			'$1' + i18n.thousandSeparator + '$2$3');
 	}
-	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
-	// Note: all html *end* tags have the / escaped to pass on validator
+	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '</span>';
 }
 
 function prettyFloatUndo(str) {
@@ -1028,13 +1027,13 @@ function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 }
 
 function array2ul(a) {
-	return '<ul><li>' + a.join('<\/li><li>') + '<\/li><\/ul>';
+	return '<ul><li>' + a.join('</li><li>') + '</li></ul>';
 }
 function wrapme(tag, text) {
 	return '<' + tag + '>' + text + '</' + tag + '>';
 }
 function linkme(url, text) {
-	return '<a href="' + url + '">' + text + '<\/a>';
+	return '<a href="' + url + '">' + text + '</a>';
 }
 
 function selectOptionByText(combo, optionText) {
@@ -1182,28 +1181,28 @@ function drawChart(values, labels) {
 			chart.push(
 				'<span class="label" title="' + chartData[i][2] + '">' +
 				chartData[i][3] +
-				'<\/span>'
+				'</span>'
 				// Showing short value. Real value is stored as a tooltip.
 			);
 		}
 
 		// The bar, a painted div with exact height
 		barType = (chartData[i][3].substring(0, 1) === '-') ? 'negbar' : 'posbar';
-		chart.push('<div class="bar ' + barType + '" style="height:' + chartData[i][1] + 'px"><\/div>');
+		chart.push('<div class="bar ' + barType + '" style="height:' + chartData[i][1] + 'px"></div>');
 
-		chart.push('<\/td>');
+		chart.push('</td>');
 	}
-	chart.push('<\/tr>');
+	chart.push('</tr>');
 
 	// Second line: the labels
 	chart.push('<tr class="label">');
 	for (i = 0, leni = chartData.length; i < leni; i++) {
-		chart.push('<td>' + chartData[i][0] + '<\/td>');
+		chart.push('<td>' + chartData[i][0] + '</td>');
 	}
-	chart.push('<\/tr>');
+	chart.push('</tr>');
 
 	// And we're done
-	chart.push('<\/table>');
+	chart.push('</table>');
 	chart = chart.join('\n');
 
 	return chart;
@@ -1420,7 +1419,7 @@ function getMiniBar(pos, neg) {
 	// Labels
 	labels = '';
 	if (showMiniBarsLabels) {
-		labelTemplate = '<span class="label" style="margin-left:-{margin}">{label}<\/span>';
+		labelTemplate = '<span class="label" style="margin-left:-{margin}">{label}</span>';
 
 		// The label positioning (negative margin)
 		posMargin = (miniBarWidth - 2) + 'px';                // full bar width
@@ -1441,10 +1440,10 @@ function getMiniBar(pos, neg) {
 	// The TD width *must* be set to accomodate these tricks
 	//
 	return '<td class="minibar" style="width:' + (miniBarWidth + 2) + 'px">' +
-		'<div class="minibar posbar" style="width:' + posPx + 'px">&nbsp;<\/div>' +
-		'<div class="minibar negbar" style="width:' + negPx + 'px">&nbsp;<\/div>' +
+		'<div class="minibar posbar" style="width:' + posPx + 'px">&nbsp;</div>' +
+		'<div class="minibar negbar" style="width:' + negPx + 'px">&nbsp;</div>' +
 		labels +
-		'<\/td>';
+		'</td>';
 }
 
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
@@ -1454,25 +1453,25 @@ function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
 	partial.push('<td> +');
 	partial.push(prettyFloat(monthPos, true) + '<br>');
 	partial.push(prettyFloat(monthNeg, true));
-	partial.push('<\/td><\/tr><\/table>');
+	partial.push('</td></tr></table>');
 	partial = partial.join('');
 
 	// Show month total?
 	if (monthTotal !== '') {
-		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
+		monthTotal = '<span class="arrow">→</span>' + prettyFloat(monthTotal);
 	}
 
 	results.push('<tr class="totals">');
 	if (showRowCount) {
-		results.push('<td class="row-count"><\/td>');
+		results.push('<td class="row-count"></td>');
 	}
-	results.push('<td><\/td>');
-	results.push('<td>' + partial + '<\/td>');
-	results.push('<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>');
+	results.push('<td></td>');
+	results.push('<td>' + partial + '</td>');
+	results.push('<td class="monthtotal" colspan="2">' + monthTotal + '</td>');
 	if (showBalance) {
-		results.push('<td class="number">' + prettyFloat(total) + '<\/td>');
+		results.push('<td class="number">' + prettyFloat(total) + '</td>');
 	}
-	results.push('<\/tr>');
+	results.push('</tr>');
 
 	return results.join('');
 }
@@ -1484,21 +1483,21 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 		'<tr onClick="toggleRowHighlight(this)">' :
 		'<tr onClick="toggleRowHighlight(this)" class="future">');
 	if (showRowCount) {
-		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
+		theRow.push('<td class="row-count">' + rowCount + '</td>');
 	}
-	theRow.push('<td>' + formatReportDate(theMonth) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
+	theRow.push('<td>' + formatReportDate(theMonth) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '</td>');
 	if (showBalance) {
-		theRow.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
+		theRow.push('<td class="number">' + prettyFloat(theTotal)  + '</td>');
 	}
 
 	if (showMiniBars) {
 		theRow.push(getMiniBar(monthPos, monthNeg));
 	}
 
-	theRow.push('<\/tr>');
+	theRow.push('</tr>');
 	return theRow.join('\n');
 }
 
@@ -1510,16 +1509,16 @@ function getOverviewTotalsRow(label, n1, n2, n3, extraClass) {
 		theRow.push('<tr class="totals">');
 	}
 	if (showRowCount) {
-		theRow.push('<td class="row-count"><\/td>');
+		theRow.push('<td class="row-count"></td>');
 	}
-	theRow.push('<td class="rowlabel">' + label + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n1) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n2) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n3) + '<\/td>');
+	theRow.push('<td class="rowlabel">' + label + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(n1) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(n2) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(n3) + '</td>');
 	if (showBalance) {
-		theRow.push('<td><\/td>');
+		theRow.push('<td></td>');
 	}
-	theRow.push('<\/tr>');
+	theRow.push('</tr>');
 	return theRow.join('\n');
 }
 
@@ -2269,12 +2268,12 @@ function updateSelectedRowsSummary() {
 			value = arr[i][1];
 			table.push(
 				'<tr>' +
-				'<td>' + label +  '<\/td>' +
-				'<td class="number"> ' + value + '<\/td>' +
-				'<\/tr>'
+				'<td>' + label +  '</td>' +
+				'<td class="number"> ' + value + '</td>' +
+				'</tr>'
 			);
 		}
-		table.push('<\/table>');
+		table.push('</table>');
 
 		// Show summary
 		document.getElementById('rows-summary-content').innerHTML = table.join('\n');
@@ -2339,19 +2338,19 @@ function periodReport() {
 		// Table headings
 		results.push('<tr>');
 		if (showRowCount) {
-			results.push('<th class="row-count"><\/th>');
+			results.push('<th class="row-count"></th>');
 		}
-		results.push('<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>');
-		results.push('<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>');
-		results.push('<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>');
-		results.push('<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>');
+		results.push('<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '</th>');
+		results.push('<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '</th>');
+		results.push('<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '</th>');
+		results.push('<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '</th>');
 		if (showBalance) {
-			results.push('<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>');
+			results.push('<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '</th>');
 		}
 		if (showMiniBars) {
-			results.push('<th class="percent">%<\/th>');
+			results.push('<th class="percent">%</th>');
 		}
-		results.push('<\/tr>');
+		results.push('</tr>');
 
 		// Array2Html
 		for (i = 0, leni = overviewData.length; i < leni; i++) {
@@ -2374,7 +2373,7 @@ function periodReport() {
 		}
 
 		// And we're done on the report table
-		results.push('<\/table>');
+		results.push('</table>');
 		results = results.join('\n');
 
 		// Always reset Rows Summary when generating reports
@@ -2397,7 +2396,7 @@ function periodReport() {
 		}
 
 	} else {
-		results = '<p>' + i18n.labelNoData + '<\/p>';
+		results = '<p>' + i18n.labelNoData + '</p>';
 
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
@@ -2440,16 +2439,16 @@ function dailyReport() {
 		// Compose table headings
 		results.push('<tr>');
 		if (showRowCount) {
-			results.push('<th class="row-count"><\/th>');
+			results.push('<th class="row-count"></th>');
 		}
-		results.push('<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '<\/th>');
-		results.push('<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>');
-		results.push('<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>');
-		results.push('<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>');
+		results.push('<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '</th>');
+		results.push('<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '</th>');
+		results.push('<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '</th>');
+		results.push('<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '</th>');
 		if (showBalance) {
-			results.push('<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>');
+			results.push('<th class="balance">' + i18n.labelsDetailed[4] + '</th>');
 		}
-		results.push('<\/tr>');
+		results.push('</tr>');
 
 		// Compose table rows
 		for (i = 0, leni = theData.length; i < leni; i++) {
@@ -2492,7 +2491,7 @@ function dailyReport() {
 			if (highlightRegex) {
 				rowDescription = rowDescription.replace(
 					highlightRegex,
-					'<span class="hl">$&<\/span>'
+					'<span class="hl">$&</span>'
 				);
 			}
 
@@ -2500,7 +2499,7 @@ function dailyReport() {
 			for (j = 0, lenj = highlightTags.length; j < lenj; j++) {
 				for (k = 0, lenk = rowTags.length; k < lenk; k++) {
 					if (rowTags[k] === highlightTags[j]) {
-						rowTags[k] = '<span class="hl">' + rowTags[k] + '<\/span>';
+						rowTags[k] = '<span class="hl">' + rowTags[k] + '</span>';
 						break;
 					}
 				}
@@ -2514,17 +2513,17 @@ function dailyReport() {
 			}
 
 			if (showRowCount) {
-				results.push('<td class="row-count">' + (rowCount) + '<\/td>');
+				results.push('<td class="row-count">' + (rowCount) + '</td>');
 			}
 
-			results.push('<td class="date">'   + formatReportDate(rowDate) + '<\/td>');
-			results.push('<td class="number">' + prettyFloat(rowAmount)    + '<\/td>');
-			results.push('<td class="tags">'   + rowTags.join(', ')        + '<\/td>');
-			results.push('<td>'                + rowDescription            + '<\/td>');
+			results.push('<td class="date">'   + formatReportDate(rowDate) + '</td>');
+			results.push('<td class="number">' + prettyFloat(rowAmount)    + '</td>');
+			results.push('<td class="tags">'   + rowTags.join(', ')        + '</td>');
+			results.push('<td>'                + rowDescription            + '</td>');
 			if (showBalance) {
-				results.push('<td class="number">' + prettyFloat(sumTotal)     + '<\/td>');
+				results.push('<td class="number">' + prettyFloat(sumTotal)     + '</td>');
 			}
-			results.push('<\/tr>');
+			results.push('</tr>');
 
 		}
 
@@ -2539,11 +2538,11 @@ function dailyReport() {
 		chartValues.push([-1, monthPos, monthNeg, monthTotal, sumTotal]);
 		chartLabels.push(theData[theData.length - 1][0].slice(0, 7)); // month
 
-		results.push('<\/table>');
+		results.push('</table>');
 		results = results.join('\n');
 
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
-		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
+		// results = results.replace('</th></tr>', '</th></tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 
 		// Always reset Rows Summary when generating reports
 		selectedRows = [];
@@ -2566,7 +2565,7 @@ function dailyReport() {
 		}
 
 	} else {
-		results = '<p>' + i18n.labelNoData + '<\/p>';
+		results = '<p>' + i18n.labelNoData + '</p>';
 
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
@@ -2737,7 +2736,7 @@ function tagReport() {
 	results.push(
 		'<th class="tagname" onClick="sortColTag(0)">' +
 		i18n.labelsDetailed[2] +
-		'<\/th>'
+		'</th>'
 	);
 	// dates
 	for (i = 0, leni = nDates; i < leni; i++) {
@@ -2747,14 +2746,14 @@ function tagReport() {
 		if (reportType === 'm') {
 			periodName = (allDates[i] + '-01').toDate().format('Y-b');
 			periodName = periodName.
-				replace(/^(....)/, '<i>$1<\/i>').
+				replace(/^(....)/, '<i>$1</i>').
 				replace('-', '<br>');
 		}
 
 		results.push(
 			'<th onClick="sortColTag(' + (i+1) +  ')">' +
 			periodName +
-			'<\/th>'
+			'</th>'
 		);
 	}
 	// total & average
@@ -2762,20 +2761,20 @@ function tagReport() {
 		results.push(
 			'<th onClick="sortColTag(' + (i+1) + ')" class="totals">' +
 			i18n.labelTotal +
-			'<\/th>'
+			'</th>'
 		);
 		results.push(
 			'<th onClick="sortColTag(' + (i+2) + ')" class="totals">' +
 			i18n.labelAverage +
-			'<\/th>'
+			'</th>'
 		);
 	}
-	results.push('<\/tr>');
+	results.push('</tr>');
 
 	// Compose table body, one tag per row
 	for (i = 0, leni = tableData.length; i < leni; i++) {
 		results.push('<tr>');
-		results.push('<td>' + tableData[i][0] +  '<\/td>');  // tag name
+		results.push('<td>' + tableData[i][0] +  '</td>');  // tag name
 
 		// Now the numbers (Note: j=1)
 		for (j = 1, lenj = tableData[i].length; j < lenj; j++) {
@@ -2792,14 +2791,14 @@ function tagReport() {
 			results.push(
 				'<td class="' + tdClass + '">' +
 				((tableData[i][j]) ? prettyFloat(tableData[i][j]) : '0') +
-				'<\/td>'
+				'</td>'
 			);
 			// Note: empty cells become 0 and not 0.00 to make the report less polluted
 		}
-		results.push('<\/tr>');
+		results.push('</tr>');
 	}
 
-	results.push('<\/table>');
+	results.push('</table>');
 
 	// Show report (if we have tags)
 	content.innerHTML = (tagNames.length > 0) ? results.join('\n') : '';
@@ -3362,12 +3361,12 @@ TagSummary.update = function () {
 		for (i = 0, leni = tableData.length; i < leni; i++) {
 			results.push(
 				'<tr>' +
-				'<td>' + tableData[i][0] +  '<\/td>' +
-				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '<\/td>' +
-				'<\/tr>'
+				'<td>' + tableData[i][0] +  '</td>' +
+				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '</td>' +
+				'</tr>'
 			);
 		}
-		results.push('<\/table>');
+		results.push('</table>');
 	}
 
 	// Save results to the respective DIV
