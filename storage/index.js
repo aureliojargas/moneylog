@@ -86,7 +86,7 @@ ml.storage = {
 			if (this.loadDataAtSetup) {
 				loadData();
 			}
-		} catch(error) {
+		} catch (error) {
 			console.log('ERROR: Cannot setup storage: ' + this.currentDriver);
 			console.log(error);
 		}
