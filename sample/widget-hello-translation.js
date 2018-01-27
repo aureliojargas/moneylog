@@ -32,6 +32,6 @@ HelloTranslation.populate = function () {
 };
 
 // Handle checkbox click
-HelloTranslation.checkboxClicked = function (checkbox) {  // eslint-disable-line no-unused-vars
-	return;  // do nothing
+HelloTranslation.checkboxClicked = function (checkbox) {
+	console.log('clicked ' + checkbox.id);
 };
