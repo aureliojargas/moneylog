@@ -120,8 +120,8 @@ console.log('-------------- MoneyLog Tests BEGIN');
 
 zz = 0;
 zz++; checkArray([], []);
-zz++; checkArray([1,2,3], [1,2,3]);
-zz++; checkArray([[1,2,3]], [[1,2,3]]);
+zz++; checkArray([1, 2, 3], [1, 2, 3]);
+zz++; checkArray([[1, 2, 3]], [[1, 2, 3]]);
 zz++; checkArray([1, [2, [3, [4]]]], [1, [2, [3, [4]]]]);
 zz++; checkObject({}, {});
 zz++; checkObject({n:1}, {n:1});
@@ -133,11 +133,11 @@ zz++; checkObject({a1:[1, [2, [3]]], a2:[3, [2, [1]]]}, {a2:[3, [2, [1]]], a1:[1
 // function Array.getColumn(n)
 zz++; checkArray([].getColumn(1), []);
 zz++; checkArray([[], [], []].getColumn(1), [undefined, undefined, undefined]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(0), [0, 3, 6]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(1), [1, 4, 7]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(2), [2, 5, 8]);
-zz++; checkArray([[0,1,2], [3,4]  , [6,7,8]].getColumn(2), [2, undefined, 8]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(3), [undefined, undefined, undefined]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(0), [0, 3, 6]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(1), [1, 4, 7]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(2), [2, 5, 8]);
+zz++; checkArray([[0, 1, 2], [3, 4], [6, 7, 8]].getColumn(2), [2, undefined, 8]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(3), [undefined, undefined, undefined]);
 ///////////////////////////////////////////////////////////////////// ^ Test 16
 
 // function computeTotals(arr)

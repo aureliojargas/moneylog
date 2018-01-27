@@ -51,7 +51,7 @@ rules:
   capitalized-comments: 'off'
   class-methods-use-this: error
   comma-dangle: error
-  comma-spacing: 'off'
+  comma-spacing: error
   comma-style:
     - error
     - last
