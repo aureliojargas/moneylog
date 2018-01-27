@@ -63,7 +63,9 @@ rules:
   consistent-this: 'off'
   curly: 'off'
   default-case: error
-  dot-location: 'off'
+  dot-location:
+    - error
+    - property
   dot-notation: error
   eol-last: error
   eqeqeq: 'off'

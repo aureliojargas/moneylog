@@ -2736,9 +2736,9 @@ function tagReport() {
 		// Month names get special formatting
 		if (reportType === 'm') {
 			periodName = (allDates[i] + '-01').toDate().format('Y-b');
-			periodName = periodName.
-				replace(/^(....)/, '<i>$1</i>').
-				replace('-', '<br>');
+			periodName = periodName
+				.replace(/^(....)/, '<i>$1</i>')
+				.replace('-', '<br>');
 		}
 
 		results.push('<th onClick="sortColTag(' + (i+1) + ')">' + periodName + '</th>');
