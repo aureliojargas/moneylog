@@ -123,19 +123,19 @@ var commentChar = '#';   // Must be at line start (column 1)
 var dataPatterns = {
 	rowBlankSeparated:
 		// Uses multiple TAB and spaces as field separators
-		/^(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]*(.*)$/,
+		/^(\d{4}-\d\d-\d\d)[ \t]+([+-]?[0-9.,*/]+)[ \t]*(.*)$/,
 	date:
 		// YYYY-MM-DD
 		/^ *(\d{4}-\d\d-\d\d) *$/,
 	amountNumber:
 		// 7  +7  -7  7.00  7,00  1234567,89  1.234.567,89  1,234,567.89 1234567,89
-		/^ *([+\-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
+		/^ *([+-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
 	amountCents:
 		// .12  ,12
 		/[.,](\d\d) *$/,
 	amountRecurrent:
 		// *N or /N where N>0
-		/([*\/])([1-9][0-9]*) *$/
+		/([*/])([1-9][0-9]*) *$/
 };
 
 // Internationalisation (i18n) - Screen Labels and formatting
@@ -2007,7 +2007,7 @@ function filterData() {
 
 	// Hack: Value filtering on the search box!
 	// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
-	temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
+	temp = filter.match(/^v:([-+>=<][=]?)([+-]?\d*)$/);
 	if (temp) {
 		valueFilter = temp[1];
 		valueFilterArg = temp[2] || 0;
@@ -3031,7 +3031,7 @@ function valueFilterChanged() {
 	document.getElementById('opt-value-filter-check').checked = true;
 
 	// show/hide the filter argument textbox
-	if (document.getElementById('opt-value-filter-combo').value.match(/[+\-]/)) {
+	if (document.getElementById('opt-value-filter-combo').value.match(/[+-]/)) {
 		document.getElementById('opt-value-filter-number').style.display = 'none';
 	} else {
 		document.getElementById('opt-value-filter-number').style.display = 'inline';
