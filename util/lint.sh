@@ -7,7 +7,7 @@ cd $(dirname "$0")
 cd ..
 
 # Lint all JavaScript files
-eslint \
+eslint --fix \
   *.js \
   */*.js \
   */*/*.js
