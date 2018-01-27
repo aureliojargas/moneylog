@@ -101,9 +101,6 @@ ml.storage.drivers.googledrive = (function () {
 			}
 
 			loadData();
-
-		} else {
-			console.log('User cancelled the picker');
 		}
 	};
 
