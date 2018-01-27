@@ -23,8 +23,8 @@ ml.storage.drivers.googledrive = (function () {
 	var oauthToken;
 
 	// MoneyLog driver properties
-	var userFiles = [];
-	var defaultFile = '';
+	var userFiles = [];    // eslint-disable-line no-unused-vars
+	var defaultFile = '';  // eslint-disable-line no-unused-vars
 
 	// Use the API Loader script to load google.picker and gapi.auth.
 	var onApiLoad = function () {
