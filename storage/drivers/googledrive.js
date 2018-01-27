@@ -79,22 +79,25 @@ ml.storage.drivers.googledrive = (function () {
 	var pickerCallback = function (data) {
 		if (data.action == google.picker.Action.PICKED) {
 
-			userFiles = [];
+			// Original scope is lost here :(
+			var self = ml.storage.drivers.googledrive;
+
+			self.userFiles = [];
 			for (var i = 0; i < data.docs.length; i++) {
-				userFiles.push({
+				self.userFiles.push({
 					id:   data.docs[i].id,
 					name: data.docs[i].name
 				});
 			}
+			// self.userFiles.sort(); XXX TODO
 
-			ml.storage.userFiles = userFiles;
-			// dataFiles.sort(); XXX TODO
+			ml.storage.userFiles = self.userFiles;
 			ml.storage.populateFilesCombo();
 
 			// Set the default file to load when using multiple files
-			if (this.defaultFile) {
+			if (self.defaultFile) {
 				var filesCombo = document.getElementById('source-file');
-				selectOptionByText(filesCombo, this.defaultFile);
+				selectOptionByText(filesCombo, self.defaultFile);
 			}
 
 			loadData();
