@@ -1627,21 +1627,15 @@ function updateToolbar() {
 
 	// Daily
 	if (reportType === 'd') {
-		unhide = [
-			'opt-monthly-box'
-		];
+		unhide = ['opt-monthly-box'];
 
 	// Monthly
 	} else if (reportType === 'm') {
-		hide = [
-			'opt-monthly-box'
-		];
+		hide = ['opt-monthly-box'];
 
 	// Yearly
 	} else if (reportType === 'y') {
-		hide = [
-			'opt-monthly-box'
-		];
+		hide = ['opt-monthly-box'];
 	}
 
 	// In Mobile toolbar we always add/remove, there's no hide.

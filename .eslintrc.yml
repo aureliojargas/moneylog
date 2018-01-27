@@ -27,7 +27,9 @@ globals:
 extends: 'eslint:recommended'
 rules:
   accessor-pairs: error
-  array-bracket-newline: 'off'
+  array-bracket-newline:
+    - error
+    - multiline: true
   array-bracket-spacing:
     - error
     - never
