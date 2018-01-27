@@ -530,6 +530,7 @@ if (!Array.prototype.push) { // IE5...
 }
 
 if (!Number.prototype.toFixed) { // IE5...
+	// eslint-disable-next-line no-unused-vars
 	Number.prototype.toFixed = function (n) { // precision hardcoded to 2
 		var k = (Math.round(this * 100) / 100).toString();
 		k += (k.indexOf('.') === -1) ? '.00' : '00';
