@@ -105,7 +105,9 @@ rules:
   max-nested-callbacks: error
   max-params: 'off'
   max-statements: 'off'
-  max-statements-per-line: 'off'
+  max-statements-per-line:
+    - error
+    - max: 2
   multiline-comment-style: 'off'
   multiline-ternary:
     - error

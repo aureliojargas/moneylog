@@ -3214,7 +3214,10 @@ TagSummary.config.opened = false;      // Start app with this widget opened?
 TagSummary.config.checkSort = false;   // [X] Sort by value checkbox inits checked?
 TagSummary.config.showTagless = true;  // The (no tag) sum should appear?
 
-if (isMobile) { TagSummary.config.opened = false; }  // In mobile, always closed
+// In mobile, the widget starts closed (we need vertical space)
+if (isMobile) {
+	TagSummary.config.opened = false;
+}
 
 // UI strings
 i18nDatabase.en.TagSummaryHeaderLabel = 'Tag Summary';
