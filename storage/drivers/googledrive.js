@@ -148,6 +148,6 @@ ml.storage.drivers.googledrive = (function () {
 	return {
 		// Public attributes and methods
 		name: name,
-		setup: setup,
+		setup: setup
 	};
 })();

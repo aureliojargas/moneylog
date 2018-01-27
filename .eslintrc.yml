@@ -50,7 +50,7 @@ rules:
   camelcase: 'off'
   capitalized-comments: 'off'
   class-methods-use-this: error
-  comma-dangle: 'off'
+  comma-dangle: error
   comma-spacing: 'off'
   comma-style:
     - error
