@@ -484,8 +484,6 @@ var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
 var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
-var dataFirstDate;
-var dataLastDate;
 var highlightRegex;
 var i18n;
 var rawData = '';
@@ -1959,15 +1957,9 @@ function parseData() {
 	// Sort by date
 	parsedData.sort(sortByIndex(0, 'd'));
 
-	// Save first and last date as globals
+	// Update the date range combos
 	if (parsedData.length > 0) {
-		dataFirstDate = parsedData[0][0];
-		dataLastDate = parsedData[parsedData.length-1][0];
-
-		// Update the date range combos
 		populateDateRangeCombos();
-	} else {
-		dataFirstDate = dataLastDate = undefined;
 	}
 
 	// Compose the tag cloud: sorted, append (no tag) item
