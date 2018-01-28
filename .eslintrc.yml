@@ -115,7 +115,7 @@ rules:
   new-cap: error
   new-parens: error
   newline-per-chained-call: 'off'
-  no-alert: 'off'
+  no-alert: error
   no-array-constructor: error
   no-await-in-loop: error
   no-bitwise: 'off'

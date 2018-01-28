@@ -805,6 +805,7 @@ function showError(title, msg) {
 }
 
 function invalidData(lineno, message) {
+	// eslint-disable-next-line no-alert
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
 
@@ -3445,6 +3446,7 @@ function init() {
 	// Password protected?
 	if (myPassword) {
 		// Prompt user and check
+		// eslint-disable-next-line no-alert
 		if (myPassword != prompt(appName + ' — ' + i18n.msgTypePassword)) {
 			// Destroy full interface and show error
 			document.getElementById('container').innerHTML = '<h2 style="padding:30px;">' + i18n.msgWrongPassword + '</h2>';
