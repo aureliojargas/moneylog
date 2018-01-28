@@ -59,7 +59,7 @@ rules:
   computed-property-spacing:
     - error
     - never
-  consistent-return: 'off'
+  consistent-return: error
   consistent-this: 'off'
   curly: error
   default-case: error

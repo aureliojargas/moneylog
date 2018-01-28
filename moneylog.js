@@ -1210,7 +1210,7 @@ function drawChart(values, labels) {
 function computeTotals(arr) {  // arr = [1,2,3,4,5]
 	var i, leni, n, o = {};
 
-	if (!arr.length) { return; }
+	if (!arr.length) { return arr; }
 
 	o.min = 0;
 	o.max = 0;
@@ -2588,7 +2588,7 @@ function tagReport() {
 	// Hide the Tag report when in Daily report
 	if (!showTagReport || reportType === 'd') {
 		document.getElementById('tag-report').style.display = 'none';
-		return false;
+		return;  // abort report generation
 	} else {
 		document.getElementById('tag-report').style.display = 'block';
 	}
