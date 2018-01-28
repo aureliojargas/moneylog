@@ -43,7 +43,7 @@ rules:
     - error
     - 1tbs
     - allowSingleLine: true
-  callback-return: 'off'
+  callback-return: 'off' #ok
   camelcase: error
   capitalized-comments: 'off' #ok
   class-methods-use-this: error
@@ -52,7 +52,7 @@ rules:
   comma-style:
     - error
     - last
-  complexity: 'off'
+  complexity: 'off' #ok
   computed-property-spacing:
     - error
     - never
@@ -79,7 +79,7 @@ rules:
   guard-for-in: 'off'
   handle-callback-err: error
   id-blacklist: error
-  id-length: 'off'
+  id-length: 'off' #ok
   id-match: error
   implicit-arrow-linebreak: error
   indent:
@@ -112,7 +112,7 @@ rules:
     - always-multiline
   new-cap: error
   new-parens: error
-  newline-per-chained-call: 'off'
+  newline-per-chained-call: 'off' #ok
   no-alert: error
   no-array-constructor: error
   no-await-in-loop: error
@@ -120,8 +120,8 @@ rules:
   no-buffer-constructor: error
   no-caller: error
   no-catch-shadow: error
-  no-console: 'off'
-  no-continue: 'off'
+  no-console: 'off' #ok
+  no-continue: 'off' #ok
   no-div-regex: error
   no-else-return: 'off' #ok
   no-empty:
@@ -130,15 +130,15 @@ rules:
   no-empty-function: error
   no-eq-null: error
   no-eval: error
-  no-extend-native: 'off'
+  no-extend-native: 'off' #ok
   no-extra-bind: error
   no-extra-label: error
   no-extra-parens: 'off'
   no-floating-decimal: error
   no-implicit-coercion: error
-  no-implicit-globals: 'off'
+  no-implicit-globals: 'off' #ok
   no-implied-eval: error
-  no-inline-comments: 'off'
+  no-inline-comments: 'off' #ok
   no-inner-declarations:
     - error
     - functions
@@ -149,7 +149,7 @@ rules:
   no-lone-blocks: error
   no-lonely-if: 'off'
   no-loop-func: error
-  no-magic-numbers: 'off'
+  no-magic-numbers: 'off' #ok
   no-mixed-operators:
     - error
     - allowSamePrecedence: true
@@ -162,7 +162,7 @@ rules:
     - max: 2
       maxBOF: 0
       maxEOF: 0
-  no-negated-condition: 'off'
+  no-negated-condition: 'off' #ok
   no-nested-ternary: 'off'
   no-new: error
   no-new-func: error
@@ -170,7 +170,7 @@ rules:
   no-new-require: error
   no-new-wrappers: error
   no-octal-escape: error
-  no-param-reassign: 'off'
+  no-param-reassign: 'off' #ok
   no-path-concat: error
   no-plusplus:
     - error
@@ -230,7 +230,7 @@ rules:
     - error
     - always
   require-await: error
-  require-jsdoc: 'off'
+  require-jsdoc: 'off' #ok
   semi: error
   semi-spacing:
     - error
