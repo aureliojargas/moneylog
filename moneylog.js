@@ -3205,7 +3205,7 @@ Widget.prototype.checkboxClicked = function (element) {  // Event handler
 };
 
 // Hooks
-Widget.prototype.showReportPost = function () {};
+Widget.prototype.showReportPost = function () {};  // eslint-disable-line no-empty-function
 
 
 // ------------------------------------------------------------------
