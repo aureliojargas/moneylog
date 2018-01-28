@@ -13,14 +13,18 @@ var S = true;
 var N = false;
 
 
-/*********************************************************************
-* User Config
-* -----------
-*
-* There is no need to change *anything*, but if you have special
-* needs, here is the place to customize this script.
-*
-*********************************************************************/
+// -------------------------------------------------------------------
+// User Config
+// -----------
+//
+// There is no need to change *anything*, but if you have special
+// needs, here is the place to customize this script.
+//
+// Better yet, use a config.js file on the same folder as this one.
+//
+// Learn more about MoneyLog configuration:
+// http://aurelio.net/moneylog/config/
+//  -------------------------------------------------------------------
 
 var myPassword = '';              // Set up an access password
 var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
