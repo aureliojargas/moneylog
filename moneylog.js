@@ -496,7 +496,7 @@ var reportData = [];  // filtered by applyTags(filterData())
 var selectedRows = [];
 var savedDateRangeIndexes = [];  // used in the reload process
 var isFullScreen = false;
-var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
+var isBeta = (/β$/).test(appVersion);  // beta if version ends with 'β'
 var TagSummary;   // to make ESLint happy
 var AboutWidget;  // to make ESLint happy
 

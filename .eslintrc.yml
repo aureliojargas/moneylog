@@ -283,7 +283,7 @@ rules:
   wrap-iife:
     - error
     - inside
-  wrap-regex: 'off'
+  wrap-regex: error
   yield-star-spacing: error
   yoda:
     - error
