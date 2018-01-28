@@ -1,6 +1,6 @@
-///////////////////////////////////////////////////////////////////////
-//// Hello Translation Widget
-//// by Aurelio Jargas 2012-02-17
+// --------------------------------------------------------------------
+// Hello Translation Widget
+// by Aurelio Jargas 2012-02-17
 //
 // A simple sample widget, using translated strings.
 //

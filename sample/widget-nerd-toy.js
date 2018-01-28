@@ -1,6 +1,6 @@
-///////////////////////////////////////////////////////////////////////
-//// Nerd Toy Widget
-//// by Aurelio Jargas 2012-02-16
+// --------------------------------------------------------------------
+// Nerd Toy Widget
+// by Aurelio Jargas 2012-02-16
 //
 // A sample widget that shows some MoneyLog options
 // for you to turn ON or OFF with handy checkboxes.

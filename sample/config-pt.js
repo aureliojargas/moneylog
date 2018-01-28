@@ -9,7 +9,7 @@
 //
 //     http://aurelio.net/moneylog/config/
 //
-//////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------------
 //
 // Este é um arquivo em JavaScript, você deve seguir as regras de sintaxe da
 // linguagem. Se você não sabe nada de JavaScript, não se preocupe. Vou lhe
@@ -58,10 +58,10 @@
 // As aspas são importantes, não as apague. Apenas troque a palavra que está
 // dentro delas.
 //
-//////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------------
 
 
-////// SENHA DE ACESSO
+// SENHA DE ACESSO
 //
 // Você pode definir uma senha de acesso, para impedir que outras pessoas
 // vejam seus dados. Porém, saiba que esta é uma proteção bem simples, que
@@ -71,29 +71,29 @@
 // myPassword = 'abc123'        ;// Pedir esta senha ao iniciar o app
 
 
-////// IDIOMA
+// IDIOMA
 //
 // lang = 'pt'                  ;// pt, en, es (Português, Inglês, Espanhol)
 
 
-////// EXTRATO PADRÃO AO INICIAR
+// EXTRATO PADRÃO AO INICIAR
 //
 // reportType = 'd'             ;// d, m, y (diário, mensal, anual)
 
 
-////// TELA CHEIA
+// TELA CHEIA
 //
 // initFullScreen = N           ;// Iniciar o app já no modo Tela Cheia?
 
 
-////// BUSCA
+// BUSCA
 //
 // defaultSearch = ''           ;// Iniciar já pesquisando por este texto
 // checkRegex = N               ;// Marcar a opção [X] regex?
 // checkNegate = N              ;// Marcar a opção [X] excluir?
 
 
-////// PERÍODO - DATA INICIAL E FINAL
+// PERÍODO - DATA INICIAL E FINAL
 //
 // checkDateFrom = S            ;// Marcar a opção [X] De:?
 // checkDateUntil = S           ;// Marcar a opção [X] Até:?
@@ -109,31 +109,31 @@
 // initMonthOffsetUntil = 0     ;// Valor inicial da opção [X] Até:
 
 
-////// PARCIAIS MENSAIS
+// PARCIAIS MENSAIS
 //
 // checkMonthPartials = S       ;// Marcar a opção [X] Parciais Mensais?
 
 
-////// SOMENTE VALORES
+// SOMENTE VALORES
 //
 // Nada ainda.
 
 
-////// WIDGETS
+// WIDGETS
 //
 // initViewWidgetOpen = S       ;// Iniciar com a caixa Visualizar aberta?
 // initTagCloudOpen = S         ;// Iniciar com a Nuvem de Tags aberta?
 // showTagCloud = S             ;// Usar o widget Nuvem de Tags?
 
 
-////// WIDGET: SOMATÓRIO DE TAGS
+// WIDGET: SOMATÓRIO DE TAGS
 // TagSummary.config.active = S         ;// Usar o widget Somatório de tags?
 // TagSummary.config.opened = S         ;// Iniciar com este widget já aberto?
 // TagSummary.config.showTagless = S    ;// Mostrar o item (sem tag)?
 // TagSummary.config.checkSort = N      ;// Marcar a opção [X] Ordenar por valor?
 
 
-////// TABELA DO EXTRATO
+// TABELA DO EXTRATO
 //
 // showBalance = S              ;// Mostrar a coluna Acumulado?
 // showRowCount = S             ;// Mostrar o número da linha à esquerda?
@@ -150,7 +150,7 @@
 // sortData.y.rev = N           ;// Anual : iniciar com a ordem inversa?
 
 
-////// GRÁFICO DE BARRAS
+// GRÁFICO DE BARRAS
 //
 // showCharts = S               ;// Mostrar gráfico de barras depois do extrato?
 // showChartBarLabel = S        ;// Mostrar os números no topo de cada barra?
@@ -160,14 +160,14 @@
 // initChartYearly = 1          ;// Iniciar mostrando este item no gráfico anual [1-4]
 
 
-////// BARRA DE PORCENTAGEM
+// BARRA DE PORCENTAGEM
 //
 // showMiniBars = S             ;// Mostrar barra de porcentagem no mensal/anual?
 // showMiniBarsLabels = S       ;// Mostrar os números dentro destas barras?
 // miniBarWidth = 70            ;// Largura da barra de porcentagem, em pixels
 
 
-////// TAGS
+// TAGS
 //
 // showTagReport = S            ;// Mostrar o relatório de tags?
 // ignoreTags = 'poupança'      ;// Ignorar lançamentos com estas tags
@@ -176,7 +176,7 @@
 // checkHideRelatedTags = N     ;// Marcar a opção [X] Esconder relacionadas?
 
 
-////// FORMATO DA DATA
+// FORMATO DA DATA
 //
 // showLocaleDate = N           ;// Mostrar datas no formato regional d/m/a?
 //
@@ -193,7 +193,7 @@
 // i18nDatabase.pt.dateFormatYear = 'Y'     ;// Personalizar formato ano
 
 
-////// IGNORAR LANÇAMENTOS ANTIGOS E FUTUROS
+// IGNORAR LANÇAMENTOS ANTIGOS E FUTUROS
 //
 // Se você já usa o MoneyLog há bastante tempo, pode querer simplesmente
 // ignorar os lançamentos antigos, dos anos anteriores. Ou ainda, limitar a
@@ -206,16 +206,16 @@
 // ignoreDataNewerThan = '2020-12-31'   ;// Ignorar lançamentos após 2020
 
 
-////// ARQUIVOS TXT
+// ARQUIVOS TXT
 //
-//<Dropbox>
+// <Dropbox>
 // Se você usa mais de um arquivo TXT, o MoneyLog automaticamente carrega
 // todos os arquivos que encontrar em sua pasta. Com essa configuração você
 // pode mudar isso e carregar somente um arquivo específico no início.
 //
 // dataFilesDefault = 'meu-arquivo.txt';
-//</Dropbox>
-//<Beta>
+// </Dropbox>
+// <Beta>
 // Se você quer usar mais de um arquivo TXT, deverá cadastrar todos eles no
 // array dataFiles. Podem ser inúmeros, tantos quantos você queira. Veja
 // alguns exemplos, separado por ano, por tipo de conta e por tipo de gasto:
@@ -230,4 +230,4 @@
 // mudar isso e carregar outro, basta usar esta configuração:
 //
 // dataFilesDefault = 'carro.txt';
-//</Beta>
+// </Beta>

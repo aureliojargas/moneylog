@@ -31,7 +31,7 @@ ml.storage.drivers.filesystem = {
 			iframe.src = fileData.name;
 			iframe.onload = function () {
 				callback(iframe.contentWindow.document.getElementsByTagName('pre')[0].innerText);
-				iframe.parentNode.removeChild(iframe);  //del iframe
+				iframe.parentNode.removeChild(iframe);  // del iframe
 			};
 			document.body.appendChild(iframe);  // add iframe
 		};

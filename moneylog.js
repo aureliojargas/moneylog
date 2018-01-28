@@ -477,7 +477,9 @@ var i18nDatabase = {
 	}
 };
 
-//// End of user Config
+// -------------------------------------------------------------------
+// End of user config
+// -------------------------------------------------------------------
 
 
 // Global vars
@@ -518,9 +520,9 @@ if (isMobile) {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                              PROTOTYPES
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 if (!Array.prototype.push) { // IE5...
 	Array.prototype.push = function (item) {
@@ -674,7 +676,7 @@ Array.prototype.removePattern = function (patt, n) { // n = number of removes
 
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+	Array.prototype.indexOf = function (searchElement /* , fromIndex */ ) {
 		'use strict';
 		var t, len, n, k;
 		if (this == null) {
@@ -797,9 +799,9 @@ String.prototype.toDate = function () {
 };
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                              TOOLS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function showError(title, msg) {
 	document.getElementById('error').style.display = 'block';
@@ -1256,9 +1258,9 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                         TAGS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function createTagCloud(names) {
 	// Create all the <a> elements for the Tag Cloud
@@ -1402,9 +1404,9 @@ function tagClicked(el) {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                         REPORT HELPERS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function getMiniBar(pos, neg) {
 	var roof, posPx, negPx, posLabel, negLabel, posMargin, negMargin, labels, labelTemplate;
@@ -1525,9 +1527,9 @@ function getOverviewTotalsRow(label, n1, n2, n3, extraClass) {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                       INTERFACE UPDATE
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function populateChartColsCombo() {
 	var el = document.getElementById('chart-selector');
@@ -1556,7 +1558,7 @@ function populateDateRangeCombos() {
 	fmt = 'Y-m';
 	range = getDataUniqueDates('m');
 
-	//// Let's choose which items to select by default.
+	// Let's choose which items to select by default.
 	//
 	// Get user defaults and apply the offsets
 	if (typeof offset1 === 'number') {
@@ -1659,9 +1661,9 @@ function updateToolbar() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                        DATA HANDLERS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function resetData() {
 	reportData = [];
@@ -1751,7 +1753,7 @@ function parseData() {
 		rowAmount = '';
 		rowText = '';
 
-		///////////////////////////////////////////////////////////// Firewall
+		// ----------------------------------------------------------- Firewall
 
 		// Skip commented rows
 		if (thisRow.indexOf(commentChar) === 0) {
@@ -1798,18 +1800,19 @@ function parseData() {
 			}
 		}
 
-		//// At this point we have:
+		// At this point we have:
+		//
 		// fields[0] -> date
 		// fields[1] -> amount
 		// fields[2] -> text (tags + description)
 		//
 		// The contents will be validated in the following lines.
 
-		///////////////////////////////////////////////////////////// Text
+		// ----------------------------------------------------------- Text
 
 		rowText = (fields.length > 2) ? fields[2].strip() : '';
 
-		///////////////////////////////////////////////////////////// Date
+		// ----------------------------------------------------------- Date
 
 		rowDate = fields[0].match(dataPatterns.date);
 		if (rowDate) {
@@ -1818,7 +1821,7 @@ function parseData() {
 			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + thisRow);
 		}
 
-		///////////////////////////////////////////////////////////// Amount
+		// ----------------------------------------------------------- Amount
 
 		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + thisRow;
 
@@ -1856,7 +1859,7 @@ function parseData() {
 			return;
 		}
 
-		///////////////////////////////////////////////////////////// Recurrent Value
+		// ----------------------------------------------------------- Recurrent Value
 
 		// A value of -100/10 means I've spent 100 and will pay it in 10x
 		// A value of -100*10 means I'll spent 100/month in the next 10 months
@@ -1896,7 +1899,7 @@ function parseData() {
 			continue;
 		}
 
-		///////////////////////////////////////////////////////////// Tags + Description
+		// ----------------------------------------------------------- Tags + Description
 
 		// Parse tags
 		if (rowText.indexOf(dataTagTerminator) !== -1) {
@@ -1923,7 +1926,7 @@ function parseData() {
 			rowDescription = rowText || '&nbsp;';
 		}
 
-		/////////////////////////////////////////////////////////////
+		// -----------------------------------------------------------
 
 		// Ignore old or future data?
 		// Note: This code *must* be here at the end of the loop,
@@ -2024,7 +2027,7 @@ function filterData() {
 		thisTags = theData[i][2].clone();
 		thisDescription = theData[i][3];
 
-		///////////////////////////////////////////////////////////// Filters
+		// ----------------------------------------------------------- Filters
 
 		// Apply date filter
 		if (thisDate < firstDate) {
@@ -2193,9 +2196,9 @@ function groupByPeriod(arr, periodType) {  // m, y
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                          REPORTS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function updateSelectedRowsSummary() {
 	var i, leni, data, arr, table, label, value, colNumber, colIndex, trElement, tdElement;
@@ -2314,8 +2317,8 @@ function periodReport() {
 			overviewData.push([period, totals.sumPositive, totals.sumNegative, totals.sum, balance]);
 		}
 
-		//// Report data is OK inside overviewData array
-		//// Now we must compose the report table
+		// Report data is OK inside overviewData array
+		// Now we must compose the report table
 
 		// Perform the user-selected sorting column and order
 		colTypes = ['d', 'n', 'n', 'n', 'n'];
@@ -2598,7 +2601,7 @@ function tagReport() {
 	// Group report data by period (month or year), to make things easier
 	groupedData = groupByPeriod(theData, reportType);
 
-	/////////////////////////////////////////////////// MONTHS / YEARS
+	// ----------------------------------------------------------- MONTHS / YEARS
 
 	// Compose the list of all months/years in the period
 	// Note: can't use groupedData.keys because there may be gaps
@@ -2612,7 +2615,7 @@ function tagReport() {
 	}
 	nDates = allDates.length;
 
-	/////////////////////////////////////////////////// TAG TOTALS
+	// ----------------------------------------------------------- TAG TOTALS
 
 	// tagData = {
 	//     tag1: {
@@ -2678,7 +2681,7 @@ function tagReport() {
 		}
 	}
 
-	/////////////////////////////////////////////////// TABLE DATA
+	// ----------------------------------------------------------- TABLE DATA
 
 	// tableData = [
 	//     ['tag1', 55, 26, 0, 0, 123, ...],
@@ -2703,7 +2706,7 @@ function tagReport() {
 		}
 	}
 
-	/////////////////////////////////////////////////// SORT
+	// ----------------------------------------------------------- SORT
 
 	if (sortIndex === 0) {
 		// Sort by tag name, ignoring case and accents
@@ -2722,11 +2725,12 @@ function tagReport() {
 		tableData.reverse();
 	}
 
-	/////////////////////////////////////////////////// HTML
+	// ----------------------------------------------------------- HTML
 
 	results.push('<table class="report">');
 
-	//// Table heading
+	// Table heading
+
 	results.push('<tr>');
 
 	// tag column
@@ -2804,9 +2808,9 @@ function showReport() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                        DATA EDITOR
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function editorOn() {
 	var filepath;
@@ -2858,9 +2862,9 @@ function editorSave() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                         EVENT HANDLERS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function sortCol(index) {
 	// Note: sortData config is one-based, sortCol() is zero-based
@@ -3025,9 +3029,9 @@ function resetRowsSummary() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                            Widgets
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 // Widget object, all widgets must use this type.
 // Ex.:
@@ -3204,9 +3208,9 @@ Widget.prototype.checkboxClicked = function (element) {  // Event handler
 Widget.prototype.showReportPost = function () {};
 
 
-/////////////////////////////////////////////////////////////////////
-////
-//// Tag Summary Widget
+// ------------------------------------------------------------------
+// Tag Summary Widget
+// ------------------------------------------------------------------
 
 TagSummary = new Widget('tag-summary', 'Tag Summary', 'TagSummary');
 
@@ -3357,9 +3361,9 @@ TagSummary.update = function () {
 };
 
 
-/////////////////////////////////////////////////////////////////////
-////
-//// About Widget
+// ------------------------------------------------------------------
+// About Widget
+// ------------------------------------------------------------------
 
 AboutWidget = new Widget('about', 'About', 'AboutWidget');
 
@@ -3431,9 +3435,9 @@ AboutWidget.populate = function () {
 };
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                             INIT
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function init() {
 	var i;

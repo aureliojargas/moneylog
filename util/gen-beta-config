@@ -29,11 +29,11 @@ if test -f "$file_path"
 then
 	sed '
 		# Remove Dropbox-specific data
-		/^\/\/<Dropbox>/, /^\/\/<\/Dropbox>/ d
+		/^\/\/ <Dropbox>/, /^\/\/ <\/Dropbox>/ d
 
 		# Remove marker lines
-		/^\/\/<Beta>/ d
-		/^\/\/<\/Beta>/ d
+		/^\/\/ <Beta>/ d
+		/^\/\/ <\/Beta>/ d
 	
 	' "$file_path"
 else
