@@ -755,7 +755,7 @@ Date.prototype.format = function (fmt) {
 	// Available tokens (i.e. for 1999-12-31):
 	// Y=1999, y=99, m=12, d=31, b=Dec, B=December
 
-	var d = this;
+	var that = this;
 	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
 	return fmt.replace(
 		/(\\)?[YymdBb]/g,
@@ -766,17 +766,17 @@ Date.prototype.format = function (fmt) {
 			}
 			switch (m) {
 			case 'Y':
-				return d.getYearML() || 'Y';
+				return that.getYearML() || 'Y';
 			case 'y':
-				return d.getYearML().slice(2, 4) || 'y';
+				return that.getYearML().slice(2, 4) || 'y';
 			case 'm':
-				return d.getMonthML() || 'm';
+				return that.getMonthML() || 'm';
 			case 'd':
-				return d.getDateML() || 'd';
+				return that.getDateML() || 'd';
 			case 'B':
-				return d.getMonthName() || 'B';
+				return that.getMonthName() || 'B';
 			case 'b':
-				return d.getMonthShortName() || 'b';
+				return that.getMonthShortName() || 'b';
 			default:
 				return m;
 			}
@@ -2888,16 +2888,15 @@ function sortColTag(index) {
 	tagReport();
 }
 
-function changeReport() {
-	var el, oldType, newType;
+function changeReport() {  // this == <a class="button"> element
+	var oldType, newType;
 
-	el = this;
 	oldType = reportType;
-	newType = el.id;
+	newType = this.id;
 
 	// Deactivate old report, activate new
 	removeClass(document.getElementById(oldType), 'active');
-	addClass(el, 'active');
+	addClass(this, 'active');
 
 	// Always reset Rows Summary when changing reports
 	selectedRows = [];
