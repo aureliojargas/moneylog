@@ -679,7 +679,7 @@ if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (searchElement /* , fromIndex */ ) {
 		'use strict';
 		var t, len, n, k;
-		if (this == null) {
+		if (this == null) {  // eslint-disable-line no-eq-null
 			throw new TypeError();
 		}
 		t = Object(this);

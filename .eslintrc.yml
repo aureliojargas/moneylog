@@ -128,7 +128,7 @@ rules:
     - error
     - allowEmptyCatch: true
   no-empty-function: error
-  no-eq-null: 'off'
+  no-eq-null: error
   no-eval: error
   no-extend-native: 'off'
   no-extra-bind: error
