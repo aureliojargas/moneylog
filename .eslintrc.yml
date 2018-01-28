@@ -47,7 +47,7 @@ rules:
     - 1tbs
     - allowSingleLine: true
   callback-return: 'off'
-  camelcase: 'off'
+  camelcase: error
   capitalized-comments: 'off'
   class-methods-use-this: error
   comma-dangle: error

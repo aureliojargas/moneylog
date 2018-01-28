@@ -55,12 +55,12 @@ ml.storage = {
 	},
 
 	populateFilesCombo: function () {
-		var nr_files = this.userFiles.length;
+		var nrFiles = this.userFiles.length;
 		var combo = document.getElementById('source-file');
 
 		// Clean then add all files
 		this.resetFilesCombo();
-		for (var i = 0; i < nr_files; i++) {
+		for (var i = 0; i < nrFiles; i++) {
 			combo.add(new Option(
 				this.userFiles[i].name,
 				this.userFiles[i].id
@@ -68,7 +68,7 @@ ml.storage = {
 		}
 
 		// Extra option at the end: parse all files
-		if (nr_files > 1) {
+		if (nrFiles > 1) {
 			combo.add(new Option('*'));
 		}
 	},

@@ -1116,14 +1116,14 @@ function addScript(scriptUrl, callback) {
 // http://stackoverflow.com/q/524696
 // http://dev.opera.com/articles/view/dynamic-style-css-javascript/
 //
-function addStyleSheet(element_id, contents) {
+function addStyleSheet(elementId, contents) {
 	var head, style, rules;
 
 	head = document.getElementsByTagName('head')[0];
 	style = document.createElement('style');
 	rules = document.createTextNode(contents);
 
-	style.id = element_id;
+	style.id = elementId;
 	style.type = 'text/css';
 	if (style.styleSheet) {
 		style.styleSheet.cssText = rules.nodeValue;
@@ -1132,8 +1132,8 @@ function addStyleSheet(element_id, contents) {
 	}
 	head.appendChild(style);
 }
-function removeStyleSheet(element_id) {
-	var el = document.getElementById(element_id);
+function removeStyleSheet(elementId) {
+	var el = document.getElementById(elementId);
 	el.parentNode.removeChild(el);
 }
 
@@ -2195,7 +2195,7 @@ function groupByPeriod(arr, periodType) {  // m, y
 /////////////////////////////////////////////////////////////////////
 
 function updateSelectedRowsSummary() {
-	var i, leni, data, arr, table, label, value, col_nr, col_index, tr_element, td_element;
+	var i, leni, data, arr, table, label, value, colNumber, colIndex, trElement, tdElement;
 
 	data = [];
 	arr = [];
@@ -2211,29 +2211,29 @@ function updateSelectedRowsSummary() {
 		// Monthly/Yearly: we have (2) Incoming, (3) Expense, (4) Partial
 		//
 		if (reportType === 'd') {
-			col_nr = 2;
+			colNumber = 2;
 		} else {
-			col_nr = parseInt(document.getElementById('rows-summary-index').value, 10);
+			colNumber = parseInt(document.getElementById('rows-summary-index').value, 10);
 		}
 
 		// The column number is affected by the presence of the row count column
 		if (showRowCount) {
-			col_nr += 1;
+			colNumber += 1;
 		}
 
 		// We will soon query each TR element for a specific child TD.
 		// Our column count is one-based, but the TR children array is ZERO-based.
-		col_index = col_nr - 1;
+		colIndex = colNumber - 1;
 
 		for (i = 0, leni = selectedRows.length; i < leni; i++) {
-			tr_element = selectedRows[i];
-			td_element = tr_element.getElementsByTagName('td')[col_index];
+			trElement = selectedRows[i];
+			tdElement = trElement.getElementsByTagName('td')[colIndex];
 
 			// Inside the TD, the number is inside a SPAN tag, examples:
 			//     <td class="number"><span class="neg">-123,45</span></td>
 			//     <td class="number"><span class="pos">123,45</span></td>
 			//
-			value = td_element.getElementsByTagName('span')[0].firstChild.nodeValue;
+			value = tdElement.getElementsByTagName('span')[0].firstChild.nodeValue;
 
 			// The value is a formatted string, we need to convert it to float
 			value = prettyFloatUndo(value);
@@ -2935,11 +2935,11 @@ function toggleFullScreen() {
 	return false;  // cancel link action
 }
 
-function toggleToolbarBox(header_id, content_id) {
+function toggleToolbarBox(headerId, contentId) {
 	// Handle toolbar box header clicking: show/hide contents
 	var header, content;
-	header = document.getElementById(header_id);
-	content = document.getElementById(content_id);
+	header = document.getElementById(headerId);
+	content = document.getElementById(contentId);
 	if (content.style.display === 'block') {
 		content.style.display = 'none';
 		removeClass(header, 'active');
