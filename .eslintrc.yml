@@ -108,7 +108,9 @@ rules:
   max-statements-per-line:
     - error
     - max: 2
-  multiline-comment-style: 'off'
+  multiline-comment-style:
+    - error
+    - separate-lines
   multiline-ternary:
     - error
     - always-multiline

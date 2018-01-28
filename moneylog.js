@@ -1,9 +1,7 @@
 /* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
 
-/*
-	moneylog.js
-	http://aurelio.net/moneylog/
-*/
+// moneylog.js
+// http://aurelio.net/moneylog/
 
 // I hope someday I can move everything under this namespace.
 // Until then, MoneyLog is a globals festival :(
