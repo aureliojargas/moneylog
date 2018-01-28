@@ -645,7 +645,7 @@ Array.prototype.hasAllArrayItems = function (arr) {
 Array.prototype.unique = function () {
 	var i, j, a = [], l = this.length;
 	for (i = 0; i < l; i++) {
-		for (j = i+1; j < l; j++) {
+		for (j = i + 1; j < l; j++) {
 			if (this[i] === this[j]) { j = ++i; }
 		}
 		a.push(this[i]);
@@ -2741,13 +2741,13 @@ function tagReport() {
 				.replace('-', '<br>');
 		}
 
-		results.push('<th onClick="sortColTag(' + (i+1) + ')">' + periodName + '</th>');
+		results.push('<th onClick="sortColTag(' + (i + 1) + ')">' + periodName + '</th>');
 	}
 
 	// total & average
 	if (nDates > 1) {
-		results.push('<th onClick="sortColTag(' + (i+1) + ')" class="totals">' + i18n.labelTotal + '</th>');
-		results.push('<th onClick="sortColTag(' + (i+2) + ')" class="totals">' + i18n.labelAverage + '</th>');
+		results.push('<th onClick="sortColTag(' + (i + 1) + ')" class="totals">' + i18n.labelTotal + '</th>');
+		results.push('<th onClick="sortColTag(' + (i + 2) + ')" class="totals">' + i18n.labelAverage + '</th>');
 	}
 
 	results.push('</tr>');
@@ -3469,7 +3469,7 @@ function init() {
 	// Some configs may be set as strings or arrays.
 	// If user choose string, let's convert it to an array now.
 	if (typeof highlightTags === 'string') {
-		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/): [];
+		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/) : [];
 	}
 	if (typeof ignoreTags === 'string') {
 		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
