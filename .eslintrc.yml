@@ -172,7 +172,9 @@ rules:
   no-octal-escape: error
   no-param-reassign: 'off'
   no-path-concat: error
-  no-plusplus: 'off'
+  no-plusplus:
+    - error
+    - allowForLoopAfterthoughts: true
   no-process-env: error
   no-process-exit: error
   no-proto: error

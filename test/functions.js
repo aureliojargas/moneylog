@@ -8,6 +8,7 @@
 // 2. In your browser, open the JavaScript console to see the messages.
 // 3. Run MoneyLog, every tests should report "ok".
 
+/* eslint no-plusplus: "off" */
 
 var zz, suffix;
 

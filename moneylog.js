@@ -557,7 +557,7 @@ if (!Array.prototype.sum) {
 	Array.prototype.sum = function () {
 		var i, sum;
 		// for (i = 0, sum = 0; i < this.length ; sum += this[i++]);
-		for (sum = 0, i = this.length; i; sum += this[--i]);  // eslint-disable-line curly
+		for (sum = 0, i = this.length; i; sum += this[--i]);  // eslint-disable-line curly, no-plusplus
 		return sum;
 	};
 }
@@ -650,7 +650,7 @@ Array.prototype.unique = function () {
 	var i, j, a = [], l = this.length;
 	for (i = 0; i < l; i++) {
 		for (j = i + 1; j < l; j++) {
-			if (this[i] === this[j]) { j = ++i; }
+			if (this[i] === this[j]) { j = ++i; }  // eslint-disable-line no-plusplus
 		}
 		a.push(this[i]);
 	}
@@ -3090,7 +3090,7 @@ Widget.tidyInstances = function () {
 			window[Widget.instances[i].instanceName] = undefined;
 			Widget.instances.splice(i, 1);
 		} else {
-			i++;
+			i += 1;
 		}
 	}
 };
