@@ -34,7 +34,7 @@ rules:
     - error
     - never
   array-callback-return: error
-  array-element-newline: 'off'
+  array-element-newline: 'off' #ok
   arrow-body-style: error
   arrow-parens: error
   arrow-spacing: error
@@ -48,7 +48,7 @@ rules:
     - allowSingleLine: true
   callback-return: 'off'
   camelcase: error
-  capitalized-comments: 'off'
+  capitalized-comments: 'off' #ok
   class-methods-use-this: error
   comma-dangle: error
   comma-spacing: error
@@ -93,18 +93,18 @@ rules:
   jsx-quotes: error
   key-spacing: error
   keyword-spacing: error
-  line-comment-position: 'off'
+  line-comment-position: 'off' #ok
   linebreak-style:
     - error
     - unix
   lines-around-comment: error
   lines-between-class-members: error
   max-depth: 'off'
-  max-len: 'off'
-  max-lines: 'off'
+  max-len: 'off' #ok
+  max-lines: 'off' #ok
   max-nested-callbacks: error
   max-params: 'off'
-  max-statements: 'off'
+  max-statements: 'off' #ok
   max-statements-per-line:
     - error
     - max: 2
@@ -127,7 +127,7 @@ rules:
   no-continue: 'off'
   no-div-regex: error
   no-duplicate-imports: error
-  no-else-return: 'off'
+  no-else-return: 'off' #ok
   no-empty:
     - error
     - allowEmptyCatch: true
@@ -159,7 +159,7 @@ rules:
     - allowSamePrecedence: true
   no-mixed-requires: error
   no-multi-assign: error
-  no-multi-spaces: 'off'
+  no-multi-spaces: 'off' #ok
   no-multi-str: error
   no-multiple-empty-lines:
     - error
