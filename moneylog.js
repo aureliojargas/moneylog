@@ -690,6 +690,7 @@ if (!Array.prototype.indexOf) {
 		n = 0;
 		if (arguments.length > 0) {
 			n = Number(arguments[1]);
+			// eslint-disable-next-line no-self-compare
 			if (n != n) { // shortcut for verifying if it's NaN
 				n = 0;
 			} else if (n != 0 && n != Infinity && n != -Infinity) {

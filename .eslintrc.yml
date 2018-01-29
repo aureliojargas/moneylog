@@ -186,7 +186,7 @@ rules:
   no-return-assign: error
   no-return-await: error
   no-script-url: error
-  no-self-compare: 'off'
+  no-self-compare: error
   no-sequences: error
   no-shadow: error
   no-shadow-restricted-names: error
