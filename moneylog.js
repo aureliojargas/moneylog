@@ -90,7 +90,7 @@ var useLegacyDataFormat = false;  // Use v4-style TAB-only as separator?
 
 // Default sort for all tables
 // d=daily, m=monthly, y=yearly, index=column(one-based), reverse
-var sortData = {'d': {}, 'm': {}, 'y': {}};
+var sortData = {d: {}, m: {}, y: {}};
 sortData.d.index = 1;
 sortData.d.rev = false;
 sortData.m.index = 1;
@@ -911,7 +911,7 @@ function getDataUniqueDates(periodType) {  // periodType: d, m, y
 	var i, leni, theData, item, last, slices, results = [];
 
 	theData = parsedData.clone();
-	slices = {'y': 4, 'm': 7, 'd': 10};
+	slices = {y: 4, m: 7, d: 10};
 	for (i = 0, leni = theData.length; i < leni; i++) {
 		item = theData[i][0].slice(0, slices[periodType]);  // get date
 		if (item !== last) {
@@ -2184,7 +2184,7 @@ function groupByPeriod(arr, periodType) {  // m, y
 	var i, leni, item, slices, results = {};
 
 	results.keys = [];
-	slices = {'y': 4, 'm': 7, 'd': 10};
+	slices = {y: 4, m: 7, d: 10};
 	for (i = 0, leni = arr.length; i < leni; i++) {
 		item = arr[i][0].slice(0, slices[periodType]);  // get date
 		if (!results[item]) {
