@@ -3315,7 +3315,7 @@ TagSummary.update = function () {
 					tagData[tag] = 0;
 					tagNames.push(tag);
 				}
-				tagData[tag] = tagData[tag] + rowAmount;
+				tagData[tag] += rowAmount;
 			}
 		}
 	}
