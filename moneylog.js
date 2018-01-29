@@ -1873,7 +1873,8 @@ function parseData() {
 		// 2010-01-25  -30    Foo 2/3    |    2010-01-25  -90    Foo 2/3
 		// 2010-02-25  -30    Foo 3/3    |    2010-02-25  -90    Foo 3/3
 		//
-		// XXX It doesn't fix end-of-month day. Uses 2009-02-31 instead 2009-02-28. But it's OK.
+		// Note: It doesn't fix end-of-month day. Uses 2009-02-31 instead of 2009-02-28.
+		//       But it's OK.
 		//
 		// Note: the date/value filters must appear *after* the recurrent processing
 		//
