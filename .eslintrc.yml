@@ -200,7 +200,7 @@ rules:
   no-undefined: 'off'
   no-underscore-dangle: error
   no-unmodified-loop-condition: error
-  no-unneeded-ternary: 'off'
+  no-unneeded-ternary: error
   no-unused-expressions: error
   no-use-before-define: 'off'
   no-useless-call: error

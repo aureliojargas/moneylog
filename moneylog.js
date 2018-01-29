@@ -3166,7 +3166,7 @@ Widget.prototype.create = function () {
 	this.box = document.getElementById(this.id + '-box');
 	this.header = document.getElementById(this.id + '-header');
 	this.content = document.getElementById(this.id + '-content');
-	this.created = (this.box && this.header && this.content) ? true : false;
+	this.created = Boolean(this.box && this.header && this.content);
 
 	// Set header tooltip
 	this.header.title = i18n[this.instanceName + 'HeaderHelp'];
