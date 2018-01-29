@@ -676,7 +676,7 @@ Array.prototype.removePattern = function (patt, n) { // n = number of removes
 
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function (searchElement /* , fromIndex */ ) {
+	Array.prototype.indexOf = function (searchElement /* , fromIndex */) {
 		'use strict';
 		var t, len, n, k;
 		if (this == null) {  // eslint-disable-line no-eq-null
@@ -2111,7 +2111,7 @@ function applyTags(theData) {
 		if (matchExcluded && (
 			//  !group && matchedOne  ||  group && matchedAll
 			(!groupExcluded && rowTags.hasArrayItem(excludedTags)) ||
-				( groupExcluded && rowTags.hasAllArrayItems(excludedTags))
+				(groupExcluded && rowTags.hasAllArrayItems(excludedTags))
 		)) {
 			continue;
 		}
@@ -2120,7 +2120,7 @@ function applyTags(theData) {
 		if (matchSelected && (
 			//  !group && !matchedOne  ||  group && !matchedAll
 			(!groupSelected && !rowTags.hasArrayItem(selectedTags)) ||
-				( groupSelected && !rowTags.hasAllArrayItems(selectedTags))
+				(groupSelected && !rowTags.hasAllArrayItems(selectedTags))
 		)) {
 			continue;
 		}
