@@ -1882,7 +1882,7 @@ function parseData() {
 			recValue = rowAmount;
 
 			if (recOperator === '/') {
-				recValue = (recValue / recTimes);
+				recValue = recValue / recTimes;
 			}
 
 			// Make sure we have a valid money value (not float)
@@ -2515,7 +2515,7 @@ function dailyReport() {
 			}
 
 			if (showRowCount) {
-				results.push('<td class="row-count">' + (rowCount) + '</td>');
+				results.push('<td class="row-count">' + rowCount + '</td>');
 			}
 
 			results.push('<td class="date">'   + formatReportDate(rowDate) + '</td>');
