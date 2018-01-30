@@ -683,7 +683,7 @@ if (!Array.prototype.indexOf) {
 			throw new TypeError();
 		}
 		t = Object(this);
-		len = t.length >>> 0;
+		len = t.length >>> 0;  // eslint-disable-line no-bitwise
 		if (len === 0) {
 			return -1;
 		}
