@@ -31,8 +31,9 @@ ml.storage = {
 	// module methods, drivers should not reimplement those:
 
 	populateDriversCombo: function () {
-		var combo = document.getElementById('storage-driver');
-		for (var i = 0; i < this.availableDrivers.length; i++) {
+		var i, combo;
+		combo = document.getElementById('storage-driver');
+		for (i = 0; i < this.availableDrivers.length; i++) {
 			combo.add(new Option(
 				this.drivers[this.availableDrivers[i]].name,
 				this.availableDrivers[i]
@@ -55,12 +56,13 @@ ml.storage = {
 	},
 
 	populateFilesCombo: function () {
+		var i;
 		var nrFiles = this.userFiles.length;
 		var combo = document.getElementById('source-file');
 
 		// Clean then add all files
 		this.resetFilesCombo();
-		for (var i = 0; i < nrFiles; i++) {
+		for (i = 0; i < nrFiles; i++) {
 			combo.add(new Option(
 				this.userFiles[i].name,
 				this.userFiles[i].id
@@ -95,6 +97,7 @@ ml.storage = {
 	// Read multiple files (async) and callback with a single string with
 	// all their contents concatenated (in random order)
 	readAsyncMulti: function (filenames, callback) {
+		var i;
 		var loadedData = [];
 
 		function allDone() {
@@ -109,7 +112,7 @@ ml.storage = {
 			}
 		}
 
-		for (var i = 0; i < filenames.length; i++) {
+		for (i = 0; i < filenames.length; i++) {
 			ml.storage.readAsync(filenames[i], oneFileWasRead);
 		}
 	},

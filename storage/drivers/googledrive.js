@@ -57,12 +57,13 @@ ml.storage.drivers.googledrive = (function () {
 
 	// Create and render a Picker object for picking user files.
 	var createPicker = function () {
+		var view, picker;
 		if (pickerApiLoaded && oauthToken) {
-			var view = new google.picker.DocsView()
+			view = new google.picker.DocsView()
 				// txt files only
 				.setMimeTypes('text/plain');
 
-			var picker = new google.picker.PickerBuilder()
+			picker = new google.picker.PickerBuilder()
 				.addView(view)
 				.setOAuthToken(oauthToken)
 				.setDeveloperKey(developerKey)
@@ -77,13 +78,15 @@ ml.storage.drivers.googledrive = (function () {
 
 	// Called when the user has chosen the file
 	var pickerCallback = function (data) {
+		var i, self, filesCombo;
+
 		if (data.action == google.picker.Action.PICKED) {
 
 			// Original scope is lost here :(
-			var self = ml.storage.drivers.googledrive;
+			self = ml.storage.drivers.googledrive;
 
 			self.userFiles = [];
-			for (var i = 0; i < data.docs.length; i++) {
+			for (i = 0; i < data.docs.length; i++) {
 				self.userFiles.push({
 					id: data.docs[i].id,
 					name: data.docs[i].name
@@ -96,7 +99,7 @@ ml.storage.drivers.googledrive = (function () {
 
 			// Set the default file to load when using multiple files
 			if (self.defaultFile) {
-				var filesCombo = document.getElementById('source-file');
+				filesCombo = document.getElementById('source-file');
 				selectOptionByText(filesCombo, self.defaultFile);
 			}
 
@@ -106,10 +109,12 @@ ml.storage.drivers.googledrive = (function () {
 
 	// https://developers.google.com/drive/v3/web/manage-downloads
 	var readFile = function (id, callback) {
+		var downloadUrl, accessToken, xhr;
+
 		if (id) {
-			var downloadUrl = 'https://www.googleapis.com/drive/v3/files/' + id + '?alt=media';
-			var accessToken = gapi.auth.getToken().access_token;
-			var xhr = new XMLHttpRequest();
+			downloadUrl = 'https://www.googleapis.com/drive/v3/files/' + id + '?alt=media';
+			accessToken = gapi.auth.getToken().access_token;
+			xhr = new XMLHttpRequest();
 
 			xhr.open('GET', downloadUrl);
 			xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);

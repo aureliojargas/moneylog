@@ -258,7 +258,7 @@ rules:
     - error
     - never
   valid-jsdoc: error
-  vars-on-top: 'off'
+  vars-on-top: error
   wrap-iife:
     - error
     - inside

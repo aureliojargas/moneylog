@@ -7,8 +7,9 @@ ml.storage.drivers.filesystem = {
 	defaultFile: '',
 
 	setUserFilesFromFlatArray: function (arr) {
+		var i;
 		this.userFiles = [];
-		for (var i = 0; i < arr.length; i++) {
+		for (i = 0; i < arr.length; i++) {
 			this.userFiles.push({
 				id: i,
 				name: arr[i]
@@ -17,6 +18,8 @@ ml.storage.drivers.filesystem = {
 	},
 
 	setup: function () {
+		var filesCombo;
+
 		ml.storage.isAsync = true;
 		ml.storage.isEditable = false;
 		ml.storage.isFileBased = true;
@@ -49,7 +52,7 @@ ml.storage.drivers.filesystem = {
 		ml.storage.userFiles = this.userFiles;
 		ml.storage.populateFilesCombo();
 
-		var filesCombo = document.getElementById('source-file');
+		filesCombo = document.getElementById('source-file');
 
 		// Honor legacy global config: dataFilesDefault
 		// Set the default file to load when using multiple files

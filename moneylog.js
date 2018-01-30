@@ -1064,7 +1064,8 @@ function linkme(url, text) {
 }
 
 function selectOptionByText(combo, optionText) {
-	for (var i = 0; i < combo.options.length; i++) {
+	var i;
+	for (i = 0; i < combo.options.length; i++) {
 		if (combo.options[i].text === optionText) {
 			combo.selectedIndex = i;
 			break;
@@ -1708,10 +1709,12 @@ function reloadData() {
 }
 
 function loadData() {
+	var messageBoard;
+
 	// Hide charts when loading
 	document.getElementById('charts').style.display = 'none';
 	// Where to show the "loading..." message
-	var messageBoard = document.getElementById('report');
+	messageBoard = document.getElementById('report');
 
 	resetData();
 
