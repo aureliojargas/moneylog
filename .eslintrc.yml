@@ -133,7 +133,7 @@ rules:
   no-extend-native: 'off' #ok
   no-extra-bind: error
   no-extra-label: error
-  no-extra-parens: 'off'
+  no-extra-parens: 'off' #ok
   no-floating-decimal: error
   no-implicit-coercion: error
   no-implicit-globals: 'off' #ok
@@ -191,9 +191,9 @@ rules:
   no-shadow: error
   no-shadow-restricted-names: error
   no-sync: error
-  no-tabs: 'off'
+  no-tabs: 'off' #ok
   no-template-curly-in-string: error
-  no-ternary: 'off'
+  no-ternary: 'off' #ok
   no-throw-literal: error
   no-trailing-spaces: error
   no-undef-init: error
@@ -202,7 +202,7 @@ rules:
   no-unmodified-loop-condition: error
   no-unneeded-ternary: error
   no-unused-expressions: error
-  no-use-before-define: 'off'
+  no-use-before-define: 'off' #ok
   no-useless-call: error
   no-useless-concat: error
   no-useless-return: error
@@ -219,10 +219,10 @@ rules:
   operator-linebreak:
     - error
     - after
-  padded-blocks: 'off'
-  padding-line-between-statements: error
+  padded-blocks: 'off' #ok
+  padding-line-between-statements: 'off'
   prefer-promise-reject-errors: error
-  quote-props: 'off'
+  quote-props: 'off' #ok
   quotes:
     - error
     - single
@@ -239,7 +239,7 @@ rules:
   semi-style:
     - error
     - last
-  sort-keys: 'off'
+  sort-keys: 'off' #ok
   sort-vars: 'off'
   space-before-blocks: error
   space-before-function-paren:
@@ -247,7 +247,7 @@ rules:
     - anonymous: always
       named: never
       asyncArrow: always
-  space-in-parens: 'off'
+  space-in-parens: 'off' #ok
   space-infix-ops: error
   space-unary-ops: error
   spaced-comment: error
