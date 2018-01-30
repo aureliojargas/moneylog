@@ -88,33 +88,52 @@ var ignoreDataNewerThan = '';     // Ignore entries newer than this date (ie: 20
 // Legacy options
 var useLegacyDataFormat = false;  // Use v4-style TAB-only as separator?
 
-// Default sort for all tables
-// d=daily, m=monthly, y=yearly, index=column(one-based), reverse
-var sortData = {d: {}, m: {}, y: {}};
-sortData.d.index = 1;
-sortData.d.rev = false;
-sortData.m.index = 1;
-sortData.m.rev = false;
-sortData.y.index = 1;
-sortData.y.rev = false;
+// Default sort configuration for all tables:
+//
+//   index      sort index column for reports (one-based)
+//   min        min value for index
+//   max        max value for index
+//   rev        reverse the sort order?
+//
+//   indexTag   sort index column for Tag Report (one-based)
+//   minTag     min value for indexTag
+//   maxTag     -- not available, since it is dynamic
+//   revTag     reverse the sort order in Tag Report?
+//
+var sortData = {
 
-// Tag Report, DO NOT CHANGE
-sortData.m.indexTag = 1;
-sortData.m.revTag = false;
-sortData.y.indexTag = 1;
-sortData.y.revTag = false;
+	// Daily Report
+	d: {
+		index: 1,
+		min: 1,
+		max: 4,
+		rev: false
+	},
 
-// Sort index limits, DO NOT CHANGE
-sortData.d.min = 1;
-sortData.m.min = 1;
-sortData.y.min = 1;
-sortData.d.max = 4;
-sortData.m.max = 5;
-sortData.y.max = 5;
-sortData.m.minTag = 1;
-sortData.y.minTag = 1;
-// sortData.*.maxTag is variable
+	// Monthly Report
+	m: {
+		index: 1,
+		min: 1,
+		max: 5,
+		rev: false,
 
+		indexTag: 1,
+		minTag: 1,
+		revTag: false
+	},
+
+	// Yearly Report
+	y: {
+		index: 1,
+		rev: false,
+		min: 1,
+		max: 5,
+
+		indexTag: 1,
+		minTag: 1,
+		revTag: false
+	}
+};
 
 // Data format
 var dataFieldSeparator = '\t';  // Only used if useLegacyDataFormat=true
