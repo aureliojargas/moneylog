@@ -11,6 +11,8 @@
 // I'm using the last example in "2. Object literal notation"
 ml.storage.drivers.googledrive = (function () {
 
+	var name = 'Google Drive';
+
 	// The Browser API and Client ID keys obtained from the Google API Console
 	var developerKey = 'AIzaSyAgPNmODKpMNzP30VdvvgQFSw-H8mtIegc';
 	var clientId = '372105999892-po48pkb5kjlhlf1t3j2bj96se9v986cp.apps.googleusercontent.com';
@@ -27,12 +29,12 @@ ml.storage.drivers.googledrive = (function () {
 	var defaultFile = '';  // eslint-disable-line no-unused-vars
 
 	// Use the API Loader script to load google.picker and gapi.auth.
-	var onApiLoad = function () {
+	function onApiLoad() {
 		gapi.load('auth', {'callback': onAuthApiLoad});
 		gapi.load('picker', {'callback': onPickerApiLoad});
-	};
+	}
 
-	var onAuthApiLoad = function () {
+	function onAuthApiLoad() {
 		gapi.auth.authorize(
 			{
 				'client_id': clientId,
@@ -41,22 +43,22 @@ ml.storage.drivers.googledrive = (function () {
 			},
 			handleAuthResult
 		);
-	};
+	}
 
-	var onPickerApiLoad = function () {
+	function onPickerApiLoad() {
 		pickerApiLoaded = true;
 		createPicker();
-	};
+	}
 
-	var handleAuthResult = function (authResult) {
+	function handleAuthResult(authResult) {
 		if (authResult && !authResult.error) {
 			oauthToken = authResult.access_token;
 			createPicker();
 		}
-	};
+	}
 
 	// Create and render a Picker object for picking user files.
-	var createPicker = function () {
+	function createPicker() {
 		var view, picker;
 		if (pickerApiLoaded && oauthToken) {
 			view = new google.picker.DocsView()
@@ -74,10 +76,10 @@ ml.storage.drivers.googledrive = (function () {
 				.build();
 			picker.setVisible(true);
 		}
-	};
+	}
 
 	// Called when the user has chosen the file
-	var pickerCallback = function (data) {
+	function pickerCallback(data) {
 		var i, self, filesCombo;
 
 		if (data.action == google.picker.Action.PICKED) {
@@ -105,10 +107,10 @@ ml.storage.drivers.googledrive = (function () {
 
 			loadData();
 		}
-	};
+	}
 
 	// https://developers.google.com/drive/v3/web/manage-downloads
-	var readFile = function (id, callback) {
+	function readFile(id, callback) {
 		var downloadUrl, accessToken, xhr;
 
 		if (id) {
@@ -129,10 +131,9 @@ ml.storage.drivers.googledrive = (function () {
 		} else {
 			console.log('ERROR: No file id informed');
 		}
-	};
+	}
 
-	var name = 'Google Drive';
-	var setup = function () {
+	function setup() {
 
 		// Setup MoneyLog storage
 		ml.storage.isAsync = true;
@@ -148,7 +149,7 @@ ml.storage.drivers.googledrive = (function () {
 
 		// Load the Google API
 		addScript('https://apis.google.com/js/api.js', onApiLoad);
-	};
+	}
 
 	return {
 		// Public attributes and methods

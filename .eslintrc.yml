@@ -72,7 +72,9 @@ rules:
   func-names:
     - error
     - never
-  func-style: 'off'
+  func-style:
+    - error
+    - declaration
   function-paren-newline: error
   getter-return: error
   global-require: error
