@@ -225,7 +225,11 @@ rules:
     - error
     - after
   padded-blocks: 'off' #ok
-  padding-line-between-statements: 'off'
+  padding-line-between-statements:
+    - error
+    - blankLine: always
+      prev: "*"
+      next: function
   prefer-promise-reject-errors: error
   quote-props: 'off' #ok
   quotes:

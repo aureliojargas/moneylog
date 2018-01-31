@@ -1067,9 +1067,11 @@ function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 function array2ul(a) {
 	return '<ul><li>' + a.join('</li><li>') + '</li></ul>';
 }
+
 function wrapme(tag, text) {
 	return '<' + tag + '>' + text + '</' + tag + '>';
 }
+
 function linkme(url, text) {
 	return '<a href="' + url + '">' + text + '</a>';
 }
@@ -1092,12 +1094,15 @@ function getClass(el) {
 		return [];
 	}
 }
+
 function setClass(el, arr) {
 	el.className = arr.join(' ');
 }
+
 function hasClass(el, klass) {
 	return getClass(el).hasItem(klass);
 }
+
 function addClass(el, klass) {
 	var arr = getClass(el);
 	if (!arr.hasItem(klass)) {
@@ -1105,12 +1110,14 @@ function addClass(el, klass) {
 		setClass(el, arr);
 	}
 }
+
 function removeClass(el, klass) {
 	var arr = getClass(el);
 	if (arr.hasItem(klass)) {
 		setClass(el, arr.removePattern(klass));
 	}
 }
+
 function toggleClass(el, klass) {
 	var arr = getClass(el);
 	if (arr.hasItem(klass)) {
@@ -1169,6 +1176,7 @@ function addStyleSheet(elementId, contents) {
 	}
 	head.appendChild(style);
 }
+
 function removeStyleSheet(elementId) {
 	var el = document.getElementById(elementId);
 	el.parentNode.removeChild(el);
@@ -2875,6 +2883,7 @@ function editorOn() {
 
 	return false;  // cancel link action
 }
+
 function editorOff() {
 
 	// Hide editor
@@ -2885,6 +2894,7 @@ function editorOff() {
 
 	return false;  // cancel link action
 }
+
 function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
 
@@ -2896,6 +2906,7 @@ function saveLocalData() {
 
 	editButton.innerHTML = i18n.labelEditorOpen;
 }
+
 function editorSave() {
 	editorOff();
 	saveLocalData();

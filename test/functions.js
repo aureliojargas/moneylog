@@ -36,6 +36,7 @@ function check(results, ok) {
 		console.log(results);
 	}
 }
+
 function checkArray(results, ok, quiet) {
 	// Special function to test arrays because [] == [] returns false.
 
@@ -79,6 +80,7 @@ function checkArray(results, ok, quiet) {
 		return true;
 	}
 }
+
 function checkObject(results, ok) {
 	// Loop and check all object properties
 
