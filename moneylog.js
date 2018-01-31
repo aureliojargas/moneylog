@@ -476,7 +476,8 @@ var i18nDatabase = {
 		helpWebsite: 'Ir al sitio web de MoneyLog.'
 	},
 	getLanguage: function (langCode) {
-		var phrase, defaultLang = this.defaultLanguage;
+		var phrase;
+		var defaultLang = this.defaultLanguage;
 
 		if (defaultLang !== langCode) {
 			if (this[langCode]) {
@@ -507,8 +508,8 @@ var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
 var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
-var highlightRegex;
-var i18n;
+var highlightRegex = null;
+var i18n = {};
 var rawData = '';
 var parsedData = [];
 var reportData = [];  // filtered by applyTags(filterData())
@@ -516,8 +517,10 @@ var selectedRows = [];
 var savedDateRangeIndexes = [];  // used in the reload process
 var isFullScreen = false;
 var isBeta = (/β$/).test(appVersion);  // beta if version ends with 'β'
-var TagSummary;   // to make ESLint happy
-var AboutWidget;  // to make ESLint happy
+
+// Widgets
+var TagSummary = {};
+var AboutWidget = {};
 
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
@@ -587,7 +590,8 @@ if (!Array.prototype.avg) {
 }
 // [[0,1,2], [3,4,5], [6,7,8]].getColumn(1) -> [1, 4, 7]
 Array.prototype.getColumn = function (n) {
-	var i, leni, results = [];
+	var i, leni;
+	var results = [];
 	for (i = 0, leni = this.length; i < leni; i++) {
 		results.push(this[i][n]);
 	}
@@ -666,7 +670,9 @@ Array.prototype.hasAllArrayItems = function (arr) {
 // http://www.shamasis.net/2009/09/fast-algorithm-to-find-unique-items-in-javascript-array/
 // I choose the "classic" version, it's more reliable.
 Array.prototype.unique = function () {
-	var i, j, a = [], l = this.length;
+	var i, j;
+	var a = [];
+	var l = this.length;
 	for (i = 0; i < l; i++) {
 		for (j = i + 1; j < l; j++) {
 			if (this[i] === this[j]) { j = ++i; }  // eslint-disable-line no-plusplus
@@ -677,7 +683,9 @@ Array.prototype.unique = function () {
 };
 
 Array.prototype.removePattern = function (patt, n) { // n = number of removes
-	var i, leni, count = 0, cleaned = [];
+	var i, leni;
+	var count = 0;
+	var cleaned = [];
 
 	if (!n) {
 		n = Infinity;
@@ -927,7 +935,8 @@ function getPastMonth(months) {
 function getDataUniqueDates(periodType) {  // periodType: d, m, y
 	// Returns array with unique (dates|months|years) in parsedData.
 	// Note: parsedData is already sorted ASC by date.
-	var i, leni, theData, item, last, slices, results = [];
+	var i, leni, theData, item, last, slices;
+	var results = [];
 
 	theData = parsedData.clone();
 	slices = {y: 4, m: 7, d: 10};
@@ -944,7 +953,8 @@ function getDataUniqueDates(periodType) {  // periodType: d, m, y
 function getYearRange(date1, date2) {
 	// Given two dates, returns array with all the years between them, inclusive.
 	// Dates are strings formatted as YYYY-MM-DD.
-	var y, y1, y2, results = [];
+	var y, y1, y2;
+	var results = [];
 
 	if (date1 > date2) {  // no deal
 		return results;
@@ -962,7 +972,8 @@ function getYearRange(date1, date2) {
 function getMonthRange(date1, date2) {
 	// Given two dates, returns array with all the months between them, inclusive.
 	// Dates are strings formatted as YYYY-MM-DD.
-	var y, y1, y2, m, m1, m2, ini, end, results = [];
+	var y, y1, y2, m, m1, m2, ini, end;
+	var results = [];
 
 	if (date1 > date2) {  // no deal
 		return results;
@@ -1233,7 +1244,8 @@ function drawChart(values, labels) {
 }
 
 function computeTotals(arr) {  // arr = [1,2,3,4,5]
-	var i, leni, n, o = {};
+	var i, leni, n;
+	var o = {};
 
 	if (!arr.length) { return arr; }
 
@@ -1285,7 +1297,8 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 
 function createTagCloud(names) {
 	// Create all the <a> elements for the Tag Cloud
-	var i, leni, results = [];
+	var i, leni;
+	var results = [];
 
 	for (i = 0, leni = names.length; i < leni; i++) {
 		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>');
@@ -1339,7 +1352,8 @@ function updateTagCloud(visibleTags) {
 
 function getSelectedTags() {
 	// Get currently selected tags (from interface)
-	var i, leni, el, els, results = [];
+	var i, leni, el, els;
+	var results = [];
 
 	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
 	for (i = 0, leni = els.length; i < leni; i++) {
@@ -1354,7 +1368,8 @@ function getSelectedTags() {
 
 function getExcludedTags() {
 	// Get currently excluded tags (from interface)
-	var i, leni, el, els, results = [];
+	var i, leni, el, els;
+	var results = [];
 
 	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
 	for (i = 0, leni = els.length; i < leni; i++) {
@@ -1472,7 +1487,8 @@ function getMiniBar(pos, neg) {
 }
 
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
-	var partial = [], results = [];
+	var partial = [];
+	var results = [];
 
 	partial.push('<table class="posneg number"><tr>');
 	partial.push('<td> +');
@@ -2203,7 +2219,8 @@ function groupByPeriod(arr, periodType) {  // m, y
 	//     keys: ['2012-02', '2012-03']  // always sorted
 	// }
 
-	var i, leni, item, slices, results = {};
+	var i, leni, item, slices;
+	var results = {};
 
 	results.keys = [];
 	slices = {y: 4, m: 7, d: 10};
@@ -3408,7 +3425,8 @@ i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
 
 // Create elements
 AboutWidget.populate = function () {
-	var version, commit, html = [];
+	var version, commit;
+	var html = [];
 
 	// When in β: always show the commit ID
 	if (isBeta) {

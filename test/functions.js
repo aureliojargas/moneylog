@@ -44,7 +44,8 @@ function checkArray(results, ok, quiet) {
 	// console.log(ok);
 	// console.log(quiet);
 
-	var i, failed, prefix = 'Test ' + zz + ': ';
+	var i, failed;
+	var prefix = 'Test ' + zz + ': ';
 
 	for (i = 0; i < ok.length; i++) {
 
@@ -81,7 +82,8 @@ function checkArray(results, ok, quiet) {
 function checkObject(results, ok) {
 	// Loop and check all object properties
 
-	var x, failed, prefix = 'Test ' + zz + ': ';
+	var x, failed;
+	var prefix = 'Test ' + zz + ': ';
 
 	for (x in ok) {
 
