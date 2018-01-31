@@ -87,7 +87,7 @@ rules:
   indent:
     - error
     - tab
-  init-declarations: 'off'
+  init-declarations: 'off' #ok
   jsx-quotes: error
   key-spacing: error
   keyword-spacing: error
@@ -101,7 +101,7 @@ rules:
   max-len: 'off' #ok
   max-lines: 'off' #ok
   max-nested-callbacks: error
-  max-params: 'off'
+  max-params: 'off' #ok
   max-statements: 'off' #ok
   max-statements-per-line:
     - error
@@ -149,7 +149,7 @@ rules:
   no-label-var: error
   no-labels: error
   no-lone-blocks: error
-  no-lonely-if: 'off'
+  no-lonely-if: 'off' #ok
   no-loop-func: error
   no-magic-numbers: 'off' #ok
   no-mixed-operators:
@@ -245,7 +245,7 @@ rules:
     - error
     - last
   sort-keys: 'off' #ok
-  sort-vars: 'off'
+  sort-vars: 'off' #ok
   space-before-blocks: error
   space-before-function-paren:
     - error
@@ -256,7 +256,7 @@ rules:
   space-infix-ops: error
   space-unary-ops: error
   spaced-comment: error
-  strict: 'off'
+  strict: 'off' #ok
   switch-colon-spacing: error
   template-tag-spacing: error
   unicode-bom:
