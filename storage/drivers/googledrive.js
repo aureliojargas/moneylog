@@ -57,21 +57,22 @@ ml.storage.drivers.googledrive = (function () {
 		}
 	}
 
-	// Create and render a Picker object for picking user files.
+	// Create and render a Picker object for picking a user folder
 	function createPicker() {
 		var view, picker;
 		if (pickerApiLoaded && oauthToken) {
-			view = new google.picker.DocsView()
-				// txt files only
-				.setMimeTypes('text/plain');
-
+			// Picker will show folders only, in hierarquical view
+			view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+				.setParent('root')
+				.setIncludeFolders(true)
+				.setSelectFolderEnabled(true)
+				.setMode(google.picker.DocsViewMode.LIST);
 			picker = new google.picker.PickerBuilder()
 				.addView(view)
 				.setOAuthToken(oauthToken)
 				.setDeveloperKey(developerKey)
 				.setCallback(pickerCallback)
 				.enableFeature(google.picker.Feature.NAV_HIDDEN)
-				.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 				.setLocale('pt-BR')
 				.build();
 			picker.setVisible(true);
