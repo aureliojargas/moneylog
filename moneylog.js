@@ -1,4 +1,4 @@
-/* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
+/* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault encodeQueryData getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
 
 // moneylog.js
 // http://aurelio.net/moneylog/
@@ -1128,6 +1128,19 @@ function toggleClass(el, klass) {
 		setClass(el, arr);
 		return true;
 	}
+}
+
+// Compose URL query string from a data object
+// https://stackoverflow.com/a/111545/1623438
+function encodeQueryData(data) {
+	var name;
+	var result = [];
+	for (name in data) {
+		if (Object.prototype.hasOwnProperty.call(data, name)) {
+			result.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
+		}
+	}
+	return result.join('&');
 }
 
 // DO NOT append elements using el.innerHTML += "foo";

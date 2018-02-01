@@ -10,6 +10,7 @@ globals:
   computeTotals: false
   dataFiles: false
   dataFilesDefault: false
+  encodeQueryData: false
   gapi: false
   google: false
   groupByPeriod: false
