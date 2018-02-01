@@ -1735,8 +1735,10 @@ function reloadData() {
 function loadData() {
 	var messageBoard;
 
-	// Hide charts when loading
+	// Hide charts and Tag Report when loading data
 	document.getElementById('charts').style.display = 'none';
+	document.getElementById('tag-report').style.display = 'none';
+
 	// Where to show the "loading..." message
 	messageBoard = document.getElementById('report');
 
