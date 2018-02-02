@@ -2,9 +2,9 @@
 // http://aurelio.net/moneylog/
 //
 // On page loading, the Google Drive File Picker will show up.
-// Once you select your text files, MoneyLog will load them.
+// Once you select your MoneyLog folder, their files will be loaded.
 
-// Most of this code is a copy/paste from the official documentation:
+// The base of this code is a copy/paste from the official documentation:
 // https://developers.google.com/picker/docs/
 
 // About namespacing: https://addyosmani.com/blog/essential-js-namespacing/
@@ -79,34 +79,32 @@ ml.storage.drivers.googledrive = (function () {
 		}
 	}
 
-	// Called when the user has chosen the file
+	// Called when the user has chosen the folder
 	function pickerCallback(data) {
-		var i, self, filesCombo;
+		var folderId, filesCombo;
 
+		// Original scope is lost here :(
+		var self = ml.storage.drivers.googledrive;
+
+		// User picked one folder
 		if (data.action == google.picker.Action.PICKED) {
 
-			// Original scope is lost here :(
-			self = ml.storage.drivers.googledrive;
+			// List this folder's files
+			folderId = data.docs[0].id;
+			getFolderFiles(folderId, function (files) {
 
-			self.userFiles = [];
-			for (i = 0; i < data.docs.length; i++) {
-				self.userFiles.push({
-					id: data.docs[i].id,
-					name: data.docs[i].name
-				});
-			}
-			// self.userFiles.sort(); XXX TODO
+				self.userFiles = files;
+				ml.storage.userFiles = self.userFiles;
+				ml.storage.populateFilesCombo();
 
-			ml.storage.userFiles = self.userFiles;
-			ml.storage.populateFilesCombo();
+				// Set the default file to load when using multiple files
+				if (self.defaultFile) {
+					filesCombo = document.getElementById('source-file');
+					selectOptionByText(filesCombo, self.defaultFile);
+				}
 
-			// Set the default file to load when using multiple files
-			if (self.defaultFile) {
-				filesCombo = document.getElementById('source-file');
-				selectOptionByText(filesCombo, self.defaultFile);
-			}
-
-			loadData();
+				loadData();
+			});
 		}
 	}
 
