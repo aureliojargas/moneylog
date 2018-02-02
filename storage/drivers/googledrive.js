@@ -81,7 +81,7 @@ ml.storage.drivers.googledrive = (function () {
 
 	// Called when the user has chosen the folder
 	function pickerCallback(data) {
-		var folderId, filesCombo;
+		var folderId;
 
 		// Original scope is lost here :(
 		var self = ml.storage.drivers.googledrive;
@@ -106,7 +106,7 @@ ml.storage.drivers.googledrive = (function () {
 				// Apply user config.js file (if any)
 				if (configFile) {
 					readFile(configFile.id, function (contents) {
-						eval(contents);
+						eval(contents);  // eslint-disable-line no-eval
 						initUI();
 						setDefaultFile(self.defaultFile);
 						loadData();
@@ -121,6 +121,7 @@ ml.storage.drivers.googledrive = (function () {
 
 	// Set the default file to load when using multiple files
 	function setDefaultFile(file) {
+		var filesCombo;
 		if (file) {
 			filesCombo = document.getElementById('source-file');
 			selectOptionByText(filesCombo, file);

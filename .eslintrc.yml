@@ -15,6 +15,7 @@ globals:
   google: false
   groupByPeriod: false
   i18nDatabase: false
+  initUI: false
   loadData: false
   ml: false
   selectOptionByText: false
