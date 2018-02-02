@@ -612,6 +612,7 @@ String.prototype.replaceAll = function (from, to) {
 	return this.split(from).join(to);
 	// http://stackoverflow.com/a/542305
 };
+
 String.prototype.unacccent = function () {
 	if (!this.match(/[^a-z0-9 ]/)) { // no accented char
 		return this;
@@ -626,6 +627,16 @@ String.prototype.unacccent = function () {
 		.replace(/ç/g,        'c')
 		.replace(/ñ/g,        'n');
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#polyfill
+if (!String.prototype.endsWith) {
+	String.prototype.endsWith = function (search, thisLen) {
+		if (thisLen === undefined || thisLen > this.length) {
+			thisLen = this.length;
+		}
+		return this.substring(thisLen - search.length, thisLen) === search;
+	};
+}
 
 Array.prototype.clone = function () {
 	return [].concat(this);
