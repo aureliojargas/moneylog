@@ -3580,8 +3580,8 @@ function sanitizeConfig() {
 	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
 	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
 	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
-	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
-	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
+	if (sortData.m.indexTag < sortData.m.minTag) { sortData.m.indexTag = sortData.m.minTag; }
+	if (sortData.y.indexTag < sortData.y.minTag) { sortData.y.indexTag = sortData.y.minTag; }
 }
 
 function initUI() {
