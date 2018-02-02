@@ -107,6 +107,7 @@ ml.storage.drivers.googledrive = (function () {
 				if (configFile) {
 					readFile(configFile.id, function (contents) {
 						eval(contents);  // eslint-disable-line no-eval
+						sanitizeConfig();
 						initUI();
 						setDefaultFile(self.defaultFile);
 						loadData();

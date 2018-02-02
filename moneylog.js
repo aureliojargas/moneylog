@@ -3548,6 +3548,42 @@ AboutWidget.populate = function () {
 //                             INIT
 // ------------------------------------------------------------------
 
+function sanitizeConfig() {
+	// Regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
+	// Note: Using regex to allow ignorecase and global *atomic* replace
+	if (highlightWords) {
+		highlightRegex = new RegExp(
+			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
+			'ig'
+		);
+	}
+
+	// Some configs may be set as strings or arrays.
+	// If user choose string, let's convert it to an array now.
+	if (typeof highlightTags === 'string') {
+		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/) : [];
+	}
+	if (typeof ignoreTags === 'string') {
+		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
+	}
+	if (typeof initSelectedTags === 'string') {
+		initSelectedTags = (initSelectedTags) ? initSelectedTags.strip().split(/\s+/) : [];
+	}
+	if (typeof initExcludedTags === 'string') {
+		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
+	}
+
+	// Validate the sort data config
+	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
+	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
+	if (sortData.y.index < sortData.y.min) { sortData.y.index = sortData.y.min; }
+	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
+	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
+	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
+	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
+	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
+}
+
 function initUI() {
 	var i;
 
@@ -3572,30 +3608,6 @@ function initUI() {
 	populateChartColsCombo();
 	populateRowsSummaryCombo();
 	populateValueFilterCombo();
-
-	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
-	// Note: Using regex to allow ignorecase and global *atomic* replace
-	if (highlightWords) {
-		highlightRegex = new RegExp(
-			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
-			'ig'
-		);
-	}
-
-	// Some configs may be set as strings or arrays.
-	// If user choose string, let's convert it to an array now.
-	if (typeof highlightTags === 'string') {
-		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/) : [];
-	}
-	if (typeof ignoreTags === 'string') {
-		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
-	}
-	if (typeof initSelectedTags === 'string') {
-		initSelectedTags = (initSelectedTags) ? initSelectedTags.strip().split(/\s+/) : [];
-	}
-	if (typeof initExcludedTags === 'string') {
-		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
-	}
 
 	// Set interface labels
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
@@ -3734,22 +3746,13 @@ function initUI() {
 		updateToolbar();
 	}
 
-	// Validate the sort data config
-	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
-	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
-	if (sortData.y.index < sortData.y.min) { sortData.y.index = sortData.y.min; }
-	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
-	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
-	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
-	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
-	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
-
 	// Uncomment this line to focus the search box at init
 	// document.getElementById('filter').focus();
 }
 
 function init() {
 
+	sanitizeConfig();
 	initUI();
 
 	// UI is ok, so now let's setup storage and (maybe) load user data
