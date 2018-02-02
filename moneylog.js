@@ -3548,7 +3548,7 @@ AboutWidget.populate = function () {
 //                             INIT
 // ------------------------------------------------------------------
 
-function init() {
+function initUI() {
 	var i;
 
 	// Load the i18n messages (must be the first)
@@ -3744,12 +3744,17 @@ function init() {
 	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
 	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
 
+	// Uncomment this line to focus the search box at init
+	// document.getElementById('filter').focus();
+}
+
+function init() {
+
+	initUI();
+
 	// UI is ok, so now let's setup storage and (maybe) load user data
 	// Exception: some cloud storages defer user data loading after the file picker
 	ml.storage.init();
 	ml.storage.setDriver();
-
-	// Uncomment this line to focus the search box at init
-	// document.getElementById('filter').focus();
 }
 window.onload = init;
