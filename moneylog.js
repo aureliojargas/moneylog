@@ -3573,15 +3573,17 @@ function sanitizeConfig() {
 		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
 	}
 
-	// Validate the sort data config
-	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
-	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
-	if (sortData.y.index < sortData.y.min) { sortData.y.index = sortData.y.min; }
-	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
-	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
-	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
-	if (sortData.m.indexTag < sortData.m.minTag) { sortData.m.indexTag = sortData.m.minTag; }
-	if (sortData.y.indexTag < sortData.y.minTag) { sortData.y.indexTag = sortData.y.minTag; }
+	// Make sure sort data do not cross min/max limits
+	// max limit
+	sortData.d.index = Math.min(sortData.d.max, sortData.d.index);
+	sortData.m.index = Math.min(sortData.m.max, sortData.m.index);
+	sortData.y.index = Math.min(sortData.y.max, sortData.y.index);
+	// min limit
+	sortData.d.index = Math.max(sortData.d.min, sortData.d.index);
+	sortData.m.index = Math.max(sortData.m.min, sortData.m.index);
+	sortData.y.index = Math.max(sortData.y.min, sortData.y.index);
+	sortData.m.indexTag = Math.max(sortData.m.minTag, sortData.m.indexTag);
+	sortData.y.indexTag = Math.max(sortData.y.minTag, sortData.y.indexTag);
 }
 
 function initUI() {
