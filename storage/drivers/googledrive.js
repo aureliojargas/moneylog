@@ -195,6 +195,10 @@ ml.storage.drivers.googledrive = (function () {
 			readFile(fileData.id, callback);
 		};
 
+		// Google Drive API has a User Rate Limit of 10 requests per second
+		// See https://github.com/aureliojargas/moneylog/issues/22
+		ml.storage.maxFilesForStar = 9;
+
 		ml.storage.resetFilesCombo();
 
 		// Load the Google API

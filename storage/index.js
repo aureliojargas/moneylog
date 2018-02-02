@@ -22,6 +22,7 @@ ml.storage = {
 
 	// to be set by file based drivers
 	userFiles: [],  // [{id:'', name:''}, ...]
+	maxFilesForStar: 999,
 
 	// stubs to be implemented by each driver (some are optional)
 	write: function (contents) { console.log(contents); },
@@ -70,7 +71,7 @@ ml.storage = {
 		}
 
 		// Extra option at the end: parse all files
-		if (nrFiles > 1) {
+		if (nrFiles > 1 && nrFiles <= this.maxFilesForStar) {
 			combo.add(new Option('*'));
 		}
 	},
