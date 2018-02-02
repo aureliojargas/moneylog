@@ -92,8 +92,12 @@ ml.storage.drivers.googledrive = (function () {
 			// List this folder's files
 			folderId = data.docs[0].id;
 			getFolderFiles(folderId, function (files) {
+				var textFile;
 
-				self.userFiles = files;
+				// Filter relevant files
+				textFiles = files.filter(function (el) { return el.name.endsWith('.txt'); });
+
+				self.userFiles = textFiles;
 				ml.storage.userFiles = self.userFiles;
 				ml.storage.populateFilesCombo();
 
