@@ -92,23 +92,38 @@ ml.storage.drivers.googledrive = (function () {
 			// List this folder's files
 			folderId = data.docs[0].id;
 			getFolderFiles(folderId, function (files) {
-				var textFile;
+				var textFiles, configFile;
 
 				// Filter relevant files
 				textFiles = files.filter(function (el) { return el.name.endsWith('.txt'); });
+				configFile = files.filter(function (el) { return el.name === 'config.js'; })[0];
 
+				// Setup data files combo
 				self.userFiles = textFiles;
 				ml.storage.userFiles = self.userFiles;
 				ml.storage.populateFilesCombo();
 
-				// Set the default file to load when using multiple files
-				if (self.defaultFile) {
-					filesCombo = document.getElementById('source-file');
-					selectOptionByText(filesCombo, self.defaultFile);
+				// Apply user config.js file (if any)
+				if (configFile) {
+					readFile(configFile.id, function (contents) {
+						eval(contents);
+						initUI();
+						setDefaultFile(self.defaultFile);
+						loadData();
+					});
+				} else {
+					setDefaultFile(self.defaultFile);
+					loadData();
 				}
-
-				loadData();
 			});
+		}
+	}
+
+	// Set the default file to load when using multiple files
+	function setDefaultFile(file) {
+		if (file) {
+			filesCombo = document.getElementById('source-file');
+			selectOptionByText(filesCombo, file);
 		}
 	}
 
