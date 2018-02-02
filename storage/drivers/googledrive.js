@@ -140,6 +140,8 @@ ml.storage.drivers.googledrive = (function () {
 			queryString = encodeQueryData({
 				// https://developers.google.com/drive/v3/web/search-parameters
 				q: '"' + folderId + '" in parents and trashed = false and (mimeType = "text/plain" or mimeType = "application/x-javascript")',
+				spaces: 'drive',
+				orderBy: 'name',
 				fields: 'files(id, name)'
 			});
 
