@@ -2,7 +2,7 @@
 // http://aurelio.net/moneylog/
 //
 // On page loading, the Google Drive File Picker will show up.
-// Once you select your MoneyLog folder, their files will be loaded.
+// Once you select your MoneyLog folder, its files will be loaded.
 
 // The base of this code is a copy/paste from the official documentation:
 // https://developers.google.com/picker/docs/
