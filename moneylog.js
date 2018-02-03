@@ -3734,7 +3734,7 @@ function initUI() {
 	document.getElementById('tag-report-opt-related-check').checked = checkHideRelatedTags;
 	document.getElementById('filter').value = defaultSearch;
 
-	// Always show these toolbar boxes opened at init
+	// These toolbar boxes must be opened at init?
 	toggleStorage(    {open: initStorageWidgetOpen});
 	toggleViewOptions({open: initViewWidgetOpen});
 	toggleTagCloud(   {open: initTagCloudOpen});
