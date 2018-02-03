@@ -10,12 +10,15 @@ globals:
   computeTotals: false
   dataFiles: false
   dataFilesDefault: false
+  encodeQueryData: false
   gapi: false
   google: false
   groupByPeriod: false
   i18nDatabase: false
+  initUI: false
   loadData: false
   ml: false
+  sanitizeConfig: false
   selectOptionByText: false
   showError: false
   showReport: false

@@ -2,9 +2,9 @@
 // http://aurelio.net/moneylog/
 //
 // On page loading, the Google Drive File Picker will show up.
-// Once you select your text files, MoneyLog will load them.
+// Once you select your MoneyLog folder, its files will be loaded.
 
-// Most of this code is a copy/paste from the official documentation:
+// The base of this code is a copy/paste from the official documentation:
 // https://developers.google.com/picker/docs/
 
 // About namespacing: https://addyosmani.com/blog/essential-js-namespacing/
@@ -57,55 +57,107 @@ ml.storage.drivers.googledrive = (function () {
 		}
 	}
 
-	// Create and render a Picker object for picking user files.
+	// Create and render a Picker object for picking a user folder
 	function createPicker() {
 		var view, picker;
 		if (pickerApiLoaded && oauthToken) {
-			view = new google.picker.DocsView()
-				// txt files only
-				.setMimeTypes('text/plain');
-
+			// Picker will show folders only, in hierarquical view
+			view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+				.setParent('root')
+				.setIncludeFolders(true)
+				.setSelectFolderEnabled(true)
+				.setMode(google.picker.DocsViewMode.LIST);
 			picker = new google.picker.PickerBuilder()
 				.addView(view)
 				.setOAuthToken(oauthToken)
 				.setDeveloperKey(developerKey)
 				.setCallback(pickerCallback)
 				.enableFeature(google.picker.Feature.NAV_HIDDEN)
-				.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 				.setLocale('pt-BR')
 				.build();
 			picker.setVisible(true);
 		}
 	}
 
-	// Called when the user has chosen the file
+	// Called when the user has chosen the folder
 	function pickerCallback(data) {
-		var i, self, filesCombo;
+		var folderId;
 
+		// Original scope is lost here :(
+		var self = ml.storage.drivers.googledrive;
+
+		// User picked one folder
 		if (data.action == google.picker.Action.PICKED) {
 
-			// Original scope is lost here :(
-			self = ml.storage.drivers.googledrive;
+			// List this folder's files
+			folderId = data.docs[0].id;
+			getFolderFiles(folderId, function (files) {
+				var textFiles, configFile;
 
-			self.userFiles = [];
-			for (i = 0; i < data.docs.length; i++) {
-				self.userFiles.push({
-					id: data.docs[i].id,
-					name: data.docs[i].name
-				});
-			}
-			// self.userFiles.sort(); XXX TODO
+				// Filter relevant files
+				textFiles = files.filter(function (el) { return el.name.endsWith('.txt'); });
+				configFile = files.filter(function (el) { return el.name === 'config.js'; })[0];
 
-			ml.storage.userFiles = self.userFiles;
-			ml.storage.populateFilesCombo();
+				// Setup data files combo
+				self.userFiles = textFiles;
+				ml.storage.userFiles = self.userFiles;
+				ml.storage.populateFilesCombo();
 
-			// Set the default file to load when using multiple files
-			if (self.defaultFile) {
-				filesCombo = document.getElementById('source-file');
-				selectOptionByText(filesCombo, self.defaultFile);
-			}
+				// Apply user config.js file (if any)
+				if (configFile) {
+					readFile(configFile.id, function (contents) {
+						eval(contents);  // eslint-disable-line no-eval
+						sanitizeConfig();
+						initUI();
+						setDefaultFile(self.defaultFile);
+						loadData();
+					});
+				} else {
+					setDefaultFile(self.defaultFile);
+					loadData();
+				}
+			});
+		}
+	}
 
-			loadData();
+	// Set the default file to load when using multiple files
+	function setDefaultFile(file) {
+		var filesCombo;
+		if (file) {
+			filesCombo = document.getElementById('source-file');
+			selectOptionByText(filesCombo, file);
+		}
+	}
+
+	// https://developers.google.com/drive/v3/web/folder
+	// https://developers.google.com/drive/v3/reference/files/list
+	function getFolderFiles(folderId, callback) {
+		var url, queryString, accessToken, xhr, data;
+
+		if (folderId) {
+			accessToken = gapi.auth.getToken().access_token;
+			url = 'https://www.googleapis.com/drive/v3/files';
+			queryString = encodeQueryData({
+				// https://developers.google.com/drive/v3/web/search-parameters
+				q: '"' + folderId + '" in parents and trashed = false and (mimeType = "text/plain" or mimeType = "application/x-javascript")',
+				spaces: 'drive',
+				orderBy: 'name',
+				fields: 'files(id, name)'
+			});
+
+			xhr = new XMLHttpRequest();
+			xhr.open('GET', url + '?' + queryString);
+			xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+			xhr.onload = function () {
+				data = JSON.parse(xhr.responseText);
+				callback(data.files);
+			};
+			xhr.onerror = function () {
+				console.log('ERROR: xhr error');
+			};
+			xhr.send();
+		} else {
+			console.log('ERROR: No folder id informed');
 		}
 	}
 
@@ -144,6 +196,10 @@ ml.storage.drivers.googledrive = (function () {
 		ml.storage.readAsync = function (fileData, callback) {
 			readFile(fileData.id, callback);
 		};
+
+		// Google Drive API has a User Rate Limit of 10 requests per second
+		// See https://github.com/aureliojargas/moneylog/issues/22
+		ml.storage.maxFilesForStar = 9;
 
 		ml.storage.resetFilesCombo();
 

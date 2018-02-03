@@ -1,4 +1,4 @@
-/* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
+/* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault encodeQueryData getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
 
 // moneylog.js
 // http://aurelio.net/moneylog/
@@ -612,6 +612,7 @@ String.prototype.replaceAll = function (from, to) {
 	return this.split(from).join(to);
 	// http://stackoverflow.com/a/542305
 };
+
 String.prototype.unacccent = function () {
 	if (!this.match(/[^a-z0-9 ]/)) { // no accented char
 		return this;
@@ -626,6 +627,16 @@ String.prototype.unacccent = function () {
 		.replace(/ç/g,        'c')
 		.replace(/ñ/g,        'n');
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#polyfill
+if (!String.prototype.endsWith) {
+	String.prototype.endsWith = function (search, thisLen) {
+		if (thisLen === undefined || thisLen > this.length) {
+			thisLen = this.length;
+		}
+		return this.substring(thisLen - search.length, thisLen) === search;
+	};
+}
 
 Array.prototype.clone = function () {
 	return [].concat(this);
@@ -736,6 +747,36 @@ if (!Array.prototype.indexOf) {
 		return -1;
 	};
 }
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#polyfill
+/* eslint-disable */
+if (!Array.prototype.filter)
+	Array.prototype.filter = function(func, thisArg) {
+		'use strict';
+		if ( ! ((typeof func === 'Function' || typeof func === 'function') && this) )
+			throw new TypeError();
+
+		var len = this.length >>> 0,
+			res = new Array(len), // preallocate array
+			t = this, c = 0, i = -1;
+		if (thisArg === undefined)
+			while (++i !== len)
+				// checks to see if the key was set
+				if (i in this)
+					if (func(t[i], i, t))
+						res[c++] = t[i];
+		else
+			while (++i !== len)
+				// checks to see if the key was set
+				if (i in this)
+					if (func.call(thisArg, t[i], i, t))
+						res[c++] = t[i];
+
+		res.length = c; // shrink down array to proper size
+		return res;
+	};
+/* eslint-enable */
+
 RegExp.escape = function (str) {
 	var specials = new RegExp('[.*+?|\\^$()\\[\\]{}\\\\]', 'g');
 	return str.replace(specials, '\\$&');
@@ -1128,6 +1169,19 @@ function toggleClass(el, klass) {
 		setClass(el, arr);
 		return true;
 	}
+}
+
+// Compose URL query string from a data object
+// https://stackoverflow.com/a/111545/1623438
+function encodeQueryData(data) {
+	var name;
+	var result = [];
+	for (name in data) {
+		if (Object.prototype.hasOwnProperty.call(data, name)) {
+			result.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
+		}
+	}
+	return result.join('&');
 }
 
 // DO NOT append elements using el.innerHTML += "foo";
@@ -2995,17 +3049,32 @@ function toggleFullScreen() {
 	return false;  // cancel link action
 }
 
-function toggleToolbarBox(headerId, contentId) {
+function toggleToolbarBox(headerId, contentId, options) {
 	// Handle toolbar box header clicking: show/hide contents
 	var header, content;
 	header = document.getElementById(headerId);
 	content = document.getElementById(contentId);
-	if (content.style.display === 'block') {
-		content.style.display = 'none';
-		removeClass(header, 'active');
-	} else {
+
+	function open() {
 		content.style.display = 'block';
 		addClass(header, 'active');
+	}
+	function close() {
+		content.style.display = 'none';
+		removeClass(header, 'active');
+	}
+
+	// Force state
+	if (options.open === true) {
+		open();
+	} else if (options.open === false) {
+		close();
+
+	// Toggle state
+	} else if (content.style.display === 'none') {
+		open();
+	} else {
+		close();
 	}
 	return false;  // cancel link action
 }
@@ -3018,16 +3087,16 @@ function toggleCheckboxOptionExtra(checkbox) {
 	}
 }
 
-function toggleStorage() {
-	return toggleToolbarBox('storage-header', 'storage-content');
+function toggleStorage(options) {
+	return toggleToolbarBox('storage-header', 'storage-content', options);
 }
 
-function toggleViewOptions() {
-	return toggleToolbarBox('view-options-header', 'view-options-content');
+function toggleViewOptions(options) {
+	return toggleToolbarBox('view-options-header', 'view-options-content', options);
 }
 
-function toggleTagCloud() {
-	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
+function toggleTagCloud(options) {
+	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content', options);
 }
 
 function toggleValueFilter() {
@@ -3494,7 +3563,45 @@ AboutWidget.populate = function () {
 //                             INIT
 // ------------------------------------------------------------------
 
-function init() {
+function sanitizeConfig() {
+	// Regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
+	// Note: Using regex to allow ignorecase and global *atomic* replace
+	if (highlightWords) {
+		highlightRegex = new RegExp(
+			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
+			'ig'
+		);
+	}
+
+	// Some configs may be set as strings or arrays.
+	// If user choose string, let's convert it to an array now.
+	if (typeof highlightTags === 'string') {
+		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/) : [];
+	}
+	if (typeof ignoreTags === 'string') {
+		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
+	}
+	if (typeof initSelectedTags === 'string') {
+		initSelectedTags = (initSelectedTags) ? initSelectedTags.strip().split(/\s+/) : [];
+	}
+	if (typeof initExcludedTags === 'string') {
+		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
+	}
+
+	// Make sure sort data do not cross min/max limits
+	// max limit
+	sortData.d.index = Math.min(sortData.d.max, sortData.d.index);
+	sortData.m.index = Math.min(sortData.m.max, sortData.m.index);
+	sortData.y.index = Math.min(sortData.y.max, sortData.y.index);
+	// min limit
+	sortData.d.index = Math.max(sortData.d.min, sortData.d.index);
+	sortData.m.index = Math.max(sortData.m.min, sortData.m.index);
+	sortData.y.index = Math.max(sortData.y.min, sortData.y.index);
+	sortData.m.indexTag = Math.max(sortData.m.minTag, sortData.m.indexTag);
+	sortData.y.indexTag = Math.max(sortData.y.minTag, sortData.y.indexTag);
+}
+
+function initUI() {
 	var i;
 
 	// Load the i18n messages (must be the first)
@@ -3518,30 +3625,6 @@ function init() {
 	populateChartColsCombo();
 	populateRowsSummaryCombo();
 	populateValueFilterCombo();
-
-	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
-	// Note: Using regex to allow ignorecase and global *atomic* replace
-	if (highlightWords) {
-		highlightRegex = new RegExp(
-			RegExp.escape(highlightWords).replace(/\s+/g, '|'),
-			'ig'
-		);
-	}
-
-	// Some configs may be set as strings or arrays.
-	// If user choose string, let's convert it to an array now.
-	if (typeof highlightTags === 'string') {
-		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/) : [];
-	}
-	if (typeof ignoreTags === 'string') {
-		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
-	}
-	if (typeof initSelectedTags === 'string') {
-		initSelectedTags = (initSelectedTags) ? initSelectedTags.strip().split(/\s+/) : [];
-	}
-	if (typeof initExcludedTags === 'string') {
-		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
-	}
 
 	// Set interface labels
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
@@ -3642,21 +3725,19 @@ function init() {
 	document.getElementById('editor-save'            ).onclick  = editorSave;
 
 	// Apply user defaults (this code must be after event handlers adding)
-	if (initFullScreen)     { toggleFullScreen(); }
-	if (checkRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
-	if (checkNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
-	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
-	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
-	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (checkHideRelatedTags) {
-		document.getElementById('tag-report-opt-related-check').checked = true;
-	}
+	if (initFullScreen) { toggleFullScreen(); }
+	document.getElementById('opt-regex-check' ).checked = checkRegex;
+	document.getElementById('opt-negate-check').checked = checkNegate;
+	document.getElementById('opt-date-1-check').checked = checkDateFrom;
+	document.getElementById('opt-date-2-check').checked = checkDateUntil;
+	document.getElementById('opt-monthly-check').checked = checkMonthPartials;
+	document.getElementById('tag-report-opt-related-check').checked = checkHideRelatedTags;
 	document.getElementById('filter').value = defaultSearch;
 
-	// Always show these toolbar boxes opened at init
-	if (initStorageWidgetOpen) {     toggleStorage(); }
-	if (initViewWidgetOpen)    { toggleViewOptions(); }
-	if (initTagCloudOpen)      {    toggleTagCloud(); }
+	// These toolbar boxes must be opened at init?
+	toggleStorage(    {open: initStorageWidgetOpen});
+	toggleViewOptions({open: initViewWidgetOpen});
+	toggleTagCloud(   {open: initTagCloudOpen});
 
 	// Maybe hide some widgets?
 	if (!showStorageWidget) {
@@ -3680,22 +3761,18 @@ function init() {
 		updateToolbar();
 	}
 
-	// Validate the sort data config
-	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
-	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
-	if (sortData.y.index < sortData.y.min) { sortData.y.index = sortData.y.min; }
-	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
-	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
-	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
-	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
-	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
+	// Uncomment this line to focus the search box at init
+	// document.getElementById('filter').focus();
+}
+
+function init() {
+
+	sanitizeConfig();
+	initUI();
 
 	// UI is ok, so now let's setup storage and (maybe) load user data
 	// Exception: some cloud storages defer user data loading after the file picker
 	ml.storage.init();
 	ml.storage.setDriver();
-
-	// Uncomment this line to focus the search box at init
-	// document.getElementById('filter').focus();
 }
 window.onload = init;
