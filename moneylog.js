@@ -3725,15 +3725,13 @@ function initUI() {
 	document.getElementById('editor-save'            ).onclick  = editorSave;
 
 	// Apply user defaults (this code must be after event handlers adding)
-	if (initFullScreen)     { toggleFullScreen(); }
-	if (checkRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
-	if (checkNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
-	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
-	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
-	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (checkHideRelatedTags) {
-		document.getElementById('tag-report-opt-related-check').checked = true;
-	}
+	if (initFullScreen) { toggleFullScreen(); }
+	document.getElementById('opt-regex-check' ).checked = checkRegex;
+	document.getElementById('opt-negate-check').checked = checkNegate;
+	document.getElementById('opt-date-1-check').checked = checkDateFrom;
+	document.getElementById('opt-date-2-check').checked = checkDateUntil;
+	document.getElementById('opt-monthly-check').checked = checkMonthPartials;
+	document.getElementById('tag-report-opt-related-check').checked = checkHideRelatedTags;
 	document.getElementById('filter').value = defaultSearch;
 
 	// Always show these toolbar boxes opened at init
