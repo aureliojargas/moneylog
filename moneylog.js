@@ -3049,17 +3049,32 @@ function toggleFullScreen() {
 	return false;  // cancel link action
 }
 
-function toggleToolbarBox(headerId, contentId) {
+function toggleToolbarBox(headerId, contentId, options) {
 	// Handle toolbar box header clicking: show/hide contents
 	var header, content;
 	header = document.getElementById(headerId);
 	content = document.getElementById(contentId);
-	if (content.style.display === 'block') {
-		content.style.display = 'none';
-		removeClass(header, 'active');
-	} else {
+
+	function open() {
 		content.style.display = 'block';
 		addClass(header, 'active');
+	}
+	function close() {
+		content.style.display = 'none';
+		removeClass(header, 'active');
+	}
+
+	// Force state
+	if (options.open === true) {
+		open();
+	} else if (options.open === false) {
+		close();
+
+	// Toggle state
+	} else if (content.style.display === 'none') {
+		open();
+	} else {
+		close();
 	}
 	return false;  // cancel link action
 }
@@ -3072,16 +3087,16 @@ function toggleCheckboxOptionExtra(checkbox) {
 	}
 }
 
-function toggleStorage() {
-	return toggleToolbarBox('storage-header', 'storage-content');
+function toggleStorage(options) {
+	return toggleToolbarBox('storage-header', 'storage-content', options);
 }
 
-function toggleViewOptions() {
-	return toggleToolbarBox('view-options-header', 'view-options-content');
+function toggleViewOptions(options) {
+	return toggleToolbarBox('view-options-header', 'view-options-content', options);
 }
 
-function toggleTagCloud() {
-	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
+function toggleTagCloud(options) {
+	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content', options);
 }
 
 function toggleValueFilter() {
@@ -3722,9 +3737,9 @@ function initUI() {
 	document.getElementById('filter').value = defaultSearch;
 
 	// Always show these toolbar boxes opened at init
-	if (initStorageWidgetOpen) {     toggleStorage(); }
-	if (initViewWidgetOpen)    { toggleViewOptions(); }
-	if (initTagCloudOpen)      {    toggleTagCloud(); }
+	toggleStorage(    {open: initStorageWidgetOpen});
+	toggleViewOptions({open: initViewWidgetOpen});
+	toggleTagCloud(   {open: initTagCloudOpen});
 
 	// Maybe hide some widgets?
 	if (!showStorageWidget) {
