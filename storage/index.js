@@ -101,6 +101,13 @@ ml.storage = {
 		}
 	},
 
+	// Call this after reading user's config.js file
+	applyUserConfig: function (configString) {
+		eval(configString);  // eslint-disable-line no-eval
+		sanitizeConfig();
+		initUI();
+	},
+
 	// Read multiple files (async) and callback with a single string with
 	// all their contents concatenated (in random order)
 	readAsyncMulti: function (filenames, callback) {
