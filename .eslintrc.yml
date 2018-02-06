@@ -72,9 +72,7 @@ rules:
   for-direction: error
   func-call-spacing: error
   func-name-matching: error
-  func-names:
-    - error
-    - never
+  func-names: 'off' #ok
   func-style:
     - error
     - declaration
