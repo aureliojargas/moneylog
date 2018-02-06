@@ -1,15 +1,21 @@
 // HTML: <pre id="data">
 
 ml.storage.drivers.html = {
+	id: 'html',
 	name: '<pre> element',
+	config: {
+		isAsync: false,
+		isEditable: false,
+		isFileBased: false,
+		isReloadable: false,
+		loadDataAtSetup: true
+	},
+
+	read: function () {
+		return document.getElementById('data').innerText;
+	},
+
 	setup: function () {
-		ml.storage.isAsync = false;
-		ml.storage.isEditable = false;
-		ml.storage.isFileBased = false;
-		ml.storage.isReloadable = false;
-		ml.storage.loadDataAtSetup = true;
-		ml.storage.read = function () {
-			return document.getElementById('data').innerText;
-		};
+		// none
 	}
 };

@@ -1799,7 +1799,7 @@ function loadData() {
 	resetData();
 
 	// Read user data, process it and show results
-	if (ml.storage.isFileBased) {
+	if (ml.storage.driver.config.isFileBased) {
 		messageBoard.innerText = i18n.msgLoading.replace('%s', getSelectedFile().name);
 		showHideEditButton();
 		ml.storage.readAsyncMulti(getActiveDataFiles(), function (contents) {
@@ -1809,7 +1809,7 @@ function loadData() {
 		});
 	} else {
 		messageBoard.innerText = i18n.msgLoading.replace('%s', '');
-		rawData = ml.storage.read();
+		rawData = ml.storage.driver.read();
 		parseData();
 		showReport();
 	}
@@ -1825,7 +1825,7 @@ function getSelectedFile() {
 
 function getActiveDataFiles() {
 	if (getSelectedFile().name === '*') {
-		return ml.storage.userFiles;  // all files
+		return ml.storage.driver.userFiles;  // all files
 	} else {
 		return [getSelectedFile()];
 	}
@@ -1833,7 +1833,7 @@ function getActiveDataFiles() {
 
 function showHideEditButton() {
 	// Hide Edit button when current file is '*'
-	if (ml.storage.isEditable && ml.storage.isFileBased) {
+	if (ml.storage.driver.config.isEditable && ml.storage.driver.config.isFileBased) {
 		document.getElementById('editor-open').style.visibility = (getSelectedFile().name === '*') ? 'hidden' : 'visible';
 	}
 }
@@ -2927,10 +2927,10 @@ function editorOn() {
 	document.getElementById('content').style.display = 'none';
 
 	// Set file name
-	if (ml.storage.isFileBased) {
+	if (ml.storage.driver.config.isFileBased) {
 		filepath = getSelectedFile().name;
 	} else {
-		filepath = ml.storage.drivers[ml.storage.currentDriver].name;
+		filepath = ml.storage.driver.name;
 	}
 	document.getElementById('editor-file-name').innerHTML = filepath;
 
@@ -2955,7 +2955,7 @@ function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
 
 	editButton.innerHTML = i18n.msgSaving;
-	ml.storage.write(document.getElementById('editor-data').value);
+	ml.storage.driver.write(document.getElementById('editor-data').value);
 
 	// Reload report
 	reloadData();
@@ -3059,6 +3059,7 @@ function toggleToolbarBox(headerId, contentId, options) {
 		content.style.display = 'block';
 		addClass(header, 'active');
 	}
+
 	function close() {
 		content.style.display = 'none';
 		removeClass(header, 'active');
@@ -3522,7 +3523,7 @@ AboutWidget.populate = function () {
 	}
 
 	// When in txt mode: link to repository since we can't get the commit hash
-	if (ml.storage.currentDriver === 'filesystem') {
+	if (ml.storage.driver.id === 'filesystem') {
 		version = linkme(appRepository, 'v' + appVersion);
 	}
 

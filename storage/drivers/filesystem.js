@@ -1,9 +1,19 @@
 // File system: local text files
 
 ml.storage.drivers.filesystem = {
+	id: 'filesystem',
 	name: 'Local text files',
+	config: {
+		isAsync: true,
+		isEditable: false,
+		isFileBased: true,
+		isReloadable: true,
+		loadDataAtSetup: true,
+		maxFilesForStar: 999
+	},
+
 	dataFiles: [],  // flat array, meant for easier user config
-	userFiles: [],  // objects array
+	userFiles: [],  // [{id:'', name:''}, ...]
 	defaultFile: '',
 
 	setUserFilesFromFlatArray: function (arr) {
@@ -17,31 +27,30 @@ ml.storage.drivers.filesystem = {
 		}
 	},
 
+	// Use a temporary iframe to read a local text file contents.
+	// Note: Firefox won't read text files in a parent folder.
+	readAsync: function (fileData, callback) {
+		var iframe = document.createElement('iframe');
+		iframe.style.display = 'none';
+		iframe.src = fileData.name;
+		iframe.onload = function () {
+			callback(iframe.contentWindow.document.getElementsByTagName('pre')[0].innerText);
+			iframe.parentNode.removeChild(iframe);  // del iframe
+		};
+		document.body.appendChild(iframe);  // add iframe
+	},
+
 	setup: function () {
 		var filesCombo;
 
-		ml.storage.isAsync = true;
-		ml.storage.isEditable = false;
-		ml.storage.isFileBased = true;
-		ml.storage.isReloadable = true;
-		ml.storage.loadDataAtSetup = true;
-
-		// Use a temporary iframe to read a local text file contents.
-		// Note: Firefox won't read text files in a parent folder.
-		ml.storage.readAsync = function (fileData, callback) {
-			var iframe = document.createElement('iframe');
-			iframe.style.display = 'none';
-			iframe.src = fileData.name;
-			iframe.onload = function () {
-				callback(iframe.contentWindow.document.getElementsByTagName('pre')[0].innerText);
-				iframe.parentNode.removeChild(iframe);  // del iframe
-			};
-			document.body.appendChild(iframe);  // add iframe
-		};
-
 		// Honor legacy global config: dataFiles array
-		if (dataFiles && dataFiles.length > 0) {
-			this.setUserFilesFromFlatArray(dataFiles);
+		if (this.dataFiles.length === 0 && dataFiles && dataFiles.length > 0) {
+			this.dataFiles = dataFiles;
+		}
+
+		// Honor legacy global config: dataFilesDefault
+		if (!this.defaultFile && dataFilesDefault) {
+			this.defaultFile = dataFilesDefault;
 		}
 
 		// Set user files from config array
@@ -49,19 +58,11 @@ ml.storage.drivers.filesystem = {
 			this.setUserFilesFromFlatArray(this.dataFiles);
 		}
 
-		ml.storage.userFiles = this.userFiles;
 		ml.storage.populateFilesCombo();
-
-		filesCombo = document.getElementById('source-file');
-
-		// Honor legacy global config: dataFilesDefault
-		// Set the default file to load when using multiple files
-		if (dataFilesDefault) {
-			selectOptionByText(filesCombo, dataFilesDefault);
-		}
 
 		// Set the default file to load when using multiple files
 		if (this.defaultFile) {
+			filesCombo = document.getElementById('source-file');
 			selectOptionByText(filesCombo, this.defaultFile);
 		}
 	}

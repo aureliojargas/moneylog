@@ -1,5 +1,22 @@
 // Read (and possibly write) user data.
-// Each driver must implement the necessary stubs and set defaults.
+//
+// Each driver must implement some of these methods:
+//
+//     write: function (contents) { ... },
+//     read: function () { return contents; },
+//     readAsync: function (fileData, callback) { callback(contents); },
+//     setup: function () { ... },
+//
+// Each driver must set its config:
+//
+//     config: {
+//         isAsync: fasle,
+//         isEditable: false,
+//         isFileBased: false,
+//         isReloadable: false,
+//         loadDataAtSetup: false,
+//         maxFilesForStar: 999,  // only for file-based drivers
+//     },
 
 ml.storage = {
 
@@ -10,24 +27,9 @@ ml.storage = {
 		'filesystem',
 		'googledrive'
 	],
-	currentDriver: 'filesystem',  // default if not specified in config
-	drivers: {},  // driver's implementations
-
-	// properties to be set by each driver (all are required)
-	isAsync: false,
-	isEditable: false,
-	isFileBased: false,
-	isReloadable: false,
-	loadDataAtSetup: false,
-
-	// to be set by file based drivers
-	userFiles: [],  // [{id:'', name:''}, ...]
-	maxFilesForStar: 999,
-
-	// stubs to be implemented by each driver (some are optional)
-	write: function (contents) { console.log(contents); },
-	read: function () { return ''; },
-	readAsync: function (fileData, callback) { callback('contents'); },
+	defaultDriver: 'filesystem',  // default driver at app init
+	driver: {},                   // the currently loaded driver
+	drivers: {},                  // all driver's implementations
 
 	// module methods, drivers should not reimplement those:
 
@@ -41,15 +43,15 @@ ml.storage = {
 			));
 		}
 		// Select the current driver
-		if (this.currentDriver) {
-			combo.value = this.currentDriver;
+		if (this.defaultDriver) {
+			combo.value = this.defaultDriver;
 		}
 	},
 
 	driversComboChanged: function () {
 		var combo = document.getElementById('storage-driver');
-		var driver = combo.options[combo.selectedIndex].value;
-		ml.storage.setDriver(driver);
+		var driverId = combo.options[combo.selectedIndex].value;
+		ml.storage.setDriver(driverId);
 	},
 
 	resetFilesCombo: function () {
@@ -58,39 +60,43 @@ ml.storage = {
 
 	populateFilesCombo: function () {
 		var i;
-		var nrFiles = this.userFiles.length;
+		var files = this.driver.userFiles;
+		var nrFiles = files.length;
 		var combo = document.getElementById('source-file');
 
 		// Clean then add all files
 		this.resetFilesCombo();
 		for (i = 0; i < nrFiles; i++) {
 			combo.add(new Option(
-				this.userFiles[i].name,
-				this.userFiles[i].id
+				files[i].name,
+				files[i].id
 			));
 		}
 
 		// Extra option at the end: parse all files
-		if (nrFiles > 1 && nrFiles <= this.maxFilesForStar) {
+		if (nrFiles > 1 && nrFiles <= this.driver.config.maxFilesForStar) {
 			combo.add(new Option('*'));
 		}
 	},
 
-	setDriver: function (driverName) {
+	setDriver: function (driverId) {
 		try {
-			this.currentDriver = driverName || this.currentDriver;
-			this.drivers[this.currentDriver].setup();  // driver-specific setup
+			driverId = driverId || this.defaultDriver;
+
+			// Load driver code and set it up
+			this.driver = this.drivers[driverId];
+			this.driver.setup();
 
 			// Show/hide UI elements for each mode
-			document.getElementById('source-file'  ).style.display    = (this.isFileBased ) ? '' : 'none';
-			document.getElementById('editor-open'  ).style.visibility = (this.isEditable  ) ? 'visible' : 'hidden';
-			document.getElementById('source-reload').style.visibility = (this.isReloadable) ? 'visible' : 'hidden';
+			document.getElementById('source-file'  ).style.display    = (this.driver.config.isFileBased ) ? '' : 'none';
+			document.getElementById('editor-open'  ).style.visibility = (this.driver.config.isEditable  ) ? 'visible' : 'hidden';
+			document.getElementById('source-reload').style.visibility = (this.driver.config.isReloadable) ? 'visible' : 'hidden';
 
-			if (this.loadDataAtSetup) {
+			if (this.driver.config.loadDataAtSetup) {
 				loadData();
 			}
 		} catch (error) {
-			console.log('ERROR: Cannot setup storage: ' + this.currentDriver);
+			console.log('ERROR: Cannot setup storage: ' + driverId);
 			console.log(error);
 		}
 	},
@@ -114,7 +120,7 @@ ml.storage = {
 		}
 
 		for (i = 0; i < filenames.length; i++) {
-			ml.storage.readAsync(filenames[i], oneFileWasRead);
+			this.driver.readAsync(filenames[i], oneFileWasRead);
 		}
 	},
 
