@@ -26,7 +26,7 @@ ml.storage.drivers.browser = {
 		return ml.storage.drivers.html.read();
 	},
 
-	setup: function () {
+	init: function () {
 
 		// Browser support check
 		if (!window.localStorage) {

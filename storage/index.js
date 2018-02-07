@@ -5,7 +5,7 @@
 //     write: function (contents) { ... },
 //     read: function () { return contents; },
 //     readAsync: function (fileData, callback) { callback(contents); },
-//     setup: function () { ... },
+//     init: function () { ... },
 //
 // Each driver must set its config:
 //
@@ -94,7 +94,7 @@ ml.storage = {
 
 			// Load driver code and set it up
 			this.driver = this.drivers[driverId];
-			this.driver.setup();
+			this.driver.init();
 
 			// Show/hide UI elements for each mode
 			document.getElementById('source-file'  ).style.display    = (this.driver.config.isFileBased ) ? '' : 'none';

@@ -40,7 +40,7 @@ ml.storage.drivers.filesystem = {
 		document.body.appendChild(iframe);  // add iframe
 	},
 
-	setup: function () {
+	init: function () {
 		var filesCombo;
 
 		// Honor legacy global config: dataFiles array

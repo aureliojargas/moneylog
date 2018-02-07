@@ -26,7 +26,7 @@ ml.storage.drivers.googledrive = {
 		this.readFile(fileData.id, callback);
 	},
 
-	setup: function () {
+	init: function () {
 		ml.storage.resetFilesCombo();
 
 		// Load the Google API

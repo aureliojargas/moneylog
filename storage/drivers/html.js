@@ -15,7 +15,7 @@ ml.storage.drivers.html = {
 		return document.getElementById('data').innerText;
 	},
 
-	setup: function () {
+	init: function () {
 		// none
 	}
 };
