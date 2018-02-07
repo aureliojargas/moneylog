@@ -36,10 +36,6 @@
 2017-02-07     -32.37    water|
 2017-03-07     -30.00    water|
 
-# Future transactions!
-
-2017-07-31     +99.99    salary| Bonus
-
 # Installment payments: use a / and the number of months
 
 2016-12-05    -500/5     geek| Used Netbook bought in 5 payments

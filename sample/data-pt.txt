@@ -37,10 +37,6 @@
 2017-02-07     -32,37    água|
 2017-03-07     -30,00    água|
 
-# Transações futuras!
-
-2017-07-31     +99,99    salário| Bônus
-
 # Pagamentos e ganhos parcelados: use uma / e o número de meses
 
 2016-12-05    -500/5     nerd| Netbook usado comprado parcelado

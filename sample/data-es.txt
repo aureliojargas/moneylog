@@ -33,10 +33,6 @@
 2017-02-07     -32,37    agua|
 2017-03-07     -30,00    agua|
 
-# Movimientos Futuros!
-
-2017-07-31     +99,99    salario| Bono
-
 # Ingresos y Egresos en cuotas
 
 2016-12-05    -500/5     nerd| Netbook usado comprado en cuotas
