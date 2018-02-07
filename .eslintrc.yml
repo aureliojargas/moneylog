@@ -8,8 +8,6 @@ globals:
   appName: false
   array2ul: false
   computeTotals: false
-  dataFiles: false
-  dataFilesDefault: false
   encodeQueryData: false
   gapi: false
   google: false
@@ -24,6 +22,8 @@ globals:
   showReport: false
   Widget: false
   # modified
+  dataFiles: true
+  dataFilesDefault: true
   i18n: true
   lang: true
 
