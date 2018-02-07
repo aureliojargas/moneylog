@@ -60,7 +60,7 @@ ml.storage.drivers.googledrive = {
 				{
 					'client_id': self.clientId,
 					'scope': self.scope,
-					'immediate': true  // just ask for Google account on the 1st time
+					'immediate': false
 				},
 				function handleAuthResult(authResult) {
 					if (authResult && !authResult.error) {
