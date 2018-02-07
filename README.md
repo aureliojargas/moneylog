@@ -11,4 +11,4 @@ Every commit to the `master` branch triggers an app deploy to https://moneylog.a
 
 The deploy logs are in https://app.netlify.com/sites/moneylog/deploys
 
-See [netlify.toml](https://github.com/aureliojargas/moneylog/blob/master/netlify.toml) for the build commands.
+More information in [public/README.md](https://github.com/aureliojargas/moneylog/blob/master/public/README.md)
