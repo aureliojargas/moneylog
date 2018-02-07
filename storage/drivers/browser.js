@@ -22,8 +22,14 @@ ml.storage.drivers.browser = {
 		localStorage.setItem(this.database, contents);
 	},
 
-	getDefaultData: function () {
-		return ml.storage.drivers.html.read();
+	setDefaultData: function () {
+		ml.storage.drivers.filesystem.readAsync(
+			{name: 'sample/data-pt.txt'},
+			function (contents) {
+				ml.storage.drivers.browser.write(contents);
+				loadData();
+			}
+		);
 	},
 
 	init: function () {
@@ -39,7 +45,7 @@ ml.storage.drivers.browser = {
 
 		// Empty database? Initialize with sample content
 		if (this.read().strip() === '') {
-			this.write(this.getDefaultData());
+			this.setDefaultData();
 		}
 	}
 };
