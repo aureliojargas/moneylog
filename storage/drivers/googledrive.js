@@ -1,5 +1,4 @@
 // Google Drive integration for MoneyLog
-// https://aurelio.net/moneylog/
 //
 // On page loading, the Google Drive File Picker will show up.
 // Once you select your MoneyLog folder, its files will be loaded.

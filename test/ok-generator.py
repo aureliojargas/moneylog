@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Aurelio Jargas, https://aurelio.net/moneylog/
+# Aurelio Jargas
 #
 # Generates the ok.txt file, used to test MoneyLog parsing.
 
