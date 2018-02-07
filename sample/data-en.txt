@@ -1,5 +1,8 @@
-# Change this data by yours, separated by TABs or spaces
+# Change this data by yours, separated by spaces
 # The date is on the YEAR-MONTH-DAY format
+# The amount may be positive or negative, with or without cents
+# The tags are optional, separated from the description by a |
+# The description is also optional
 
 2016-11-01    -100.00    My initial balance :(
 

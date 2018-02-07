@@ -1,5 +1,8 @@
-# Troque estes dados pelos seus, separados por TABs ou espaços
+# Troque estes dados pelos seus, separados por espaços
 # A data é no formato ANO-MES-DIA
+# O valor pode ser positivo ou negativo, com ou sem centavos
+# As tags são opcionais, separadas da descrição por uma |
+# A descrição também é opcional
 
 2016-11-01    -100,00    Saldo inicial da conta :(
 

@@ -1,4 +1,4 @@
-# Cambie estos datos por los suyos, separando las columnas usando la tecla TAB o espacios en blanco
+# Cambie estos datos por los suyos, separando las columnas usando espacios en blanco
 # La fecha debe ser ingresada en el formato AÑO-MES-DÍA
 
 2016-11-01    -100,00    Saldo inicial :(
