@@ -2,7 +2,7 @@
 // http://aurelio.net/moneylog/config/
 
 // Set app lang
-// Using portuguese because our userbase is mainly from Brazil
+// Using portuguese because the userbase is mainly from Brazil
 lang = 'pt';
 
 // Disable drivers that do not make sense on this online version
@@ -14,4 +14,4 @@ ml.storage.availableDrivers = [
 ];
 
 // Set the default driver activated at startup
-ml.storage.currentDriver = 'browser';
+ml.storage.defaultDriver = 'browser';
