@@ -1,48 +1,48 @@
 # Change this data by yours, separated by TABs or spaces
 # The date is on the YEAR-MONTH-DAY format
 
-2011-11-01    -100.00    My initial balance :(
+2016-11-01    -100.00    My initial balance :(
 
-2011-12-15     -74.23    supermarket|
-2011-12-23     -39.90    gift, book| "Gremlins Horoscope" book
+2016-12-15     -74.23    supermarket|
+2016-12-23     -39.90    gift, book| "Gremlins Horoscope" book
 
-2012-01-03    -342.59    gift| One Shrubbery
-2012-01-11     +30.00    I've won that bet with John
-2012-01-12     -35.00    gift, geek| Ascii Art Tux 3D poster
-2012-01-29     -95.67    supermarket|
+2017-01-03    -342.59    gift| One Shrubbery
+2017-01-11     +30.00    I've won that bet with John
+2017-01-12     -35.00    gift, geek| Ascii Art Tux 3D poster
+2017-01-29     -95.67    supermarket|
 
-2012-02-12    -199.90    gift| Used Segway on E-bay
+2017-02-12    -199.90    gift| Used Segway on E-bay
 
-2012-03-20     -10.00    Dinner at downtown
+2017-03-20     -10.00    Dinner at downtown
 
 # The order is not important. You can join together recurring transactions.
 
-2011-12-05     500       salary|
-2012-01-05     500       salary|
-2012-02-05     500       salary|
-2012-03-05     500       salary|
-2012-04-05     500       salary|
+2016-12-05     500       salary|
+2017-01-05     500       salary|
+2017-02-05     500       salary|
+2017-03-05     500       salary|
+2017-04-05     500       salary|
 
-2011-12-07     -25.00    energy|
-2012-01-07     -20.00    energy|
-2012-02-07     -29.00    energy|
-2012-03-07     -25.00    energy|
+2016-12-07     -25.00    energy|
+2017-01-07     -20.00    energy|
+2017-02-07     -29.00    energy|
+2017-03-07     -25.00    energy|
 
-2011-12-07     -20.00    water|
-2012-01-07     -17.80    water|
-2012-02-07     -32.37    water|
-2012-03-07     -30.00    water|
+2016-12-07     -20.00    water|
+2017-01-07     -17.80    water|
+2017-02-07     -32.37    water|
+2017-03-07     -30.00    water|
 
 # Future transactions!
 
-2012-07-31     +99.99    salary| Bonus
+2017-07-31     +99.99    salary| Bonus
 
 # Installment payments: use a / and the number of months
 
-2011-12-05    -500/5     geek| Used Netbook bought in 5 payments
-2011-11-25     100/2     gift| Christmas gift: half in November, half in December
+2016-12-05    -500/5     geek| Used Netbook bought in 5 payments
+2016-11-25     100/2     gift| Christmas gift: half in November, half in December
 
 # Recurring payments: use a * and the number of months
 
-2012-01-05    -200*6     rental| Home rental (seis months)
-2011-11-10     100*2     gift| Uncle Arnold will give me 100 bucks/month until December
+2017-01-05    -200*6     rental| Home rental (seis months)
+2016-11-10     100*2     gift| Uncle Arnold will give me 100 bucks/month until December
