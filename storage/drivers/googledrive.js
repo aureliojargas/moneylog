@@ -131,23 +131,14 @@ ml.storage.drivers.googledrive = {
 				if (configFile) {
 					self.readFile(configFile.id, function (contents) {
 						ml.storage.applyUserConfig(contents);
-						self.setDefaultFile(self.defaultFile);
+						ml.storage.setFilesCombo(self.defaultFile);
 						loadData();
 					});
 				} else {
-					self.setDefaultFile(self.defaultFile);
+					ml.storage.setFilesCombo(self.defaultFile);
 					loadData();
 				}
 			});
-		}
-	},
-
-	// Set the default file to load when using multiple files
-	setDefaultFile: function (file) {
-		var filesCombo;
-		if (file) {
-			filesCombo = document.getElementById('source-file');
-			selectOptionByText(filesCombo, file);
 		}
 	},
 

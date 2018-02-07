@@ -79,6 +79,15 @@ ml.storage = {
 		}
 	},
 
+	// Set the selected file when using multiple files
+	setFilesCombo: function (file) {
+		var combo;
+		if (file) {
+			combo = document.getElementById('source-file');
+			selectOptionByText(combo, file);
+		}
+	},
+
 	setDriver: function (driverId) {
 		try {
 			driverId = driverId || this.defaultDriver;
