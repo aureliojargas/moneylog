@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aurelio Jargas, http://aurelio.net/moneylog/
+# Aurelio Jargas, https://aurelio.net/moneylog/
 #
 # Script to join all the MoneyLog pieces in one singe HTML file, generating
 # the MoneyLog Cloud (Dropbox) version.

@@ -3,7 +3,7 @@
 # O valor pode ser positivo ou negativo, com ou sem centavos
 # As tags são opcionais, separadas da descrição por uma |
 # A descrição também é opcional
-# Guia completo em http://aurelio.net/moneylog/input/
+# Guia completo em https://aurelio.net/moneylog/input/
 
 2016-11-01    -100,00    Saldo inicial da conta :(
 

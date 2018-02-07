@@ -1,4 +1,4 @@
-# http://aurelio.net/moneylog/
+# https://aurelio.net/moneylog/
 # MoneyLog test file.
 # 100% OK when: no errors raised, month balance is always zero.
 #

@@ -7,7 +7,7 @@
 //
 // Para saber mais informações sobre cada uma das configurações, visite:
 //
-//     http://aurelio.net/moneylog/config/
+//     https://aurelio.net/moneylog/config/
 //
 // --------------------------------------------------------------------------
 //

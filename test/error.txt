@@ -1,4 +1,4 @@
-# http://aurelio.net/moneylog/
+# https://aurelio.net/moneylog/
 # MoneyLog ERROR test file.
 # Uncomment one by one to see the error.
 #

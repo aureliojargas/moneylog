@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Aurelio Jargas, http://aurelio.net/moneylog/
+# Aurelio Jargas, https://aurelio.net/moneylog/
 #
 # Generates the ok.txt file, used to test MoneyLog parsing.
 
@@ -55,7 +55,7 @@ def title(msg):
 
 #-------------------------------------------------------------
 
-print "# http://aurelio.net/moneylog/"
+print "# https://aurelio.net/moneylog/"
 print "# MoneyLog test file."
 print "# 100% OK when: no errors raised, month balance is always zero."
 print "#"

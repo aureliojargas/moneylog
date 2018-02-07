@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aurelio Jargas, http://aurelio.net/moneylog/
+# Aurelio Jargas, https://aurelio.net/moneylog/
 #
 # Set the hash for the latest Git commit in $commit_id variable
 #

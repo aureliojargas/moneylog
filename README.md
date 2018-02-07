@@ -1,8 +1,8 @@
 # MoneyLog Experience, by Aurelio Jargas
 
-English website:    <http://aurelio.net/soft/moneylog/>
+English website:    <https://aurelio.net/soft/moneylog/>
 
-Portuguese website: <http://aurelio.net/moneylog/>
+Portuguese website: <https://aurelio.net/moneylog/>
 
 
 ## Deploy

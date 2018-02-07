@@ -1,7 +1,7 @@
 /* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault encodeQueryData getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
 
 // moneylog.js
-// http://aurelio.net/moneylog/
+// https://aurelio.net/moneylog/
 
 // I hope someday I can move everything under this namespace.
 // Until then, MoneyLog is a globals festival :(
@@ -23,7 +23,7 @@ var N = false;
 // Better yet, use a config.js file on the same folder as this one.
 //
 // Learn more about MoneyLog configuration:
-// http://aurelio.net/moneylog/config/
+// https://aurelio.net/moneylog/config/
 //  -------------------------------------------------------------------
 
 var myPassword = '';              // Set up an access password
@@ -249,8 +249,8 @@ var i18nDatabase = {
 		msgTypePassword: 'Type your password:',
 		msgWrongPassword: 'Wrong password.',
 		// App
-		appUrl: 'http://aurelio.net/soft/moneylog/',
-		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
+		appUrl: 'https://aurelio.net/soft/moneylog/',
+		appUrlOnline: 'https://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
 		helpWebsite: 'Go to the MoneyLog website.'
 	},
@@ -341,8 +341,8 @@ var i18nDatabase = {
 		msgTypePassword: 'Digite a sua senha:',
 		msgWrongPassword: 'Senha errada.',
 		// App
-		appUrl: 'http://aurelio.net/moneylog/beta/',
-		appUrlOnline: 'http://aurelio.net/moneylog/browser/app/',
+		appUrl: 'https://aurelio.net/moneylog/beta/',
+		appUrlOnline: 'https://aurelio.net/moneylog/browser/app/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
 		helpWebsite: 'Visite o website do MoneyLog.'
 	},
@@ -3518,7 +3518,7 @@ AboutWidget.populate = function () {
 
 	// When stable: hide commit, version links to website
 	} else {
-		version = linkme('http://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);
+		version = linkme('https://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);
 		commit = '';
 	}
 
@@ -3528,7 +3528,7 @@ AboutWidget.populate = function () {
 	}
 
 	html.push('<div id="about-app">');
-	html.push(linkme('http://aurelio.net/moneylog/', appName));
+	html.push(linkme('https://aurelio.net/moneylog/', appName));
 	html.push('<span id="app-version">' + version + '</span>');
 	if (isBeta && appCommit !== '') {
 		html.push('<div>commit: ' + commit + '</div>');
@@ -3541,7 +3541,7 @@ AboutWidget.populate = function () {
 	html.push('</div>');
 
 	html.push('<div id="about-donate">');
-	html.push(linkme('http://aurelio.net/moneylog/donate/', '♥'));
+	html.push(linkme('https://aurelio.net/moneylog/donate/', '♥'));
 	html.push('</div>');
 
 	html.push('<hr>');
