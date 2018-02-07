@@ -51,6 +51,12 @@ ml.storage = {
 	driversComboChanged: function () {
 		var combo = document.getElementById('storage-driver');
 		var driverId = combo.options[combo.selectedIndex].value;
+
+		// Wipe old driver data
+		resetData();
+		showReport();
+
+		// Load new driver
 		ml.storage.setDriver(driverId);
 	},
 
