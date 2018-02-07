@@ -100,6 +100,7 @@ ml.storage.drivers.googledrive = {
 				.setCallback(self.pickerCallback)
 				.enableFeature(google.picker.Feature.NAV_HIDDEN)
 				.setLocale('pt-BR')
+				.setTitle('Cadê a pasta do MoneyLog?')
 				.build();
 			picker.setVisible(true);
 		}
