@@ -16,6 +16,7 @@ globals:
   initUI: false
   loadData: false
   ml: false
+  resetData: false
   sanitizeConfig: false
   selectOptionByText: false
   showError: false
