@@ -117,11 +117,9 @@ ml.storage.drivers.googledrive = {
 	processFiles: function (files) {
 
 		// Filter relevant files
-		var textFiles = files.filter(function (file) { return file.name.endsWith('.txt'); });
+		this.userFiles = files.filter(function (file) { return file.name.endsWith('.txt'); });
 		this.configFile = files.filter(function (file) { return file.name === 'config.js'; })[0];
 
-		// Setup data files combo
-		this.userFiles = textFiles;
 		ml.storage.populateFilesCombo();
 
 		// Apply user config.js file (if any)
