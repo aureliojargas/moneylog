@@ -43,7 +43,7 @@ ml.storage.drivers.googledrive = {
 
 	// Scope to use to access user's files (the more restrictive, the better)
 	// https://developers.google.com/drive/v3/web/about-auth
-	scope: ['https://www.googleapis.com/auth/drive.file'],
+	scope: ['https://www.googleapis.com/auth/drive.readonly'],
 
 	pickerApiLoaded: false,
 	oauthToken: '',
