@@ -50,30 +50,31 @@ ml.storage.drivers.googledrive = {
 
 	// Use the API Loader script to load google.picker and gapi.auth.
 	onApiLoad: function () {
-		// Load auth
-		gapi.load('auth', function onAuthApiLoad() {
-			gapi.auth.authorize(
-				{
-					'client_id': this.clientId,
-					'scope': this.scope,
-					'immediate': false
-				},
-				function handleAuthResult(authResult) {
-					if (authResult && !authResult.error) {
-						this.oauthToken = authResult.access_token;
-						this.createPicker();
-					} else {
-						console.log("Google auth failed:", authResult);
-					}
-				}.bind(this)
-			);
-		}.bind(this));
+		gapi.load('auth', this.onAuthApiLoad.bind(this));
+		gapi.load('picker', this.onPickerApiLoad.bind(this));
+	},
 
-		// Load picker
-		gapi.load('picker', function onPickerApiLoad() {
-			this.pickerApiLoaded = true;
-			this.createPicker();
-		}.bind(this));
+	onAuthApiLoad: function () {
+		gapi.auth.authorize(
+			{
+				'client_id': this.clientId,
+				'scope': this.scope,
+				'immediate': false
+			},
+			function handleAuthResult(authResult) {
+				if (authResult && !authResult.error) {
+					this.oauthToken = authResult.access_token;
+					this.createPicker();
+				} else {
+					console.log("Google auth failed:", authResult);
+				}
+			}.bind(this)
+		);
+	},
+
+	onPickerApiLoad: function () {
+		this.pickerApiLoaded = true;
+		this.createPicker();
 	},
 
 	// Create and render a Picker object for picking a user folder
