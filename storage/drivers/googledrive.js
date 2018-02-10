@@ -66,7 +66,7 @@ ml.storage.drivers.googledrive = {
 					this.oauthToken = authResult.access_token;
 					this.createPicker();
 				} else {
-					console.log("Google auth failed:", authResult);
+					console.log('Google auth failed:', authResult);
 				}
 			}.bind(this)
 		);
