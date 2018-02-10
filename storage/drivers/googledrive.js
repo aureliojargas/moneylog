@@ -109,28 +109,30 @@ ml.storage.drivers.googledrive = {
 
 			// List this folder's files
 			folderId = data.docs[0].id;
-			this.getFolderFiles(folderId, function processFiles(files) {
+			this.getFolderFiles(folderId, this.processFiles.bind(this));
+		}
+	},
 
-				// Filter relevant files
-				var textFiles = files.filter(function (el) { return el.name.endsWith('.txt'); });
-				var configFile = files.filter(function (el) { return el.name === 'config.js'; })[0];
+	processFiles: function (files) {
 
-				// Setup data files combo
-				this.userFiles = textFiles;
-				ml.storage.populateFilesCombo();
+		// Filter relevant files
+		var textFiles = files.filter(function (el) { return el.name.endsWith('.txt'); });
+		var configFile = files.filter(function (el) { return el.name === 'config.js'; })[0];
 
-				// Apply user config.js file (if any)
-				if (configFile) {
-					this.readFile(configFile.id, function (contents) {
-						ml.storage.applyUserConfig(contents);
-						ml.storage.setFilesCombo(this.defaultFile);
-						loadData();
-					}.bind(this));
-				} else {
-					ml.storage.setFilesCombo(this.defaultFile);
-					loadData();
-				}
+		// Setup data files combo
+		this.userFiles = textFiles;
+		ml.storage.populateFilesCombo();
+
+		// Apply user config.js file (if any)
+		if (configFile) {
+			this.readFile(configFile.id, function (contents) {
+				ml.storage.applyUserConfig(contents);
+				ml.storage.setFilesCombo(this.defaultFile);
+				loadData();
 			}.bind(this));
+		} else {
+			ml.storage.setFilesCombo(this.defaultFile);
+			loadData();
 		}
 	},
 
