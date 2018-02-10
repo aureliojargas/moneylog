@@ -29,7 +29,7 @@ ml.storage.drivers.googledrive = {
 		ml.storage.resetFilesCombo();
 
 		// Load the Google API
-		addScript('https://apis.google.com/js/api.js', this.onApiLoad);
+		addScript('https://apis.google.com/js/api.js', this.onApiLoad.bind(this));
 	},
 
 	// -----------------------------------------------------------------------
@@ -50,44 +50,36 @@ ml.storage.drivers.googledrive = {
 
 	// Use the API Loader script to load google.picker and gapi.auth.
 	onApiLoad: function () {
-
-		// The original 'this' context is lost here :(
-		var self = ml.storage.drivers.googledrive;
-
 		// Load auth
 		gapi.load('auth', function onAuthApiLoad() {
 			gapi.auth.authorize(
 				{
-					'client_id': self.clientId,
-					'scope': self.scope,
+					'client_id': this.clientId,
+					'scope': this.scope,
 					'immediate': false
 				},
 				function handleAuthResult(authResult) {
 					if (authResult && !authResult.error) {
-						self.oauthToken = authResult.access_token;
-						self.createPicker();
+						this.oauthToken = authResult.access_token;
+						this.createPicker();
 					} else {
 						console.log("Google auth failed:", authResult);
 					}
-				}
+				}.bind(this)
 			);
-		});
+		}.bind(this));
 
 		// Load picker
 		gapi.load('picker', function onPickerApiLoad() {
-			self.pickerApiLoaded = true;
-			self.createPicker();
-		});
+			this.pickerApiLoaded = true;
+			this.createPicker();
+		}.bind(this));
 	},
 
 	// Create and render a Picker object for picking a user folder
 	createPicker: function () {
 		var view, picker;
-
-		// The original 'this' context is lost here :(
-		var self = ml.storage.drivers.googledrive;
-
-		if (self.pickerApiLoaded && self.oauthToken) {
+		if (this.pickerApiLoaded && this.oauthToken) {
 			// Picker will show folders only, in hierarquical view
 			view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
 				.setParent('root')
@@ -96,9 +88,9 @@ ml.storage.drivers.googledrive = {
 				.setMode(google.picker.DocsViewMode.LIST);
 			picker = new google.picker.PickerBuilder()
 				.addView(view)
-				.setOAuthToken(self.oauthToken)
-				.setDeveloperKey(self.developerKey)
-				.setCallback(self.pickerCallback)
+				.setOAuthToken(this.oauthToken)
+				.setDeveloperKey(this.developerKey)
+				.setCallback(this.pickerCallback.bind(this))
 				.enableFeature(google.picker.Feature.NAV_HIDDEN)
 				.setLocale('pt-BR')
 				.setTitle('Cadê a pasta do MoneyLog?')
@@ -111,36 +103,33 @@ ml.storage.drivers.googledrive = {
 	pickerCallback: function (data) {
 		var folderId;
 
-		// The original 'this' context is lost here :(
-		var self = ml.storage.drivers.googledrive;
-
 		// User picked one folder
 		if (data.action == google.picker.Action.PICKED) {
 
 			// List this folder's files
 			folderId = data.docs[0].id;
-			self.getFolderFiles(folderId, function processFiles(files) {
+			this.getFolderFiles(folderId, function processFiles(files) {
 
 				// Filter relevant files
 				var textFiles = files.filter(function (el) { return el.name.endsWith('.txt'); });
 				var configFile = files.filter(function (el) { return el.name === 'config.js'; })[0];
 
 				// Setup data files combo
-				self.userFiles = textFiles;
+				this.userFiles = textFiles;
 				ml.storage.populateFilesCombo();
 
 				// Apply user config.js file (if any)
 				if (configFile) {
-					self.readFile(configFile.id, function (contents) {
+					this.readFile(configFile.id, function (contents) {
 						ml.storage.applyUserConfig(contents);
-						ml.storage.setFilesCombo(self.defaultFile);
+						ml.storage.setFilesCombo(this.defaultFile);
 						loadData();
-					});
+					}.bind(this));
 				} else {
-					ml.storage.setFilesCombo(self.defaultFile);
+					ml.storage.setFilesCombo(this.defaultFile);
 					loadData();
 				}
-			});
+			}.bind(this));
 		}
 	},
 
