@@ -110,7 +110,7 @@ ml.storage.drivers.googledrive = {
 
 			// List this folder's files
 			folderId = data.docs[0].id;
-			this.getFolderFiles(folderId, this.processFiles.bind(this));
+			this.listAllUserFiles(folderId, this.processFiles.bind(this));
 		}
 	},
 
@@ -135,36 +135,41 @@ ml.storage.drivers.googledrive = {
 		}
 	},
 
+	listAllUserFiles: function (folderId, callback) {
+		var query;
+		if (folderId) {
+			// https://developers.google.com/drive/v3/web/search-parameters
+			query = '"' + folderId + '" in parents and trashed = false and (mimeType = "text/plain" or mimeType = "application/x-javascript")';
+			this.listFiles(query, callback);
+		}
+	},
+
 	// https://developers.google.com/drive/v3/web/folder
 	// https://developers.google.com/drive/v3/reference/files/list
-	getFolderFiles: function (folderId, callback) {
+	// https://developers.google.com/drive/v3/web/search-parameters
+	listFiles: function (query, callback) {
 		var url, queryString, accessToken, xhr, data;
 
-		if (folderId) {
-			accessToken = gapi.auth.getToken().access_token;
-			url = 'https://www.googleapis.com/drive/v3/files';
-			queryString = encodeQueryData({
-				// https://developers.google.com/drive/v3/web/search-parameters
-				q: '"' + folderId + '" in parents and trashed = false and (mimeType = "text/plain" or mimeType = "application/x-javascript")',
-				spaces: 'drive',
-				orderBy: 'name',
-				fields: 'files(id, name)'
-			});
+		accessToken = gapi.auth.getToken().access_token;
+		url = 'https://www.googleapis.com/drive/v3/files';
+		queryString = encodeQueryData({
+			q: query,
+			spaces: 'drive',
+			orderBy: 'name',
+			fields: 'files(id, name)'
+		});
 
-			xhr = new XMLHttpRequest();
-			xhr.open('GET', url + '?' + queryString);
-			xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-			xhr.onload = function () {
-				data = JSON.parse(xhr.responseText);
-				callback(data.files);
-			};
-			xhr.onerror = function () {
-				console.log('ERROR: xhr error');
-			};
-			xhr.send();
-		} else {
-			console.log('ERROR: No folder id informed');
-		}
+		xhr = new XMLHttpRequest();
+		xhr.open('GET', url + '?' + queryString);
+		xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+		xhr.onload = function () {
+			data = JSON.parse(xhr.responseText);
+			callback(data.files);
+		};
+		xhr.onerror = function () {
+			console.log('ERROR: xhr error');
+		};
+		xhr.send();
 	},
 
 	// https://developers.google.com/drive/v3/web/manage-downloads
