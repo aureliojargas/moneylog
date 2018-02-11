@@ -15,7 +15,8 @@
 //         isFileBased: false,
 //         isReloadable: false,
 //         loadDataAtSetup: false,
-//         maxFilesForStar: 999,  // only for file-based drivers
+//         maxFilesForStar: 999,   // only for file-based drivers
+//         showFolderLink: false,  // only for file-based drivers
 //     },
 
 ml.storage = {
@@ -103,9 +104,10 @@ ml.storage = {
 			this.driver.init();
 
 			// Show/hide UI elements for each mode
-			document.getElementById('source-file'  ).style.display    = (this.driver.config.isFileBased ) ? '' : 'none';
-			document.getElementById('editor-open'  ).style.visibility = (this.driver.config.isEditable  ) ? 'visible' : 'hidden';
-			document.getElementById('source-reload').style.visibility = (this.driver.config.isReloadable) ? 'visible' : 'hidden';
+			document.getElementById('source-file'   ).style.display    = (this.driver.config.isFileBased   ) ? '' : 'none';
+			document.getElementById('storage-folder').style.display    = (this.driver.config.showFolderLink) ? '' : 'none';
+			document.getElementById('editor-open'   ).style.visibility = (this.driver.config.isEditable    ) ? 'visible' : 'hidden';
+			document.getElementById('source-reload' ).style.visibility = (this.driver.config.isReloadable  ) ? 'visible' : 'hidden';
 
 			if (this.driver.config.loadDataAtSetup) {
 				loadData();

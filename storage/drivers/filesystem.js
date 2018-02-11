@@ -8,6 +8,7 @@ ml.storage.drivers.filesystem = {
 		isEditable: false,
 		isFileBased: true,
 		isReloadable: true,
+		showFolderLink: false,
 		loadDataAtSetup: true,
 		maxFilesForStar: 999
 	},

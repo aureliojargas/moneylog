@@ -252,6 +252,14 @@ a.button.active {
 	margin-bottom: 1em;
 }
 
+#storage-folder {
+	display: block;
+	margin: -0.5em 0 0.5em 0;
+}
+#storage-folder:before {
+	content: "📁 ";  /* U+1F4C1 File Folder */
+}
+
 #source-file-box.mini {
 	line-height: 150%;
 }

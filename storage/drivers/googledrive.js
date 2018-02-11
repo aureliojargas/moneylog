@@ -14,6 +14,7 @@ ml.storage.drivers.googledrive = {
 		isEditable: false,
 		isFileBased: true,
 		isReloadable: true,
+		showFolderLink: true,
 		loadDataAtSetup: false,
 
 		// Google Drive API has a User Rate Limit of 10 requests per second
@@ -84,6 +85,7 @@ ml.storage.drivers.googledrive = {
 
 	onAuthOk: function () {
 		this.findUserFolder(function () {
+			this.setWidgetFolder();
 			this.listAllUserFiles(
 				this.processFiles.bind(this)
 			);
@@ -174,6 +176,12 @@ ml.storage.drivers.googledrive = {
 			}
 			callback();
 		}.bind(this));
+	},
+
+	setWidgetFolder: function () {
+		var a = document.getElementById('storage-folder');
+		a.href = 'https://drive.google.com/drive/folders/' + this.userFolder.id;
+		a.innerText = this.userFolder.name;
 	},
 
 	listAllUserFiles: function (callback) {
