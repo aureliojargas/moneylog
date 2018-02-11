@@ -35,7 +35,17 @@ ml.storage.drivers.googledrive = {
 		ml.storage.resetFilesCombo();
 
 		// Load the Google API
-		addScript('https://apis.google.com/js/api.js', this.onApiLoad.bind(this));
+		if (!window.gapi) {
+			addScript('https://apis.google.com/js/api.js', this.onApiLoad.bind(this));
+
+		// API loaded, but not authenticated
+		} else if (!this.oauthToken) {
+			this.onApiLoad();
+
+		// API loaded and user authenticated
+		} else {
+			this.onAuthOk();
+		}
 	},
 
 	// -----------------------------------------------------------------------
