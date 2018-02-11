@@ -35,17 +35,12 @@ ml.storage.drivers.googledrive = {
 		ml.storage.resetFilesCombo();
 		ml.storage.resetWidgetFolder();
 
-		// Load the Google API
 		if (!window.gapi) {
+			// Load the Google API
 			addScript('https://apis.google.com/js/api.js', this.onApiLoad.bind(this));
-
-		// API loaded, but not authenticated
-		} else if (!this.oauthToken) {
+		} else  {
+			// Already loaded, call API entrypoint
 			this.onApiLoad();
-
-		// API loaded and user authenticated
-		} else {
-			this.onAuthOk();
 		}
 	},
 
