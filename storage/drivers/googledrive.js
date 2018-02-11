@@ -111,7 +111,7 @@ ml.storage.drivers.googledrive = {
 					.setDeveloperKey(this.developerKey)
 					.enableFeature(google.picker.Feature.NAV_HIDDEN)
 					.setLocale(this.pickerLanguages[lang])
-					.setTitle('Cadê a pasta do MoneyLog?')
+					.setTitle(i18n.labelLocateAppFolder)
 					.setCallback(
 
 						function onPickerDone(data) {

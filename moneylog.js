@@ -184,6 +184,7 @@ var i18nDatabase = {
 		// Storage
 		labelStorage: 'Storage',
 		labelReload: 'Reload',
+		labelLocateAppFolder: 'Where is your MoneyLog folder?',
 		helpStorage: 'Choose the storage for your data.',
 		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// Report types
@@ -276,6 +277,7 @@ var i18nDatabase = {
 		// Storage
 		labelStorage: 'Lançamentos',
 		labelReload: 'Recarregar',
+		labelLocateAppFolder: 'Cadê a pasta do MoneyLog?',
 		helpStorage: 'Escolha a fonte dos seus dados (lançamentos).',
 		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// Report types
