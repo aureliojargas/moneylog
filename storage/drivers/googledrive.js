@@ -158,12 +158,15 @@ ml.storage.drivers.googledrive = {
 		xhr = new XMLHttpRequest();
 		xhr.open('GET', url + '?' + queryString);
 		xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-		xhr.onload = function () {
-			data = JSON.parse(xhr.responseText);
-			callback(data.files);
-		};
-		xhr.onerror = function () {
-			console.log('ERROR: xhr error');
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				if (xhr.status === 200) {
+					data = JSON.parse(xhr.responseText);
+					callback(data.files);
+				} else {
+					console.log(xhr.responseText);
+				}
+			}
 		};
 		xhr.send();
 	},
@@ -175,16 +178,18 @@ ml.storage.drivers.googledrive = {
 		if (id) {
 			downloadUrl = 'https://www.googleapis.com/drive/v3/files/' + id + '?alt=media';
 			accessToken = gapi.auth.getToken().access_token;
-			xhr = new XMLHttpRequest();
 
+			xhr = new XMLHttpRequest();
 			xhr.open('GET', downloadUrl);
 			xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-
-			xhr.onload = function () {
-				callback(xhr.responseText);
-			};
-			xhr.onerror = function () {
-				console.log('ERROR: xhr error');
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						callback(xhr.responseText);
+					} else {
+						console.log(xhr.responseText);
+					}
+				}
 			};
 			xhr.send();
 		} else {
