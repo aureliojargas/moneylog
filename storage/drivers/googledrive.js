@@ -139,7 +139,7 @@ ml.storage.drivers.googledrive = {
 		var query;
 		if (folderId) {
 			// https://developers.google.com/drive/v3/web/search-parameters
-			query = '"' + folderId + '" in parents and trashed = false and (mimeType = "text/plain" or mimeType = "application/x-javascript")';
+			query = '"' + folderId + '" in parents and (mimeType = "text/plain" or mimeType = "application/x-javascript")';
 			this.listFiles(query, callback);
 		}
 	},
@@ -153,7 +153,7 @@ ml.storage.drivers.googledrive = {
 		accessToken = gapi.auth.getToken().access_token;
 		url = 'https://www.googleapis.com/drive/v3/files';
 		queryString = encodeQueryData({
-			q: query,
+			q: 'trashed = false and ' + query,  // never list trashed
 			spaces: 'drive',
 			orderBy: 'name',
 			fields: 'files(id, name)'
