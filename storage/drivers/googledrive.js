@@ -33,6 +33,7 @@ ml.storage.drivers.googledrive = {
 
 	init: function () {
 		ml.storage.resetFilesCombo();
+		ml.storage.resetWidgetFolder();
 
 		// Load the Google API
 		if (!window.gapi) {

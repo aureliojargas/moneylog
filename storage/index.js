@@ -95,6 +95,12 @@ ml.storage = {
 		}
 	},
 
+	resetWidgetFolder: function () {
+		var a = document.getElementById('storage-folder');
+		a.href = '';
+		a.innerText = '';
+	},
+
 	setDriver: function (driverId) {
 		try {
 			driverId = driverId || this.defaultDriver;
