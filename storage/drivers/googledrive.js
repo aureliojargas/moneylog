@@ -18,6 +18,7 @@ ml.storage.drivers.googledrive = {
 		maxFilesForStar: 9
 	},
 
+	userFolder: {},  // {id:'', name:''}
 	configFile: {},  // {id:'', name:''}
 	userFiles: [],  // [{id:'', name:''}, ...]
 	defaultFile: '',
@@ -103,14 +104,10 @@ ml.storage.drivers.googledrive = {
 
 	// Called when the user has chosen the folder
 	pickerCallback: function (data) {
-		var folderId;
-
-		// User picked one folder
 		if (data.action == google.picker.Action.PICKED) {
-
-			// List this folder's files
-			folderId = data.docs[0].id;
-			this.listAllUserFiles(folderId, this.processFiles.bind(this));
+			// User picked one folder, process its files
+			this.userFolder = data.docs[0];
+			this.listAllUserFiles(this.processFiles.bind(this));
 		}
 	},
 
@@ -135,11 +132,10 @@ ml.storage.drivers.googledrive = {
 		}
 	},
 
-	listAllUserFiles: function (folderId, callback) {
+	listAllUserFiles: function (callback) {
 		var query;
-		if (folderId) {
-			// https://developers.google.com/drive/v3/web/search-parameters
-			query = '"' + folderId + '" in parents and (mimeType = "text/plain" or mimeType = "application/x-javascript")';
+		if (this.userFolder.id) {
+			query = '"' + this.userFolder.id + '" in parents and (mimeType = "text/plain" or mimeType = "application/x-javascript")';
 			this.listFiles(query, callback);
 		}
 	},
