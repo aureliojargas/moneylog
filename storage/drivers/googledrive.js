@@ -51,6 +51,13 @@ ml.storage.drivers.googledrive = {
 	// https://developers.google.com/drive/v3/web/about-auth
 	scope: ['https://www.googleapis.com/auth/drive.readonly'],
 
+	// https://developers.google.com/picker/docs/#i18n
+	pickerLanguages: {
+		pt: 'pt-BR',
+		en: 'en',
+		es: 'es',
+		ca: 'ca'
+	},
 
 	// Use the API Loader script to load google.picker and gapi.auth.
 	onApiLoad: function () {
@@ -103,11 +110,8 @@ ml.storage.drivers.googledrive = {
 					.setOAuthToken(this.oauthToken)
 					.setDeveloperKey(this.developerKey)
 					.enableFeature(google.picker.Feature.NAV_HIDDEN)
-
-					// FIXME Hardcoded in Portuguese for now
-					.setLocale('pt-BR')
+					.setLocale(this.pickerLanguages[lang])
 					.setTitle('Cadê a pasta do MoneyLog?')
-
 					.setCallback(
 
 						function onPickerDone(data) {
