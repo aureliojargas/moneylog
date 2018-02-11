@@ -118,12 +118,12 @@ ml.storage.drivers.googledrive = {
 
 		// Filter relevant files
 		this.userFiles = files.filter(function (file) { return file.name.endsWith('.txt'); });
-		this.configFile = files.filter(function (file) { return file.name === 'config.js'; })[0];
+		this.configFile = files.filter(function (file) { return file.name === 'config.js'; })[0] || {};
 
 		ml.storage.populateFilesCombo();
 
 		// Apply user config.js file (if any)
-		if (this.configFile && this.configFile.id) {
+		if (this.configFile.id) {
 			this.readFile(this.configFile.id, function (contents) {
 				ml.storage.applyUserConfig(contents);
 				ml.storage.setFilesCombo(this.defaultFile);
