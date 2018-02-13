@@ -1,7 +1,10 @@
 // Google Drive integration for MoneyLog
 //
-// On page loading, the Google Drive File Picker will show up.
-// Once you select your MoneyLog folder, its files will be loaded.
+// By default, it searches for a MoneyLog folder in the root of your Drive,
+// and load all its files automatically, no user action required.
+//
+// If that folder is not found, then the Google Picker is loaded so the
+// user can point where the MoneyLog folder is located.
 
 ml.storage.drivers.googledrive = {
 	id: 'googledrive',
@@ -42,18 +45,16 @@ ml.storage.drivers.googledrive = {
 	// The Browser API and Client ID keys obtained from the Google API Console
 	developerKey: 'AIzaSyAgPNmODKpMNzP30VdvvgQFSw-H8mtIegc',
 	clientId: '372105999892-po48pkb5kjlhlf1t3j2bj96se9v986cp.apps.googleusercontent.com',
+	oauthToken: '',
 
 	// Scope to use to access user's files (the more restrictive, the better)
 	// https://developers.google.com/drive/v3/web/about-auth
 	scope: ['https://www.googleapis.com/auth/drive.readonly'],
 
-	pickerApiLoaded: false,
-	oauthToken: '',
 
 	// Use the API Loader script to load google.picker and gapi.auth.
 	onApiLoad: function () {
 		gapi.load('auth', this.onAuthApiLoad.bind(this));
-		gapi.load('picker', this.onPickerApiLoad.bind(this));
 	},
 
 	onAuthApiLoad: function () {
@@ -66,7 +67,7 @@ ml.storage.drivers.googledrive = {
 			function handleAuthResult(authResult) {
 				if (authResult && !authResult.error) {
 					this.oauthToken = authResult.access_token;
-					this.createPicker();
+					this.onAuthOk();
 				} else {
 					console.log('Google auth failed:', authResult);
 				}
@@ -74,41 +75,54 @@ ml.storage.drivers.googledrive = {
 		);
 	},
 
-	onPickerApiLoad: function () {
-		this.pickerApiLoaded = true;
-		this.createPicker();
+	onAuthOk: function () {
+		this.findUserFolder(function () {
+			this.listAllUserFiles(
+				this.processFiles.bind(this)
+			);
+		}.bind(this));
 	},
 
-	// Create and render a Picker object for picking a user folder
-	createPicker: function () {
-		var view, picker;
-		if (this.pickerApiLoaded && this.oauthToken) {
-			// Picker will show folders only, in hierarquical view
-			view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
-				.setParent('root')
-				.setIncludeFolders(true)
-				.setSelectFolderEnabled(true)
-				.setMode(google.picker.DocsViewMode.LIST);
-			picker = new google.picker.PickerBuilder()
-				.addView(view)
-				.setOAuthToken(this.oauthToken)
-				.setDeveloperKey(this.developerKey)
-				.setCallback(this.pickerCallback.bind(this))
-				.enableFeature(google.picker.Feature.NAV_HIDDEN)
-				.setLocale('pt-BR')
-				.setTitle('Cadê a pasta do MoneyLog?')
-				.build();
-			picker.setVisible(true);
-		}
-	},
+	runPicker: function (callback) {
 
-	// Called when the user has chosen the folder
-	pickerCallback: function (data) {
-		if (data.action == google.picker.Action.PICKED) {
-			// User picked one folder, process its files
-			this.userFolder = data.docs[0];
-			this.listAllUserFiles(this.processFiles.bind(this));
-		}
+		// Load Picker API
+		gapi.load(
+			'picker',
+			function onPickerApiLoad() {
+
+				// Picker setup: will show folders only, in hierarquical view
+				var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+					.setParent('root')
+					.setIncludeFolders(true)
+					.setSelectFolderEnabled(true)
+					.setMode(google.picker.DocsViewMode.LIST);
+
+				// Load Picker
+				var picker = new google.picker.PickerBuilder()
+					.addView(view)
+					.setOAuthToken(this.oauthToken)
+					.setDeveloperKey(this.developerKey)
+					.enableFeature(google.picker.Feature.NAV_HIDDEN)
+
+					// FIXME Hardcoded in Portuguese for now
+					.setLocale('pt-BR')
+					.setTitle('Cadê a pasta do MoneyLog?')
+
+					.setCallback(
+
+						function onPickerDone(data) {
+							if (data.action == google.picker.Action.PICKED) {
+								this.userFolder = data.docs[0];  // Save picked folder metadata
+								callback();
+							}
+						}.bind(this)
+
+					)
+					.build();
+				picker.setVisible(true);
+
+			}.bind(this)
+		);
 	},
 
 	processFiles: function (files) {
@@ -130,6 +144,32 @@ ml.storage.drivers.googledrive = {
 			ml.storage.setFilesCombo(this.defaultFile);
 			loadData();
 		}
+	},
+
+	// Set this.userFolder and callback
+	findUserFolder: function (callback) {
+		this.findDefaultUserFolder(function () {
+
+			// Found default /MoneyLog folder
+			if (this.userFolder.id) {
+				callback();
+
+			// Not found, will prompt user with the Picker
+			} else {
+				this.runPicker(callback);
+			}
+		}.bind(this));
+	},
+
+	findDefaultUserFolder: function (callback) {
+		// Folder named MoneyLog at Google Drive root
+		var query = '"root" in parents and name = "MoneyLog" and mimeType = "application/vnd.google-apps.folder"';
+		this.listFiles(query, function (files) {
+			if (files && files.length > 0) {
+				this.userFolder = files[0];
+			}
+			callback();
+		}.bind(this));
 	},
 
 	listAllUserFiles: function (callback) {
