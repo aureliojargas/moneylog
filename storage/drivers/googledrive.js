@@ -92,9 +92,7 @@ ml.storage.drivers.googledrive = {
 	onAuthOk: function () {
 		this.findUserFolder(function () {
 			this.setWidgetFolder();
-			this.listAllUserFiles(
-				this.processFiles.bind(this)
-			);
+			this.listAllUserFiles(this.processFiles.bind(this));
 		}.bind(this));
 	},
 
@@ -120,16 +118,12 @@ ml.storage.drivers.googledrive = {
 					.enableFeature(google.picker.Feature.NAV_HIDDEN)
 					.setLocale(this.pickerLanguages[lang])
 					.setTitle(i18n.labelLocateAppFolder)
-					.setCallback(
-
-						function onPickerDone(data) {
-							if (data.action == google.picker.Action.PICKED) {
-								this.userFolder = data.docs[0];  // Save picked folder metadata
-								callback();
-							}
-						}.bind(this)
-
-					)
+					.setCallback(function onPickerDone(data) {
+						if (data.action == google.picker.Action.PICKED) {
+							this.userFolder = data.docs[0];  // Save picked folder metadata
+							callback();
+						}
+					}.bind(this))
 					.build();
 				picker.setVisible(true);
 
