@@ -1,0 +1,305 @@
+env:
+  browser: true
+
+# Unfortunately, MoneyLog is a globals festival :(
+# These globals are used by other files than moneylog.js
+globals:
+  addScript: false
+  appName: false
+  array2ul: false
+  computeTotals: false
+  encodeQueryData: false
+  gapi: false
+  google: false
+  groupByPeriod: false
+  i18nDatabase: false
+  initUI: false
+  loadData: false
+  ml: false
+  resetData: false
+  sanitizeConfig: false
+  selectOptionByText: false
+  showError: false
+  showReport: false
+  Widget: false
+  # modified
+  dataFiles: true
+  dataFilesDefault: true
+  i18n: true
+  lang: true
+
+extends: 'eslint:recommended'
+rules:
+  accessor-pairs: error
+  array-bracket-newline:
+    - error
+    - multiline: true
+  array-bracket-spacing:
+    - error
+    - never
+  array-callback-return: error
+  array-element-newline: 'off' #ok
+  block-scoped-var: error
+  block-spacing:
+    - error
+    - always
+  brace-style:
+    - error
+    - 1tbs
+    - allowSingleLine: true
+  callback-return: 'off' #ok
+  camelcase: error
+  capitalized-comments: 'off' #ok
+  class-methods-use-this: error
+  comma-dangle: error
+  comma-spacing: error
+  comma-style:
+    - error
+    - last
+  complexity: 'off' #ok
+  computed-property-spacing:
+    - error
+    - never
+  consistent-return: error
+  consistent-this: error
+  curly: error
+  default-case: error
+  dot-location:
+    - error
+    - property
+  dot-notation: error
+  eol-last: error
+  eqeqeq: 'off'
+  for-direction: error
+  func-call-spacing: error
+  func-name-matching: error
+  func-names: 'off' #ok
+  func-style:
+    - error
+    - declaration
+  function-paren-newline: error
+  getter-return: error
+  global-require: error
+  guard-for-in: 'off'
+  handle-callback-err: error
+  id-blacklist: error
+  id-length: 'off' #ok
+  id-match: error
+  implicit-arrow-linebreak: error
+  indent:
+    - error
+    - tab
+  init-declarations: 'off' #ok
+  jsx-quotes: error
+  key-spacing: error
+  keyword-spacing: error
+  line-comment-position: 'off' #ok
+  linebreak-style:
+    - error
+    - unix
+  lines-around-comment: error
+  lines-between-class-members: error
+  max-depth: 'off'
+  max-len: 'off' #ok
+  max-lines: 'off' #ok
+  max-nested-callbacks: error
+  max-params: 'off' #ok
+  max-statements: 'off' #ok
+  max-statements-per-line:
+    - error
+    - max: 2
+  multiline-comment-style:
+    - error
+    - separate-lines
+  multiline-ternary:
+    - error
+    - always-multiline
+  new-cap: error
+  new-parens: error
+  newline-per-chained-call: 'off' #ok
+  no-alert: error
+  no-array-constructor: error
+  no-await-in-loop: error
+  no-bitwise: error
+  no-buffer-constructor: error
+  no-caller: error
+  no-catch-shadow: error
+  no-console: 'off' #ok
+  no-continue: 'off' #ok
+  no-div-regex: error
+  no-else-return: 'off' #ok
+  no-empty:
+    - error
+    - allowEmptyCatch: true
+  no-empty-function: error
+  no-eq-null: error
+  no-eval: error
+  no-extend-native: 'off' #ok
+  no-extra-bind: error
+  no-extra-label: error
+  no-extra-parens: 'off' #ok
+  no-floating-decimal: error
+  no-implicit-coercion: error
+  no-implicit-globals: 'off' #ok
+  no-implied-eval: error
+  no-inline-comments: 'off' #ok
+  no-inner-declarations:
+    - error
+    - functions
+  no-invalid-this: error
+  no-iterator: error
+  no-label-var: error
+  no-labels: error
+  no-lone-blocks: error
+  no-lonely-if: 'off' #ok
+  no-loop-func: error
+  no-magic-numbers: 'off' #ok
+  no-mixed-operators:
+    - error
+    - allowSamePrecedence: true
+  no-mixed-requires: error
+  no-multi-assign: error
+  no-multi-spaces: 'off' #ok
+  no-multi-str: error
+  no-multiple-empty-lines:
+    - error
+    - max: 2
+      maxBOF: 0
+      maxEOF: 0
+  no-negated-condition: 'off' #ok
+  no-nested-ternary: 'off'
+  no-new: error
+  no-new-func: error
+  no-new-object: error
+  no-new-require: error
+  no-new-wrappers: error
+  no-octal-escape: error
+  no-param-reassign: 'off' #ok
+  no-path-concat: error
+  no-plusplus:
+    - error
+    - allowForLoopAfterthoughts: true
+  no-process-env: error
+  no-process-exit: error
+  no-proto: error
+  no-prototype-builtins: error
+  no-restricted-globals: error
+  no-restricted-modules: error
+  no-restricted-properties: error
+  no-restricted-syntax: error
+  no-return-assign: error
+  no-return-await: error
+  no-script-url: error
+  no-self-compare: error
+  no-sequences: error
+  no-shadow: error
+  no-shadow-restricted-names: error
+  no-sync: error
+  no-tabs: 'off' #ok
+  no-template-curly-in-string: error
+  no-ternary: 'off' #ok
+  no-throw-literal: error
+  no-trailing-spaces: error
+  no-undef-init: error
+  no-undefined: 'off'
+  no-underscore-dangle: error
+  no-unmodified-loop-condition: error
+  no-unneeded-ternary: error
+  no-unused-expressions: error
+  no-use-before-define: 'off' #ok
+  no-useless-call: error
+  no-useless-concat: error
+  no-useless-return: error
+  no-void: error
+  no-warning-comments: error
+  no-whitespace-before-property: error
+  no-with: error
+  nonblock-statement-body-position: error
+  object-curly-newline: error
+  object-curly-spacing: error
+  one-var:
+    - error
+    - uninitialized: always
+      initialized: never
+  one-var-declaration-per-line: error
+  operator-assignment: 'off' #ok
+  operator-linebreak:
+    - error
+    - after
+  padded-blocks: 'off' #ok
+  padding-line-between-statements:
+    - error
+    - blankLine: always
+      prev: "*"
+      next: function
+  prefer-promise-reject-errors: error
+  quote-props: 'off' #ok
+  quotes:
+    - error
+    - single
+  radix:
+    - error
+    - always
+  require-await: error
+  require-jsdoc: 'off' #ok
+  semi: error
+  semi-spacing:
+    - error
+    - after: true
+      before: false
+  semi-style:
+    - error
+    - last
+  sort-keys: 'off' #ok
+  sort-vars: 'off' #ok
+  space-before-blocks: error
+  space-before-function-paren:
+    - error
+    - anonymous: always
+      named: never
+      asyncArrow: always
+  space-in-parens: 'off' #ok
+  space-infix-ops: error
+  space-unary-ops: error
+  spaced-comment: error
+  strict: 'off' #ok
+  switch-colon-spacing: error
+  template-tag-spacing: error
+  unicode-bom:
+    - error
+    - never
+  valid-jsdoc: error
+  vars-on-top: error
+  wrap-iife:
+    - error
+    - inside
+  wrap-regex: error
+  yoda:
+    - error
+    - never
+
+  ### ES6 rules - not for me
+  # arrow-body-style: error
+  # arrow-parens: error
+  # arrow-spacing: error
+  # generator-star-spacing: error
+  # no-confusing-arrow: error
+  # no-duplicate-imports: error
+  # no-restricted-imports: error
+  # no-useless-computed-key: error
+  # no-useless-constructor: error
+  # no-useless-rename: error
+  # no-var: 'off' #ok
+  # object-shorthand: 'off' #ok
+  # prefer-arrow-callback: 'off' #ok
+  # prefer-const: error
+  # prefer-destructuring: 'off' #ok
+  # prefer-numeric-literals: error
+  # prefer-rest-params: 'off' #ok
+  # prefer-spread: error
+  # prefer-template: 'off' #ok
+  # rest-spread-spacing: error
+  # sort-imports: error
+  # symbol-description: error
+  # template-curly-spacing: error
+  # yield-star-spacing: error

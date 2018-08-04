@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aurelio Jargas, http://aurelio.net/moneylog/
+# Aurelio Jargas, https://aurelio.net/moneylog/
 #
 # Generates the commented config.js sample, with Dropbox specific sections.
 #
@@ -29,11 +29,11 @@ if test -f "$file_path"
 then
 	sed '
 		# Remove Beta-specific data
-		/^\/\/<Beta>/, /^\/\/<\/Beta>/ d
+		/^\/\/ <Beta>/, /^\/\/ <\/Beta>/ d
 
 		# Remove marker lines
-		/^\/\/<Dropbox>/ d
-		/^\/\/<\/Dropbox>/ d
+		/^\/\/ <Dropbox>/ d
+		/^\/\/ <\/Dropbox>/ d
 	
 	' "$file_path"
 else

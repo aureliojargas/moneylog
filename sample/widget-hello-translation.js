@@ -1,6 +1,6 @@
-///////////////////////////////////////////////////////////////////////
-//// Hello Translation Widget
-//// by Aurelio Jargas 2012-02-17
+// --------------------------------------------------------------------
+// Hello Translation Widget
+// by Aurelio Jargas 2012-02-17
 //
 // A simple sample widget, using translated strings.
 //
@@ -33,5 +33,5 @@ HelloTranslation.populate = function () {
 
 // Handle checkbox click
 HelloTranslation.checkboxClicked = function (checkbox) {
-	return;  // do nothing
+	console.log('clicked ' + checkbox.id);
 };

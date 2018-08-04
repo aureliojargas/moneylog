@@ -1,7 +1,7 @@
 /*
 	MoneyLog default CSS
 	by Aurelio Jargas
-	http://aurelio.net/moneylog/
+	https://aurelio.net/moneylog/
 */
 
 /* ---------------------------------------------- Reset CSS (from YUI) */
@@ -160,7 +160,7 @@ a.button {
 
 .button {
 	display: block;
-	margin: 1em 0 0 0;
+	margin: 0;
 	text-align: center;
 	font-weight: normal;
 	font-size: 100%;
@@ -193,13 +193,13 @@ a.button.active {
 	border-style: none;
 }
 
-.widget-box .button:before {
+.widget-box > .button:before {
 	content: "▶";
 	position: absolute;
 	top: 0;
 	left: 8px;  /* The same as .widget-content padding-left */
 }
-.widget-box .button.active:before {
+.widget-box > .button.active:before {
 	content: "▼";
 	position: absolute;
 	top: 0;
@@ -208,6 +208,12 @@ a.button.active {
 
 /* ---------------------------------------------- [ widgets ] */
 
+.widget-box {
+	margin: 1em 0;
+}
+.widget-box:first-child {
+	margin-top: 0;
+}
 .widget-content {
 	background-color: white;
 	border: 1px solid #bbb;  /* element_border */
@@ -217,6 +223,9 @@ a.button.active {
 }
 .widget-content a {
 	color: #2B97E9;  /* cloud_blue */
+}
+.widget-content a.button {
+	color: inherit;
 }
 #about-content a:hover {
 	text-decoration: underline;
@@ -233,8 +242,22 @@ a.button.active {
 
 /* ---------------------------------------------- [file.txt ▼] */
 
+#storage-content {
+	display: none;  /* JS will show */
+}
+
+#storage-driver,
 #source-file {
 	width: 100%;
+	margin-bottom: 1em;
+}
+
+#storage-folder {
+	display: block;
+	margin: -0.5em 0 0.5em 0;
+}
+#storage-folder:before {
+	content: "📁 ";  /* U+1F4C1 File Folder */
 }
 
 #source-file-box.mini {
@@ -249,10 +272,11 @@ a.button.active {
 #source-reload,
 #editor-open {
 	display: inline-block;  /* see showHideEditButton() */
-	width: 78px;
+	width: 69px;
+	margin: 0;
 }
-#source-reload {
-	float: right;
+#editor-open {
+	margin-right: 5px;
 }
 
 #source-reload.mini {  /* ↻ */
@@ -301,7 +325,7 @@ a.button.active {
 
 #toolbar label:hover,
 #toolbar input:hover + label {
-/*	font-weight: bold;*/
+	/*font-weight: bold;*/
 }
 .checkbox-option {
 	text-align: left;
@@ -332,10 +356,6 @@ a.button.active {
 #opt-date-1-year-combo,
 #opt-date-2-year-combo {
 	display: none;  /* appears in Yearly report */
-}
-#opt-future-box,
-#opt-last-months-box {
-	display: none;  /* legacy, JS will show */
 }
 #opt-value-filter-number {
 	display: none;  /* appears when SELECT item is chosen */

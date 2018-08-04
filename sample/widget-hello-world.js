@@ -1,6 +1,6 @@
-///////////////////////////////////////////////////////////////////////
-//// Hello World Widget
-//// by Aurelio Jargas 2012-02-17
+// --------------------------------------------------------------------
+// Hello World Widget
+// by Aurelio Jargas 2012-02-17
 //
 // A sample widget. Simple. Readable.
 //

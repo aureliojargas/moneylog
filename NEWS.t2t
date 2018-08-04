@@ -14,7 +14,7 @@ March, 2012
 %!postproc(html): '\[r(\d+)\]'    '<a href="http://code.google.com/p/moneylog-dev/source/detail?r=\1">r\1</a>'
 % 
 % Add links to configuration keys ``fooBar``
-%!preproc(html): ``(.*?)``    [\1 http://aurelio.net/moneylog/config/#\1]
+%!preproc(html): ``(.*?)``    [\1 https://aurelio.net/moneylog/config/#\1]
 %
 % Fix some config links: #i18nDatabase.pt.dateFormat -> #i18nDatabase-pt-dateFormat
 %!postproc(html): (/config/#[A-Za-z0-9-]+?)\.    \1-
@@ -156,7 +156,7 @@ March, 2012
 - New config ``showBalance``, to show/hide the Balance column in all reports. [r529]
 - New configs for the default report sorting: ``sortData.d.index``, ``sortData.d.rev``, ``sortData.m.index``, ``sortData.m.rev``, ``sortData.y.index``, ``sortData.y.rev``. [r523]
 - The config ``oneFile`` was removed. [r288]
-- Check the new config guide http://aurelio.net/moneylog/config/
+- Check the new config guide https://aurelio.net/moneylog/config/
 
 
 == Widgets ==[widgets]

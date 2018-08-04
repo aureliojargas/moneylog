@@ -8,6 +8,7 @@
 // 2. In your browser, open the JavaScript console to see the messages.
 // 3. Run MoneyLog, every tests should report "ok".
 
+/* eslint no-plusplus: "off" */
 
 var zz, suffix;
 
@@ -35,6 +36,7 @@ function check(results, ok) {
 		console.log(results);
 	}
 }
+
 function checkArray(results, ok, quiet) {
 	// Special function to test arrays because [] == [] returns false.
 
@@ -43,7 +45,8 @@ function checkArray(results, ok, quiet) {
 	// console.log(ok);
 	// console.log(quiet);
 
-	var i, failed, prefix = 'Test ' + zz + ': ';
+	var i, failed;
+	var prefix = 'Test ' + zz + ': ';
 
 	for (i = 0; i < ok.length; i++) {
 
@@ -77,10 +80,12 @@ function checkArray(results, ok, quiet) {
 		return true;
 	}
 }
+
 function checkObject(results, ok) {
 	// Loop and check all object properties
 
-	var x, failed, prefix = 'Test ' + zz + ': ';
+	var x, failed;
+	var prefix = 'Test ' + zz + ': ';
 
 	for (x in ok) {
 
@@ -118,55 +123,55 @@ function checkObject(results, ok) {
 
 console.log('-------------- MoneyLog Tests BEGIN');
 
-var zz = 0;
+zz = 0;
 zz++; checkArray([], []);
-zz++; checkArray([1,2,3], [1,2,3]);
-zz++; checkArray([[1,2,3]], [[1,2,3]]);
+zz++; checkArray([1, 2, 3], [1, 2, 3]);
+zz++; checkArray([[1, 2, 3]], [[1, 2, 3]]);
 zz++; checkArray([1, [2, [3, [4]]]], [1, [2, [3, [4]]]]);
 zz++; checkObject({}, {});
-zz++; checkObject({n:1}, {n:1});
-zz++; checkObject({n:1, s:'x', a:[1]}, {n:1, s:'x', a:[1]});
-zz++; checkObject({n:1, s:'x', a:[1, [2, [3]]]}, {n:1, s:'x', a:[1, [2, [3]]]});
-zz++; checkObject({a1:[1, [2, [3]]], a2:[3, [2, [1]]]}, {a2:[3, [2, [1]]], a1:[1, [2, [3]]]});
-///////////////////////////////////////////////////////////////////// ^ Test 9
+zz++; checkObject({n: 1}, {n: 1});
+zz++; checkObject({n: 1, s: 'x', a: [1]}, {n: 1, s: 'x', a: [1]});
+zz++; checkObject({n: 1, s: 'x', a: [1, [2, [3]]]}, {n: 1, s: 'x', a: [1, [2, [3]]]});
+zz++; checkObject({a1: [1, [2, [3]]], a2: [3, [2, [1]]]}, {a2: [3, [2, [1]]], a1: [1, [2, [3]]]});
+// -------------------------------------------------------------- ^ Test 9
 
 // function Array.getColumn(n)
 zz++; checkArray([].getColumn(1), []);
 zz++; checkArray([[], [], []].getColumn(1), [undefined, undefined, undefined]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(0), [0, 3, 6]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(1), [1, 4, 7]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(2), [2, 5, 8]);
-zz++; checkArray([[0,1,2], [3,4]  , [6,7,8]].getColumn(2), [2, undefined, 8]);
-zz++; checkArray([[0,1,2], [3,4,5], [6,7,8]].getColumn(3), [undefined, undefined, undefined]);
-///////////////////////////////////////////////////////////////////// ^ Test 16
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(0), [0, 3, 6]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(1), [1, 4, 7]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(2), [2, 5, 8]);
+zz++; checkArray([[0, 1, 2], [3, 4], [6, 7, 8]].getColumn(2), [2, undefined, 8]);
+zz++; checkArray([[0, 1, 2], [3, 4, 5], [6, 7, 8]].getColumn(3), [undefined, undefined, undefined]);
+// -------------------------------------------------------------- ^ Test 16
 
 // function computeTotals(arr)
 zz++; check(computeTotals([]), undefined);
 zz++; checkObject(
 	computeTotals([0]),
-	{min:0, max:0, sum:0, average:0, sumPositive:0, sumNegative:0, balance:[0]}
+	{min: 0, max: 0, sum: 0, average: 0, sumPositive: 0, sumNegative: 0, balance: [0]}
 );
 zz++; checkObject(
 	computeTotals([1]),
-	{min:1, max:1, sum:1, average:1, sumPositive:1, sumNegative:0, balance:[1]}
+	{min: 1, max: 1, sum: 1, average: 1, sumPositive: 1, sumNegative: 0, balance: [1]}
 );
 zz++; checkObject(
 	computeTotals([-1]),
-	{min:-1, max:-1, sum:-1, average:-1, sumPositive:0, sumNegative:-1, balance:[-1]}
+	{min: -1, max: -1, sum: -1, average: -1, sumPositive: 0, sumNegative: -1, balance: [-1]}
 );
 zz++; checkObject(
 	computeTotals([0, 0, 0, 0]),
-	{min:0, max:0, sum:0, average:0, sumPositive:0, sumNegative:0, balance:[0, 0, 0, 0]}
+	{min: 0, max: 0, sum: 0, average: 0, sumPositive: 0, sumNegative: 0, balance: [0, 0, 0, 0]}
 );
 zz++; checkObject(
 	computeTotals([-2, -1, 0, 1, 2]),
-	{min:-2, max:2, sum:0, average:0, sumPositive:3, sumNegative:-3, balance:[-2, -3, -3, -2, 0]}
+	{min: -2, max: 2, sum: 0, average: 0, sumPositive: 3, sumNegative: -3, balance: [-2, -3, -3, -2, 0]}
 );
 zz++; checkObject(
 	computeTotals([10.00, 25.50, -5.50, 33.33]),
-	{min:-5.50, max:33.33, sum:63.33, average:15.8325, sumPositive:68.83, sumNegative:-5.50, balance:[10.00, 35.50, 30.00, 63.33]}
+	{min: -5.50, max: 33.33, sum: 63.33, average: 15.8325, sumPositive: 68.83, sumNegative: -5.50, balance: [10.00, 35.50, 30.00, 63.33]}
 );
-///////////////////////////////////////////////////////////////////// ^ Test 23
+// -------------------------------------------------------------- ^ Test 23
 
 // function groupByPeriod(arr, periodType) {  // m, y
 zz++; checkObject(
@@ -177,7 +182,7 @@ zz++; checkObject(
 		['2012-03-04', '-4', 'bar1'],
 		['2012-03-18', '-5', 'bar2'],
 		['2012-04-01', '6', 'baz']
-		], 'm'),
+	], 'm'),
 	{
 		'2012-02': [
 			['2012-02-15', '1', 'foo1'],
@@ -188,9 +193,7 @@ zz++; checkObject(
 			['2012-03-04', '-4', 'bar1'],
 			['2012-03-18', '-5', 'bar2']
 		],
-		'2012-04': [
-			['2012-04-01', '6', 'baz']
-		],
+		'2012-04': [['2012-04-01', '6', 'baz']],
 		'keys': ['2012-02', '2012-03', '2012-04']
 	}
 );
@@ -202,7 +205,7 @@ zz++; checkObject(
 		['2013-03-04', '-4', 'bar1'],
 		['2013-03-18', '-5', 'bar2'],
 		['2014-04-01', '6', 'baz']
-		], 'y'),
+	], 'y'),
 	{
 		'2012': [
 			['2012-02-15', '1', 'foo1'],
@@ -213,9 +216,7 @@ zz++; checkObject(
 			['2013-03-04', '-4', 'bar1'],
 			['2013-03-18', '-5', 'bar2']
 		],
-		'2014': [
-			['2014-04-01', '6', 'baz']
-		],
+		'2014': [['2014-04-01', '6', 'baz']],
 		'keys': ['2012', '2013', '2014']
 	}
 );
@@ -227,7 +228,7 @@ zz++; checkObject(
 		['2012-02-18', '2', 'foo2'],
 		['2013-03-18', '-5', 'bar2'],
 		['2012-02-28', '3', 'foo3']
-		], 'y'),
+	], 'y'),
 	{
 		'2012': [
 			['2012-02-15', '1', 'foo1'],
@@ -238,14 +239,11 @@ zz++; checkObject(
 			['2013-03-04', '-4', 'bar1'],
 			['2013-03-18', '-5', 'bar2']
 		],
-		'2014': [
-			['2014-04-01', '6', 'baz']
-		],
+		'2014': [['2014-04-01', '6', 'baz']],
 		'keys': ['2012', '2013', '2014']
 	}
 );
-///////////////////////////////////////////////////////////////////// ^ Test 26
-
+// -------------------------------------------------------------- ^ Test 26
 
 
 console.log('-------------- MoneyLog Tests END');

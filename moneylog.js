@@ -1,25 +1,30 @@
-/*global window: false, localStorage: false */
-/*jslint devel: true, regexp: true, browser: true, undef: true, continue: true, sloppy: true, eqeq: true, white: true, forin: true, plusplus: true, maxerr: 500 */
+/* exported Y S N addScript addStyleSheet array2ul dataFiles dataFilesDefault encodeQueryData getPastMonth removeStyleSheet selectOptionByText showError sortCol sortColTag tagClicked toggleClass toggleRowHighlight wrapme */
 
-/*
-	moneylog.js
-	http://aurelio.net/moneylog/
-*/
+// moneylog.js
+// https://aurelio.net/moneylog/
 
-/* shortcuts for config */
+// I hope someday I can move everything under this namespace.
+// Until then, MoneyLog is a globals festival :(
+var ml = {};
+
+// shortcuts for config
 var Y = true;
 var S = true;
 var N = false;
 
 
-/*********************************************************************
-* User Config
-* -----------
-*
-* There is no need to change *anything*, but if you have special
-* needs, here is the place to customize this script.
-*
-*********************************************************************/
+// -------------------------------------------------------------------
+// User Config
+// -----------
+//
+// There is no need to change *anything*, but if you have special
+// needs, here is the place to customize this script.
+//
+// Better yet, use a config.js file on the same folder as this one.
+//
+// Learn more about MoneyLog configuration:
+// https://aurelio.net/moneylog/config/
+//  -------------------------------------------------------------------
 
 var myPassword = '';              // Set up an access password
 var lang = 'pt';                  // pt:Portuguese, en:English, ca:Catalan, es:Spanish (Argentina)
@@ -42,12 +47,12 @@ var checkDateFrom = true;         // Date filter From: checkbox inits checked?
 var checkDateUntil = true;        // Date filter To: checkbox inits checked?
 var initMonthOffsetFrom = -2;     // From: month will be N months from now
 var initMonthOffsetUntil = 0;     // To:   month will be N months from now
-var initYearOffsetFrom;           // From: year will be N years from now (default OFF)
-var initYearOffsetUntil;          // To:   year will be N years from now (default OFF)
 
 // Widgets
+var initStorageWidgetOpen = true; // Start app with the Storage widget opened?
 var initViewWidgetOpen = true;    // Start app with the View widget opened?
 var initTagCloudOpen = true;      // Start app with the Tag Cloud widget opened?
+var showStorageWidget = true;     // Show Storage widget in the sidebar?
 var showViewWidget = true;        // Show View widget in the sidebar?
 var showTagCloud = true;          // Show Tag Cloud widget in the sidebar?
 
@@ -69,13 +74,12 @@ var initChartDaily = 3;           // Initial selected item for the daily chart [
 var initChartMonthly = 1;         // Initial selected item for the monthly chart [1-4]
 var initChartYearly = 1;          // Initial selected item for the yearly chart [1-4]
 
-// External TXT files (used in flavors TXT and Cloud)
-// Note: The file encoding is UTF-8. Change to ISO-8859-1 if accents got mangled.
+// Legacy config for external TXT files. Will be kept here for some time.
+// Now use:
+//   ml.storage.drivers.filesystem.dataFiles = [];
+//   ml.storage.drivers.filesystem.defaultFile = '';
 var dataFiles = [];               // The paths for the TXT data files
 var dataFilesDefault = '';        // Default selected file at init when using multiple TXT
-
-// MoneyLog Browser config
-var localStorageKey = 'moneylogData'; // Keyname for the localStorage database
 
 // Ignore old or future data - Use with care!
 var ignoreDataOlderThan = '';     // Ignore entries older than this date (ie: 2010-01-01)
@@ -83,39 +87,53 @@ var ignoreDataNewerThan = '';     // Ignore entries newer than this date (ie: 20
 
 // Legacy options
 var useLegacyDataFormat = false;  // Use v4-style TAB-only as separator?
-var useLegacyDateFilter = false;  // Restore old options: Future Data, Recent Only
-var maxLastMonths = 12;           // Number of months on the last months combo
-var initLastMonths = 3;           // Initial value for last months combo
-var defaultLastMonths = false;    // Last months combo inits checked?
-var defaultFuture = false;        // Show future checkbox inits checked?
 
-// Default sort for all tables
-// d=daily, m=monthly, y=yearly, index=column(one-based), reverse
-var sortData = {'d':{}, 'm':{}, 'y':{}};
-sortData.d.index = 1;
-sortData.d.rev = false;
-sortData.m.index = 1;
-sortData.m.rev = false;
-sortData.y.index = 1;
-sortData.y.rev = false;
+// Default sort configuration for all tables:
+//
+//   index      sort index column for reports (one-based)
+//   min        min value for index
+//   max        max value for index
+//   rev        reverse the sort order?
+//
+//   indexTag   sort index column for Tag Report (one-based)
+//   minTag     min value for indexTag
+//   maxTag     -- not available, since it is dynamic
+//   revTag     reverse the sort order in Tag Report?
+//
+var sortData = {
 
-// Tag Report, DO NOT CHANGE
-sortData.m.indexTag = 1;
-sortData.m.revTag = false;
-sortData.y.indexTag = 1;
-sortData.y.revTag = false;
+	// Daily Report
+	d: {
+		index: 1,
+		min: 1,
+		max: 4,
+		rev: false
+	},
 
-// Sort index limits, DO NOT CHANGE
-sortData.d.min = 1;
-sortData.m.min = 1;
-sortData.y.min = 1;
-sortData.d.max = 4;
-sortData.m.max = 5;
-sortData.y.max = 5;
-sortData.m.minTag = 1;
-sortData.y.minTag = 1;
-// sortData.*.maxTag is variable
+	// Monthly Report
+	m: {
+		index: 1,
+		min: 1,
+		max: 5,
+		rev: false,
 
+		indexTag: 1,
+		minTag: 1,
+		revTag: false
+	},
+
+	// Yearly Report
+	y: {
+		index: 1,
+		rev: false,
+		min: 1,
+		max: 5,
+
+		indexTag: 1,
+		minTag: 1,
+		revTag: false
+	}
+};
 
 // Data format
 var dataFieldSeparator = '\t';  // Only used if useLegacyDataFormat=true
@@ -126,19 +144,19 @@ var commentChar = '#';   // Must be at line start (column 1)
 var dataPatterns = {
 	rowBlankSeparated:
 		// Uses multiple TAB and spaces as field separators
-		/^(\d{4}-\d\d-\d\d)[ \t]+([+\-]?[0-9.,*\/]+)[ \t]*(.*)$/,
+		/^(\d{4}-\d\d-\d\d)[ \t]+([+-]?[0-9.,*/]+)[ \t]*(.*)$/,
 	date:
 		// YYYY-MM-DD
 		/^ *(\d{4}-\d\d-\d\d) *$/,
 	amountNumber:
 		// 7  +7  -7  7.00  7,00  1234567,89  1.234.567,89  1,234,567.89 1234567,89
-		/^ *([+\-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
+		/^ *([+-]? *(\d+|\d{1,3}([.,]\d{3})*)([.,]\d\d)?) *$/,
 	amountCents:
 		// .12  ,12
 		/[.,](\d\d) *$/,
 	amountRecurrent:
 		// *N or /N where N>0
-		/([*\/])([1-9][0-9]*) *$/
+		/([*/])([1-9][0-9]*) *$/
 };
 
 // Internationalisation (i18n) - Screen Labels and formatting
@@ -163,8 +181,11 @@ var i18nDatabase = {
 		labelsOverview: ['Period', 'Incoming', 'Expense', 'Partial', 'Balance'],
 		// Full Screen
 		helpFullScreen: 'Turns ON/OFF the Full Screen mode: only the report is shown, with no toolbar.',
-		// Datafile
+		// Storage
+		labelStorage: 'Storage',
 		labelReload: 'Reload',
+		labelLocateAppFolder: 'Where is your MoneyLog folder?',
+		helpStorage: 'Choose the storage for your data.',
 		helpReload: 'Reload only the data, keeping the current view untouched.',
 		// Report types
 		labelReports: 'Reports',
@@ -192,11 +213,6 @@ var i18nDatabase = {
 		helpViewOptions: 'Show/hide the view options.',
 		helpMonthPartials: 'Shows the monthly balance, with sums of your incoming and expenses on the period.',
 		helpValueFilter: 'See only positive or negative values, or greater/lesser than some value.',
-		// Legacy
-		labelLastMonths: 'Recent Only',
-		labelShowFuture: 'Future Data',
-		helpLastMonths: 'See only the latest data, ignoring oldies.',
-		helpShowFuture: 'Shows future incoming and expenses.',
 		// Tag Cloud
 		labelTagCloud: 'Tag Cloud',
 		labelTagCloudEmpty: '(no tag)',
@@ -205,7 +221,6 @@ var i18nDatabase = {
 		helpTagCloud: 'Show/hide the tag cloud.',
 		helpTagCloudReset: 'Undo all the selections you have made in the Tag Cloud.',
 		helpTagCloudGroup: 'Only match if the entry has ALL the selected tags.',
-		// helpTags: 'Choose the desired tags for the report: food, health, education, trip, …',
 		// Tag Report
 		labelTagReportRelated: 'Hide related tags',
 		helpTagReportRelated: 'For entries with multiple tags, ignore the tags that are not explicitly selected in Tag Cloud.',
@@ -228,7 +243,6 @@ var i18nDatabase = {
 		errorInvalidDate: 'Invalid date:',
 		errorInvalidAmount: 'Invalid amount:',
 		errorNoLocalStorage: 'Sorry, your browser does not have localStorage support. %s will not work.',
-		errorNoDropboxSupport: 'Cannot find the Dropbox support files. %s will not work.',
 		errorRequirements: 'Minimum requirements:',
 		// Message
 		msgLoading: 'Loading %s...',
@@ -236,19 +250,14 @@ var i18nDatabase = {
 		msgTypePassword: 'Type your password:',
 		msgWrongPassword: 'Wrong password.',
 		// App
-		appUrl: 'http://aurelio.net/soft/moneylog/',
-		appUrlOnline: 'http://aurelio.net/soft/moneylog/online/',
+		appUrl: 'https://aurelio.net/soft/moneylog/',
+		appUrlOnline: 'https://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
 		helpWebsite: 'Go to the MoneyLog website.',
 		// Previous balance
 		labelPrevBalance: 'Previous Balance',
 		helpPrevBalance: 'Show the previous balance',
 		descrPrevBalance: 'Previous balance'
-
-		// helpHelp: 'Show/hide the help text.',
-		// helpTip: 'Tip: On the reports, click the column header to sort the results. Click again for reverse sorting.',
-		// helpInstall: 'Instructions: Save this page, use a plain text editor to add your own transactions and open it on the browser.',
-		// helpTranslator: ''
 	},
 	pt: {
 		centsSeparator: ',',
@@ -269,8 +278,11 @@ var i18nDatabase = {
 		labelsOverview: ['Período', 'Ganhos', 'Gastos', 'Saldo', 'Acumulado'],
 		// Full Screen
 		helpFullScreen: 'Liga/desliga o modo tela cheia: aparece somente o extrato, sem a barra de ferramentas.',
-		// Datafile
+		// Storage
+		labelStorage: 'Lançamentos',
 		labelReload: 'Recarregar',
+		labelLocateAppFolder: 'Cadê a pasta do MoneyLog?',
+		helpStorage: 'Escolha a fonte dos seus dados (lançamentos).',
 		helpReload: 'Recarrega somente os dados, sem perder as opções de visualização.',
 		// Report types
 		labelReports: 'Extratos',
@@ -298,11 +310,6 @@ var i18nDatabase = {
 		helpViewOptions: 'Mostra e esconde as opções de visualização.',
 		helpMonthPartials: 'Resumo do mês, com saldo mensal e acumulado, e totais de ganhos e gastos.',
 		helpValueFilter: 'Veja somente valores positivos, negativos ou maiores/menores que um valor específico.',
-		// Legacy
-		labelLastMonths: 'Somente Recentes',
-		labelShowFuture: 'Lançamentos Futuros',
-		helpLastMonths: 'Veja somente os dados mais recentes, ignorando os antigos.',
-		helpShowFuture: 'Veja quais lançamentos estão agendados para os meses seguintes.',
 		// Tag Cloud
 		labelTagCloud: 'Tags',
 		labelTagCloudEmpty: '(sem tag)',
@@ -311,7 +318,6 @@ var i18nDatabase = {
 		helpTagCloud: 'Mostra e esconde a nuvem de tags.',
 		helpTagCloudReset: 'Desmarca todas as tags que você selecionou, voltando ao estado inicial.',
 		helpTagCloudGroup: 'Cada lançamento deve possuir TODAS as tags selecionadas, simultaneamente.',
-		// helpTags: 'Escolha que tipo de transações você quer ver: alimentação, saúde, educação, viagem, etc.',
 		// Tag Report
 		labelTagReportRelated: 'Esconder as tags relacionadas',
 		helpTagReportRelated: 'Para os lançamentos com múltiplas tags, ignore as tags que não estejam explicitamente selecionadas.',
@@ -341,18 +347,14 @@ var i18nDatabase = {
 		msgTypePassword: 'Digite a sua senha:',
 		msgWrongPassword: 'Senha errada.',
 		// App
-		appUrl: 'http://aurelio.net/moneylog/beta/',
-		appUrlOnline: 'http://aurelio.net/moneylog/browser/app/',
+		appUrl: 'https://aurelio.net/moneylog/beta/',
+		appUrlOnline: 'https://aurelio.net/moneylog/browser/app/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
 		helpWebsite: 'Visite o website do MoneyLog.',
 		// Previous balance
 		labelPrevBalance: 'Saldo Anterior',
 		helpPrevBalance: 'Exibe saldo anterior',
 		descrPrevBalance: 'Saldo anterior'
-
-		// helpHelp: 'Mostra e esconde o texto de ajuda.',
-		// helpTip: 'Dica: Nos relatórios, clique no título da coluna para mudar a ordenação. Clicando novamente a ordem é invertida.',
-		// helpInstall: 'Instruções: Salve esta página, use um editor de textos para colocar seus lançamentos e abra no navegador. Para instruções detalhadas e várias outras dicas de uso, leia o FAQ: http://aurelio.net/moneylog/faq/'
 	},
 	ca: {
 		centsSeparator: ',',
@@ -363,15 +365,12 @@ var i18nDatabase = {
 		labelDaily: 'diari',
 		labelMonthly: 'mensual',
 		labelYearly: 'anual',
-		labelLastMonths: 'Només els Darrers',
 		labelValueFilter: 'Valors Filtrats',
 		labelPositive: 'positiu',
 		labelNegative: 'negatiu',
 		labelGreaterThan: 'més gran que',
 		labelLessThan: 'més petit que',
-		labelShowFuture: 'Mostra les dades futures',
 		labelMonthPartials: 'Mostra els Parcials Mensuals',
-		// labelSearch: 'Camp de cerca',
 		labelSearchRegex: 'regex',
 		labelSearchNegate: 'nega-ho',
 		labelReload: 'Carrega',
@@ -389,17 +388,14 @@ var i18nDatabase = {
 		errorNoFieldSeparator: 'No separator found:',
 		errorTooManySeparators: 'Hi ha masses separadors',
 		errorInvalidDate: 'La data no és vàlida:',
-		errorInvalidAmount: "L'import no és vàlid:",
-		msgLoading: "S'està carregant %s...",
+		errorInvalidAmount: 'L\'import no és vàlid:',
+		msgLoading: 'S\'està carregant %s...',
 		helpReports: 'Informes: diari, mensual i anual, amb gràfics, balanç i totals.',
-		helpLastMonths: 'Mostra només les dades més recents, omet les antigues.',
 		helpValueFilter: 'Mostra només els valors positius o negatius, o major / menor que un cert valor.',
-		helpShowFuture: 'Mostra els ingressos i despeses futures.',
 		helpMonthPartials: 'Mostra el saldo mensual, amb sumes dels vostres ingressos i despeses del període.',
 		helpSearch: 'Filtre dels informes en temps real, a mesura que escriu.',
 		helpSearchRegex: 'Utilitza expressions regulars en el camp de cerca.',
-		helpSearchNegate: "Eliminar els resultats de cerca de l'informe.",
-		// helpHelp: "'Mostra / oculta aquest text d'ajuda.",
+		helpSearchNegate: 'Eliminar els resultats de cerca de l\'informe.',
 		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
 		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
 		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
@@ -407,17 +403,11 @@ var i18nDatabase = {
 		labelPrevBalance: 'Saldo Anterior',
 		helpPrevBalance: 'Mostra el saldo anterior',
 		descrPrevBalance: 'Saldo anterior'
-
-		// helpTip: 'Consell: En els informes, feu clic a la capçalera de columna per ordenar els resultats. Feu clic de nou per a la classificació inversa.',
-		// helpInstall: 'Instruccions: Deseu aquesta pàgina, utilitzeu un editor de text per afegir les vostres transaccions i obriu-ho al navegador.',
-		// helpTranslator: 'Traducció: Paco Rivière, http://pacoriviere.cat'
 	},
 	es: {
 		centsSeparator: ',',
 		thousandSeparator: '.',
 		dateFormat: 'd/m/Y',
-		//-dateFormatMonth: 'B Y',
-		//-dateFormatYear: 'Y',
 		monthNames: ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 		labelNoData: 'Sin movimientos.',
 		labelTotal: 'Total',
@@ -460,11 +450,6 @@ var i18nDatabase = {
 		helpViewOptions: 'Mostrar/esconder opciones.',
 		helpMonthPartials: 'Vea el balance con el saldo mensual, el acumulado y totales de ingresos y egresos.',
 		helpValueFilter: 'Vea solo los montos positivos o los negativos, o los "mayores a" o los "menores a" cualquier valor dado.',
-		// Legacy
-		labelLastMonths: 'Mostrar solo últimos',
-		labelShowFuture: 'Mostrar movimientos futuros',
-		helpLastMonths: 'Vea solo la información mas actual, escondiendo la información antigua.',
-		helpShowFuture: 'Vea movimientos agendados a futuro.',
 		// Tag Cloud
 		labelTagCloud: 'Conceptos',
 		labelTagCloudEmpty: '(vacío)',
@@ -495,7 +480,6 @@ var i18nDatabase = {
 		errorInvalidDate: 'Fecha invalida:',
 		errorInvalidAmount: 'Cantidad invalida:',
 		errorNoLocalStorage: 'Lo sentimos, su navegador no tiene soporte para localStorage. %s no funcionará.',
-		errorNoDropboxSupport: 'No se puede encontrar los archivos de soporte para Dropbox. %s no funcionará.',
 		errorRequirements: 'Requisitos mínimos:',
 		// Message
 		msgLoading: 'Cargando %s...',
@@ -509,86 +493,62 @@ var i18nDatabase = {
 		labelPrevBalance: 'Saldo Anterior',
 		helpPrevBalance: 'Muestra el saldo anterior',
 		descrPrevBalance: 'Saldo anterior'
-
-		// Old messages
-		// helpHelp: 'Mostrar/Esconder texto de ayuda.',
-		// helpTags: 'Seleccione que tipo de conceptos desea ver en el reporte: comida, salud, educación, viajes, …',
-		// helpTip: 'Consejo:	Haga click en los títulos de las columnas del reporte para ordenar la información de menor a mayor. Haga click nuevamente para mostrar la información en el orden inverso.',
-		// helpInstall: 'Instrucciones: Guarde esta página, use un editor de texto simple para volcar sus movimientos y luego abrala en su navegador.',
-		// helpTranslator: 'Traducción: Gonzalo Nemmi'
 	},
-	getLanguage: function (lang) {
-		var phrase, defaultLang = this.defaultLanguage;
+	getLanguage: function (langCode) {
+		var phrase;
+		var defaultLang = this.defaultLanguage;
 
-		if (defaultLang !== lang) {
-			if (this[lang]) {
-				// check if all attributes from 'defaultLang' are in 'lang'
+		if (defaultLang !== langCode) {
+			if (this[langCode]) {
+				// check if all attributes from 'defaultLang' are in 'langCode'
 				// if not, copy from 'defaultLang'
 				for (phrase in this[defaultLang]) {
-					if (!this[lang][phrase] || this[lang][phrase].length === 0) {
-						this[lang][phrase] = this[defaultLang][phrase];
+					if (!this[langCode][phrase] || this[langCode][phrase].length === 0) {
+						this[langCode][phrase] = this[defaultLang][phrase];
 					}
 				}
 			} else {
 				// unknown lang, show default instead
-				lang = defaultLang;
+				langCode = defaultLang;
 			}
 		}
-		return this[lang];
+		return this[langCode];
 	}
 };
 
-//// End of user Config
-
-
-// The appMode sets the Moneylog flavor:
-// txt          HTML, CSS, JS files are separated. Read user data from local TXT files.
-// one          Full app is in a single moneylog.html file, with user data at the end.
-// dropbox      Runs online, read/save user data from/to TXT files in a Dropbox account.
-// localStorage Read/edit/save user data to the browser. Must always use the same browser.
-//
-var appMode = 'txt';  // DO NOT CHANGE
+// -------------------------------------------------------------------
+// End of user config
+// -------------------------------------------------------------------
 
 
 // Global vars
 var appVersion = '6β';
 var appYear = '2014';  // only used in official releases
 var appName = 'MoneyLog';
-var appFlavor = '';
 var appCommit = '';  // set by util/gen-* scripts
 var appRepository = 'https://github.com/aureliojargas/moneylog';
-var dropboxAppFolder = '/Apps/MoneyLog Cloud';
-var dropboxTxtFolder = '/txt';
-var dataFirstDate;
-var dataLastDate;
-var highlightRegex;
-var i18n;
+var highlightRegex = null;
+var i18n = {};
 var rawData = '';
 var parsedData = [];
 var reportData = [];  // filtered by applyTags(filterData())
-var waitingToLoad = [];
 var selectedRows = [];
-var multiRawData = '';
-var savedDateRangeIndexes = [];  // used in TXT reload process
+var savedDateRangeIndexes = [];  // used in the reload process
 var isFullScreen = false;
-var isOpera = (window.opera) ? true : false;
-var isBeta = /β$/.test(appVersion);  // beta if version ends with 'β'
-var initDropbox;  // to be implemented in server side
-var showReport;  // to make JSLint happy
-var Widget;
-var TagSummary;
-var AboutWidget;
+var isBeta = (/β$/).test(appVersion);  // beta if version ends with 'β'
+
+// Widgets
+var TagSummary = {};
+var AboutWidget = {};
 
 // We have special rules for tiny screens (480px or less)
 var isMobile = (document.documentElement.clientWidth && document.documentElement.clientWidth < 481);
-
-// The iframe loading occurs in parallel with the main execution, we need to know when it's done
-var iframeIsLoaded = true;
 
 // Change some defaults for the mobile version.
 // User can still overwrite those.
 if (isMobile) {
 	// Init with all widgets closed
+	initStorageWidgetOpen = true;  // exception
 	initViewWidgetOpen = false;
 	initTagCloudOpen = false;
 	// Note: Tag Summary is closed at Widget definition. Search for isMobile.
@@ -601,9 +561,9 @@ if (isMobile) {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                              PROTOTYPES
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 if (!Array.prototype.push) { // IE5...
 	Array.prototype.push = function (item) {
@@ -613,6 +573,7 @@ if (!Array.prototype.push) { // IE5...
 }
 
 if (!Number.prototype.toFixed) { // IE5...
+	// eslint-disable-next-line no-unused-vars
 	Number.prototype.toFixed = function (n) { // precision hardcoded to 2
 		var k = (Math.round(this * 100) / 100).toString();
 		k += (k.indexOf('.') === -1) ? '.00' : '00';
@@ -637,7 +598,7 @@ if (!Array.prototype.sum) {
 	Array.prototype.sum = function () {
 		var i, sum;
 		// for (i = 0, sum = 0; i < this.length ; sum += this[i++]);
-		for (sum = 0, i = this.length; i; sum += this[--i]);
+		for (sum = 0, i = this.length; i; sum += this[--i]);  // eslint-disable-line curly, no-plusplus
 		return sum;
 	};
 }
@@ -648,7 +609,8 @@ if (!Array.prototype.avg) {
 }
 // [[0,1,2], [3,4,5], [6,7,8]].getColumn(1) -> [1, 4, 7]
 Array.prototype.getColumn = function (n) {
-	var i, leni, results = [];
+	var i, leni;
+	var results = [];
 	for (i = 0, leni = this.length; i < leni; i++) {
 		results.push(this[i][n]);
 	}
@@ -669,22 +631,33 @@ String.prototype.replaceAll = function (from, to) {
 	return this.split(from).join(to);
 	// http://stackoverflow.com/a/542305
 };
+
 String.prototype.unacccent = function () {
 	if (!this.match(/[^a-z0-9 ]/)) { // no accented char
 		return this;
 	}
-	return this.replace(
-		/[àáâãäå]/g, 'a').replace(
-		/[èéêë]/g, 'e').replace(
-		/[ìíîï]/g, 'i').replace(
-		/[òóôõö]/g, 'o').replace(
-		/[ùúûü]/g, 'u').replace(
-		/[ýÿ]/g, 'y').replace(
-		/ç/g, 'c').replace(
-		/ñ/g, 'n');
+	return this
+		.replace(/[àáâãäå]/g, 'a')
+		.replace(/[èéêë]/g,   'e')
+		.replace(/[ìíîï]/g,   'i')
+		.replace(/[òóôõö]/g,  'o')
+		.replace(/[ùúûü]/g,   'u')
+		.replace(/[ýÿ]/g,     'y')
+		.replace(/ç/g,        'c')
+		.replace(/ñ/g,        'n');
 };
 
-Array.prototype.clone = function() {
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#polyfill
+if (!String.prototype.endsWith) {
+	String.prototype.endsWith = function (search, thisLen) {
+		if (thisLen === undefined || thisLen > this.length) {
+			thisLen = this.length;
+		}
+		return this.substring(thisLen - search.length, thisLen) === search;
+	};
+}
+
+Array.prototype.clone = function () {
 	return [].concat(this);
 };
 
@@ -726,11 +699,13 @@ Array.prototype.hasAllArrayItems = function (arr) {
 
 // http://www.shamasis.net/2009/09/fast-algorithm-to-find-unique-items-in-javascript-array/
 // I choose the "classic" version, it's more reliable.
-Array.prototype.unique = function() {
-	var i, j, a = [], l = this.length;
+Array.prototype.unique = function () {
+	var i, j;
+	var a = [];
+	var l = this.length;
 	for (i = 0; i < l; i++) {
-		for (j = i+1; j < l; j++) {
-			if (this[i] === this[j]) { j = ++i; }
+		for (j = i + 1; j < l; j++) {
+			if (this[i] === this[j]) { j = ++i; }  // eslint-disable-line no-plusplus
 		}
 		a.push(this[i]);
 	}
@@ -738,7 +713,9 @@ Array.prototype.unique = function() {
 };
 
 Array.prototype.removePattern = function (patt, n) { // n = number of removes
-	var i, leni, count = 0, cleaned = [];
+	var i, leni;
+	var count = 0;
+	var cleaned = [];
 
 	if (!n) {
 		n = Infinity;
@@ -756,20 +733,21 @@ Array.prototype.removePattern = function (patt, n) { // n = number of removes
 
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
-		"use strict";
+	Array.prototype.indexOf = function (searchElement /* , fromIndex */) {
+		'use strict';
 		var t, len, n, k;
-		if (this == null) {
+		if (this == null) {  // eslint-disable-line no-eq-null
 			throw new TypeError();
 		}
 		t = Object(this);
-		len = t.length >>> 0;
+		len = t.length >>> 0;  // eslint-disable-line no-bitwise
 		if (len === 0) {
 			return -1;
 		}
 		n = 0;
 		if (arguments.length > 0) {
 			n = Number(arguments[1]);
+			// eslint-disable-next-line no-self-compare
 			if (n != n) { // shortcut for verifying if it's NaN
 				n = 0;
 			} else if (n != 0 && n != Infinity && n != -Infinity) {
@@ -788,6 +766,36 @@ if (!Array.prototype.indexOf) {
 		return -1;
 	};
 }
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#polyfill
+/* eslint-disable */
+if (!Array.prototype.filter)
+	Array.prototype.filter = function(func, thisArg) {
+		'use strict';
+		if ( ! ((typeof func === 'Function' || typeof func === 'function') && this) )
+			throw new TypeError();
+
+		var len = this.length >>> 0,
+			res = new Array(len), // preallocate array
+			t = this, c = 0, i = -1;
+		if (thisArg === undefined)
+			while (++i !== len)
+				// checks to see if the key was set
+				if (i in this)
+					if (func(t[i], i, t))
+						res[c++] = t[i];
+		else
+			while (++i !== len)
+				// checks to see if the key was set
+				if (i in this)
+					if (func.call(thisArg, t[i], i, t))
+						res[c++] = t[i];
+
+		res.length = c; // shrink down array to proper size
+		return res;
+	};
+/* eslint-enable */
+
 RegExp.escape = function (str) {
 	var specials = new RegExp('[.*+?|\\^$()\\[\\]{}\\\\]', 'g');
 	return str.replace(specials, '\\$&');
@@ -839,33 +847,33 @@ Date.prototype.format = function (fmt) {
 	// Available tokens (i.e. for 1999-12-31):
 	// Y=1999, y=99, m=12, d=31, b=Dec, B=December
 
-	var d = this;
+	var that = this;
 	// http://code.google.com/p/datejs/source/browse/trunk/src/core.js?spec=svn197&r=194#810
 	return fmt.replace(
-			/(\\)?[YymdBb]/g,
-			function (m) {
-				// Ignore escaped chars as \Y, \b, ...
-				if (m.charAt(0) === '\\') {
-					return m.replace('\\', '');
-				}
-				switch (m) {
-					case 'Y':
-						return d.getYearML() || 'Y';
-					case 'y':
-						return d.getYearML().slice(2, 4) || 'y';
-					case 'm':
-						return d.getMonthML() || 'm';
-					case 'd':
-						return d.getDateML() || 'd';
-					case 'B':
-						return d.getMonthName() || 'B';
-					case 'b':
-						return d.getMonthShortName() || 'b';
-					default:
-						return m;
-				}
+		/(\\)?[YymdBb]/g,
+		function (m) {
+			// Ignore escaped chars as \Y, \b, ...
+			if (m.charAt(0) === '\\') {
+				return m.replace('\\', '');
 			}
-		);
+			switch (m) {
+			case 'Y':
+				return that.getYearML() || 'Y';
+			case 'y':
+				return that.getYearML().slice(2, 4) || 'y';
+			case 'm':
+				return that.getMonthML() || 'm';
+			case 'd':
+				return that.getDateML() || 'd';
+			case 'B':
+				return that.getMonthName() || 'B';
+			case 'b':
+				return that.getMonthShortName() || 'b';
+			default:
+				return m;
+			}
+		}
+	);
 };
 Date.prototype.setMonthOffset = function (n) {  // negative n is ok
 	// Beware: 2010-01-31 + 1 = 2010-03-03
@@ -879,16 +887,17 @@ String.prototype.toDate = function () {
 };
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                              TOOLS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function showError(title, msg) {
 	document.getElementById('error').style.display = 'block';
-	document.getElementById('error').innerHTML = '<h2>' + title + '<\/h2>' + msg;
+	document.getElementById('error').innerHTML = '<h2>' + title + '</h2>' + msg;
 }
 
 function invalidData(lineno, message) {
+	// eslint-disable-next-line no-alert
 	alert(i18n.errorInvalidData + lineno + '\n' + message.replace(/\t/g, '<TAB>'));
 }
 
@@ -955,14 +964,14 @@ function formatReportDate(date) {
 	}
 
 	switch (date.length) {
-		case 10:  // YYYY-MM-DD
-			return formatDate(date, i18n.dateFormat);
-		case 7:  // YYYY-MM
-			return formatDate(date + '-01', i18n.dateFormatMonth);
-		case 4:  // YYYY
-			return formatDate(date + '-01-01', i18n.dateFormatYear);
-		default:  // unknown format
-			return date;
+	case 10:  // YYYY-MM-DD
+		return formatDate(date, i18n.dateFormat);
+	case 7:  // YYYY-MM
+		return formatDate(date + '-01', i18n.dateFormatMonth);
+	case 4:  // YYYY
+		return formatDate(date + '-01-01', i18n.dateFormatYear);
+	default:  // unknown format
+		return date;
 	}
 }
 
@@ -986,10 +995,11 @@ function getPastMonth(months) {
 function getDataUniqueDates(periodType) {  // periodType: d, m, y
 	// Returns array with unique (dates|months|years) in parsedData.
 	// Note: parsedData is already sorted ASC by date.
-	var i, leni, theData, item, last, slices, results = [];
+	var i, leni, theData, item, last, slices;
+	var results = [];
 
 	theData = parsedData.clone();
-	slices = { 'y': 4, 'm': 7, 'd': 10 };
+	slices = {y: 4, m: 7, d: 10};
 	for (i = 0, leni = theData.length; i < leni; i++) {
 		item = theData[i][0].slice(0, slices[periodType]);  // get date
 		if (item !== last) {
@@ -1003,7 +1013,8 @@ function getDataUniqueDates(periodType) {  // periodType: d, m, y
 function getYearRange(date1, date2) {
 	// Given two dates, returns array with all the years between them, inclusive.
 	// Dates are strings formatted as YYYY-MM-DD.
-	var y, y1, y2, results = [];
+	var y, y1, y2;
+	var results = [];
 
 	if (date1 > date2) {  // no deal
 		return results;
@@ -1021,7 +1032,8 @@ function getYearRange(date1, date2) {
 function getMonthRange(date1, date2) {
 	// Given two dates, returns array with all the months between them, inclusive.
 	// Dates are strings formatted as YYYY-MM-DD.
-	var y, y1, y2, m, m1, m2, ini, end, results = [];
+	var y, y1, y2, m, m1, m2, ini, end;
+	var results = [];
 
 	if (date1 > date2) {  // no deal
 		return results;
@@ -1054,11 +1066,12 @@ function prettyFloat(num, noHtml) {
 	var myClass = (num < 0) ? 'neg' : 'pos';
 	num = num.toFixed(2).replace('.', i18n.centsSeparator);
 	while (i18n.thousandSeparator && num.search(/[0-9]{4}/) > -1) {
-		num = num.replace(/([0-9])([0-9]{3})([^0-9])/,
-			'$1' + i18n.thousandSeparator + '$2$3');
+		num = num.replace(
+			/([0-9])([0-9]{3})([^0-9])/,
+			'$1' + i18n.thousandSeparator + '$2$3'
+		);
 	}
-	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '<\/span>';
-	// Note: all html *end* tags have the / escaped to pass on validator
+	return (noHtml) ? num : '<span class="' + myClass + '">' + num + '</span>';
 }
 
 function prettyFloatUndo(str) {
@@ -1112,13 +1125,25 @@ function prettyBarLabel(n) { // Convert float to short strings: 1k2, 1m2, ...
 }
 
 function array2ul(a) {
-	return '<ul><li>' + a.join('<\/li><li>') + '<\/li><\/ul>';
+	return '<ul><li>' + a.join('</li><li>') + '</li></ul>';
 }
+
 function wrapme(tag, text) {
 	return '<' + tag + '>' + text + '</' + tag + '>';
 }
+
 function linkme(url, text) {
-	return '<a href="' + url + '">' + text + '<\/a>';
+	return '<a href="' + url + '">' + text + '</a>';
+}
+
+function selectOptionByText(combo, optionText) {
+	var i;
+	for (i = 0; i < combo.options.length; i++) {
+		if (combo.options[i].text === optionText) {
+			combo.selectedIndex = i;
+			break;
+		}
+	}
 }
 
 // DOM Class helpers
@@ -1129,12 +1154,15 @@ function getClass(el) {
 		return [];
 	}
 }
+
 function setClass(el, arr) {
 	el.className = arr.join(' ');
 }
+
 function hasClass(el, klass) {
 	return getClass(el).hasItem(klass);
 }
+
 function addClass(el, klass) {
 	var arr = getClass(el);
 	if (!arr.hasItem(klass)) {
@@ -1142,12 +1170,14 @@ function addClass(el, klass) {
 		setClass(el, arr);
 	}
 }
+
 function removeClass(el, klass) {
 	var arr = getClass(el);
 	if (arr.hasItem(klass)) {
 		setClass(el, arr.removePattern(klass));
 	}
 }
+
 function toggleClass(el, klass) {
 	var arr = getClass(el);
 	if (arr.hasItem(klass)) {
@@ -1158,6 +1188,19 @@ function toggleClass(el, klass) {
 		setClass(el, arr);
 		return true;
 	}
+}
+
+// Compose URL query string from a data object
+// https://stackoverflow.com/a/111545/1623438
+function encodeQueryData(data) {
+	var name;
+	var result = [];
+	for (name in data) {
+		if (Object.prototype.hasOwnProperty.call(data, name)) {
+			result.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
+		}
+	}
+	return result.join('&');
 }
 
 // DO NOT append elements using el.innerHTML += "foo";
@@ -1174,19 +1217,30 @@ function appendHTML(el, html) {
 	}
 }
 
+// http://unixpapa.com/js/dyna.html
+// https://stackoverflow.com/a/22534608/1623438
+function addScript(scriptUrl, callback) {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.onload = callback;
+	script.src = scriptUrl;
+	head.appendChild(script);
+}
+
 // CSS stylesheet add/remove
 //
 // http://stackoverflow.com/q/524696
 // http://dev.opera.com/articles/view/dynamic-style-css-javascript/
 //
-function addStyleSheet(element_id, contents) {
+function addStyleSheet(elementId, contents) {
 	var head, style, rules;
 
 	head = document.getElementsByTagName('head')[0];
 	style = document.createElement('style');
 	rules = document.createTextNode(contents);
 
-	style.id = element_id;
+	style.id = elementId;
 	style.type = 'text/css';
 	if (style.styleSheet) {
 		style.styleSheet.cssText = rules.nodeValue;
@@ -1195,8 +1249,9 @@ function addStyleSheet(element_id, contents) {
 	}
 	head.appendChild(style);
 }
-function removeStyleSheet(element_id) {
-	var el = document.getElementById(element_id);
+
+function removeStyleSheet(elementId) {
+	var el = document.getElementById(elementId);
 	el.parentNode.removeChild(el);
 }
 
@@ -1225,7 +1280,7 @@ function drawChart(values, labels) {
 		valueShort = prettyBarLabel(values[i]); // 1k2
 
 		// Date: 2010-12 -> 2010<br>12
-		label =  labels[i].replace('-', '<br>');
+		label = labels[i].replace('-', '<br>');
 
 		chartData.push([label, height, value, valueShort]);
 	}
@@ -1243,40 +1298,37 @@ function drawChart(values, labels) {
 
 		// Will show bar value at top?
 		if (showChartBarLabel) {
-			chart.push(
-				'<span class="label" title="' + chartData[i][2] + '">' +
-				chartData[i][3] +
-				'<\/span>'
-				// Showing short value. Real value is stored as a tooltip.
-			);
+			// Showing short value. Real value is stored as a tooltip.
+			chart.push('<span class="label" title="' + chartData[i][2] + '">' + chartData[i][3] + '</span>');
 		}
 
 		// The bar, a painted div with exact height
 		barType = (chartData[i][3].substring(0, 1) === '-') ? 'negbar' : 'posbar';
-		chart.push('<div class="bar ' + barType + '" style="height:' + chartData[i][1] + 'px"><\/div>');
+		chart.push('<div class="bar ' + barType + '" style="height:' + chartData[i][1] + 'px"></div>');
 
-		chart.push('<\/td>');
+		chart.push('</td>');
 	}
-	chart.push('<\/tr>');
+	chart.push('</tr>');
 
 	// Second line: the labels
 	chart.push('<tr class="label">');
 	for (i = 0, leni = chartData.length; i < leni; i++) {
-		chart.push('<td>' + chartData[i][0] + '<\/td>');
+		chart.push('<td>' + chartData[i][0] + '</td>');
 	}
-	chart.push('<\/tr>');
+	chart.push('</tr>');
 
 	// And we're done
-	chart.push('<\/table>');
+	chart.push('</table>');
 	chart = chart.join('\n');
 
 	return chart;
 }
 
 function computeTotals(arr) {  // arr = [1,2,3,4,5]
-	var i, leni, n, o = {};
+	var i, leni, n;
+	var o = {};
 
-	if (!arr.length) { return; }
+	if (!arr.length) { return arr; }
 
 	o.min = 0;
 	o.max = 0;
@@ -1307,7 +1359,8 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 		// min/max
 		if (i === 0) {
 			// First value, store it as max and min
-			o.min = o.max = n;
+			o.min = n;
+			o.max = n;
 		} else {
 			o.min = (n < o.min) ? n : o.min;
 			o.max = (n > o.max) ? n : o.max;
@@ -1319,13 +1372,14 @@ function computeTotals(arr) {  // arr = [1,2,3,4,5]
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                         TAGS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function createTagCloud(names) {
 	// Create all the <a> elements for the Tag Cloud
-	var i, leni, results = [];
+	var i, leni;
+	var results = [];
 
 	for (i = 0, leni = names.length; i < leni; i++) {
 		results.push('<a class="trigger unselected" href="#" onClick="return tagClicked(this);">' + names[i] + '</a>');
@@ -1379,7 +1433,8 @@ function updateTagCloud(visibleTags) {
 
 function getSelectedTags() {
 	// Get currently selected tags (from interface)
-	var i, leni, el, els, results = [];
+	var i, leni, el, els;
+	var results = [];
 
 	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
 	for (i = 0, leni = els.length; i < leni; i++) {
@@ -1394,7 +1449,8 @@ function getSelectedTags() {
 
 function getExcludedTags() {
 	// Get currently excluded tags (from interface)
-	var i, leni, el, els, results = [];
+	var i, leni, el, els;
+	var results = [];
 
 	els = document.getElementById('tag-cloud-tags').getElementsByTagName('a');
 	for (i = 0, leni = els.length; i < leni; i++) {
@@ -1465,9 +1521,9 @@ function tagClicked(el) {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                         REPORT HELPERS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function getMiniBar(pos, neg) {
 	var roof, posPx, negPx, posLabel, negLabel, posMargin, negMargin, labels, labelTemplate;
@@ -1484,7 +1540,7 @@ function getMiniBar(pos, neg) {
 	// Labels
 	labels = '';
 	if (showMiniBarsLabels) {
-		labelTemplate = '<span class="label" style="margin-left:-{margin}">{label}<\/span>';
+		labelTemplate = '<span class="label" style="margin-left:-{margin}">{label}</span>';
 
 		// The label positioning (negative margin)
 		posMargin = (miniBarWidth - 2) + 'px';                // full bar width
@@ -1505,38 +1561,39 @@ function getMiniBar(pos, neg) {
 	// The TD width *must* be set to accomodate these tricks
 	//
 	return '<td class="minibar" style="width:' + (miniBarWidth + 2) + 'px">' +
-		'<div class="minibar posbar" style="width:' + posPx + 'px">&nbsp;<\/div>' +
-		'<div class="minibar negbar" style="width:' + negPx + 'px">&nbsp;<\/div>' +
+		'<div class="minibar posbar" style="width:' + posPx + 'px">&nbsp;</div>' +
+		'<div class="minibar negbar" style="width:' + negPx + 'px">&nbsp;</div>' +
 		labels +
-		'<\/td>';
+		'</td>';
 }
 
 function getTotalsRow(total, monthTotal, monthNeg, monthPos) {
-	var partial = [], results = [];
+	var partial = [];
+	var results = [];
 
 	partial.push('<table class="posneg number"><tr>');
 	partial.push('<td> +');
 	partial.push(prettyFloat(monthPos, true) + '<br>');
 	partial.push(prettyFloat(monthNeg, true));
-	partial.push('<\/td><\/tr><\/table>');
+	partial.push('</td></tr></table>');
 	partial = partial.join('');
 
 	// Show month total?
 	if (monthTotal !== '') {
-		monthTotal = '<span class="arrow">→<\/span>' + prettyFloat(monthTotal);
+		monthTotal = '<span class="arrow">→</span>' + prettyFloat(monthTotal);
 	}
 
 	results.push('<tr class="totals">');
 	if (showRowCount) {
-		results.push('<td class="row-count"><\/td>');
+		results.push('<td class="row-count"></td>');
 	}
-	results.push('<td><\/td>');
-	results.push('<td>' + partial + '<\/td>');
-	results.push('<td class="monthtotal" colspan="2">' + monthTotal + '<\/td>');
+	results.push('<td></td>');
+	results.push('<td>' + partial + '</td>');
+	results.push('<td class="monthtotal" colspan="2">' + monthTotal + '</td>');
 	if (showBalance) {
-		results.push('<td class="number">' + prettyFloat(total) + '<\/td>');
+		results.push('<td class="number">' + prettyFloat(total) + '</td>');
 	}
-	results.push('<\/tr>');
+	results.push('</tr>');
 
 	return results.join('');
 }
@@ -1545,24 +1602,24 @@ function getOverviewRow(theMonth, monthPos, monthNeg, monthTotal, theTotal, rowC
 	var theRow = [];
 
 	theRow.push((theMonth <= getCurrentDate().slice(0, 7)) ?
-			'<tr onClick="toggleRowHighlight(this)">' :
-			'<tr onClick="toggleRowHighlight(this)" class="future">');
+		'<tr onClick="toggleRowHighlight(this)">' :
+		'<tr onClick="toggleRowHighlight(this)" class="future">');
 	if (showRowCount) {
-		theRow.push('<td class="row-count">' + rowCount + '<\/td>');
+		theRow.push('<td class="row-count">' + rowCount + '</td>');
 	}
-	theRow.push('<td>' + formatReportDate(theMonth) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(monthPos)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(monthNeg)  + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '<\/td>');
+	theRow.push('<td>' + formatReportDate(theMonth) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthPos) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthNeg) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(monthTotal) + '</td>');
 	if (showBalance) {
-		theRow.push('<td class="number">' + prettyFloat(theTotal)  + '<\/td>');
+		theRow.push('<td class="number">' + prettyFloat(theTotal) + '</td>');
 	}
 
 	if (showMiniBars) {
 		theRow.push(getMiniBar(monthPos, monthNeg));
 	}
 
-	theRow.push('<\/tr>');
+	theRow.push('</tr>');
 	return theRow.join('\n');
 }
 
@@ -1574,23 +1631,23 @@ function getOverviewTotalsRow(label, n1, n2, n3, extraClass) {
 		theRow.push('<tr class="totals">');
 	}
 	if (showRowCount) {
-		theRow.push('<td class="row-count"><\/td>');
+		theRow.push('<td class="row-count"></td>');
 	}
-	theRow.push('<td class="rowlabel">' + label + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n1) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n2) + '<\/td>');
-	theRow.push('<td class="number">' + prettyFloat(n3) + '<\/td>');
+	theRow.push('<td class="rowlabel">' + label + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(n1) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(n2) + '</td>');
+	theRow.push('<td class="number">' + prettyFloat(n3) + '</td>');
 	if (showBalance) {
-		theRow.push('<td><\/td>');
+		theRow.push('<td></td>');
 	}
-	theRow.push('<\/tr>');
+	theRow.push('</tr>');
 	return theRow.join('\n');
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                       INTERFACE UPDATE
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function populateChartColsCombo() {
 	var el = document.getElementById('chart-selector');
@@ -1609,29 +1666,6 @@ function populateRowsSummaryCombo() {
 	el.options[2] = new Option(i18n.labelsOverview[3], 4);  // Partial
 }
 
-function populateDataFilesCombo() {
-	var el, i, leni;
-	if (appMode === 'txt' || appMode === 'dropbox') {
-		el = document.getElementById('source-file');
-		for (i = 0, leni = dataFiles.length; i < leni; i++) {
-			el.options[i] = new Option(dataFiles[i]);
-		}
-	}
-}
-
-function populateLastMonthsCombo() {
-	var el, label, i;
-	el = document.getElementById('opt-last-months-combo');
-	label = i18n.labelMonths[0];
-	for (i = 1; i <= maxLastMonths; i++) {
-		if (i > 1) {
-			label = i18n.labelMonths[1];
-		}
-		el.options[i - 1] = new Option(i + ' ' + label, i);
-	}
-	el.selectedIndex = (initLastMonths > 0) ? initLastMonths - 1 : 0;
-}
-
 function populateDateRangeCombos() {
 	var el1, el2, i, leni, my, range, fmt, offset1, offset2, index1, index2;
 
@@ -1642,20 +1676,14 @@ function populateDateRangeCombos() {
 	fmt = 'Y-m';
 	range = getDataUniqueDates('m');
 
-	//// Let's choose which items to select by default.
+	// Let's choose which items to select by default.
 	//
-	// Get user defaults
+	// Get user defaults and apply the offsets
 	if (typeof offset1 === 'number') {
-		index1 = range.indexOf(
-			formatDate(
-				addMonths(getCurrentDate(), offset1),  // apply offset
-				fmt));
+		index1 = range.indexOf(formatDate(addMonths(getCurrentDate(), offset1), fmt));
 	}
 	if (typeof offset2 === 'number') {
-		index2 = range.indexOf(
-			formatDate(
-				addMonths(getCurrentDate(), offset2),  // apply offset
-				fmt));
+		index2 = range.indexOf(formatDate(addMonths(getCurrentDate(), offset2), fmt));
 	}
 	//
 	// Wait! Maybe we're just reloading?
@@ -1715,21 +1743,15 @@ function updateToolbar() {
 
 	// Daily
 	if (reportType === 'd') {
-		unhide = [
-			'opt-monthly-box'
-		];
+		unhide = ['opt-monthly-box'];
 
 	// Monthly
 	} else if (reportType === 'm') {
-		hide = [
-			'opt-monthly-box'
-		];
+		hide = ['opt-monthly-box'];
 
 	// Yearly
 	} else if (reportType === 'y') {
-		hide = [
-			'opt-monthly-box'
-		];
+		hide = ['opt-monthly-box'];
 	}
 
 	// In Mobile toolbar we always add/remove, there's no hide.
@@ -1757,9 +1779,9 @@ function updateToolbar() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                        DATA HANDLERS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function resetData() {
 	reportData = [];
@@ -1767,110 +1789,76 @@ function resetData() {
 	rawData = '';
 }
 
-function loadDataFile(filePath) {
-	document.getElementById('charts').style.display = 'none';  // hide charts when loading
-	document.getElementById('report').innerHTML = i18n.msgLoading.replace('%s', filePath);
-	resetData();
-	iframeIsLoaded = false;
-	document.getElementById('data-frame').src = filePath;
-	// This triggers the onLoad iframe event, handled by iframeLoaded()
-}
-
-function loadWaitingDataFiles() {
-	var filePath;
-
-	// This is a pooling function that keeps calling itself until the
-	// waitingToLoad array is empty. I have to do this instead a simple
-	// while loop because the iframe loading occurs in parallel, the
-	// JavaScript engine don't hang up waiting for it to complete.
-	//
-	// See also: iframeLoaded()
-
-	// The last file has finished loading, so now we can load the next
-	if (iframeIsLoaded) {
-		filePath = waitingToLoad.shift();
-		loadDataFile(filePath);
-	}
-
-	// There is another file to load? Schedule it
-	if (waitingToLoad.length > 0) {
-		setTimeout(loadWaitingDataFiles, 100);
-	}
-}
-function getSelectedFile() {
-	return dataFiles[document.getElementById('source-file').selectedIndex];
-	// Note: IE7/8 fail at <select>.value, so we must use selectedIndex
-}
-function showHideEditButton() {
-	var el;
-	if (appMode === 'dropbox') {
-		// Hide Edit button when current file is '*'
-		el = document.getElementById('editor-open');
-		el.style.visibility = (getSelectedFile() === '*') ? 'hidden' : 'visible';
-	}
-}
-function loadSelectedFile() {
-	var filePath;
-
-	// Reset multifile data
-	multiRawData = '';
-	waitingToLoad = [];
-
-	filePath = getSelectedFile();
-
-	showHideEditButton();
-
-	// We will load a single file or all of them?
-	if (filePath === '*') {
-		waitingToLoad = dataFiles.removePattern('*');
-		if (waitingToLoad.length > 0) {
-			loadWaitingDataFiles();
-		}
-	} else {
-		loadDataFile(filePath);
-	}
-	return false;  // cancel link action
-}
-function reloadSelectedFile() {
+function reloadData() {
 	// Save currently selected tags
 	initSelectedTags = getSelectedTags();
 	initExcludedTags = getExcludedTags();
+
 	// Save currently selected date range
 	savedDateRangeIndexes = [
 		document.getElementById('opt-date-1-month-combo').selectedIndex,
 		document.getElementById('opt-date-2-month-combo').selectedIndex
 	];
-	// Reload
-	loadSelectedFile();
+
+	loadData();
+
 	return false;  // cancel link action
 }
 
-function loadLocalData() {
-	// first time using localStorage (or empty), load default data from #data (PRE)
-	if (!localStorage.getItem(localStorageKey) || localStorage.getItem(localStorageKey).strip() === "") {
-		localStorage.setItem(localStorageKey, document.getElementById('data').innerHTML);
+function loadData() {
+	var messageBoard;
+
+	// Hide charts and Tag Report when loading data
+	document.getElementById('charts').style.display = 'none';
+	document.getElementById('tag-report').style.display = 'none';
+
+	// Where to show the "loading..." message
+	messageBoard = document.getElementById('report');
+
+	resetData();
+
+	// Read user data, process it and show results
+	if (ml.storage.driver.config.isFileBased) {
+		messageBoard.innerText = i18n.msgLoading.replace('%s', getSelectedFile().name);
+		showHideEditButton();
+		ml.storage.readAsyncMulti(getActiveDataFiles(), function (contents) {
+			rawData = contents;
+			parseData();
+			showReport();
+		});
+	} else {
+		messageBoard.innerText = i18n.msgLoading.replace('%s', '');
+		rawData = ml.storage.driver.read();
+		parseData();
+		showReport();
 	}
-	document.getElementById('editor-data').value = localStorage.getItem(localStorageKey);
 }
 
-function readData() {
-	var iframeDoc;
+function getSelectedFile() {
+	var combo = document.getElementById('source-file');
+	return {
+		id: combo.options[combo.selectedIndex].value,
+		name: combo.options[combo.selectedIndex].text
+	};
+}
 
-	// Read raw data from localStorage, #data (<PRE>) or from external dataFile (<IFRAME><PRE>)
-	if (appMode === 'localStorage') {
-		loadLocalData();
-		rawData = document.getElementById('editor-data').value;
-	} else if (appMode === 'portable' || appMode === 'dropbox') {
-		rawData = document.getElementById('data').innerHTML;
+function getActiveDataFiles() {
+	if (getSelectedFile().name === '*') {
+		return ml.storage.driver.userFiles;  // all files
 	} else {
-		// Note: Firefox/Camino won't read if the TXT file is in a parent folder.
-		iframeDoc = document.getElementById('data-frame').contentWindow.document;
-		rawData = iframeDoc.getElementsByTagName('pre')[0].innerHTML;
+		return [getSelectedFile()];
+	}
+}
+
+function showHideEditButton() {
+	// Hide Edit button when current file is '*'
+	if (ml.storage.driver.config.isEditable && ml.storage.driver.config.isFileBased) {
+		document.getElementById('editor-open').style.visibility = (getSelectedFile().name === '*') ? 'hidden' : 'visible';
 	}
 }
 
 function parseData() {
-	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, trash, tagNames;
+	var i, j, lenj, rows, thisRow, rowDate, rowAmount, rowText, rowTagsDescription, rowTags, rowDescription, recurrentAmount, recValue, recTimes, recOperator, lineno, fields, rowAmountErrorMsg, tagNames;
 
 	// Reset the data holders
 	parsedData = [];
@@ -1883,9 +1871,11 @@ function parseData() {
 	for (i = 0; i < rows.length; i++) {
 		lineno = i + 1;
 		thisRow = rows[i].lstrip();  // Ignore left spacing
-		rowDate = rowAmount = rowText = '';
+		rowDate = '';
+		rowAmount = '';
+		rowText = '';
 
-		///////////////////////////////////////////////////////////// Firewall
+		// ----------------------------------------------------------- Firewall
 
 		// Skip commented rows
 		if (thisRow.indexOf(commentChar) === 0) {
@@ -1906,7 +1896,7 @@ function parseData() {
 				return;  // abort at first error
 			}
 
-			trash = fields.shift();  // field[0] is the full match
+			fields.shift();  // discard field[0], the full match
 
 		// Old style matching method: split
 		} else {
@@ -1932,18 +1922,19 @@ function parseData() {
 			}
 		}
 
-		//// At this point we have:
+		// At this point we have:
+		//
 		// fields[0] -> date
 		// fields[1] -> amount
 		// fields[2] -> text (tags + description)
 		//
 		// The contents will be validated in the following lines.
 
-		///////////////////////////////////////////////////////////// Text
+		// ----------------------------------------------------------- Text
 
 		rowText = (fields.length > 2) ? fields[2].strip() : '';
 
-		///////////////////////////////////////////////////////////// Date
+		// ----------------------------------------------------------- Date
 
 		rowDate = fields[0].match(dataPatterns.date);
 		if (rowDate) {
@@ -1952,7 +1943,7 @@ function parseData() {
 			invalidData(lineno, i18n.errorInvalidDate + ' ' + fields[0] + '\n\n' + thisRow);
 		}
 
-		///////////////////////////////////////////////////////////// Amount
+		// ----------------------------------------------------------- Amount
 
 		rowAmountErrorMsg = i18n.errorInvalidAmount + ' ' + fields[1] + '\n\n' + thisRow;
 
@@ -1972,10 +1963,10 @@ function parseData() {
 			// Normalize Value
 			// Force '.' as internal cents separator, remove other punctuation
 			// Ex.: 1.234,56 > 1.234@56 > 1234@56 > 1234.56
-			rowAmount = rowAmount.replace(
-				dataPatterns.amountCents, '@$1').replace(
-				/[.,]/g, '').replace(
-				'@', '.');
+			rowAmount = rowAmount
+				.replace(dataPatterns.amountCents, '@$1')
+				.replace(/[.,]/g, '')
+				.replace('@', '.');
 
 			// Now we can validate the number (str2float)
 			rowAmount = parseFloat(rowAmount);
@@ -1990,7 +1981,7 @@ function parseData() {
 			return;
 		}
 
-		///////////////////////////////////////////////////////////// Recurrent Value
+		// ----------------------------------------------------------- Recurrent Value
 
 		// A value of -100/10 means I've spent 100 and will pay it in 10x
 		// A value of -100*10 means I'll spent 100/month in the next 10 months
@@ -2003,7 +1994,8 @@ function parseData() {
 		// 2010-01-25  -30    Foo 2/3    |    2010-01-25  -90    Foo 2/3
 		// 2010-02-25  -30    Foo 3/3    |    2010-02-25  -90    Foo 3/3
 		//
-		// XXX It doesn't fix end-of-month day. Uses 2009-02-31 instead 2009-02-28. But it's OK.
+		// Note: It doesn't fix end-of-month day. Uses 2009-02-31 instead of 2009-02-28.
+		//       But it's OK.
 		//
 		// Note: the date/value filters must appear *after* the recurrent processing
 		//
@@ -2011,7 +2003,7 @@ function parseData() {
 			recValue = rowAmount;
 
 			if (recOperator === '/') {
-				recValue = (recValue / recTimes);
+				recValue = recValue / recTimes;
 			}
 
 			// Make sure we have a valid money value (not float)
@@ -2030,7 +2022,7 @@ function parseData() {
 			continue;
 		}
 
-		///////////////////////////////////////////////////////////// Tags + Description
+		// ----------------------------------------------------------- Tags + Description
 
 		// Parse tags
 		if (rowText.indexOf(dataTagTerminator) !== -1) {
@@ -2057,7 +2049,7 @@ function parseData() {
 			rowDescription = rowText || '&nbsp;';
 		}
 
-		/////////////////////////////////////////////////////////////
+		// -----------------------------------------------------------
 
 		// Ignore old or future data?
 		// Note: This code *must* be here at the end of the loop,
@@ -2082,15 +2074,9 @@ function parseData() {
 	// Sort by date
 	parsedData.sort(sortByIndex(0, 'd'));
 
-	// Save first and last date as globals
+	// Update the date range combos
 	if (parsedData.length > 0) {
-		dataFirstDate = parsedData[0][0];
-		dataLastDate = parsedData[parsedData.length-1][0];
-
-		// Update the date range combos
 		populateDateRangeCombos();
-	} else {
-		dataFirstDate = dataLastDate = undefined;
 	}
 
 	// Compose the tag cloud: sorted, append (no tag) item
@@ -2109,7 +2095,7 @@ function parseData() {
 }
 
 function filterData() {
-	var i, leni, temp, theData, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, showFuture, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
+	var i, leni, temp, theData, isRegex, isNegated, filter, filterPassed, firstDate, lastDate, filteredData, thisDate, thisValue, thisTags, thisDescription, valueFilter, valueFilterArg;
 
 	theData = parsedData.clone();
 	isRegex = false;
@@ -2119,30 +2105,13 @@ function filterData() {
 	lastDate = '9999-99-99';
 	filteredData = [];
 
-	// New style date options
-	if (!useLegacyDateFilter) {
-
-		if (document.getElementById('opt-date-1-check').checked) {
-			firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
-		}
-		if (document.getElementById('opt-date-2-check').checked) {
-			lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
-		}
-
-	// Old style date options
-	} else {
-
-		// [X] Recent Only, works for daily/monthly
-		if (document.getElementById('opt-last-months-check').checked) {
-			firstDate = getPastMonth(parseInt(document.getElementById('opt-last-months-combo').value, 10) - 1);  // 1 = current
-		}
-		// [X] Future Data, works for all reports
-		showFuture = document.getElementById('opt-future-check').checked;
-		if (!showFuture) {
-			lastDate = getCurrentDate();
-		}
+	// Date filters
+	if (document.getElementById('opt-date-1-check').checked) {
+		firstDate = document.getElementById('opt-date-1-month-combo').value + '-00';
 	}
-
+	if (document.getElementById('opt-date-2-check').checked) {
+		lastDate = document.getElementById('opt-date-2-month-combo').value + '-99';
+	}
 
 	// Get filters data for the report
 	filter = document.getElementById('filter').value;
@@ -2156,7 +2125,7 @@ function filterData() {
 	
 	// Hack: Value filtering on the search box!
 	// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
-	temp = filter.match(/^v:([\-+>=<][=]?)([+\-]?\d*)$/);
+	temp = filter.match(/^v:([-+>=<][=]?)([+-]?\d*)$/);
 	if (temp) {
 		valueFilter = temp[1];
 		valueFilterArg = temp[2] || 0;
@@ -2185,7 +2154,7 @@ function filterData() {
 		thisTags = theData[i][2].clone();
 		thisDescription = theData[i][3];
 
-		///////////////////////////////////////////////////////////// Filters
+		// ----------------------------------------------------------- Filters
 
 		// Apply date filter
 		if (thisDate < firstDate) {
@@ -2272,19 +2241,19 @@ function applyTags(theData) {
 
 		// Ignore this row if it matches the excluded tags
 		if (matchExcluded && (
-				//  !group && matchedOne  ||  group && matchedAll
-				(!groupExcluded && rowTags.hasArrayItem(excludedTags)) ||
-				( groupExcluded && rowTags.hasAllArrayItems(excludedTags))
-			)) {
+			//  !group && matchedOne  ||  group && matchedAll
+			(!groupExcluded && rowTags.hasArrayItem(excludedTags)) ||
+				(groupExcluded && rowTags.hasAllArrayItems(excludedTags))
+		)) {
 			continue;
 		}
 
 		// Ignore this row if it does not match the selected tags
 		if (matchSelected && (
-				//  !group && !matchedOne  ||  group && !matchedAll
-				(!groupSelected && !rowTags.hasArrayItem(selectedTags)) ||
-				( groupSelected && !rowTags.hasAllArrayItems(selectedTags))
-			)) {
+			//  !group && !matchedOne  ||  group && !matchedAll
+			(!groupSelected && !rowTags.hasArrayItem(selectedTags)) ||
+				(groupSelected && !rowTags.hasAllArrayItems(selectedTags))
+		)) {
 			continue;
 		}
 
@@ -2330,7 +2299,7 @@ function groupByPeriod(arr, periodType) {  // m, y
 	//         ['2012-03-04', '-4.44', 'bar1'],
 	//         ['2012-03-18', '-5.55', 'bar2'],
 	//     ], 'm')
-	// 
+	//
 	// returns:
 	// {
 	//     '2012-02': [
@@ -2344,10 +2313,11 @@ function groupByPeriod(arr, periodType) {  // m, y
 	//     keys: ['2012-02', '2012-03']  // always sorted
 	// }
 
-	var i, leni, item, slices, results = {};
+	var i, leni, item, slices;
+	var results = {};
 
 	results.keys = [];
-	slices = { 'y': 4, 'm': 7, 'd': 10 };
+	slices = {y: 4, m: 7, d: 10};
 	for (i = 0, leni = arr.length; i < leni; i++) {
 		item = arr[i][0].slice(0, slices[periodType]);  // get date
 		if (!results[item]) {
@@ -2361,12 +2331,12 @@ function groupByPeriod(arr, periodType) {  // m, y
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                          REPORTS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function updateSelectedRowsSummary() {
-	var i, leni, data, arr, table, label, value, col_nr, col_index, tr_element, td_element;
+	var i, leni, data, arr, table, label, value, colNumber, colIndex, trElement, tdElement;
 
 	data = [];
 	arr = [];
@@ -2382,29 +2352,29 @@ function updateSelectedRowsSummary() {
 		// Monthly/Yearly: we have (2) Incoming, (3) Expense, (4) Partial
 		//
 		if (reportType === 'd') {
-			col_nr = 2;
+			colNumber = 2;
 		} else {
-			col_nr = parseInt(document.getElementById('rows-summary-index').value, 10);
+			colNumber = parseInt(document.getElementById('rows-summary-index').value, 10);
 		}
 
 		// The column number is affected by the presence of the row count column
 		if (showRowCount) {
-			col_nr += 1;
+			colNumber += 1;
 		}
 
 		// We will soon query each TR element for a specific child TD.
 		// Our column count is one-based, but the TR children array is ZERO-based.
-		col_index = col_nr - 1;
+		colIndex = colNumber - 1;
 
 		for (i = 0, leni = selectedRows.length; i < leni; i++) {
-			tr_element = selectedRows[i];
-			td_element = tr_element.getElementsByTagName('td')[col_index];
+			trElement = selectedRows[i];
+			tdElement = trElement.getElementsByTagName('td')[colIndex];
 
 			// Inside the TD, the number is inside a SPAN tag, examples:
 			//     <td class="number"><span class="neg">-123,45</span></td>
 			//     <td class="number"><span class="pos">123,45</span></td>
 			//
-			value = td_element.getElementsByTagName('span')[0].firstChild.nodeValue;
+			value = tdElement.getElementsByTagName('span')[0].firstChild.nodeValue;
 
 			// The value is a formatted string, we need to convert it to float
 			value = prettyFloatUndo(value);
@@ -2426,14 +2396,13 @@ function updateSelectedRowsSummary() {
 		for (i = 0, leni = arr.length; i < leni; i++) {
 			label = arr[i][0];
 			value = arr[i][1];
-			table.push(
-				'<tr>' +
-				'<td>' + label +  '<\/td>' +
-				'<td class="number"> ' + value + '<\/td>' +
-				'<\/tr>'
-			);
+
+			table.push('<tr>');
+			table.push('<td>' + label + '</td>');
+			table.push('<td class="number"> ' + value + '</td>');
+			table.push('</tr>');
 		}
-		table.push('<\/table>');
+		table.push('</table>');
 
 		// Show summary
 		document.getElementById('rows-summary-content').innerHTML = table.join('\n');
@@ -2483,8 +2452,8 @@ function periodReport() {
 			overviewData.push([period, totals.sumPositive, totals.sumNegative, totals.sum, balance]);
 		}
 
-		//// Report data is OK inside overviewData array
-		//// Now we must compose the report table
+		// Report data is OK inside overviewData array
+		// Now we must compose the report table
 
 		// Perform the user-selected sorting column and order
 		colTypes = ['d', 'n', 'n', 'n', 'n'];
@@ -2498,19 +2467,19 @@ function periodReport() {
 		// Table headings
 		results.push('<tr>');
 		if (showRowCount) {
-			results.push('<th class="row-count"><\/th>');
+			results.push('<th class="row-count"></th>');
 		}
-		results.push('<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '<\/th>');
-		results.push('<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '<\/th>');
-		results.push('<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '<\/th>');
-		results.push('<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '<\/th>');
+		results.push('<th onClick="sortCol(0)">' + i18n.labelsOverview[0] + '</th>');
+		results.push('<th onClick="sortCol(1)">' + i18n.labelsOverview[1] + '</th>');
+		results.push('<th onClick="sortCol(2)">' + i18n.labelsOverview[2] + '</th>');
+		results.push('<th onClick="sortCol(3)">' + i18n.labelsOverview[3] + '</th>');
 		if (showBalance) {
-			results.push('<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '<\/th>');
+			results.push('<th onClick="sortCol(4)">' + i18n.labelsOverview[4] + '</th>');
 		}
 		if (showMiniBars) {
-			results.push('<th class="percent">%<\/th>');
+			results.push('<th class="percent">%</th>');
 		}
-		results.push('<\/tr>');
+		results.push('</tr>');
 
 		// Array2Html
 		for (i = 0, leni = overviewData.length; i < leni; i++) {
@@ -2533,7 +2502,7 @@ function periodReport() {
 		}
 
 		// And we're done on the report table
-		results.push('<\/table>');
+		results.push('</table>');
 		results = results.join('\n');
 
 		// Always reset Rows Summary when generating reports
@@ -2556,7 +2525,7 @@ function periodReport() {
 		}
 
 	} else {
-		results = '<p>' + i18n.labelNoData + '<\/p>';
+		results = '<p>' + i18n.labelNoData + '</p>';
 
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
@@ -2567,7 +2536,13 @@ function periodReport() {
 function dailyReport() {
 	var i, leni, j, lenj, k, lenk, rowDate, rowAmount, rowTags, rowDescription, monthTotal, monthPos, monthNeg, rowCount, results, monthPartials, theData, sumPos, sumNeg, sumTotal, chart, chartCol, chartLabels, chartValues, chartValuesSelected, currentDate, colTypes, sortIndex, sortRev;
 
-	sumTotal = sumPos = sumNeg = monthTotal = monthPos = monthNeg = rowCount = 0;
+	sumTotal = 0;
+	sumPos = 0;
+	sumNeg = 0;
+	monthTotal = 0;
+	monthPos = 0;
+	monthNeg = 0;
+	rowCount = 0;
 	results = [];
 	chartValues = [];
 	chartLabels = [];
@@ -2599,16 +2574,16 @@ function dailyReport() {
 		// Compose table headings
 		results.push('<tr>');
 		if (showRowCount) {
-			results.push('<th class="row-count"><\/th>');
+			results.push('<th class="row-count"></th>');
 		}
-		results.push('<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '<\/th>');
-		results.push('<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '<\/th>');
-		results.push('<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '<\/th>');
-		results.push('<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '<\/th>');
+		results.push('<th onClick="sortCol(0)">' + i18n.labelsDetailed[0] + '</th>');
+		results.push('<th onClick="sortCol(1)">' + i18n.labelsDetailed[1] + '</th>');
+		results.push('<th onClick="sortCol(2)" class="tags">' + i18n.labelsDetailed[2] + '</th>');
+		results.push('<th onClick="sortCol(3)">' + i18n.labelsDetailed[3] + '</th>');
 		if (showBalance) {
-			results.push('<th class="balance">' + i18n.labelsDetailed[4] + '<\/th>');
+			results.push('<th class="balance">' + i18n.labelsDetailed[4] + '</th>');
 		}
-		results.push('<\/tr>');
+		results.push('</tr>');
 
 		// Compose table rows
 		for (i = 0, leni = theData.length; i < leni; i++) {
@@ -2651,7 +2626,7 @@ function dailyReport() {
 			if (highlightRegex) {
 				rowDescription = rowDescription.replace(
 					highlightRegex,
-					'<span class="hl">$&<\/span>'
+					'<span class="hl">$&</span>'
 				);
 			}
 
@@ -2659,7 +2634,7 @@ function dailyReport() {
 			for (j = 0, lenj = highlightTags.length; j < lenj; j++) {
 				for (k = 0, lenk = rowTags.length; k < lenk; k++) {
 					if (rowTags[k] === highlightTags[j]) {
-						rowTags[k] = '<span class="hl">' + rowTags[k] + '<\/span>';
+						rowTags[k] = '<span class="hl">' + rowTags[k] + '</span>';
 						break;
 					}
 				}
@@ -2673,17 +2648,17 @@ function dailyReport() {
 			}
 
 			if (showRowCount) {
-				results.push('<td class="row-count">' + (rowCount) + '<\/td>');
+				results.push('<td class="row-count">' + rowCount + '</td>');
 			}
 
-			results.push('<td class="date">'   + formatReportDate(rowDate) + '<\/td>');
-			results.push('<td class="number">' + prettyFloat(rowAmount)    + '<\/td>');
-			results.push('<td class="tags">'   + rowTags.join(', ')        + '<\/td>');
-			results.push('<td>'                + rowDescription            + '<\/td>');
+			results.push('<td class="date">'   + formatReportDate(rowDate) + '</td>');
+			results.push('<td class="number">' + prettyFloat(rowAmount)    + '</td>');
+			results.push('<td class="tags">'   + rowTags.join(', ')        + '</td>');
+			results.push('<td>'                + rowDescription            + '</td>');
 			if (showBalance) {
-				results.push('<td class="number">' + prettyFloat(sumTotal)     + '<\/td>');
+				results.push('<td class="number">' + prettyFloat(sumTotal) + '</td>');
 			}
-			results.push('<\/tr>');
+			results.push('</tr>');
 
 		}
 
@@ -2698,11 +2673,11 @@ function dailyReport() {
 		chartValues.push([-1, monthPos, monthNeg, monthTotal, sumTotal]);
 		chartLabels.push(theData[theData.length - 1][0].slice(0, 7)); // month
 
-		results.push('<\/table>');
+		results.push('</table>');
 		results = results.join('\n');
 
 		// Real dirty hack to insert totals row at the table beginning (UGLY!)
-		// results = results.replace('<\/th><\/tr>', '<\/th><\/tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
+		// results = results.replace('</th></tr>', '</th></tr>' + getTotalsRow(sumTotal, '', sumNeg, sumPos));
 
 		// Always reset Rows Summary when generating reports
 		selectedRows = [];
@@ -2725,7 +2700,7 @@ function dailyReport() {
 		}
 
 	} else {
-		results = '<p>' + i18n.labelNoData + '<\/p>';
+		results = '<p>' + i18n.labelNoData + '</p>';
 
 		// Hide charts when there's no data
 		document.getElementById('charts').style.display = 'none';
@@ -2753,7 +2728,7 @@ function tagReport() {
 	// Hide the Tag report when in Daily report
 	if (!showTagReport || reportType === 'd') {
 		document.getElementById('tag-report').style.display = 'none';
-		return false;
+		return;  // abort report generation
 	} else {
 		document.getElementById('tag-report').style.display = 'block';
 	}
@@ -2761,7 +2736,7 @@ function tagReport() {
 	// Group report data by period (month or year), to make things easier
 	groupedData = groupByPeriod(theData, reportType);
 
-	/////////////////////////////////////////////////// MONTHS / YEARS
+	// ----------------------------------------------------------- MONTHS / YEARS
 
 	// Compose the list of all months/years in the period
 	// Note: can't use groupedData.keys because there may be gaps
@@ -2775,7 +2750,7 @@ function tagReport() {
 	}
 	nDates = allDates.length;
 
-	/////////////////////////////////////////////////// TAG TOTALS
+	// ----------------------------------------------------------- TAG TOTALS
 
 	// tagData = {
 	//     tag1: {
@@ -2841,7 +2816,7 @@ function tagReport() {
 		}
 	}
 
-	/////////////////////////////////////////////////// TABLE DATA
+	// ----------------------------------------------------------- TABLE DATA
 
 	// tableData = [
 	//     ['tag1', 55, 26, 0, 0, 123, ...],
@@ -2866,7 +2841,7 @@ function tagReport() {
 		}
 	}
 
-	/////////////////////////////////////////////////// SORT
+	// ----------------------------------------------------------- SORT
 
 	if (sortIndex === 0) {
 		// Sort by tag name, ignoring case and accents
@@ -2885,19 +2860,17 @@ function tagReport() {
 		tableData.reverse();
 	}
 
-	/////////////////////////////////////////////////// HTML
+	// ----------------------------------------------------------- HTML
 
 	results.push('<table class="report">');
 
-	//// Table heading
+	// Table heading
+
 	results.push('<tr>');
 
 	// tag column
-	results.push(
-		'<th class="tagname" onClick="sortColTag(0)">' +
-		i18n.labelsDetailed[2] +
-		'<\/th>'
-	);
+	results.push('<th class="tagname" onClick="sortColTag(0)">' + i18n.labelsDetailed[2] + '</th>');
+
 	// dates
 	for (i = 0, leni = nDates; i < leni; i++) {
 		periodName = allDates[i];
@@ -2905,60 +2878,46 @@ function tagReport() {
 		// Month names get special formatting
 		if (reportType === 'm') {
 			periodName = (allDates[i] + '-01').toDate().format('Y-b');
-			periodName = periodName.
-				replace(/^(....)/, '<i>$1<\/i>').
-				replace('-', '<br>');
+			periodName = periodName
+				.replace(/^(....)/, '<i>$1</i>')
+				.replace('-', '<br>');
 		}
 
-		results.push(
-			'<th onClick="sortColTag(' + (i+1) +  ')">' +
-			periodName +
-			'<\/th>'
-		);
+		results.push('<th onClick="sortColTag(' + (i + 1) + ')">' + periodName + '</th>');
 	}
+
 	// total & average
 	if (nDates > 1) {
-		results.push(
-			'<th onClick="sortColTag(' + (i+1) + ')" class="totals">' +
-			i18n.labelTotal +
-			'<\/th>'
-		);
-		results.push(
-			'<th onClick="sortColTag(' + (i+2) + ')" class="totals">' +
-			i18n.labelAverage +
-			'<\/th>'
-		);
+		results.push('<th onClick="sortColTag(' + (i + 1) + ')" class="totals">' + i18n.labelTotal + '</th>');
+		results.push('<th onClick="sortColTag(' + (i + 2) + ')" class="totals">' + i18n.labelAverage + '</th>');
 	}
-	results.push('<\/tr>');
+
+	results.push('</tr>');
 
 	// Compose table body, one tag per row
 	for (i = 0, leni = tableData.length; i < leni; i++) {
 		results.push('<tr>');
-		results.push('<td>' + tableData[i][0] +  '<\/td>');  // tag name
+		results.push('<td>' + tableData[i][0] + '</td>');  // tag name
 
 		// Now the numbers (Note: j=1)
 		for (j = 1, lenj = tableData[i].length; j < lenj; j++) {
 
 			// Mark the Totals columns
 			if (nDates > 1 && j === lenj - 2) {  // penultimate
-				tdClass = "number totals total";
+				tdClass = 'number totals total';
 			} else if (nDates > 1 && j === lenj - 1) {  // last
-				tdClass = "number totals average";
+				tdClass = 'number totals average';
 			} else {
-				tdClass = "number";
+				tdClass = 'number';
 			}
 
-			results.push(
-				'<td class="' + tdClass + '">' +
-				((tableData[i][j]) ? prettyFloat(tableData[i][j]) : '0') +
-				'<\/td>'
-			);
+			results.push('<td class="' + tdClass + '">' + ((tableData[i][j]) ? prettyFloat(tableData[i][j]) : '0') + '</td>');
 			// Note: empty cells become 0 and not 0.00 to make the report less polluted
 		}
-		results.push('<\/tr>');
+		results.push('</tr>');
 	}
 
-	results.push('<\/table>');
+	results.push('</table>');
 
 	// Show report (if we have tags)
 	content.innerHTML = (tagNames.length > 0) ? results.join('\n') : '';
@@ -2984,29 +2943,24 @@ function showReport() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                        DATA EDITOR
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function editorOn() {
 	var filepath;
 
 	// Load the current data to the editor
-	// Note: already loaded when localStorage
-	if (appMode !== 'localStorage') {
-		document.getElementById('editor-data').value = rawData;
-	}
+	document.getElementById('editor-data').value = rawData;
 
 	// Hide content to avoid scroll bars
 	document.getElementById('content').style.display = 'none';
 
 	// Set file name
-	if (appMode === 'localStorage') {
-		filepath = 'Browser localStorage: ' + localStorageKey;
-	} else if (appMode === 'dropbox') {
-		filepath = 'Dropbox: ' + dropboxAppFolder + dropboxTxtFolder + '/' + getSelectedFile();
+	if (ml.storage.driver.config.isFileBased) {
+		filepath = getSelectedFile().name;
 	} else {
-		filepath = getSelectedFile();
+		filepath = ml.storage.driver.name;
 	}
 	document.getElementById('editor-file-name').innerHTML = filepath;
 
@@ -3015,6 +2969,7 @@ function editorOn() {
 
 	return false;  // cancel link action
 }
+
 function editorOff() {
 
 	// Hide editor
@@ -3025,67 +2980,29 @@ function editorOff() {
 
 	return false;  // cancel link action
 }
+
 function saveLocalData() {
 	var editButton = document.getElementById('editor-open');
 
 	editButton.innerHTML = i18n.msgSaving;
-	localStorage.setItem(localStorageKey, document.getElementById('editor-data').value);
-
-	// Save currently selected tags
-	initSelectedTags = getSelectedTags();
-	initExcludedTags = getExcludedTags();
+	ml.storage.driver.write(document.getElementById('editor-data').value);
 
 	// Reload report
-	resetData();
-	readData();
-	parseData();
-	showReport();
+	reloadData();
+
 	editButton.innerHTML = i18n.labelEditorOpen;
 }
+
 function editorSave() {
 	editorOff();
 	saveLocalData();
 	return false;  // cancel link action
 }
-// Allows to insert TABs inside textarea
-// Opera bug: needs to be attached to onkeypress instead onkeydown
-// Original from: http://pallieter.org/Projects/insertTab/ (see <script> at page source)
-function insertTab(e) {
-	var kC, oS, sS, sE, o = this; // aurelio: make jslint happy
-
-	if (!e) { e = window.event; } // IE - aurelio: removed event on calling
-	o = this; // aurelio: removed this on calling
-
-	kC = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
-	if (kC == 9 && !e.shiftKey && !e.ctrlKey && !e.altKey) {
-		oS = o.scrollTop; // Set the current scroll position.
-		if (o.setSelectionRange) {
-			// For: Opera + FireFox + Safari
-			sS = o.selectionStart;
-			sE = o.selectionEnd;
-			o.value = o.value.substring(0, sS) + '\t' + o.value.substr(sE);
-			o.setSelectionRange(sS + 1, sS + 1);
-			o.focus();
-		} else if (o.createTextRange) {
-			// For: MSIE
-			document.selection.createRange().text = '\t'; // String.fromCharCode(9)
-			// o.onblur = function() { o.focus(); o.onblur = null; };
-		}
-		o.scrollTop = oS; // Return to the original scroll position.
-		if (e.preventDefault) {  // aurelio change
-			e.preventDefault();
-		} else {
-			e.returnValue = false;
-		}
-		return false; // Not needed, but good practice.
-	}
-	return true;
-}
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                         EVENT HANDLERS
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 function sortCol(index) {
 	// Note: sortData config is one-based, sortCol() is zero-based
@@ -3093,8 +3010,8 @@ function sortCol(index) {
 	// If the same index, flip current reverse state, else reverse=false
 	sortData[reportType].rev =
 		(sortData[reportType].index == (index + 1)) ?
-		!sortData[reportType].rev :
-		false;
+			!sortData[reportType].rev :
+			false;
 	// Save new index
 	sortData[reportType].index = index + 1;
 	// Refresh table
@@ -3107,24 +3024,23 @@ function sortColTag(index) {
 	// If the same index, flip current reverse state, else reverse=false
 	sortData[reportType].revTag =
 		(sortData[reportType].indexTag === (index + 1)) ?
-		!sortData[reportType].revTag :
-		false;
+			!sortData[reportType].revTag :
+			false;
 	// Save new index
 	sortData[reportType].indexTag = index + 1;
 	// Refresh table
 	tagReport();
 }
 
-function changeReport() {
-	var el, oldType, newType;
+function changeReport() {  // this == <a class="button"> element
+	var oldType, newType;
 
-	el = this;
 	oldType = reportType;
-	newType = el.id;
+	newType = this.id;
 
 	// Deactivate old report, activate new
 	removeClass(document.getElementById(oldType), 'active');
-	addClass(el, 'active');
+	addClass(this, 'active');
 
 	// Always reset Rows Summary when changing reports
 	selectedRows = [];
@@ -3135,41 +3051,6 @@ function changeReport() {
 	showReport();
 
 	return false;  // cancel link action
-}
-
-function iframeLoaded(el) {
-	// Note: This function is attached to the iframe onLoad event.
-
-	// Discard the first iframe load, it's always blank, on the initial page load.
-	// The other loads are for real.
-	if (typeof el.loadCount == 'undefined') {
-		el.loadCount = 1;
-		return;
-	}
-	el.loadCount++;
-
-	// Read iframe contents
-	readData();
-	iframeIsLoaded = true;
-
-	if (waitingToLoad.length > 0) {
-		// We're on multifiles mode, just append the new data to the temporary holder.
-		multiRawData = multiRawData + '\n' + rawData;
-	} else {
-		if (multiRawData) {
-			// We're on multifiles mode and the last file was loaded.
-			// Join the new data to the holder and save it all to rawData.
-			rawData = multiRawData + '\n' + rawData;
-		}
-		// One file or multifile, now it's time to process what we've read
-		parseData();
-		showReport();
-	}
-}
-
-function lastMonthsChanged() {
-	document.getElementById('opt-last-months-check').checked = true;
-	showReport();
 }
 
 function dateRangeComboChanged() {
@@ -3198,17 +3079,33 @@ function toggleFullScreen() {
 	return false;  // cancel link action
 }
 
-function toggleToolbarBox(header_id, content_id) {
+function toggleToolbarBox(headerId, contentId, options) {
 	// Handle toolbar box header clicking: show/hide contents
 	var header, content;
-	header = document.getElementById(header_id);
-	content = document.getElementById(content_id);
-	if (content.style.display === 'block') {
-		content.style.display = 'none';
-		removeClass(header, 'active');
-	} else {
+	header = document.getElementById(headerId);
+	content = document.getElementById(contentId);
+
+	function open() {
 		content.style.display = 'block';
 		addClass(header, 'active');
+	}
+
+	function close() {
+		content.style.display = 'none';
+		removeClass(header, 'active');
+	}
+
+	// Force state
+	if (options.open === true) {
+		open();
+	} else if (options.open === false) {
+		close();
+
+	// Toggle state
+	} else if (content.style.display === 'none') {
+		open();
+	} else {
+		close();
 	}
 	return false;  // cancel link action
 }
@@ -3221,17 +3118,16 @@ function toggleCheckboxOptionExtra(checkbox) {
 	}
 }
 
-function toggleViewOptions() {
-	return toggleToolbarBox('view-options-header', 'view-options-content');
+function toggleStorage(options) {
+	return toggleToolbarBox('storage-header', 'storage-content', options);
 }
 
-function toggleTagCloud() {
-	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content');
+function toggleViewOptions(options) {
+	return toggleToolbarBox('view-options-header', 'view-options-content', options);
 }
 
-function toggleLastMonths() {
-	toggleCheckboxOptionExtra(this);
-	showReport();
+function toggleTagCloud(options) {
+	return toggleToolbarBox('tag-cloud-header', 'tag-cloud-content', options);
 }
 
 function toggleValueFilter() {
@@ -3272,7 +3168,7 @@ function valueFilterChanged() {
 	document.getElementById('opt-value-filter-check').checked = true;
 
 	// show/hide the filter argument textbox
-	if (document.getElementById('opt-value-filter-combo').value.match(/[+\-]/)) {
+	if (document.getElementById('opt-value-filter-combo').value.match(/[+-]/)) {
 		document.getElementById('opt-value-filter-number').style.display = 'none';
 	} else {
 		document.getElementById('opt-value-filter-number').style.display = 'inline';
@@ -3287,9 +3183,9 @@ function resetRowsSummary() {
 }
 
 
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                            Widgets
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
 // Widget object, all widgets must use this type.
 // Ex.:
@@ -3348,7 +3244,7 @@ Widget.tidyInstances = function () {
 			window[Widget.instances[i].instanceName] = undefined;
 			Widget.instances.splice(i, 1);
 		} else {
-			i++;
+			i += 1;
 		}
 	}
 };
@@ -3423,7 +3319,7 @@ Widget.prototype.create = function () {
 	this.box = document.getElementById(this.id + '-box');
 	this.header = document.getElementById(this.id + '-header');
 	this.content = document.getElementById(this.id + '-content');
-	this.created = (this.box && this.header && this.content) ? true : false;
+	this.created = Boolean(this.box && this.header && this.content);
 
 	// Set header tooltip
 	this.header.title = i18n[this.instanceName + 'HeaderHelp'];
@@ -3432,7 +3328,6 @@ Widget.prototype.create = function () {
 Widget.prototype.populate = function () {
 	// Called right after create(), here you create the widget contents.
 	// You must implement this function in your widget.
-	return;
 };
 
 Widget.prototype.addCheckbox = function (idSuffix, label, checked) {
@@ -3464,12 +3359,12 @@ Widget.prototype.checkboxClicked = function (element) {  // Event handler
 };
 
 // Hooks
-Widget.prototype.showReportPost = function () {};
+Widget.prototype.showReportPost = function () {};  // eslint-disable-line no-empty-function
 
 
-/////////////////////////////////////////////////////////////////////
-////
-//// Tag Summary Widget
+// ------------------------------------------------------------------
+// Tag Summary Widget
+// ------------------------------------------------------------------
 
 TagSummary = new Widget('tag-summary', 'Tag Summary', 'TagSummary');
 
@@ -3479,7 +3374,10 @@ TagSummary.config.opened = false;      // Start app with this widget opened?
 TagSummary.config.checkSort = false;   // [X] Sort by value checkbox inits checked?
 TagSummary.config.showTagless = true;  // The (no tag) sum should appear?
 
-if (isMobile) { TagSummary.config.opened = false; }  // In mobile, always closed
+// In mobile, the widget starts closed (we need vertical space)
+if (isMobile) {
+	TagSummary.config.opened = false;
+}
 
 // UI strings
 i18nDatabase.en.TagSummaryHeaderLabel = 'Tag Summary';
@@ -3569,7 +3467,7 @@ TagSummary.update = function () {
 					tagData[tag] = 0;
 					tagNames.push(tag);
 				}
-				tagData[tag] = tagData[tag] + rowAmount;
+				tagData[tag] += rowAmount;
 			}
 		}
 	}
@@ -3600,14 +3498,12 @@ TagSummary.update = function () {
 		// Compose the HTML table
 		results.push('<table>');
 		for (i = 0, leni = tableData.length; i < leni; i++) {
-			results.push(
-				'<tr>' +
-				'<td>' + tableData[i][0] +  '<\/td>' +
-				'<td class="number"> ' + prettyFloat(tableData[i][1]) + '<\/td>' +
-				'<\/tr>'
-			);
+			results.push('<tr>');
+			results.push('<td>' + tableData[i][0] + '</td>');
+			results.push('<td class="number"> ' + prettyFloat(tableData[i][1]) + '</td>');
+			results.push('</tr>');
 		}
-		results.push('<\/table>');
+		results.push('</table>');
 	}
 
 	// Save results to the respective DIV
@@ -3619,10 +3515,9 @@ TagSummary.update = function () {
 };
 
 
-
-/////////////////////////////////////////////////////////////////////
-////
-//// About Widget
+// ------------------------------------------------------------------
+// About Widget
+// ------------------------------------------------------------------
 
 AboutWidget = new Widget('about', 'About', 'AboutWidget');
 
@@ -3643,7 +3538,8 @@ i18nDatabase.es.AboutWidgetHeaderHelp = 'Mostrar/esconder Acerca de.';
 
 // Create elements
 AboutWidget.populate = function () {
-	var version, commit, html = [];
+	var version, commit;
+	var html = [];
 
 	// When in β: always show the commit ID
 	if (isBeta) {
@@ -3652,17 +3548,17 @@ AboutWidget.populate = function () {
 
 	// When stable: hide commit, version links to website
 	} else {
-		version = linkme('http://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);
-		commit = ''
+		version = linkme('https://aurelio.net/moneylog/v' + appVersion + '/', 'v' + appVersion);
+		commit = '';
 	}
 
 	// When in txt mode: link to repository since we can't get the commit hash
-	if (appMode === 'txt') {
+	if (ml.storage.driver.id === 'filesystem') {
 		version = linkme(appRepository, 'v' + appVersion);
 	}
 
 	html.push('<div id="about-app">');
-	html.push(linkme('http://aurelio.net/moneylog/', appName) + ' ' + appFlavor);
+	html.push(linkme('https://aurelio.net/moneylog/', appName));
 	html.push('<span id="app-version">' + version + '</span>');
 	if (isBeta && appCommit !== '') {
 		html.push('<div>commit: ' + commit + '</div>');
@@ -3675,7 +3571,7 @@ AboutWidget.populate = function () {
 	html.push('</div>');
 
 	html.push('<div id="about-donate">');
-	html.push(linkme('http://aurelio.net/moneylog/donate/', '♥'));
+	html.push(linkme('https://aurelio.net/moneylog/donate/', '♥'));
 	html.push('</div>');
 
 	html.push('<hr>');
@@ -3690,130 +3586,16 @@ AboutWidget.populate = function () {
 	html.push(linkme('http://twitter.com/g_nemmi', '@g_nemmi'));
 	html.push('</div>');
 
-	if (appMode === 'dropbox') {
-		html.push('<hr>');
-		html.push('<div id="about-dropbox">');
-		html.push('Dropbox backend by');
-		html.push(linkme('http://twitter.com/xupisco', '@xupisco'));
-		html.push('(' + linkme('https://github.com/xupisco/MoneyLog-Cloud', 'GitHub') + ')');
-		html.push('<br>');
-		html.push('commit:');
-		html.push('<a id="about-dropbox-version" href="#"></a>');  // filled in initDropbox()
-		html.push('</div>');
-	}
-
 	this.content.innerHTML = html.join('\n');
 };
 
 
-
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 //                             INIT
-/////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------
 
-function initAppMode() {
-	switch(appMode) {
-
-		case 'portable':
-			appFlavor = 'Portable';
-			i18n.appUrl = 'http://aurelio.net/moneylog/portable/';
-			break;
-
-		case 'localStorage':
-			appFlavor = 'Browser';
-			i18n.appUrl = 'http://aurelio.net/moneylog/browser/';
-			break;
-
-		case 'dropbox':
-			// Why Cloud: can't use the word Dropbox in app name
-			// https://www.dropbox.com/developers/reference/branding
-			appFlavor = 'Cloud';
-			i18n.appUrl = 'http://aurelio.net/moneylog/cloud/';
-			break;
-
-		case 'txt':
-			// appFlavor = 'TXT';
-			// appFlavor = 'l33t';
-			// appFlavor = 'Dev';
-			appFlavor = 'Beta';
-			// I'm not happy with any name :/
-			i18n.appUrl = 'http://aurelio.net/moneylog/beta/';
-			break;
-
-		default:
-			alert('FATAL ERROR: Invalid setting appMode = ' + appMode);
-	}
-}
-
-function init() {
-	var i;
-
-	// Load the i18n messages (must be the first)
-	i18n = i18nDatabase.getLanguage(lang);
-
-	// Check app mode
-	initAppMode();
-
-	// Password protected?
-	if (myPassword) {
-		// Prompt user and check
-		if (myPassword != prompt(appName + ' ' + appFlavor + ' — ' + i18n.msgTypePassword)) {
-			// Destroy full interface and show error
-			document.getElementById('container').innerHTML = '<h2 style="padding:30px;">' + i18n.msgWrongPassword + '</h2>';
-			return;  // abort
-		}
-	}
-
-	// UI surgery for each mode
-	switch(appMode) {
-		case 'portable':
-			// Remove all file-related options
-			document.getElementById('source-file-box').style.display = 'none';
-			document.getElementById('toolbar-sep-1').style.display = 'none';
-			break;
-
-		case 'localStorage':
-			// Hide Reload button and files combo. Not needed.
-			document.getElementById('source-reload').style.display = 'none';
-			document.getElementById('source-file').style.display = 'none';
-			// Stretch Edit button
-			addClass(document.getElementById('editor-open'), 'wide');
-			document.getElementById('editor-open').style.marginTop = 0;
-			break;
-
-		case 'dropbox':
-			showHideEditButton();
-			break;
-
-		case 'txt':
-			// Hide Edit button. Not functional.
-			document.getElementById('editor-open').style.display = 'none';
-			// Inline mini reload button: [ file.txt ] ↻
-			// i18n.labelReload = '<b>⟳</b>';  // missing in Opera, Safari Mac/iOS
-			i18n.labelReload = '<b>↻</b>';  // missing in Opera
-			addClass(document.getElementById('source-file-box'), 'mini');
-			addClass(document.getElementById('source-file'), 'mini');
-			addClass(document.getElementById('source-reload'), 'mini');
-			addClass(document.getElementById('source-reload'), 'naked');
-			break;
-	}
-
-	// Set page title
-	document.title = appName + ' ' + appFlavor;
-
-	// Set default dataFile
-	if (dataFiles.length === 0 && (appMode === 'txt' || appMode === 'dropbox')) {
-		dataFiles = ['sample/data-' + lang + '.txt'];
-	}
-
-	// Prepare UI elements
-	populateLastMonthsCombo();
-	populateDataFilesCombo();
-	populateChartColsCombo();
-	populateRowsSummaryCombo();
-	populateValueFilterCombo();
-
-	// Sanitize and regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
+function sanitizeConfig() {
+	// Regexize user words: 'Foo Bar+' turns to 'Foo|Bar\+'
 	// Note: Using regex to allow ignorecase and global *atomic* replace
 	if (highlightWords) {
 		highlightRegex = new RegExp(
@@ -3825,7 +3607,7 @@ function init() {
 	// Some configs may be set as strings or arrays.
 	// If user choose string, let's convert it to an array now.
 	if (typeof highlightTags === 'string') {
-		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/): [];
+		highlightTags = (highlightTags) ? highlightTags.strip().split(/\s+/) : [];
 	}
 	if (typeof ignoreTags === 'string') {
 		ignoreTags = (ignoreTags) ? ignoreTags.strip().split(/\s+/) : [];
@@ -3837,20 +3619,56 @@ function init() {
 		initExcludedTags = (initExcludedTags) ? initExcludedTags.strip().split(/\s+/) : [];
 	}
 
+	// Make sure sort data do not cross min/max limits
+	// max limit
+	sortData.d.index = Math.min(sortData.d.max, sortData.d.index);
+	sortData.m.index = Math.min(sortData.m.max, sortData.m.index);
+	sortData.y.index = Math.min(sortData.y.max, sortData.y.index);
+	// min limit
+	sortData.d.index = Math.max(sortData.d.min, sortData.d.index);
+	sortData.m.index = Math.max(sortData.m.min, sortData.m.index);
+	sortData.y.index = Math.max(sortData.y.min, sortData.y.index);
+	sortData.m.indexTag = Math.max(sortData.m.minTag, sortData.m.indexTag);
+	sortData.y.indexTag = Math.max(sortData.y.minTag, sortData.y.indexTag);
+}
+
+function initUI() {
+	var i;
+
+	// Load the i18n messages (must be the first)
+	i18n = i18nDatabase.getLanguage(lang);
+
+	// Set app URL
+	i18n.appUrl = 'https://moneylog.aurelio.net';
+
+	// Password protected?
+	if (myPassword) {
+		// Prompt user and check
+		// eslint-disable-next-line no-alert
+		if (myPassword != prompt(appName + ' — ' + i18n.msgTypePassword)) {
+			// Destroy full interface and show error
+			document.getElementById('container').innerHTML = '<h2 style="padding:30px;">' + i18n.msgWrongPassword + '</h2>';
+			return;  // abort
+		}
+	}
+
+	// Prepare UI elements
+	populateChartColsCombo();
+	populateRowsSummaryCombo();
+	populateValueFilterCombo();
+
 	// Set interface labels
-	document.getElementById('app-flavor'               ).innerHTML = appFlavor;
 	document.getElementById('d'                        ).innerHTML = i18n.labelDaily;
 	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
-	document.getElementById('opt-last-months-label'    ).innerHTML = i18n.labelLastMonths + ':';
 	document.getElementById('opt-value-filter-label'   ).innerHTML = i18n.labelValueFilter + ':';
-	document.getElementById('opt-future-label'         ).innerHTML = i18n.labelShowFuture;
 	document.getElementById('opt-prev-balance-label'   ).innerHTML = i18n.labelPrevBalance;
 	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelSearchRegex;
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
 	document.getElementById('tag-cloud-opt-group-label').innerHTML = i18n.labelTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').innerHTML = i18n.labelTagCloudReset;
+	document.getElementById('storage-header'           ).innerHTML = i18n.labelStorage;
 	document.getElementById('source-reload'            ).innerHTML = i18n.labelReload;
 	document.getElementById('editor-open'              ).innerHTML = i18n.labelEditorOpen;
 	document.getElementById('editor-close'             ).innerHTML = i18n.labelEditorCancel;
@@ -3866,14 +3684,13 @@ function init() {
 	document.getElementById('fullscreen'               ).title = i18n.helpFullScreen;
 	document.getElementById('website'                  ).title = i18n.helpWebsite;
 	document.getElementById('report-nav'               ).title = i18n.helpReports;
-	document.getElementById('opt-last-months-label'    ).title = i18n.helpLastMonths;
 	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;
-	document.getElementById('opt-future-label'         ).title = i18n.helpShowFuture;
 	document.getElementById('opt-prev-balance-label'   ).title = i18n.helpPrevBalance;
 	document.getElementById('opt-monthly-label'        ).title = i18n.helpMonthPartials;
 	document.getElementById('filter'                   ).title = i18n.helpSearch;
 	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
 	document.getElementById('opt-negate-label'         ).title = i18n.helpSearchNegate;
+	document.getElementById('storage-header'           ).title = i18n.helpStorage;
 	document.getElementById('source-reload'            ).title = i18n.helpReload;
 	document.getElementById('tag-cloud-opt-group-label').title = i18n.helpTagCloudGroup;
 	document.getElementById('tag-cloud-opt-reset-label').title = i18n.helpTagCloudReset;
@@ -3899,17 +3716,6 @@ function init() {
 		document.getElementById('footer-message').innerHTML += 'ignoreTags = ' + ignoreTags.join(', ') + '<br>';
 	}
 
-	// localStorage browser support check
-	if (appMode === 'localStorage' && !window.localStorage) {
-		document.getElementById('editor-open').style.display = 'none'; // hide button
-		showError(
-			i18n.errorNoLocalStorage.replace('%s', appName),
-			'<p>' + i18n.errorRequirements +
-				array2ul(['Internet Explorer 8', 'Firefox 3', 'Google Chrome 3', 'Safari 4', 'Opera 10.50'])
-		);
-		return; // abort
-	}
-
 	// Set initial chart type for the reports (before event handlers)
 	if (reportType === 'd') {
 		document.getElementById('chart-selector').selectedIndex = initChartDaily - 1;
@@ -3924,19 +3730,17 @@ function init() {
 	document.getElementById('d'                      ).onclick  = changeReport;
 	document.getElementById('m'                      ).onclick  = changeReport;
 	document.getElementById('y'                      ).onclick  = changeReport;
-	document.getElementById('opt-last-months-check'  ).onclick  = toggleLastMonths;
-	document.getElementById('opt-last-months-combo'  ).onchange = lastMonthsChanged;
 	document.getElementById('opt-value-filter-check' ).onclick  = toggleValueFilter;
 	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
 	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
-	document.getElementById('opt-future-check'       ).onclick  = showReport;
 	document.getElementById('opt-prev-balance-check' ).onclick  = showReport;
 	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
-	document.getElementById('source-file'            ).onchange = loadSelectedFile;
-	document.getElementById('source-reload'          ).onclick  = reloadSelectedFile;
+	document.getElementById('storage-driver'         ).onchange = ml.storage.driversComboChanged;
+	document.getElementById('source-file'            ).onchange = loadData;
+	document.getElementById('source-reload'          ).onclick  = reloadData;
 	document.getElementById('opt-date-1-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-2-check'       ).onclick  = showReport;
 	document.getElementById('opt-date-1-month-combo' ).onchange = dateRangeComboChanged;
@@ -3947,61 +3751,31 @@ function init() {
 	document.getElementById('tag-report-opt-related-check').onclick = tagReport;
 	document.getElementById('rows-summary-index'     ).onchange = updateSelectedRowsSummary;
 	document.getElementById('rows-summary-reset'     ).onclick  = resetRowsSummary;
+	document.getElementById('storage-header'         ).onclick  = toggleStorage;
 	document.getElementById('view-options-header'    ).onclick  = toggleViewOptions;
 	document.getElementById('tag-cloud-header'       ).onclick  = toggleTagCloud;
 	document.getElementById('editor-open'            ).onclick  = editorOn;
 	document.getElementById('editor-close'           ).onclick  = editorOff;
 	document.getElementById('editor-save'            ).onclick  = editorSave;
-	document.getElementById('editor-data')[(isOpera) ? 'onkeypress' : 'onkeydown'] = insertTab;
 
 	// Apply user defaults (this code must be after event handlers adding)
-	if (initFullScreen)     { toggleFullScreen(); }
-	if (checkRegex)         { document.getElementById('opt-regex-check'  ).checked = true; }
-	if (checkNegate)        { document.getElementById('opt-negate-check' ).checked = true; }
-	if (checkDateFrom)      { document.getElementById('opt-date-1-check' ).checked = true; }
-	if (checkDateUntil)     { document.getElementById('opt-date-2-check' ).checked = true; }
-	if (checkMonthPartials) { document.getElementById('opt-monthly-check').checked = true; }
-	if (checkHideRelatedTags) {
-		document.getElementById('tag-report-opt-related-check').checked = true;
-	}
+	if (initFullScreen) { toggleFullScreen(); }
+	document.getElementById('opt-regex-check' ).checked = checkRegex;
+	document.getElementById('opt-negate-check').checked = checkNegate;
+	document.getElementById('opt-date-1-check').checked = checkDateFrom;
+	document.getElementById('opt-date-2-check').checked = checkDateUntil;
+	document.getElementById('opt-monthly-check').checked = checkMonthPartials;
+	document.getElementById('tag-report-opt-related-check').checked = checkHideRelatedTags;
 	document.getElementById('filter').value = defaultSearch;
 
-	// Apply user defaults - Legacy
-	if (defaultFuture) {
-		document.getElementById('opt-future-check' ).checked = true;
-	}
-	if (defaultLastMonths) {
-		document.getElementById('opt-last-months-check').checked = true;
-		document.getElementById('opt-last-months-extra').style.display = 'block';
-	}
-
-	// User wants old style date filters?
-	if (useLegacyDateFilter) {
-		// restore old
-		document.getElementById('opt-future-box').style.display = 'block';
-		document.getElementById('opt-last-months-box').style.display = 'block';
-		// disable new
-		document.getElementById('opt-date-1-box').style.display = 'none';
-		document.getElementById('opt-date-2-box').style.display = 'none';
-		document.getElementById('opt-date-1-check').checked = false;
-		document.getElementById('opt-date-2-check').checked = false;
-	} else {
-		// disable old
-		document.getElementById('opt-last-months-check').checked = false;
-		document.getElementById('opt-future-check').checked = false;
-		// disable auto-hide since now we have only one option who uses it
-		removeClass(document.getElementById('opt-value-filter-extra'), 'auto-hide');
-	}
-	
 	// Previous balance option
 	document.getElementById('opt-prev-balance-box').style.display = 'block';
 	document.getElementById('opt-prev-balance-check').checked = false;
 
-	// Always show these toolbar boxes opened at init
-	if (initViewWidgetOpen)  { toggleViewOptions(); }
-	if (initTagCloudOpen)    {    toggleTagCloud(); }
-
 	// Maybe hide some widgets?
+	if (!showStorageWidget) {
+		document.getElementById('storage-box').style.display = 'none';
+	}
 	if (!showViewWidget) {
 		document.getElementById('view-options-box').style.display = 'none';
 	}
@@ -4020,43 +3794,18 @@ function init() {
 		updateToolbar();
 	}
 
-	// Set the default file to load when using multiple files: dataFilesDefault or first
-	if (dataFiles.length > 1) {
-		if (dataFilesDefault && dataFiles.indexOf(dataFilesDefault) !== -1) {
-			document.getElementById('source-file').selectedIndex = dataFiles.indexOf(dataFilesDefault);
-		} else {
-			document.getElementById('source-file').selectedIndex = 0;
-		}
-	}
-
-	// Validate the sort data config
-	if (sortData.d.index < sortData.d.min) { sortData.d.index = sortData.d.min; }
-	if (sortData.m.index < sortData.m.min) { sortData.m.index = sortData.m.min; }
-	if (sortData.y.index < sortData.y.min) { sortData.y.index = sortData.y.min; }
-	if (sortData.d.index > sortData.d.max) { sortData.d.index = sortData.d.max; }
-	if (sortData.m.index > sortData.m.max) { sortData.m.index = sortData.m.max; }
-	if (sortData.y.index > sortData.y.max) { sortData.y.index = sortData.y.max; }
-	if (sortData.m.index < sortData.m.minTag) { sortData.m.index = sortData.m.minTag; }
-	if (sortData.y.index < sortData.y.minTag) { sortData.y.index = sortData.y.minTag; }
-
-	// Everything is ok, time to read/parse/show the user data
-	if (appMode === 'dropbox') {
-		if (typeof initDropbox === 'undefined') {
-			showError(i18n.errorNoDropboxSupport.replace('%s', appName), '');
-			return; // abort
-		} else {
-			initDropbox();
-		}
-	} else if (appMode === 'portable' || appMode === 'localStorage') {
-		readData();
-		parseData();
-		showReport();
-	} else {  // txt
-		loadSelectedFile();
-	}
-
 	// Uncomment this line to focus the search box at init
 	// document.getElementById('filter').focus();
 }
-window.onload = init;
 
+function init() {
+
+	sanitizeConfig();
+	initUI();
+
+	// UI is ok, so now let's setup storage and (maybe) load user data
+	// Exception: some cloud storages defer user data loading after the file picker
+	ml.storage.init();
+	ml.storage.setDriver();
+}
+window.onload = init;

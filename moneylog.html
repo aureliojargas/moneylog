@@ -3,7 +3,7 @@
 
 <!--
 
-MoneyLog Experience - http://aurelio.net/moneylog/
+MoneyLog Experience - https://aurelio.net/moneylog/
 ===================
 
 	MoneyLog Experience is a one-file finances reporter.
@@ -32,21 +32,27 @@ License/Licença:
 <meta name="author" content="Aurelio Marinho Jargas www.aurelio.net">
 <meta name="keywords" content="Personal Finance, KISS, Simple, HTML, CSS, JavaScript">
 <meta name="description" content="MoneyLog Experience - Personal finances management made real simple. In one single editable text file you have all your transactions and the engine to query it. Alter with any text editor and view the reports on the browser. Made with HTML, CSS and JavaScript.">
-<link rel="shortcut icon" href="http://aurelio.net/moneylog/favicon.ico">
+<link rel="shortcut icon" href="https://aurelio.net/moneylog/favicon.ico">
 
 <!-- iOS icon -->
-<link rel="apple-touch-icon" href="http://aurelio.net/moneylog/img/ios-icon.png">
+<link rel="apple-touch-icon" href="https://aurelio.net/moneylog/img/ios-icon.png">
 
 <!-- Set correct width for smartphones -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- Styles -->
 <link rel="stylesheet" type="text/css" href="moneylog.css">
+<link rel="stylesheet" type="text/css" href="css/portable.css">
 <link rel="stylesheet" type="text/css" href="css/mobile.css">
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print">
 
 <!-- Scripts -->
 <script type="text/javascript" src="moneylog.js"></script>
+<script type="text/javascript" src="storage/index.js"></script>
+<script type="text/javascript" src="storage/drivers/html.js"></script>
+<script type="text/javascript" src="storage/drivers/browser.js"></script>
+<script type="text/javascript" src="storage/drivers/filesystem.js"></script>
+<script type="text/javascript" src="storage/drivers/googledrive.js"></script>
 <script type="text/javascript" src="config.js"></script>
 
 </head>
@@ -59,8 +65,8 @@ License/Licença:
 
 	<div id="logo-wrapper">
 		<div id="logo">
-			<div id="app-name"><a id="website" href="http://aurelio.net/moneylog/">MoneyLog</a></div>
-			<div id="app-flavor"></div>
+			<div id="app-name"><a id="website" href="https://aurelio.net/moneylog/">MoneyLog</a></div>
+			<div id="app-flavor">online</div>
 		</div>
 
 		<div id="fullscreen" class="trigger">||</div>
@@ -69,13 +75,20 @@ License/Licença:
 	<div id="toolbar-controls-wrapper">
 		<div id="toolbar-controls">
 
-			<!-- Data Files -->
-			<div id="source-file-box">
-				<select
-					id="source-file" size="1"></select>
-				<a
-					id="editor-open" class="button" href="#"></a><a
-					id="source-reload" class="button" href="#"></a>
+			<!-- Storage -->
+			<div id="storage-box" class="widget-box">
+				<a id="storage-header" class="button" href="#">Storage</a>
+				<div id="storage-content" class="widget-content">
+					<select
+						id="storage-driver" size="1"></select>
+					<a
+						id="storage-folder" target="_blank" href=""></a>
+					<select
+						id="source-file" size="1"></select>
+					<a
+						id="editor-open" class="button" href="#"></a><a
+						id="source-reload" class="button" href="#"></a>
+				</div>
 			</div>
 
 			<hr id="toolbar-sep-1" />
@@ -141,33 +154,12 @@ License/Licença:
 							id="opt-monthly-label" for="opt-monthly-check"></label>
 					</div>
 
-					<!-- Future -->
-					<div id="opt-future-box" class="checkbox-option">
-						<input
-							id="opt-future-check" class="trigger" type="checkbox">
-						<label
-							id="opt-future-label" for="opt-future-check"></label>
-					</div>
-
 					<!-- Previous Balance -->
 					<div id="opt-prev-balance-box" class="checkbox-option">
 						<input
 							id="opt-prev-balance-check" class="trigger" type="checkbox">
 						<label
 							id="opt-prev-balance-label" for="opt-prev-balance-check"></label>
-					</div>
-
-					<!-- Last Months -->
-					<div id="opt-last-months-box" class="checkbox-option">
-						<input
-							id="opt-last-months-check" class="trigger" type="checkbox">
-						<label
-							id="opt-last-months-label" for="opt-last-months-check"></label>
-
-						<div id="opt-last-months-extra" class="checkbox-option-extra auto-hide">
-							<select
-								id="opt-last-months-combo" size="1"></select>
-						</div>
 					</div>
 
 					<!-- Value Filter -->
@@ -177,7 +169,7 @@ License/Licença:
 						<label
 							id="opt-value-filter-label" for="opt-value-filter-check"></label>
 
-						<div id="opt-value-filter-extra" class="checkbox-option-extra auto-hide">
+						<div id="opt-value-filter-extra" class="checkbox-option-extra">
 							<select
 								id="opt-value-filter-combo" size="1">
 							</select><input
@@ -187,7 +179,6 @@ License/Licença:
 
 				</div><!-- view-options-content -->
 			</div><!-- view-options-box -->
-
 
 			<!-- Tag Cloud -->
 			<div id="tag-cloud-box" class="widget-box">
@@ -280,13 +271,6 @@ License/Licença:
 		<a id="editor-save" class="button active" href="#"></a>
 	</div>
 </div>
-
-
-<!-- Data - local TXT mode -->
-<iframe id="data-frame" onload="iframeLoaded(this)">
-	<p>Sorry. No iframes support detected, please use the Portable version.</p>
-	<p>Ops! Seu navegador não entende iframes. Use a versão Portable.</p>
-</iframe>
 
 <!-- Data - Portable mode -->
 <pre id="data">
