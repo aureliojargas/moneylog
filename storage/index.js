@@ -10,7 +10,7 @@
 // Each driver must set its config:
 //
 //     config: {
-//         isAsync: fasle,
+//         isAsync: false,
 //         isEditable: false,
 //         isFileBased: false,
 //         isReloadable: false,
