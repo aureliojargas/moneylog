@@ -253,7 +253,11 @@ var i18nDatabase = {
 		appUrl: 'https://aurelio.net/soft/moneylog/',
 		appUrlOnline: 'https://aurelio.net/soft/moneylog/online/',
 		appDescription: 'Track your finances the practical way. Think simple!',
-		helpWebsite: 'Go to the MoneyLog website.'
+		helpWebsite: 'Go to the MoneyLog website.',
+		// Previous balance
+		labelPrevBalance: 'Previous Balance',
+		helpPrevBalance: 'Show the previous balance',
+		descrPrevBalance: 'Previous balance'
 	},
 	pt: {
 		centsSeparator: ',',
@@ -346,7 +350,11 @@ var i18nDatabase = {
 		appUrl: 'https://aurelio.net/moneylog/beta/',
 		appUrlOnline: 'https://aurelio.net/moneylog/browser/app/',
 		appDescription: 'Acompanhe suas finanças de maneira simples e prática. Descomplique!',
-		helpWebsite: 'Visite o website do MoneyLog.'
+		helpWebsite: 'Visite o website do MoneyLog.',
+		// Previous balance
+		labelPrevBalance: 'Saldo Anterior',
+		helpPrevBalance: 'Exibe saldo anterior',
+		descrPrevBalance: 'Saldo anterior'
 	},
 	ca: {
 		centsSeparator: ',',
@@ -389,7 +397,12 @@ var i18nDatabase = {
 		helpSearchRegex: 'Utilitza expressions regulars en el camp de cerca.',
 		helpSearchNegate: 'Eliminar els resultats de cerca de l\'informe.',
 		helpReload: 'Actualitza només les dades, no la pàgina sencera.',
-		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.'
+		// helpTags: "Escolliu el que voleu etiquetes per a l'informe: alimentació, salut, educació, viatges, …",
+		helpTagCloudGroup: 'Mostra només les entrades que tenen totes les etiquetes triades.',
+		// Previous balance
+		labelPrevBalance: 'Saldo Anterior',
+		helpPrevBalance: 'Mostra el saldo anterior',
+		descrPrevBalance: 'Saldo anterior'
 	},
 	es: {
 		centsSeparator: ',',
@@ -475,7 +488,11 @@ var i18nDatabase = {
 		msgWrongPassword: 'Contraseña incorrecta.',
 		// App
 		appDescription: 'Controle sus finanzas de forma práctica. Simple!',
-		helpWebsite: 'Ir al sitio web de MoneyLog.'
+		helpWebsite: 'Ir al sitio web de MoneyLog.',
+		// Previous balance
+		labelPrevBalance: 'Saldo Anterior',
+		helpPrevBalance: 'Muestra el saldo anterior',
+		descrPrevBalance: 'Saldo anterior'
 	},
 	getLanguage: function (langCode) {
 		var phrase;
@@ -2105,7 +2122,7 @@ function filterData() {
 		valueFilter = document.getElementById('opt-value-filter-combo').value;
 		valueFilterArg = parseInt(document.getElementById('opt-value-filter-number').value, 10) || 0;
 	}
-
+	
 	// Hack: Value filtering on the search box!
 	// Examples: v:+  v:-  v:=50  v:>100  v:<=-100
 	temp = filter.match(/^v:([-+>=<][=]?)([+-]?\d*)$/);
@@ -2123,6 +2140,10 @@ function filterData() {
 			filter = filter.toLowerCase();
 		}
 	}
+	
+	// Show previous balance?
+	var showPrevBalance = document.getElementById('opt-prev-balance-check').checked;
+	var prevBalanceValue= 0;
 
 	// Scan data rows
 	for (i = 0, leni = theData.length; i < leni; i++) {
@@ -2137,6 +2158,9 @@ function filterData() {
 
 		// Apply date filter
 		if (thisDate < firstDate) {
+			if (showPrevBalance) {
+				prevBalanceValue += thisValue;
+			}
 			continue;
 		}
 		if (thisDate > lastDate) {
@@ -2168,6 +2192,10 @@ function filterData() {
 
 		// Save the results
 		filteredData.push([thisDate, thisValue, thisTags, thisDescription]);
+	}
+	
+	if (showPrevBalance) {
+		filteredData.push([firstDate, prevBalanceValue, [], i18n.descrPrevBalance]);
 	}
 
 	return filteredData;
@@ -3634,6 +3662,7 @@ function initUI() {
 	document.getElementById('m'                        ).innerHTML = i18n.labelMonthly;
 	document.getElementById('y'                        ).innerHTML = i18n.labelYearly;
 	document.getElementById('opt-value-filter-label'   ).innerHTML = i18n.labelValueFilter + ':';
+	document.getElementById('opt-prev-balance-label'   ).innerHTML = i18n.labelPrevBalance;
 	document.getElementById('opt-monthly-label'        ).innerHTML = i18n.labelMonthPartials;
 	document.getElementById('opt-regex-label'          ).innerHTML = i18n.labelSearchRegex;
 	document.getElementById('opt-negate-label'         ).innerHTML = i18n.labelSearchNegate;
@@ -3656,6 +3685,7 @@ function initUI() {
 	document.getElementById('website'                  ).title = i18n.helpWebsite;
 	document.getElementById('report-nav'               ).title = i18n.helpReports;
 	document.getElementById('opt-value-filter-label'   ).title = i18n.helpValueFilter;
+	document.getElementById('opt-prev-balance-label'   ).title = i18n.helpPrevBalance;
 	document.getElementById('opt-monthly-label'        ).title = i18n.helpMonthPartials;
 	document.getElementById('filter'                   ).title = i18n.helpSearch;
 	document.getElementById('opt-regex-label'          ).title = i18n.helpSearchRegex;
@@ -3703,6 +3733,7 @@ function initUI() {
 	document.getElementById('opt-value-filter-check' ).onclick  = toggleValueFilter;
 	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
 	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
+	document.getElementById('opt-prev-balance-check' ).onclick  = showReport;
 	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
 	document.getElementById('filter'                 ).onkeyup  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
@@ -3737,10 +3768,9 @@ function initUI() {
 	document.getElementById('tag-report-opt-related-check').checked = checkHideRelatedTags;
 	document.getElementById('filter').value = defaultSearch;
 
-	// These toolbar boxes must be opened at init?
-	toggleStorage(    {open: initStorageWidgetOpen});
-	toggleViewOptions({open: initViewWidgetOpen});
-	toggleTagCloud(   {open: initTagCloudOpen});
+	// Previous balance option
+	document.getElementById('opt-prev-balance-box').style.display = 'block';
+	document.getElementById('opt-prev-balance-check').checked = false;
 
 	// Maybe hide some widgets?
 	if (!showStorageWidget) {
