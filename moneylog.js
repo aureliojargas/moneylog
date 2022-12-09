@@ -3552,7 +3552,7 @@ AboutWidget.populate = function () {
 	html.push(linkme('http://twitter.com/xupisco', '@xupisco'));
 	html.push('<br>');
 	html.push('i18n ca:');
-	html.push(linkme('http://twitter.com/pacoriviere', '@pacoriviere'));
+	html.push(linkme('http://paco.riviere.cat', '@pacoriviere'));
 	html.push('<br>');
 	html.push('i18n es:');
 	html.push(linkme('http://twitter.com/g_nemmi', '@g_nemmi'));
