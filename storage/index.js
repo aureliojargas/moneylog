@@ -38,10 +38,12 @@ ml.storage = {
 		var i, combo;
 		combo = document.getElementById('storage-driver');
 		for (i = 0; i < this.availableDrivers.length; i++) {
-			combo.add(new Option(
-				this.drivers[this.availableDrivers[i]].name,
-				this.availableDrivers[i]
-			));
+			if (this.drivers[this.availableDrivers[i]]) {
+				combo.add(new Option(
+					this.drivers[this.availableDrivers[i]].name,
+					this.availableDrivers[i]
+				));
+			}
 		}
 		// Select the current driver
 		if (this.defaultDriver) {
