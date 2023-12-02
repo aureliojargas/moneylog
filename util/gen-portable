@@ -1,7 +1,7 @@
 #!/bin/bash
 # Aurelio Jargas, https://aurelio.net/moneylog/
 #
-# Script to join all the MoneyLog pieces in one singe HTML file, making it
+# Script to join all the MoneyLog pieces in one single HTML file, making it
 # portable. Settings are configured and instruction messages are added.
 #
 # Usage:
@@ -68,12 +68,17 @@ instructions='
 # <script type="text/javascript" src="moneylog.js"></script>
 
 insert_css='
-/^<link .*href="moneylog.css"/ {
+/^<link .*href="moneylog\.css"/ {
 	a \
 <style type="text/css">
 	r ../moneylog.css
 	a \
-</style>\
+</style>
+	d
+}
+
+/^<link .*href="css\/portable\.css"/ {
+	a \
 <style type="text/css">
 	r ../css/portable.css
 	a \
@@ -81,7 +86,7 @@ insert_css='
 	d
 }
 
-/^<link .*href="css\/mobile.css"/ {
+/^<link .*href="css\/mobile\.css"/ {
 	a \
 <style type="text/css">
 	r ../css/mobile.css
@@ -90,7 +95,7 @@ insert_css='
 	d
 }
 
-/^<link .*href="css\/print.css"/ {
+/^<link .*href="css\/print\.css"/ {
 	a \
 <style type="text/css" media="print">
 	r ../css/print.css
@@ -100,7 +105,7 @@ insert_css='
 }
 '
 insert_js='
-/^<script .*src="moneylog.js"/ {
+/^<script .*src="moneylog\.js"/ {
 	a \
 <script type="text/javascript">
 	r ../moneylog.js
@@ -108,6 +113,23 @@ insert_js='
 </script>
 	d
 }
+/^<script .*src="storage\/index\.js"/ {
+	a \
+<script type="text/javascript">
+	r ../storage/index.js
+	a \
+</script>
+	d
+}
+/^<script .*src="storage\/drivers\/html\.js"/ {
+	a \
+<script type="text/javascript">
+	r ../storage/drivers/html.js
+	a \
+</script>
+	d
+}
+/^<script .*src="storage\/drivers\/.*\.js"/ d
 '
 insert_txt="
 /^<pre/ r $txt_path
@@ -132,8 +154,9 @@ sed -f sed_script "$html_path" |
 		# Remove config.js call
 		/^<script .* src="config.js"><\/script>/ d
 
-		# Turn ON one-file mode
-		/^var appMode = .txt.;/ s/txt/portable/
+		# Set the default driver.
+		/defaultDriver: .filesystem.,/ s/filesystem/html/
+		/var showStorageWidget = true/ s/true/false/
 
 		# Remove closing tags at the end
 		/^<\/pre>/, $ d
