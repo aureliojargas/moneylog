@@ -3702,9 +3702,9 @@ function initUI() {
 	document.getElementById('y'                      ).onclick  = changeReport;
 	document.getElementById('opt-value-filter-check' ).onclick  = toggleValueFilter;
 	document.getElementById('opt-value-filter-combo' ).onchange = valueFilterChanged;
-	document.getElementById('opt-value-filter-number').onkeyup  = showReport;
+	document.getElementById('opt-value-filter-number').oninput  = showReport;
 	document.getElementById('opt-monthly-check'      ).onclick  = toggleMonthly;
-	document.getElementById('filter'                 ).onkeyup  = showReport;
+	document.getElementById('filter'                 ).oninput  = showReport;
 	document.getElementById('opt-regex-check'        ).onclick  = showReport;
 	document.getElementById('opt-negate-check'       ).onclick  = showReport;
 	document.getElementById('storage-driver'         ).onchange = ml.storage.driversComboChanged;
